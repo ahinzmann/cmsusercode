@@ -503,7 +503,7 @@ if __name__=="__main__":
     leg2.SetTextSize(0.06)
     # lumi
     lumiPos=max_x_new-1450/1000.
-    leg3=TLatex(lumiPos,ymax+0.03,"35.9 fb^{-1} (13 TeV)")
+    leg3=TLatex(lumiPos,ymax+0.03,"78.3 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)
     leg2.Draw("same")
@@ -511,6 +511,6 @@ if __name__=="__main__":
     
     #canvas.SaveAs('limits'+testStat+asym+"_"+style+"_mdm"+mdm+version+'_noSys.pdf')
     if isInjection:
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'_2017.pdf')
     else:
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_2017.pdf')
