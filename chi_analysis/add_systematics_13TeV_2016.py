@@ -43,7 +43,7 @@ def cloneNormalize(h1):
 if __name__ == '__main__':
 
     useLensData=False
-    useUnfoldedData=False
+    useUnfoldedData=True
     injectSignal=False
 
     prefixs=["datacard_shapelimit13TeV"]
@@ -476,8 +476,9 @@ if __name__ == '__main__':
     #for l in open("xsecs_13TeV_dm.txt").readlines():
     #  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
     #for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000]:
+    for mass in [1000,1500,1750]:
     #for mass in [2000,2250,2500,3000,3500,4000,4500,5000,6000]:
-    for mass in [6000]:
+    #for mass in [6000]:
      if mass==6000:
        mDMs=[1,2990]
      elif mass==7000:
@@ -764,6 +765,7 @@ if __name__ == '__main__':
             low_bin=ewk.FindBin(nloqcd.GetXaxis().GetBinLowEdge(b+1))
             up_bin=ewk.FindBin(nloqcd.GetXaxis().GetBinUpEdge(b+1))
             correction=ewk.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
+	    print str(float(int(nloqcd.GetXaxis().GetBinLowEdge(b+1)*10.))/10.)+" TO "+str(float(int(nloqcd.GetXaxis().GetBinUpEdge(b+1)*10.))/10.)+"; "+str(float(int(correction*10000.))/10000.)+";"
             if not "EWK" in samples[i][0]:
                nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)*correction)
         nloqcd.Scale(1./nloqcd.Integral())
