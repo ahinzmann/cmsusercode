@@ -37,9 +37,9 @@ if __name__=="__main__":
   version="_v5"
 
   isGen=False
-  isCB=True
+  isCB=False
   
-  isInjection=True
+  isInjection=False
   injectiontext="Injection1p0"
   
   if isGen:
@@ -47,7 +47,8 @@ if __name__=="__main__":
   elif isCB:
     prefix="limitsDetCB"
   else:
-    prefix="limitsDet"
+    #prefix="limitsDet"
+    prefix="limits"
     
   signalCounter={}
   if style=="DMVector":
@@ -57,8 +58,8 @@ if __name__=="__main__":
 
   gs=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
   gsplot=["0p1","0p2","0p25","0p3","0p5","0p75","1","1p5"]
-  mdms=["1","3000"]
-  #mdms=["1"]
+  #mdms=["1","3000"]
+  mdms=["1"]
   #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000]
   #signalMasses=[1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000]
   signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
@@ -495,7 +496,7 @@ if __name__=="__main__":
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.04)
     # lumi
-    leg3=TLatex(max_x_new-1150,ymax+0.03,"35.9 fb^{-1} (13 TeV)")
+    leg3=TLatex(max_x_new-1150,ymax+0.03,"78.3 fb^{-1} (13 TeV)") #35.9
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.04)
     leg2.Draw("same")

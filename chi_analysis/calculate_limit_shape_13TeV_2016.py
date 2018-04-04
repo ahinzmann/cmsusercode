@@ -22,9 +22,9 @@ models=[]
 #models+=[60,61,62,63,64,65,66,67,68,69]
 #models+=[70,71,72,73,74,75,76,77]
 #models+=[78,79,80,81,82,83,84,85]
-#models+=[30,31,32,33,34,35,36,37,38]
+models+=[30,31,32,33,34,35,36,37,38]
 #models+=[40,41,42,43,44,45,46]
-models+=[47]
+#models+=[47]
 #models=[88,89]
 #models=[60,61]
 
@@ -193,15 +193,15 @@ for model in models:
 
  if model==30:
     signal="CIplusLL"
-    signalMasses=[12000]
+    signalMasses=[13000] #12000 for 2016 #13000 for 2017
     massbins=[(6000,13000),]
  if model==31:
     signal="CIplusLL"
-    signalMasses=[12000]
+    signalMasses=[13000] #12000 for 2016 #13000 for 2017
     massbins=[(5400,6000),]
  if model==32:
     signal="CIplusLL"
-    signalMasses=[12000]
+    signalMasses=[13000] #12000 for 2016 #13000 for 2017
     massbins=[(4800,5400),]
  if model==33:
     signal="CIplusLL"
@@ -410,7 +410,9 @@ for model in models:
  #dire="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/"
  #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
  dire="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/"
- prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/smearedDatacardsNov2/datacard_shapelimit13TeV"
+ #prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/smearedDatacardsNov2/datacard_shapelimit13TeV"
+ #prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/invertMatrixAug30/datacard_shapelimit13TeV"
+ prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
 
  if model>=100:  # Dark Matter
     signal=signalName[model]
@@ -429,8 +431,10 @@ for model in models:
         #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/smearedDatacardsAug30/datacard_shapelimit13TeV"
         prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/crystalBallSmearedAug30/datacard_shapelimit13TeV"
     else:
-        dire="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/"
-        prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/smearedDatacardsAug30/datacard_shapelimit13TeV"
+        #dire="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/"
+        #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/smearedDatacardsAug30/datacard_shapelimit13TeV"
+        dire="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/"
+        prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
 
     if isInjection:
         prefix=prefix.replace("/datacard_","Injection0p75/datacard_")
