@@ -505,8 +505,8 @@ if __name__ == '__main__':
 
     #samples=samples3
 
-    #print samples
-
+    print samples
+    #sys.exit()
     dataevents={}
     datahist={}
     data=None
@@ -629,10 +629,18 @@ if __name__ == '__main__':
       closefiles+=[nlofile2]
 
       # NLO uncertainties
-      filename1nu3="fastnlo/RunII/fnl5662j_cs_ct14nlo_30000_LL+.root"
+      #filename1nu3="fastnlo/RunII/fnl5662j_cs_ct14nlo_30000_LL+.root"
+      filename1nu3="fastnlo/RunII/InclusiveNJetEvents_fnl5662j_v23_fix_CT14nlo_allmu_norm.root"
       print filename1nu3
       nlofile3 = TFile.Open(filename1nu3)
       closefiles+=[nlofile3]
+
+      # NLO uncertainties
+      #filename1nu3="fastnlo/RunII/fnl5662j_cs_ct14nlo_30000_LL+.root"
+      filename1nu4="fastnlo/RunII/InclusiveNJetEvents_fnl5662j_v23_fix_CT14nlo_allmem_norm.root"
+      print filename1nu4
+      nlofile4 = TFile.Open(filename1nu4)
+      closefiles+=[nlofile4]
       
        # DM uncertainties
       filename1dmpdf="datacards/chi_dm_pdf_plots6000_13TeV_2016.root"
@@ -747,7 +755,7 @@ if __name__ == '__main__':
         # NLO normalized
         nloqcdnorm=None
         for k in mass_bins_nlo_list[j]:
-         histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
+         histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"backup"
          print histname
          hnlo = TH1F(nlofile3.Get(histname))
          hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
@@ -1103,7 +1111,7 @@ if __name__ == '__main__':
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFUp"
          print histname
-         hnloPDFup = TH1F(nlofile3.Get(histname))
+         hnloPDFup = TH1F(nlofile4.Get(histname))
          hnloPDFup.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnloPDFup=rebin(hnloPDFup,len(chi_binnings[j])-1,chi_binnings[j])
          if nloPDFupqcd:
@@ -1117,7 +1125,7 @@ if __name__ == '__main__':
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFDown"
          print histname
-         hnloPDFdown = TH1F(nlofile3.Get(histname))
+         hnloPDFdown = TH1F(nlofile4.Get(histname))
          hnloPDFdown.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnloPDFdown=rebin(hnloPDFdown,len(chi_binnings[j])-1,chi_binnings[j])
          if nloPDFdownqcd:
@@ -1216,7 +1224,8 @@ if __name__ == '__main__':
         cipdfdown.Write()
 
         # NLO Scaleup/down
-	for scaleVariation in ["MuR","MuF",""]:
+	#for scaleVariation in ["MuR","MuF",""]:
+        for scaleVariation in [""]:
           nloScaleupqcd=None
           for k in mass_bins_nlo_list[j]:
            histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale"+scaleVariation+"Up"
