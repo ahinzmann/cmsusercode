@@ -47,22 +47,27 @@ if __name__ == '__main__':
  #for runSet in [52,53,54,57,58,59]:
  #for runSet in [52,57,58]:
  #for runSet in [27,64,74,83,94,66,75,85,95]:
- for runSet in [162]:
-  theory=0
+ for runSet in [171]:
+  theory=3
   normalize=(runSet<20)
  
   colors=[1,2,4,6,8,1,2,4,6,8]
   styles=[1,2,3,4,5,1,2,3,4,5]
   widths=[2,2,2,2,2,3,3,3,3,3]
   sets=[""]
+  
+  if runSet>=162 and runSet<=172:
+    colors=[1,2,4,6,1,2,4,6,8]
+    styles=[1,2,3,4,1,2,3,4,5]
+    widths=[2,2,2,2,3,3,3,3,3]
  
   #selection = "weight*vertexWeight*((deta<1.3)&&(abs(Jet1eta)<1.0)&&(Jet1pt>500)&&(Jet1pt<7000)&&(Jet1MassDrop<0.3))"
   selection = "((abs(j_eta[0])<2.4))"
   names = ["pt",
            "mass",
  	   "mass_mmdt",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_m1",
  	   "tau21_b1",
  	   "tau21_b1_aftermass",
  	   "tau21_b2_aftermass",
@@ -96,10 +101,10 @@ if __name__ == '__main__':
  	   "n2_b2_mmdt_aftermass",
  	   ]
   plots = [("j_pt[0]",selection,"jet p_{T} (GeV)"),
-           ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
+           ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
  	   ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	   ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	   ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	   ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	   ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	   ("j_tau21_b1[0]",selection,"#tau_{2}/#tau_{1}", ),
  	   ("j_tau21_b1[0]",selection+"&&(j_mass_prun[0]>65)&&(j_mass_prun[0]<105)","#tau_{2}/#tau_{1} (#beta=1)", ),
  	   ("j_tau21_b2[0]",selection+"&&(j_mass_prun[0]>65)&&(j_mass_prun[0]<105)","#tau_{2}/#tau_{1} (#beta=2)", ),
@@ -579,6 +584,8 @@ if __name__ == '__main__':
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
    selection = "((abs(j_eta[0])<2.4)&&(j_pt[0]>300))"
    normalize=True
@@ -587,22 +594,26 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==163:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
@@ -613,18 +624,20 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==164:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
@@ -639,28 +652,28 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==165:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WH.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZH.root",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
    selection = "((abs(j_eta[0])<2.4)&&(j_pt[0]>300)&&(j_n2_b1[0]<0.15))"
    normalize=True
@@ -669,18 +682,20 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==166:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
@@ -695,28 +710,28 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==167:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WH.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZH.root",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
    selection = "((abs(j_eta[0])<2.4)&&(j_pt[0]>300)&&(j_tau21_b1[0]<0.2))"
    normalize=True
@@ -725,18 +740,20 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==168:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
@@ -751,28 +768,28 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==169:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WH.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZH.root",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
    selection = "((abs(j_eta[0])<2.4)&&(j_pt[0]>300)&&(j_n2_b1_mmdt[0]<0.2))"
    normalize=True
@@ -781,18 +798,20 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==170:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
@@ -807,28 +826,28 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==171:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/wqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
  	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:WH.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZP.root",
- 	     #"/afs/cern.ch/user/h/hinzmann/workspace/Wmass/trackObservables/processing/processed-output.dat-0:ZH.root",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
+ 	     "root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_herwig/ntupler/",
  	     ]
    selection = "((abs(j_eta[0])<2.4)&&(j_pt[0]>300)&&(j_tau21_b1_mmdt[0]<0.2))"
    normalize=True
@@ -837,18 +856,20 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
   if runSet==172:
    samples = ["root://eoscms.cern.ch//eos/cms/store/cmst3/group/monojet/precision/zqq_pt150_100_tarball.tar.xz_pythia/ntupler/",
@@ -863,26 +884,28 @@ if __name__ == '__main__':
            "mass_mmdt",
  	   "mass",
            "mass_trim",
- 	   "mass_rsd",
- 	   "mass_softdrop_b2",
- 	   "mass_softdrop_m1",
+ 	   "mass_rsd_b1",
+ 	   "mass_Softdrop_b2",
+ 	   "mass_Softdrop_b1",
+ 	   "mass_Softdrop_m1",
  	   ]
    plots = [#("j_pt[0]",selection,"jet p_{T} (GeV)"),
             #("abs(j_eta[0])",selection,"jet |#eta|"),
             ("j_mass_mmdt[0]",selection,"m_{mMDT} (GeV)"),
- 	    ("j_mass_prun[0]",selection,"pruned jet mass (GeV)"),
- 	    ("j_mass_trim[0]",selection,"trimmed jet mass (GeV)"),
- 	    ("j_mass_rsd[0]",selection,"r. softdrop (#beta=0) jet mass (GeV)"),
- 	    ("j_mass_sdb2[0]",selection,"softdrop (#beta=2) jet mass (GeV)"),
- 	    ("j_mass_sdm1[0]",selection,"softdrop (#beta=-1) jet mass (GeV)"),
+ 	    ("j_mass_prun[0]",selection,"Pruned jet mass (GeV)"),
+ 	    ("j_mass_trim[0]",selection,"Trimmed jet mass (GeV)"),
+ 	    ("j_mass_rsdb1[0]",selection,"r. Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdb2[0]",selection,"Softdrop (#beta=2) jet mass (GeV)"),
+ 	    ("j_mass_sdb1[0]",selection,"Softdrop (#beta=1) jet mass (GeV)"),
+ 	    ("j_mass_sdm1[0]",selection,"Softdrop (#beta=-1) jet mass (GeV)"),
  	    ]
-
 
   results=[]
   outfile="w_jet_wmass_"+str(runSet+100*theory)+"_out.root"
   print "outfile",outfile
   fout=TFile.Open(outfile,"RECREATE")
   for plot in plots:
+   #if not "rsd" in plot[0]: continue
    if runSet>1000:
      canvas = TCanvas("c1","c1",0,0,200,260)
      canvas.Divide(1,2,0,0,0)
@@ -918,6 +941,7 @@ if __name__ == '__main__':
    ts=[]
    firsthist=None
    for sample in samples:
+    if theory==2 or theory==3: sample=sample.replace("pt150","pt300")
     s+=1
     for gen in sets:
      if (names[plots.index(plot)]=="pt" or names[plots.index(plot)]=="eta" or names[plots.index(plot)]=="npu" or names[plots.index(plot)]=="npv" or "costheta" in names[plots.index(plot)] or "Phi" in names[plots.index(plot)] or "dR" in names[plots.index(plot)]) and gen=="Gen":
@@ -938,6 +962,7 @@ if __name__ == '__main__':
        count=0
        for fn in p.stdout:
          if not ".root" in fn: continue
+	 if (theory==1 or theory==2 or theory==3) and not "rsd" in fn: continue
 	 count+=1
 	 fFile = TFile.Open(sample+fn.replace("\n",""))
          if not fFile or fFile.IsZombie():
@@ -949,6 +974,7 @@ if __name__ == '__main__':
          tree.Add(sample+fn.replace("\n",""))
 	 #if count>10 and "QCD" in sample: break ######
 	 #break #####
+	 if count>1000: break
      print ""
      ts+=[tree]
      print sample,tree.GetEntries()
@@ -965,7 +991,7 @@ if __name__ == '__main__':
  	  canvas.GetPad(1).SetLogy(True)
  	else:
  	  canvas.SetLogy(True)
-     elif "pruned jet mass" in plot[2]:
+     elif "Pruned jet mass" in plot[2]:
  	hist=TH1F(histname,histname,30,0,150);
  	if (runSet>=162 and runSet<=172):
  	  hist=TH1F(histname,histname,40,70,110);
@@ -976,8 +1002,6 @@ if __name__ == '__main__':
      elif "jet mass (GeV)" in plot[2] or "mMDT" in plot[2]:
        if "-0" in sample and "UE" in sample and (runSet==59 or runSet==60 or runSet==57 or runSet==52 or runSet==58):
  	  hist=TH1F(histname,histname,80,70,110);
-       elif (runSet>=162 and runSet<=172) and "r." in plot[2]:
- 	  hist=TH1F(histname,histname,40,60,100);
        elif (runSet>=162 and runSet<=172):
  	  hist=TH1F(histname,histname,40,70,110);
        elif "-0" in sample and (runSet==59 or runSet==60):
@@ -1039,7 +1063,11 @@ if __name__ == '__main__':
      if runSet==170 and s==4: cutstring += "&&(j_nbHadrons[0]>1)"
      if runSet==172 and s==3: cutstring += "&&(j_nbHadrons[0]>1)"
      if runSet==172 and s==4: cutstring += "&&(j_nbHadrons[0]>1)"
+     if (runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171) and s==5: cutstring += "&&(j_nbHadrons[0]>1)"
+     if (runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171) and s==6: cutstring += "&&(j_nbHadrons[0]>1)"
      if "TT" in sample: cutstring = "(-1*(event_weights<0)+1*(event_weights>0))*("+cutstring+")"
+      
+     if (theory==2 or theory==3): cutstring += "&&(j_pt[0]>500)"
 
      print s,histname,variable,cutstring
      tree.Project(histname,variable,cutstring)
@@ -1055,7 +1083,7 @@ if __name__ == '__main__':
        hist.GetXaxis().SetTitle("")
        hist.GetXaxis().SetLabelColor(0)
        hist.GetYaxis().SetTitle("Events")
-       if "pruned jet mass" in plot[2]:
+       if "Pruned jet mass" in plot[2]:
  	   hist.GetYaxis().SetTitle("Events / (3 GeV)")
      elif not normalize:
        hist.GetXaxis().SetTitle(plot[2])
@@ -1095,8 +1123,12 @@ if __name__ == '__main__':
      if hist.GetMaximum()>maximum:
        if hist.GetMaximum()>=hist.Integral():
          maximum=hist.GetBinContent(1)
+         if runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171:
+           maximum*=1.1
        else:
  	 maximum=hist.GetMaximum()
+         if runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171:
+           maximum*=1.1
  
      if "jet p_{T}" in plot[2]:
        firsthist.GetYaxis().SetRangeUser(maximum/50.0,maximum*2.0)
@@ -1173,6 +1205,10 @@ if __name__ == '__main__':
        entry="Z, Pythia"
      elif ("Z" in sample or "z" in sample) and (runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171) and s==4:
        entry="Z, Herwig"
+     elif ("Z" in sample or "z" in sample) and (runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171) and s==5:
+       entry="Z #rightarrow bb, Pythia"
+     elif ("Z" in sample or "z" in sample) and (runSet==162 or runSet==163 or runSet==165 or runSet==167 or runSet==169 or runSet==171) and s==6:
+       entry="Z #rightarrow bb, Herwig"
      elif ("Z" in sample or "z" in sample) and (runSet==164 or runSet==166 or runSet==168 or runSet==170 or runSet==172) and s==1:
        entry="Z, Pythia"
      elif ("Z" in sample or "z" in sample) and (runSet==164 or runSet==166 or runSet==168 or runSet==170 or runSet==172) and s==2:
@@ -1264,7 +1300,7 @@ if __name__ == '__main__':
        print "max",mean
        fitmin=-1.0
        fitmax=1.0
-       if runSet==162 or runSet==163 or runSet==164 or runSet==165 or runSet==166:
+       if (runSet>=162 and runSet<=172) and theory!=3:
          fitmin=-1.0
 	 fitmax=0.67
        g1 = TF1("g1","gaus", 0.7*mean,1.3*mean)
@@ -1288,9 +1324,9 @@ if __name__ == '__main__':
        print "median", yq[0]
        if (g1.GetParameter(1)>65 and g1.GetParameter(1)<105) and runSet!=59 and runSet!=60:
  	 hmean = int(g1.GetParameter(1)*1000.)/1000.
- 	 entry+= " "+str(hmean)+""
-         hres = int(g1.GetParameter(2)/g1.GetParameter(1)*1000.)/10.
- 	 entry+= " ("+str(hres)+"%)"
+ 	 entry+= " ({0:.3f}".format(hmean)+" GeV)"
+         #hres = int(g1.GetParameter(2)/g1.GetParameter(1)*1000.)/10.
+ 	 #entry+= " ("+str(hres)+"%)"
 
      legend.AddEntry(hist,entry,"l")
      counter+=1
@@ -1334,7 +1370,7 @@ if __name__ == '__main__':
    #if False:
       #legend3=TLegend(0.17,0.7,0.5,0.75,"#tau_{2}/#tau_{1}<0.25")
       if "#tau_{2}/#tau_{1}" in plot[2]:
-        legend3=TLegend(0.17,0.75,0.5,0.8,"65 < pruned jet mass < 105")
+        legend3=TLegend(0.17,0.75,0.5,0.8,"65 < Pruned jet mass < 105")
       else:
         legend3=TLegend(0.17,0.75,0.5,0.8,"65 < m_{mMDT} < 105")
       legend3.SetTextSize(0.03)
