@@ -47,7 +47,7 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
 
-   for signalMass in [2000,2500,3000,3500,4000,5000,6000]:   
+   for signalMass in [1000,1500,2000,2500,3000,3500,4000,5000,6000]:   
      canvas = TCanvas("pdf","pdf",0,0,600,600)
      canvas.Divide(3,3)
      legends=[]

@@ -31,7 +31,7 @@ if __name__=="__main__":
  #models+=[40,41,42,43,44,45,46,47,48]
  #models=[88,89]
  #models=[60,61]
- models=[10,11]
+ #models=[10,11]
  
  testStat="LHC"
  asym="a" #asymptotic CLS
@@ -85,7 +85,7 @@ if __name__=="__main__":
     mg=TMultiGraph()
 
     min_x=5000
-    max_x=20000
+    max_x=40000
     g0=TGraph(0)
     g0.SetPoint(0,min_x,0)
     g0.SetPoint(1,max_x,0)
@@ -163,8 +163,8 @@ if __name__=="__main__":
     exp=0
     exp1m=0
     exp1p=0
-    for i in range(20000):
-        mass=i*(max_x-limits[0][0])/20000.+limits[0][0]
+    for i in range(max_x):
+        mass=i*(max_x-limits[0][0])/max_x+limits[0][0]
         if mass<min_x or mass>max_x: continue
 	if limit==0 and g.Eval(mass,0)>log10(cut):
 	    limit=mass

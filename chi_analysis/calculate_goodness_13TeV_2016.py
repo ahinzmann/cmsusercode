@@ -20,7 +20,8 @@ jesSources=16 # 1 corresponds to the single overall variation, 16 to all
 separateScaleUncertainties=False
 
 dire="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/"
-prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/smearedDatacardsNov2/datacard_shapelimit13TeV"
+#prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/smearedDatacardsNov2/datacard_shapelimit13TeV"
+prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
 
 for massbins in massbinssets:
     limits={}
