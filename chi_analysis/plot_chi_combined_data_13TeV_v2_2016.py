@@ -33,6 +33,7 @@ if __name__=="__main__":
 
     print "start ROOT"
     gROOT.Reset()
+    gROOT.SetBatch(True)
     gROOT.SetStyle("Plain")
     gStyle.SetOptStat(0)
     gStyle.SetOptFit(0)
@@ -89,7 +90,7 @@ if __name__=="__main__":
     if binByBinCorrect: prefix+="_binbybin"
     if unfoldedData: prefix+="_unfolded"
 
-    c = TCanvas("combined", "combined", 0, 0, 700, 1000)
+    c = TCanvas("combined", "combined", 700, 1000)
     c.Divide(1,1)
     
     pad=[]
@@ -194,7 +195,7 @@ if __name__=="__main__":
             h4.SetLineStyle(1)
         
         if massbin>1:
-            filename="./invertMatrixOct20/datacard_shapelimit13TeV_cs_ct14nlo_14000_LL+_chi2016.root"
+            filename="./invertMatrix/datacard_shapelimit13TeV_cs_ct14nlo_14000_LL+_chi2016.root"
             print filename
             f = TFile.Open(filename)
             new_hists+=[f]
@@ -207,7 +208,7 @@ if __name__=="__main__":
             h7.SetLineWidth(2)
 
         if massbin>3:
-            filename="./invertMatrixOct20/datacard_shapelimit13TeV_GENnp-22-v5_chi2016.root"
+            filename="./invertMatrix/datacard_shapelimit13TeV_GENnp-22-v5_chi2016.root"
             print filename
             f = TFile.Open(filename)
             new_hists+=[f]
@@ -221,11 +222,11 @@ if __name__=="__main__":
             #for b in range(h5.GetNbinsX()):
             #    h5.SetBinContent(b+1,h5.GetBinContent(b+1)/h5.GetBinWidth(b+1))
             
-            filename="./invertMatrixOct20/datacard_shapelimit13TeV_QBH_8000_6_chi_v1.root"
+            filename="./invertMatrixOct20/datacard_shapelimit13TeV_QBH_8000_6_chi2016.root"
             print filename
             f = TFile.Open(filename)
             new_hists+=[f]
-            histname='QCDADD6QBH8000#chi'+str(massbins13[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+            histname='QBH_8000_6#chi'+str(massbins13[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print histname
             h6=f.Get(histname)
             h6=h6.Rebin(len(chi_binnings[massbin])-1,h6.GetName()+"_rebin",chi_binnings[massbin])
@@ -470,7 +471,7 @@ if __name__=="__main__":
             h7.Draw("histsame")
         if massbin>3:
             h5.Draw("histsame")
-            #h6.Draw("histsame")
+            h6.Draw("histsame")
         #h4.Draw("histsame")
         #hNloQcd.Draw("histsame")
         h14G.Draw("pzesame")
@@ -547,4 +548,4 @@ if __name__=="__main__":
     leg2.Draw("same")
     leg3.Draw("same")
     
-    #c.SaveAs("~/Desktop/"+prefix + "_combined_RunII_25ns_v2_2016.pdf")
+    c.SaveAs(prefix + "_combined_RunII_25ns_v2_2016.pdf")
