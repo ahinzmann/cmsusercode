@@ -15,13 +15,13 @@ copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
 -------- Data analysis in CMSSW_8_1_X:
 
-plotSignal_13TeV_uzh2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
+plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
 
 plotSignal_13TeV_lxplus_loop.py # produce dijet angular histograms from GEN samples for DM samples
 
 plot_data_13TeV_uzh2_loop.py # produce dijet angular histograms for data and fullsim QCD samples
 
-plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
+plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
 plot_chi_jes_plots_13TeV_run2_combine.py # plot JES uncertainty histograms
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms

@@ -30,7 +30,9 @@ if __name__ == '__main__':
    lumifactor["2017"]=41.53/137.42
    lumifactor["2018"]=59.97/137.42
 
-   massbins=[(1900,2400),
+   massbins=[(1200,1500),
+              (1500,1900),
+              (1900,2400),
               (2400,3000),
               (3000,3600),
               (3600,4200),
@@ -69,6 +71,8 @@ if __name__ == '__main__':
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+              (1,2,3,4,5,6,7,8,9,10,12,14,16),
+              (1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,3,6,9,12,16),
               ]
    chi_binnings=[]
@@ -85,23 +89,24 @@ if __name__ == '__main__':
        sum_in_quadrature_down+=[len(chi_binnings[mass])*[0]]
 
      for sourceset in sourcesets:
-      canvas = TCanvas("jes","jes",0,0,600,600)
-      canvas.Divide(3,3)
+      canvas = TCanvas("jes","jes",0,0,400,300)
+      canvas.Divide(4,3)
       log=False
       legends=[]
       hists=[]
       files=[]
-      for mass in range(min(9,len(massbins))):
-        b="1"
-	if mass==3: b="2"
-        if mass==2: b="3"
-        if mass==1: b="4"
-        if mass==0: b="6"
+      for mass in range(len(massbins)):
+	if mass>=6: b="1"
+	if mass==5: b="2"
+        if mass==4: b="3"
+        if mass==3: b="4"
+        if mass==2: b="6"
+        if mass<=1: b="7"
 	f_refmc={}
 	histyear={}
 	for year in ["2016","2017","2018"]:
 	  print "datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root"
-          f_refmc[year]=TFile.Open("datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year.replace("2018","2017"))+"_"+b+"_chi.root")
+          f_refmc[year]=TFile.Open("datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root")
 	  files+=[f_refmc[year]]
           histyear[year]=f_refmc[year].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
           histyear[year]=histyear[year].Clone(histyear[year].GetName()+"main"+str(sourcesets.index(sourceset)))

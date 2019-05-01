@@ -42,12 +42,16 @@ if doJES:
   JESparameters={}
   print "load 2016 uncertainties"
   for source in JECsources:
-    JESparameters[source+"2016"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh94/CMSSW_9_4_1/src/JECDatabase/textFiles/Summer16_07Aug2017_V11_MC/Summer16_07Aug2017_V11_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2016"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Summer16_07Aug2017_V11_MC/Summer16_07Aug2017_V11_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2016"] = JetCorrectionUncertainty(JESparameters[source+"2016"])
   print "load 2017 uncertainties"
   for source in JECsources:
-    JESparameters[source+"2017"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh94/CMSSW_9_4_1/src/JECDatabase/textFiles/Fall17_17Nov2017_V32_MC/Fall17_17Nov2017_V32_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2017"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Fall17_17Nov2017_V32_MC/Fall17_17Nov2017_V32_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2017"] = JetCorrectionUncertainty(JESparameters[source+"2017"])
+  print "load 2018 uncertainties"
+  for source in JECsources:
+    JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Autumn18_V8_MC/Autumn18_V8_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESuncertainties[source+"2018"] = JetCorrectionUncertainty(JESparameters[source+"2018"])
 
 def createPlots(sample,prefix,xsec,massbins,year):
     files=[]
@@ -113,7 +117,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
        chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))
        yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
        for scale in scales:
-         if mjj>1500 and chi<16. and yboost<1.11 and scale!=1:
+         if mjj>1000 and chi<16. and yboost<1.11 and scale!=1:
            jes=JESuncertainties[scale.replace("_Up","")+year]
            jes.setJetPt(jet1.Pt())
            jes.setJetEta(jet1.Eta())
@@ -152,7 +156,7 @@ if __name__ == '__main__':
     sets=[]
     i=0
     for name in ["QCD","QCDCIplusLL10000"]:
-      for year in [2016,2017]:
+      for year in [2016,2017,2018]:
         for bin in [1,2,3,4,5,6,7]:
 	   print i,name,bin,year
 	   sets+=[(name,bin,year)]
@@ -189,21 +193,17 @@ if __name__ == '__main__':
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
               ]
-    massbins=[(1900,2400),
+    massbins=[(1200,1500),
+              (1500,1900),
+              (1900,2400),
               (2400,3000),
               (3000,3600),
               (3600,4200),
               (4200,4800),
               (4800,5400),
               (5400,6000),
-              (6000,6600),
-	      (2400,13000),
-	      (3000,13000),
-	      (3600,13000),
-	      (4200,13000),
-	      (4800,13000),
-	      (5400,13000),
 	      (6000,13000),
+              (6000,6600),
 	      (6600,13000),
 	      (6000,7000),
               (7000,13000),
@@ -342,11 +342,8 @@ if __name__ == '__main__':
           plots[i][j].SetBinContent(b+1,plots[i][j].GetBinContent(b+1)/plots[i][j].GetBinWidth(b+1))
           plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
 
-    canvas = TCanvas("","",0,0,400,200)
-    canvas.Divide(2,1)
-    if len(massbins)>2:
-      canvas = TCanvas("","",0,0,600,600)
-      canvas.Divide(3,3)
+    canvas = TCanvas("","",0,0,400,300)
+    canvas.Divide(4,3)
 
     legends=[]
     ratios=[]
