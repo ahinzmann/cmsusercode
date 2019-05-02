@@ -60,7 +60,7 @@ def createPlots(sample,prefix,xsec,massbins):
     event_count=0
     for event in events:
          event_count+=1
-	 if event_count>10000000: break
+	 #if event_count>10000000: break
          if event_count%10000==1: print "event",event_count
          jet1=TLorentzVector()
          jet2=TLorentzVector()
@@ -527,7 +527,7 @@ if __name__ == '__main__':
           plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
         plots[i][j].GetYaxis().SetRangeUser(0,0.2)
 
-    canvas = TCanvas("","",0,0,400,300)
+    canvas = TCanvas("","",0,0,800,600)
     canvas.Divide(4,3)
 
     legends=[]

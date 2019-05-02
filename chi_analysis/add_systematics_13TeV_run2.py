@@ -6,7 +6,7 @@ from math import *
 from scipy import stats
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
-gROOT.Reset()
+#gROOT.Reset()
 gROOT.SetStyle("Plain")
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
@@ -275,7 +275,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_18000_-1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples2+=[("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
+    samples+=[("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
                        ("pythia8_add_m1900_2400_6000_0_0_0_1_13TeV_Nov14",8.836e-07),
                        ("pythia8_add_m2400_2800_6000_0_0_0_1_13TeV_Nov14",1.649e-07),
                        ("pythia8_add_m2800_3300_6000_0_0_0_1_13TeV_Nov14",6.446e-08),
@@ -513,79 +513,79 @@ if __name__ == '__main__':
      # signal cards
      for i in range(len(samples)):
       if samples[i][0]=="QCDCIplusLL8000":
-        sample=prefix + '_GENnp-0-v4_chi2016.root'
+        sample=prefix + '_GENnp-0-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL9000":
-        sample=prefix + '_GENnp-1-v4_chi2016.root'
+        sample=prefix + '_GENnp-1-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL10000":
-        sample=prefix + '_GENnp-2-v4_chi2016.root'
+        sample=prefix + '_GENnp-2-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL11000":
-        sample=prefix + '_GENnp-3-v4_chi2016.root'
+        sample=prefix + '_GENnp-3-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL12000":
-        sample=prefix + '_GENnp-4-v4_chi2016.root'
+        sample=prefix + '_GENnp-4-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL13000":
-        sample=prefix + '_GENnp-5-v4_chi2016.root'
+        sample=prefix + '_GENnp-5-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL14000":
-        sample=prefix + '_GENnp-6-v4_chi2016.root'
+        sample=prefix + '_GENnp-6-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL16000":
-        sample=prefix + '_GENnp-7-v4_chi2016.root'
+        sample=prefix + '_GENnp-7-run2_chi.root'
       elif samples[i][0]=="QCDCIplusLL18000":
-        sample=prefix + '_GENnp-8-v4_chi2016.root'
+        sample=prefix + '_GENnp-8-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL8000":
-        sample=prefix + '_GENnp-9-v4_chi2016.root'
+        sample=prefix + '_GENnp-9-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL9000":
-        sample=prefix + '_GENnp-10-v4_chi2016.root'
+        sample=prefix + '_GENnp-10-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL10000":
-        sample=prefix + '_GENnp-11-v4_chi2016.root'
+        sample=prefix + '_GENnp-11-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL11000":
-        sample=prefix + '_GENnp-12-v4_chi2016.root'
+        sample=prefix + '_GENnp-12-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL12000":
-        sample=prefix + '_GENnp-13-v4_chi2016.root'
+        sample=prefix + '_GENnp-13-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL13000":
-        sample=prefix + '_GENnp-14-v4_chi2016.root'
+        sample=prefix + '_GENnp-14-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL14000":
-        sample=prefix + '_GENnp-15-v4_chi2016.root'
+        sample=prefix + '_GENnp-15-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL16000":
-        sample=prefix + '_GENnp-16-v4_chi2016.root'
+        sample=prefix + '_GENnp-16-run2_chi.root'
       elif samples[i][0]=="QCDCIminusLL18000":
-        sample=prefix + '_GENnp-17-v4_chi2016.root'
+        sample=prefix + '_GENnp-17-run2_chi.root'
       elif samples[i][0]=="QCDADD6000":
-        sample=prefix + '_GENnp-18-v5_chi2016.root'
+        sample=prefix + '_GENnp-18-run2_chi.root'
       elif samples[i][0]=="QCDADD7000":
-        sample=prefix + '_GENnp-19-v5_chi2016.root'
+        sample=prefix + '_GENnp-19-run2_chi.root'
       elif samples[i][0]=="QCDADD8000":
-        sample=prefix + '_GENnp-20-v5_chi2016.root'
+        sample=prefix + '_GENnp-20-run2_chi.root'
       elif samples[i][0]=="QCDADD9000":
-        sample=prefix + '_GENnp-21-v5_chi2016.root'
+        sample=prefix + '_GENnp-21-run2_chi.root'
       elif samples[i][0]=="QCDADD10000":
-        sample=prefix + '_GENnp-22-v5_chi2016.root'
+        sample=prefix + '_GENnp-22-run2_chi.root'
       elif samples[i][0]=="QCDADD11000":
-        sample=prefix + '_GENnp-23-v5_chi2016.root'
+        sample=prefix + '_GENnp-23-run2_chi.root'
       elif samples[i][0]=="QCDADD12000":
-        sample=prefix + '_GENnp-24-v5_chi2016.root'
+        sample=prefix + '_GENnp-24-run2_chi.root'
       elif samples[i][0]=="QCDADD13000":
-        sample=prefix + '_GENnp-25-v5_chi2016.root'
+        sample=prefix + '_GENnp-25-run2_chi.root'
       elif samples[i][0]=="QCDADD14000":
-        sample=prefix + '_GENnp-26-v5_chi2016.root'
+        sample=prefix + '_GENnp-26-run2_chi.root'
       elif samples[i][0]=="QCDADD15000":
-        sample=prefix + '_GENnp-27-v5_chi2016.root'
+        sample=prefix + '_GENnp-27-run2_chi.root'
       elif samples[i][0]=="QCDADD16000":
-        sample=prefix + '_GENnp-28-v5_chi2016.root'
+        sample=prefix + '_GENnp-28-run2_chi.root'
       elif samples[i][0]=="QCDADD17000":
-        sample=prefix + '_GENnp-29-v5_chi2016.root'
+        sample=prefix + '_GENnp-29-run2_chi.root'
       elif samples[i][0]=="QCDADD18000":
-        sample=prefix + '_GENnp-30-v5_chi2016.root'
+        sample=prefix + '_GENnp-30-run2_chi.root'
       elif samples[i][0]=="QCDADD19000":
-        sample=prefix + '_GENnp-31-v5_chi2016.root'
+        sample=prefix + '_GENnp-31-run2_chi.root'
       elif samples[i][0]=="QCDADD20000":
-        sample=prefix + '_GENnp-32-v5_chi2016.root'
+        sample=prefix + '_GENnp-32-run2_chi.root'
       elif samples[i][0]=="QCDADD21000":
-        sample=prefix + '_GENnp-33-v5_chi2016.root'
+        sample=prefix + '_GENnp-33-run2_chi.root'
       elif samples[i][0]=="QCDADD22000":
-        sample=prefix + '_GENnp-34-v5_chi2016.root'
+        sample=prefix + '_GENnp-34-run2_chi.root'
       elif samples[i][0]=="QCDAntiCIplusLL12000":
-        sample=prefix + '_GENnp-antici-v4_chi2016.root'
+        sample=prefix + '_GENnp-antici-run2_chi.root'
       elif samples[i][0]=="QCD":
-        sample=prefix + '_QCD_chi2016.root'
+        sample=prefix + '_GEN-QCD-run2_chi.root'
       elif "DM" in samples[i][0] or "ll" in samples[i][0] or "cs" in samples[i][0] or "wide" in samples[i][0] or "QBH" in samples[i][0]:
         sample=prefix + "_" + samples[i][0] + '_chi2016.root'
       #if "ADD" in samples[i][0]:
@@ -595,26 +595,29 @@ if __name__ == '__main__':
       #elif "CIminus" in samples[i][0]:
       #  sample=prefix + '_GENciminusv3_chi2016.root'
       else:
-        sample="datacards/"+prefix + '_GENv4_chi.root'
+        sample=prefix + '_GEN-QCD-run2_chi.root'
       print sample
   
       out=TFile(sample,'UPDATE')
       closefiles=[out]
       
       # LO QCD file
-      sample2="datacards/"+prefix + '_GENv4_chi.root'
+      sample2=prefix + '_GEN-QCD-run2_chi.root'
       print sample2
       in2=TFile(sample2,'READ')
 
       # data file
-      insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
+      #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
+      insample="datacard_shapelimit13TeV_run2_2016_chi.root"
       print insample
       infile=TFile(insample,'READ')
-      insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
+      #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
+      insample17="datacard_shapelimit13TeV_run2_2017_chi.root"
       print insample17
       infile17=TFile(insample17,'READ')
       insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
+      #insample18="datacard_shapelimit13TeV_run2_2018_chi.root"
       print insample18
       infile18=TFile(insample18,'READ')
 
@@ -651,7 +654,7 @@ if __name__ == '__main__':
       # JES uncertainty QCD
       jesfiles=[]
       for n in range(5):
-        filename1jes="datacards/chi_systematic_plotschi_QCDJES_"+str(n)+"_13TeV_run2.root"
+        filename1jes="chi_systematic_plotschi_QCDJES_"+str(n)+"_13TeV_run2.root"
         print filename1jes
         jesfiles += [TFile.Open(filename1jes)]
         closefiles+=[jesfiles[-1]]
@@ -670,7 +673,7 @@ if __name__ == '__main__':
       # JES uncertainty CI
       jescifiles=[]
       for n in range(5):
-        filename1jesci="datacards/chi_systematic_plotschi_QCDJES_"+str(n)+"_13TeV_run2.root"
+        filename1jesci="chi_systematic_plotschi_QCDJES_"+str(n)+"_13TeV_run2.root"
         print filename1jesci
         jescifiles += [TFile.Open(filename1jesci)]
         closefiles+=[jescifiles[-1]]
@@ -686,15 +689,12 @@ if __name__ == '__main__':
 	    print "JES source not found", jesname
 	    error
 
-      canvas = TCanvas("","",0,0,600,600)
-      canvas.Divide(3,3)
+      canvas = TCanvas("","",0,0,800,600)
+      canvas.Divide(4,3)
       plots=[]
       legends=[]
 
       for j in range(len(massbins)):
-        #if not "LO" in sample and j<2 and not "EWK" in sample:
-        #   continue
-        # data
         histname="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi"
         print histname
         if useLensData:
@@ -713,19 +713,19 @@ if __name__ == '__main__':
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
         else:
-          histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi"
+          #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi" # FIX Compute 2016 data for lower mass bins
+          histname2="datacard_shapelimit13TeV_run2_2016#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname2
           data = TH1F(infile.Get(histname2))
-          #data = TH1F(infile.Get("Data13#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1")) # buggy data
-          #for b in range(data.GetXaxis().GetNbins()):
-          #   data.SetBinContent(b+1,data.GetBinContent(b+1)*data.GetBinWidth(b+1))
-          #   data.SetBinError(b+1,data.GetBinError(b+1)*data.GetBinWidth(b+1))
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-          histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
+          #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000") # FIX Compute 2017 data for lower mass bins
+          histname17="datacard_shapelimit13TeV_run2_2017#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           data17 = TH1F(infile17.Get(histname17))
           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
 	  data.Add(data17)
+          histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
+          #histname18="datacard_shapelimit13TeV_run2_2018#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           data18 = TH1F(infile18.Get(histname18))
           data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
 	  data.Add(data18)
@@ -769,7 +769,7 @@ if __name__ == '__main__':
             nloqcdnorm=hnlo
 
         # EWK corrections
-        histname='chi-'+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"").replace("6000-7000","6000-6600").replace("7000-13000","6600-13000") # FIX
+        histname='chi-'+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("7000-13000","6600-13000") # FIX compute lower and higher mass bins
         print histname
         ewk=ewkfile.Get(histname)
         for b in range(nloqcd.GetXaxis().GetNbins()):
@@ -1013,6 +1013,8 @@ if __name__ == '__main__':
         cijerup=clone.Clone(histname+"_jerUp")
         cijerdown=clone.Clone(histname+"_jerDown")
         slopes={}
+        slopes[1200]=0.018 # FIX compute
+        slopes[1500]=0.018 # FIX compute
         slopes[1900]=0.018
         slopes[2400]=0.018 
         slopes[3000]=0.020 
@@ -1021,6 +1023,7 @@ if __name__ == '__main__':
         slopes[4800]=0.034
         slopes[5400]=0.026
         slopes[6000]=0.026
+        slopes[7000]=0.026 # FIX compute
         for b in range(clone.GetNbinsX()):
             cijerup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
             cijerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
@@ -1476,14 +1479,14 @@ if __name__ == '__main__':
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.pdf')
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.eps')
       
-      if not useUnfoldedData:
-        canvas = TCanvas("","",0,0,600,600)
-        canvas.Divide(3,3)
+      if False and not useUnfoldedData: # FIX reponse matrix for high mass bins
+        canvas = TCanvas("","",0,0,800,600)
+        canvas.Divide(4,3)
 	print "Applying response matrix"
         matrix=TFile("datacards/responseMatrices.root",'READ')
         matrix1=matrix.Get("TMatrixT<double>;2") #low mass chi binning
         matrix2=matrix.Get("TMatrixT<double>;3") #highest mass chi binning
-        matrixMassBins=[1000,1200,1500,1900,2400,3000,3600,4200,4800,5400,6000,13000]
+        matrixMassBins=[1000,1200,1500,1900,2400,3000,3600,4200,4800,5400,6000,13000] # FIX compute high mass bins
         #print (len(matrixMassBins)-1)*(len(chi_bins[0])-1)
         #matrix1.Print()
         #print (len(matrixMassBins)-1)*(len(chi_bins[-1])-1)

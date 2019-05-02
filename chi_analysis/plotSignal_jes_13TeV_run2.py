@@ -342,7 +342,7 @@ if __name__ == '__main__':
           plots[i][j].SetBinContent(b+1,plots[i][j].GetBinContent(b+1)/plots[i][j].GetBinWidth(b+1))
           plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
 
-    canvas = TCanvas("","",0,0,400,300)
+    canvas = TCanvas("","",0,0,800,600)
     canvas.Divide(4,3)
 
     legends=[]

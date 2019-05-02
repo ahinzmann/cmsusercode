@@ -89,7 +89,7 @@ if __name__ == '__main__':
        sum_in_quadrature_down+=[len(chi_binnings[mass])*[0]]
 
      for sourceset in sourcesets:
-      canvas = TCanvas("jes","jes",0,0,400,300)
+      canvas = TCanvas("jes","jes",0,0,800,600)
       canvas.Divide(4,3)
       log=False
       legends=[]
@@ -195,6 +195,7 @@ if __name__ == '__main__':
               hist2.Divide(hist2,histref)
 	     else:
               hist2=histyear2[sourceset[i][1]]
+	      hist2.SetName(hist2.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
 	      if hist2.Integral()>0:
                 hist2.Scale(histyear[sourceset[i][1]].Integral()/hist2.Integral())
  	      hist2.Divide(hist2,histyear[sourceset[i][1]])
@@ -232,6 +233,7 @@ if __name__ == '__main__':
  	      hist3.Divide(hist3,histref)
 	     else:
               hist3=histyear3[sourceset[i][1]]
+	      hist3.SetName(hist3.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
 	      if hist3.Integral()>0:
                 hist3.Scale(histyear[sourceset[i][1]].Integral()/hist3.Integral())
  	      hist3.Divide(hist3,histyear[sourceset[i][1]])

@@ -3,7 +3,7 @@ import ROOT
 from math import log10
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
-gROOT.Reset()
+#gROOT.Reset()
 gROOT.SetStyle("Plain")
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
@@ -24,7 +24,7 @@ if __name__=="__main__":
 
  models=[3]
  #models+=[10,11]
- models+=[60,61,62,63,64,65,66,67,68,69]
+ #models+=[60,61,62,63,64,65,66,67,68,69]
  #models+=[70,71,72,73,74,75,76,77]
  #models+=[78,79,80,81,82,83,84,85,86,87]
  #models+=[30,31,32,33,34,35,36,37,38]
@@ -76,7 +76,7 @@ if __name__=="__main__":
 
     print signal,model
 
-    f=file("limits"+testStat+asym+str(model)+"_"+signal+"_2016.txt")
+    f=file("limits"+testStat+asym+str(model)+"_"+signal+"_run2.txt")
     limits=eval(f.readline())
     #print limits
 
@@ -203,6 +203,6 @@ if __name__=="__main__":
     l2c.SetLineStyle(2)
     l2c.Draw("same")
     
-    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_2017.pdf')
-    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_2017.eps')
+    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.pdf')
+    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
     
