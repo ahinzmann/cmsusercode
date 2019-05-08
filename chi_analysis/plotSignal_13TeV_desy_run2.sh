@@ -1,4 +1,5 @@
-python plotSignal_13TeV_desy_run2.py 0 &
+python plotSignal_13TeV_desy_run2.py &
+python plotSignal_13TeV_desy_run2.py 4 &
 python plotSignal_13TeV_desy_run2.py 18 &
 python plotSignal_13TeV_desy_run2.py 19 &
 python plotSignal_13TeV_desy_run2.py 20 &

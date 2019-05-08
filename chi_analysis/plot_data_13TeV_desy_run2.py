@@ -25,9 +25,12 @@ gStyle.SetLegendBorderSize(0)
 def createPlots(sample,prefix,triggers,massbins):
     files=[]
     print "list files"
-    folders=os.listdir(sample)
-    for f in folders:
+    if not ".root" in sample:
+      folders=os.listdir(sample)
+      for f in folders:
     	files+=["dcap://dcache-cms-dcap.desy.de/"+sample+"/"+f]
+    else:
+      files=[sample]
 
     print files
     
@@ -54,7 +57,7 @@ def createPlots(sample,prefix,triggers,massbins):
      #if event_count>1000000: break ###
      for event in events:
          event_count+=1
-	 #if event_count>1000000: break ###
+	 #if event_count>10000: break ###
          if event_count%10000==1:
 	   print "event",event_count
 	   trigger_indices={}
@@ -80,8 +83,7 @@ def createPlots(sample,prefix,triggers,massbins):
 	      if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
 	        passedHLT=True
 		break
-            if not passedHLT: continue
-	    if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
+	    if passedHLT and yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
                plots[irec].Fill(chi)
 	    irec+=1
     #for plot in plots:
@@ -120,14 +122,14 @@ if __name__ == '__main__':
 	      (7000,13000),
               ]
  
-    samples=[("datacard_shapelimit13TeV_run2_2016","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
-            ("datacard_shapelimit13TeV_run2_2017","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
-            ("datacard_shapelimit13TeV_run2_2018","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018"),
+    samples=[("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
+            ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
+            ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018"),
             ]
 
-    triggers=[[["HLT_PFHT600"], #2016
-          ["HLT_PFHT650","HLT_PFHT600"],
-          ["HLT_PFHT650","HLT_PFHT600"],
+    triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          ["HLT_PFHT650","HLT_PFHT600","HLT_PFHT475","HLT_PFJet400"],
           [],
           [],
           [],
@@ -138,9 +140,9 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [["HLT_PFHT590"], #2017
-          ["HLT_PFHT680","HLT_PFHT590"],
-          ["HLT_PFHT680","HLT_PFHT590"],
+	  [["HLT_PFHT510"], #2017
+          ["HLT_PFHT590","HLT_PFHT510"],
+          ["HLT_PFHT680","HLT_PFHT590","HLT_PFHT510"],
           [],
           [],
           [],
@@ -151,9 +153,9 @@ if __name__ == '__main__':
           [],
           [],
           ],
-	  [["HLT_PFHT590"], #2018
-          ["HLT_PFHT680","HLT_PFHT590"],
-          ["HLT_PFHT680","HLT_PFHT590"],
+	  [["HLT_PFHT510"], #2018
+          ["HLT_PFHT590","HLT_PFHT510"],
+          ["HLT_PFHT680","HLT_PFHT590","HLT_PFHT510"],
           [],
           [],
           [],
@@ -169,6 +171,11 @@ if __name__ == '__main__':
       samplenum=int(sys.argv[1])
       samples=[samples[samplenum]]
       triggers=[triggers[samplenum]]
+
+    if len(sys.argv)>2:
+      folders=os.listdir(samples[0][2])
+      print len(folders)
+      samples=[(samples[0][0],"-"+sys.argv[2],"dcap://dcache-cms-dcap.desy.de/"+samples[0][2]+"/"+folders[int(sys.argv[2])])]
  
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -178,10 +185,10 @@ if __name__ == '__main__':
         
     print samples
 
-    for prefix,files in samples:
-      plots=[createPlots(files,prefix,triggers[samples.index((prefix,files))],massbins)]
+    for prefix,postfix,files in samples:
+      plots=[createPlots(files,prefix,triggers[samples.index((prefix,postfix,files))],massbins)]
 
-      out=TFile(prefix + '_chi.root','RECREATE')
+      out=TFile(prefix+postfix + '_chi.root','RECREATE')
       for j in range(len(massbins)):
   	for i in range(1):
   	  plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
@@ -222,14 +229,14 @@ if __name__ == '__main__':
   	canvas.cd(j+1)
   	plots[0][j].Draw("he")
   	print "number of events passed:",plots[0][j].GetEntries()
-  	legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
+  	legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("<13000",""))
   	legends+=[legend1]
   	legend1.AddEntry(plots[0][j],samples[0][0],"l")
   	legend1.SetTextSize(0.04)
   	legend1.SetFillStyle(0)
   	legend1.Draw("same")
 
-      canvas.SaveAs(prefix + '_chi.pdf')
-      canvas.SaveAs(prefix + '_chi.eps')
+      canvas.SaveAs(prefix+postfix + '_chi.pdf')
+      canvas.SaveAs(prefix+postfix + '_chi.eps')
       if wait:
   	  os.system("ghostview "+prefix + '_chi.eps')

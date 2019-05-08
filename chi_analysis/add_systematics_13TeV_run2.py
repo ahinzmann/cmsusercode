@@ -129,6 +129,34 @@ if __name__ == '__main__':
     samples2=[]
     samples3=[]
 
+    samples+=[("QCD",[("pythia8_ci_m1000_1500_50000_1_0_0_13TeV_Nov14",3.769e-05),
+                       ("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),
+                       ("pythia8_ci_m1900_2400_50000_1_0_0_13TeV_Nov14",8.836e-07),
+                       ("pythia8_ci_m2400_2800_50000_1_0_0_13TeV_Nov14",1.649e-07),
+                       ("pythia8_ci_m2800_3300_50000_1_0_0_13TeV_Nov14",6.446e-08),
+                       ("pythia8_ci_m3300_3800_50000_1_0_0_13TeV_Nov14",1.863e-08),
+                       ("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),
+                       ("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
+                       ]),
+            ]
+    samples+=[("QCDAntiCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
+                       ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
+                       ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
+                       ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
+                       ("pythia8_ci_m3300_3800_12000_1_0_0_13TeV_Nov14",1.863e-08),
+                       ("pythia8_ci_m3800_4300_12000_1_0_0_13TeV_Nov14",5.867e-09),
+                       ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
+                       ]),
+             ]
+    samples+=[("QCDCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
+                       ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
+                       ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
+                       ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
+                       ("pythia8_ci_m3300_3800_12000_1_0_0_13TeV_Nov14",1.863e-08),
+                       ("pythia8_ci_m3800_4300_12000_1_0_0_13TeV_Nov14",5.867e-09),
+                       ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
+                       ]),
+             ]
     samples2=[("QCDCIplusLL8000",[("pythia8_ci_m1500_1900_8000_1_0_0_13TeV_Nov14",3.307e-06),
                        ("pythia8_ci_m1900_2400_8000_1_0_0_13TeV_Nov14",8.836e-07),
                        ("pythia8_ci_m2400_2800_8000_1_0_0_13TeV_Nov14",1.649e-07),
@@ -420,34 +448,6 @@ if __name__ == '__main__':
                        ("pythia8_add_m5200_13000_22000_0_0_0_1_13TeV_Nov14",1),
                        ]),
              ]
-    samples+=[("QCD",[("pythia8_ci_m1000_1500_50000_1_0_0_13TeV_Nov14",3.769e-05),
-                       ("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),
-                       ("pythia8_ci_m1900_2400_50000_1_0_0_13TeV_Nov14",8.836e-07),
-                       ("pythia8_ci_m2400_2800_50000_1_0_0_13TeV_Nov14",1.649e-07),
-                       ("pythia8_ci_m2800_3300_50000_1_0_0_13TeV_Nov14",6.446e-08),
-                       ("pythia8_ci_m3300_3800_50000_1_0_0_13TeV_Nov14",1.863e-08),
-                       ("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),
-                       ("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
-                       ]),
-            ]
-    samples2+=[("QCDAntiCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
-                       ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
-                       ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
-                       ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
-                       ("pythia8_ci_m3300_3800_12000_1_0_0_13TeV_Nov14",1.863e-08),
-                       ("pythia8_ci_m3800_4300_12000_1_0_0_13TeV_Nov14",5.867e-09),
-                       ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
-                       ]),
-             ]
-    samples2+=[("QCDCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
-                       ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
-                       ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
-                       ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
-                       ("pythia8_ci_m3300_3800_12000_1_0_0_13TeV_Nov14",1.863e-08),
-                       ("pythia8_ci_m3800_4300_12000_1_0_0_13TeV_Nov14",5.867e-09),
-                       ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
-                       ]),
-             ]
 
     for m in range(5,31):
        samples2+=[("cs_ct14nlo_"+str(m*1000)+"_LL+",[]),
@@ -616,8 +616,8 @@ if __name__ == '__main__':
       insample17="datacard_shapelimit13TeV_run2_2017_chi.root"
       print insample17
       infile17=TFile(insample17,'READ')
-      insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
-      #insample18="datacard_shapelimit13TeV_run2_2018_chi.root"
+      #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
+      insample18="datacard_shapelimit13TeV_run2_2018_chi.root"
       print insample18
       infile18=TFile(insample18,'READ')
 
@@ -721,11 +721,13 @@ if __name__ == '__main__':
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000") # FIX Compute 2017 data for lower mass bins
           histname17="datacard_shapelimit13TeV_run2_2017#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print histname17
           data17 = TH1F(infile17.Get(histname17))
           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
 	  data.Add(data17)
-          histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
-          #histname18="datacard_shapelimit13TeV_run2_2018#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
+          histname18="datacard_shapelimit13TeV_run2_2018#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print histname18
           data18 = TH1F(infile18.Get(histname18))
           data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
 	  data.Add(data18)
@@ -1377,7 +1379,7 @@ if __name__ == '__main__':
         #if j<3:
         #   continue
         canvas.cd(j+1)#j-2
-        legend1=TLegend(0.2,0.6,0.9,0.95,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("4800<m_{jj}<7000","m_{jj}>4800").replace("4800<m_{jj}<13000","m_{jj}>4800"))
+        legend1=TLegend(0.2,0.6,0.9,0.95,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
         legends+=[legend1]
         legend1.AddEntry(data,"data","lpe")
         alt=cloneNormalize(alt)
@@ -1479,7 +1481,7 @@ if __name__ == '__main__':
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.pdf')
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.eps')
       
-      if False and not useUnfoldedData: # FIX reponse matrix for high mass bins
+      if not useUnfoldedData: # FIX reponse matrix for high mass bins
         canvas = TCanvas("","",0,0,800,600)
         canvas.Divide(4,3)
 	print "Applying response matrix"
@@ -1512,19 +1514,24 @@ if __name__ == '__main__':
               for j2 in range(len(massbins)):
                 for b2 in range(althists[j2].GetNbinsX()):
 		  #if abs(j1-j2)>1 or j2<j1: continue #don't take elements too far from the diagonal to avoid statistical fluctuations
+		  # map massbins on matrixMassBins
+		  j1m=j1+1
+		  j2m=j2+1
+		  j1m-=1 # FIX compute high mass bins, then no shift is needed
+		  j2m-=1 # FIX compute high mass bins, then no shift is needed
                   response=0
                   if j1==(len(massbins)-1) and j2==(len(massbins)-1):
                     # both in highest mass bin
-                    response=matrix2[(j2+3)+b2*(len(matrixMassBins)-1)][(j1+3)+b1*(len(matrixMassBins)-1)]
+                    response=matrix2[j2m+b2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
                   elif j1!=(len(massbins)-1) and j2!=(len(massbins)-1):
                     # both in lower mass bins
-                    response=matrix1[(j2+3)+b2*(len(matrixMassBins)-1)][(j1+3)+b1*(len(matrixMassBins)-1)]
+                    response=matrix1[j2m+b2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
                   elif j1==(len(massbins)-1):
                     # one in highest, one in lower mass bin
 		    for bin1 in range(althists[0].GetNbinsX()):
                       if althists[0].GetXaxis().GetBinUpEdge(bin1+1)>althists[j1].GetXaxis().GetBinLowEdge(b1+1) and\
                          althists[0].GetXaxis().GetBinLowEdge(bin1+1)<althists[j1].GetXaxis().GetBinUpEdge(b1+1):
-                        response+=matrix1[(j2+3)+b2*(len(matrixMassBins)-1)][(j1+3)+bin1*(len(matrixMassBins)-1)]/\
+                        response+=matrix1[j2m+b2*(len(matrixMassBins)-1)][j1m+bin1*(len(matrixMassBins)-1)]/\
 			    (althists[j1].GetXaxis().GetBinUpEdge(b1+1)-althists[j1].GetXaxis().GetBinLowEdge(b1+1))*\
 			    (althists[0].GetXaxis().GetBinUpEdge(bin1+1)-althists[0].GetXaxis().GetBinLowEdge(bin1+1))
                   elif j2==(len(massbins)-1):
@@ -1532,11 +1539,11 @@ if __name__ == '__main__':
 		    for bin2 in range(althists[0].GetNbinsX()):
                       if althists[0].GetXaxis().GetBinUpEdge(bin2+1)>althists[j2].GetXaxis().GetBinLowEdge(b2+1) and\
                          althists[0].GetXaxis().GetBinLowEdge(bin2+1)<althists[j2].GetXaxis().GetBinUpEdge(b2+1):
-                        response+=matrix1[(j2+3)+bin2*(len(matrixMassBins)-1)][(j1+3)+b1*(len(matrixMassBins)-1)]
+                        response+=matrix1[j2m+bin2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
 		  #response=((b1==b2) and (j1==j2))
 		  althists[j2].Fill(althists[j2].GetBinCenter(b2+1),althistsclones[j1].GetBinContent(b1+1)*response)
           for j in range(len(massbins)):
-            print dataevents[j],althists[j].Integral()
+            print dataevents[j],althistsclones[j].Integral(),althists[j].Integral()
             althists[j].Scale(dataevents[j]/althists[j].Integral())
 	    for b in range(althists[j].GetXaxis().GetNbins()):
 	      althists[j].SetBinError(b+1,0)
@@ -1573,8 +1580,10 @@ if __name__ == '__main__':
  	        sysHist=out.Get(histname)
 	        sysNorm=sysHist.Integral()
 	        for b in range(sysHist.GetNbinsX()):
-	          sysHist.SetBinContent(b+1,sysHist.GetBinContent(b+1)/althistsclones[j].GetBinContent(b+1)*althists[j].GetBinContent(b+1))
-                sysHist.Scale(sysNorm/althistsclones[j].Integral()*althists[j].Integral()/sysHist.Integral())
+		  if althistsclones[j].GetBinContent(b+1)*althists[j].GetBinContent(b+1)>0:
+	            sysHist.SetBinContent(b+1,sysHist.GetBinContent(b+1)/althistsclones[j].GetBinContent(b+1)*althists[j].GetBinContent(b+1))
+                if sysHist.Integral()>0:
+		  sysHist.Scale(sysNorm/althistsclones[j].Integral()*althists[j].Integral()/sysHist.Integral())
 	        #sysHist.Scale(dataevents[j]/sysHist.Integral())
                 for k in range(0,200):
                   out.Delete(sysHist.GetName()+";"+str(k))
@@ -1587,18 +1596,19 @@ if __name__ == '__main__':
                 plots+=[alt]
             dataplot[j].Draw("pe0zsame")
 	    legend=legend1.Clone()
-	    legend.SetHeader((str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("4800<m_{jj}<7000","m_{jj}>4800").replace("4800<m_{jj}<13000","m_{jj}>4800"))
+	    legend.SetHeader((str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
 	    legend.Draw("same")
 	    plots+=[legend]
 	    chi2=0
 	    for b in range(datahist[j].GetNbinsX()):
+	      if datahist[j].GetBinContent(b+1)==0: continue
 	      unc2=max(pow(dataplot[j].GetErrorYlow(b),2),pow(dataplot[j].GetErrorYhigh(b),2))
 	      print "stat",sqrt(unc2)/datahist[j].GetBinContent(b+1)
 	      for sys in syss:
 	        unc2+=max(pow(syshists[sys+"Up"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2),pow(syshists[sys+"Down"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2))
 	      print "stat+sys",sqrt(unc2)/datahist[j].GetBinContent(b+1)
 	      chi2+=pow(datahist[j].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2)/unc2
-	    pvalue=stats.chisqprob(chi2, datahist[j].GetNbinsX())
+	    pvalue=stats.distributions.chi2.sf(chi2, datahist[j].GetNbinsX())
             sign=-stats.norm.ppf(pvalue)
 	    print "sign",sign,"chi2/ndof",chi2/datahist[j].GetNbinsX()
         canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2_smear.pdf')
