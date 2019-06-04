@@ -97,8 +97,8 @@ for model in models:
  if model==3:
     signal="ADD"
     signalMasses=[9000,10000,11000,12000,13000,14000,15000,16000,17000]
-    #massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4200
-    massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4200
+    #massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4800
     #includeSignalTheoryUncertainties=True # from QCD-only though
  if model==4:
     signal="cs_nn30nlo_0_"

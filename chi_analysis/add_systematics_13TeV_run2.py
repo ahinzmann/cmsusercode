@@ -303,30 +303,30 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_18000_-1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples+=[("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
-                       ("pythia8_add_m1900_2400_6000_0_0_0_1_13TeV_Nov14",8.836e-07),
-                       ("pythia8_add_m2400_2800_6000_0_0_0_1_13TeV_Nov14",1.649e-07),
-                       ("pythia8_add_m2800_3300_6000_0_0_0_1_13TeV_Nov14",6.446e-08),
-                       ("pythia8_add_m3300_3800_6000_0_0_0_1_13TeV_Nov14",1.863e-08),
-                       ("pythia8_add_m3800_4300_6000_0_0_0_1_13TeV_Nov14",5.867e-09),
-                       ("pythia8_add_m4300_13000_6000_0_0_0_1_13TeV_Nov14",3.507e-09),
-                       ]),
-             ("QCDADD7000",[("pythia8_add_m1500_1900_7000_0_0_0_1_13TeV_Nov14",3.307e-06),
-                       ("pythia8_add_m1900_2400_7000_0_0_0_1_13TeV_Nov14",8.836e-07),
-                       ("pythia8_add_m2400_2800_7000_0_0_0_1_13TeV_Nov14",1.649e-07),
-                       ("pythia8_add_m2800_3300_7000_0_0_0_1_13TeV_Nov14",6.446e-08),
-                       ("pythia8_add_m3300_3800_7000_0_0_0_1_13TeV_Nov14",1.863e-08),
-                       ("pythia8_add_m3800_4300_7000_0_0_0_1_13TeV_Nov14",5.867e-09),
-                       ("pythia8_add_m4300_13000_7000_0_0_0_1_13TeV_Nov14",3.507e-09),
-                       ]),
-             ("QCDADD8000",[("pythia8_add_m1500_1900_8000_0_0_0_1_13TeV_Nov14",3.307e-06),
-                       ("pythia8_add_m1900_2400_8000_0_0_0_1_13TeV_Nov14",8.836e-07),
-                       ("pythia8_add_m2400_2800_8000_0_0_0_1_13TeV_Nov14",1.649e-07),
-                       ("pythia8_add_m2800_3300_8000_0_0_0_1_13TeV_Nov14",6.446e-08),
-                       ("pythia8_add_m3300_3800_8000_0_0_0_1_13TeV_Nov14",1.863e-08),
-                       ("pythia8_add_m3800_4300_8000_0_0_0_1_13TeV_Nov14",5.867e-09),
-                       ("pythia8_add_m4300_13000_8000_0_0_0_1_13TeV_Nov14",3.507e-09),
-                       ]),
+    samples+=[#("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
+              #         ("pythia8_add_m1900_2400_6000_0_0_0_1_13TeV_Nov14",8.836e-07),
+              #         ("pythia8_add_m2400_2800_6000_0_0_0_1_13TeV_Nov14",1.649e-07),
+              #         ("pythia8_add_m2800_3300_6000_0_0_0_1_13TeV_Nov14",6.446e-08),
+              #         ("pythia8_add_m3300_3800_6000_0_0_0_1_13TeV_Nov14",1.863e-08),
+              #         ("pythia8_add_m3800_4300_6000_0_0_0_1_13TeV_Nov14",5.867e-09),
+              #         ("pythia8_add_m4300_13000_6000_0_0_0_1_13TeV_Nov14",3.507e-09),
+              #         ]),
+             #("QCDADD7000",[("pythia8_add_m1500_1900_7000_0_0_0_1_13TeV_Nov14",3.307e-06),
+             #          ("pythia8_add_m1900_2400_7000_0_0_0_1_13TeV_Nov14",8.836e-07),
+             #          ("pythia8_add_m2400_2800_7000_0_0_0_1_13TeV_Nov14",1.649e-07),
+             #          ("pythia8_add_m2800_3300_7000_0_0_0_1_13TeV_Nov14",6.446e-08),
+             #          ("pythia8_add_m3300_3800_7000_0_0_0_1_13TeV_Nov14",1.863e-08),
+             #          ("pythia8_add_m3800_4300_7000_0_0_0_1_13TeV_Nov14",5.867e-09),
+             #          ("pythia8_add_m4300_13000_7000_0_0_0_1_13TeV_Nov14",3.507e-09),
+             #          ]),
+             #("QCDADD8000",[("pythia8_add_m1500_1900_8000_0_0_0_1_13TeV_Nov14",3.307e-06),
+             #          ("pythia8_add_m1900_2400_8000_0_0_0_1_13TeV_Nov14",8.836e-07),
+             #          ("pythia8_add_m2400_2800_8000_0_0_0_1_13TeV_Nov14",1.649e-07),
+             #          ("pythia8_add_m2800_3300_8000_0_0_0_1_13TeV_Nov14",6.446e-08),
+             #          ("pythia8_add_m3300_3800_8000_0_0_0_1_13TeV_Nov14",1.863e-08),
+             #          ("pythia8_add_m3800_4300_8000_0_0_0_1_13TeV_Nov14",5.867e-09),
+             #          ("pythia8_add_m4300_13000_8000_0_0_0_1_13TeV_Nov14",3.507e-09),
+             #          ]),
              ("QCDADD9000",[("pythia8_add_m1500_1900_9000_0_0_0_1_13TeV_Nov14",3.307e-06),
                        ("pythia8_add_m1900_2400_9000_0_0_0_1_13TeV_Nov14",8.836e-07),
                        ("pythia8_add_m2400_2800_9000_0_0_0_1_13TeV_Nov14",1.649e-07),
@@ -402,51 +402,51 @@ if __name__ == '__main__':
                        ("pythia8_add_m4300_5200_17000_0_0_0_1_13TeV_Nov14",1),
                        ("pythia8_add_m5200_13000_17000_0_0_0_1_13TeV_Nov14",1),
                        ]),
-             ("QCDADD18000",[("pythia8_add_m1500_1900_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m1900_2400_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2400_2800_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2800_3300_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3300_3800_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3800_4300_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m4300_5200_18000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m5200_13000_18000_0_0_0_1_13TeV_Nov14",1),
-                       ]),
-             ("QCDADD19000",[("pythia8_add_m1500_1900_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m1900_2400_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2400_2800_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2800_3300_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3300_3800_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3800_4300_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m4300_5200_19000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m5200_13000_19000_0_0_0_1_13TeV_Nov14",1),
-                       ]),
-             ("QCDADD20000",[("pythia8_add_m1500_1900_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m1900_2400_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2400_2800_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2800_3300_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3300_3800_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3800_4300_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m4300_5200_20000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m5200_13000_20000_0_0_0_1_13TeV_Nov14",1),
-                       ]),
-             ("QCDADD21000",[("pythia8_add_m1500_1900_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m1900_2400_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2400_2800_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2800_3300_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3300_3800_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3800_4300_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m4300_5200_21000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m5200_13000_21000_0_0_0_1_13TeV_Nov14",1),
-                       ]),
-             ("QCDADD22000",[("pythia8_add_m1500_1900_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m1900_2400_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2400_2800_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m2800_3300_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3300_3800_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m3800_4300_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m4300_5200_22000_0_0_0_1_13TeV_Nov14",1),
-                       ("pythia8_add_m5200_13000_22000_0_0_0_1_13TeV_Nov14",1),
-                       ]),
+             #("QCDADD18000",[("pythia8_add_m1500_1900_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m1900_2400_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2400_2800_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2800_3300_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3300_3800_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3800_4300_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m4300_5200_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m5200_13000_18000_0_0_0_1_13TeV_Nov14",1),
+             #          ]),
+             #("QCDADD19000",[("pythia8_add_m1500_1900_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m1900_2400_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2400_2800_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2800_3300_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3300_3800_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3800_4300_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m4300_5200_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m5200_13000_19000_0_0_0_1_13TeV_Nov14",1),
+             #          ]),
+             #("QCDADD20000",[("pythia8_add_m1500_1900_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m1900_2400_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2400_2800_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2800_3300_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3300_3800_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3800_4300_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m4300_5200_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m5200_13000_20000_0_0_0_1_13TeV_Nov14",1),
+             #          ]),
+             #("QCDADD21000",[("pythia8_add_m1500_1900_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m1900_2400_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2400_2800_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2800_3300_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3300_3800_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3800_4300_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m4300_5200_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m5200_13000_21000_0_0_0_1_13TeV_Nov14",1),
+             #          ]),
+             #("QCDADD22000",[("pythia8_add_m1500_1900_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m1900_2400_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2400_2800_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m2800_3300_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3300_3800_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m3800_4300_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m4300_5200_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ("pythia8_add_m5200_13000_22000_0_0_0_1_13TeV_Nov14",1),
+             #          ]),
              ]
 
     for m in range(5,31):
@@ -607,9 +607,9 @@ if __name__ == '__main__':
       in2=TFile(sample2,'READ')
 
       # data file
-      #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
+      insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
-      insample="datacard_shapelimit13TeV_run2_2016_chi.root"
+      #insample="datacard_shapelimit13TeV_run2_2016_chi.root"
       print insample
       infile=TFile(insample,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
@@ -713,18 +713,20 @@ if __name__ == '__main__':
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
         else:
-          #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi" # FIX Compute 2016 data for lower mass bins
-          histname2="datacard_shapelimit13TeV_run2_2016#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi" # FIX Compute 2016 data for lower mass bins
+          #histname2="datacard_shapelimit13TeV_run2_2016#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname2
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+	  if j<2: data.Scale(0) # FIX Recompute lowest mass bins for 2016
+          if j>=10: data.Scale(0) # FIX Recompute highest mass bins for 2016
           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000") # FIX Compute 2017 data for lower mass bins
           histname17="datacard_shapelimit13TeV_run2_2017#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname17
           data17 = TH1F(infile17.Get(histname17))
           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-	  data.Add(data17)
+          data.Add(data17)
           #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
           histname18="datacard_shapelimit13TeV_run2_2018#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname18
@@ -936,8 +938,9 @@ if __name__ == '__main__':
           #  #ci.Scale(nloqcd.Integral()/qcdnorm[j]/5.)
           #  # CORRECT FORMULA
           ci.Scale(nloqcd.Integral()/nloqcdbackup.Integral()) # fake signal for signficances
-          scalesignal=abs(3*data.GetBinError(1)*nloqcd.Integral()/data.Integral()/ci.GetBinContent(1)) # find 2 sigma deviation
-          ci.Scale(scalesignal)
+	  if data.Integral()>0 and ci.GetBinContent(1)>0:
+            scalesignal=abs(3*data.GetBinError(1)*nloqcd.Integral()/data.Integral()/ci.GetBinContent(1)) # find 2 sigma deviation
+            ci.Scale(scalesignal)
           ci.Add(nloqcd)
         else:
           cibackup=out.Get(histname)
