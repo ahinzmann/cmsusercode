@@ -21,7 +21,7 @@ gStyle.SetLabelSize(0.05, "XYZ")
 gStyle.SetNdivisions(510, "XYZ")
 gStyle.SetLegendBorderSize(0)
 
-def createPlots(sample,prefix,xsec,massbins):
+def createPlots(sample,prefix,weightname,massbins):
     files=[]
     print "list files"
     if sample.endswith(".txt"):
@@ -30,12 +30,18 @@ def createPlots(sample,prefix,xsec,massbins):
 	    if ".root" in line:
 	        files+=[line.strip()]
     else:
+      if "DM" in prefix:
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
+	for folder in folders:
+	  if sample in folder and ".root" in folder:
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/"+folder]
+	    #break
+      else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
 	for folder in folders:
 	  if sample in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/"+folder+"/GEN.root"]
 	    #break
-#        files=["dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/hinzmann/dijet_angular/jobtmp_"+sample+"-0/GEN.root"]
 
     print files
     prunedgenjets_handle=Handle("std::vector<reco::GenJet>")
@@ -56,12 +62,31 @@ def createPlots(sample,prefix,xsec,massbins):
       events.Add(f)
     
     nevents=events.GetEntries()
-    print sample,nevents,xsec
+    print sample,nevents,weightname
     event_count=0
+    acceptance=0
+    sumweights=0
+    firstxsec=0
     for event in events:
-         event_count+=1
+         if "DM" in prefix:
+	  xsec=event.LHEEventProduct_externalLHEProducer__GEN.product().originalXWGTUP()*1000. # convert to pb
+	  if firstxsec>0 and xsec!=firstxsec:
+	     print "inconsistent xsec",firstxsec,xsec
+	     inconsistent
+	  #weights=[(w.id,w.wgt) for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights()]
+	  #print weights
+	  try:
+	   weight=[w.wgt for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights() if weightname==w.id][0]/event.LHEEventProduct_externalLHEProducer__GEN.product().weights()[0].wgt
+	  except:
+	   print "error reading weight"
+ 	   break
+         else:
+	  xsec=weightname
+	  weight=1.
+	 event_count+=1
 	 #if event_count>10000000: break
          if event_count%10000==1: print "event",event_count
+	 sumweights+=weight
          jet1=TLorentzVector()
          jet2=TLorentzVector()
 	 jets=event.recoGenJets_ak4GenJets__GEN.product()
@@ -74,11 +99,13 @@ def createPlots(sample,prefix,xsec,massbins):
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
          if mjj<1000 or chi>16. or yboost>1.11: continue
+         if mjj>2400: acceptance+=weight
          irec=0
 	 for massbin in massbins:
             if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
-               plots[irec].Fill(chi)
+               plots[irec].Fill(chi,weight)
 	    irec+=1
+    print sample,weightname,"acceptance",acceptance/sumweights, "xsec",xsec*sumweights/event_count
     for plot in plots:
       if event_count>0:
         plot.Scale(xsec/event_count)
@@ -90,6 +117,15 @@ if __name__ == '__main__':
  
     prefix="datacard_shapelimit13TeV_GEN-QCD-run2"
     if len(sys.argv)>1:
+      if len(sys.argv)>2:
+       point=sys.argv[1]
+       if "Vector" in point:
+         weights=['gdmv_1p0_gdma_0_gv_0p01_ga_0', 'gdmv_1p0_gdma_0_gv_0p05_ga_0', 'gdmv_1p0_gdma_0_gv_0p1_ga_0', 'gdmv_1p0_gdma_0_gv_0p2_ga_0', 'gdmv_1p0_gdma_0_gv_0p25_ga_0', 'gdmv_1p0_gdma_0_gv_0p3_ga_0', 'gdmv_1p0_gdma_0_gv_0p5_ga_0', 'gdmv_1p0_gdma_0_gv_0p75_ga_0', 'gdmv_1p0_gdma_0_gv_1_ga_0', 'gdmv_1p0_gdma_0_gv_1p5_ga_0', 'gdmv_1p0_gdma_0_gv_2p0_ga_0', 'gdmv_1p0_gdma_0_gv_2p5_ga_0', 'gdmv_1p0_gdma_0_gv_3p0_ga_0']
+       else:
+         weights=['gdmv_0_gdma_1p0_gv_0_ga_0p01', 'gdmv_0_gdma_1p0_gv_0_ga_0p05', 'gdmv_0_gdma_1p0_gv_0_ga_0p1', 'gdmv_0_gdma_1p0_gv_0_ga_0p2', 'gdmv_0_gdma_1p0_gv_0_ga_0p25', 'gdmv_0_gdma_1p0_gv_0_ga_0p3', 'gdmv_0_gdma_1p0_gv_0_ga_0p5', 'gdmv_0_gdma_1p0_gv_0_ga_0p75', 'gdmv_0_gdma_1p0_gv_0_ga_1', 'gdmv_0_gdma_1p0_gv_0_ga_1p5', 'gdmv_0_gdma_1p0_gv_0_ga_2p0', 'gdmv_0_gdma_1p0_gv_0_ga_2p5', 'gdmv_0_gdma_1p0_gv_0_ga_3p0']
+       nxsec=int(sys.argv[2])
+       prefix="datacard_shapelimit13TeV_DM"+point+"_"+weights[nxsec]+"-run2"
+      else:
        prefix="datacard_shapelimit13TeV_GENnp-"+sys.argv[1]+"-run2"
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -451,6 +487,8 @@ if __name__ == '__main__':
     
     if "np" in prefix:
        samples=[samples[int(prefix.split("-")[1])]]
+    if "DM" in prefix:
+       samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     if "QCD" in prefix:
        samples=samples3
     
@@ -485,7 +523,10 @@ if __name__ == '__main__':
       i=0
       for filename,xsec in files:
         i+=1
-        ps=createPlots(filename,name,float(xsecs[filename]),massbins)
+	if "DM" in prefix:
+          ps=createPlots(filename,name,xsec,massbins)
+        else:
+	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)
         if i==1:
           plots[-1]+=ps
 	else:

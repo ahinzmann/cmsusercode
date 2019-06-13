@@ -48,9 +48,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 if line.split()[0]=="LHAPDF": continue
                 if line.split()[0]=="CT14nlo": continue
 		if order=="NNLO":
-  		  x=float(line.split()[8])
+  		  x=float(line.split()[8])/(massbins[m][1]-massbins[m][0])
   		else:
-		  x=float(line.split()[7])
+		  x=float(line.split()[7])/(massbins[m][1]-massbins[m][0])
                 xsec=[massbins[m][0],massbins[m][1],float(line.split()[3]),float(line.split()[4]),x]
                 muxsecs.append(xsec)
             allmulist.append([mu,muxsecs])
@@ -76,9 +76,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 if line.split()[0]=="LHAPDF": continue
                 if line.split()[0]=="CT14nlo": continue
 		if order=="NNLO":
-  		  x=float(line.split()[8])
+  		  x=float(line.split()[8])/(massbins[m][1]-massbins[m][0])
   		else:
-		  x=float(line.split()[7])
+		  x=float(line.split()[7])/(massbins[m][1]-massbins[m][0])
                 xsec=[massbins[m][0],massbins[m][1],float(line.split()[3]),float(line.split()[4]),x]
                 memxsecs.append(xsec)
             allmemlist.append([mem,memxsecs])

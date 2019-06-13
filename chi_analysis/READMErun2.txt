@@ -17,7 +17,7 @@ copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
 plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
 
-plotSignal_13TeV_lxplus_loop.py # produce dijet angular histograms from GEN samples for DM samples
+plotSignal_13TeV_desy_run2_DM.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 
 plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
@@ -37,7 +37,7 @@ plot_chi_combined_data_13TeV_v2_2016.py # final result plot
 -------- Limit calculation in CMSSW_8_1_X:
 
 calculate_limit_shape_13TeV_run2.py # calculate CLS for each CI, ADD, DM and QBH model
-calculate_limit_shape_13TeV_loop.py # calculate CLS for each DM model
+calculate_limit_shape_13TeV_run2_DM.py # calculate CLS for each DM model
 plot_limit_shape_13TeV_run2.py # compute CLS limit for each CI, ADD and QBH model
 plot_limit_shape_13TeV_dm_run2.py # compute CLS limit for each DM model
 plot_limit_summary.py #  summary of limits on various models (still 8 TeV version)

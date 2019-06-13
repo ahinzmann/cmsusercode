@@ -100,7 +100,7 @@ if calcUncert:
     
     scaleFactorsmu={}
     for f in cimufiles:
-        #print f
+        print f
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
         newfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"RECREATE")
@@ -192,7 +192,7 @@ if calcUncert:
     
     for f in cimemfiles:
         myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"UPDATE")
-        #print f
+        print f
         for massbin in massbins:
             #print massbin[0],massbin[1]
             histcentral=TH1F("chi-"+str(massbin[0])+"-"+str(massbin[1])+"backup","chi-"+str(massbin[0])+"-"+str(massbin[1]),len(chibins)-1,chibins)

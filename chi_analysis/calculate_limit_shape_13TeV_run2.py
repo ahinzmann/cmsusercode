@@ -12,10 +12,6 @@ def system_call(command):
 #massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] # did not calculate CI for lower mass bins yet
 
-xsecs={}
-for l in open("xsecs_13TeV_dm.txt").readlines():
-  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
-
 models=[]
 models+=[3]
 #models+=[11]
@@ -29,7 +25,7 @@ models+=[3]
 #models=[88,89]
 #models=[60,61]
 
-VectorDM=True
+VectorDM=False
 AxialDM=True
 
 injectSignal=False
@@ -54,7 +50,7 @@ if VectorDM:
     for gv in ["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]:
       #models+=[counter]
       signalName[counter]="DMVector_Dijet_LO_Mphi"
-      signalExtraName[counter]="_"+mdm+"_1p5_1p0_Mar5_gdmv_1p0_gdma_0_gv_"+gv+"_ga_0"
+      signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_1p0_gdma_0_gv_"+gv+"_ga_0"
       counter+=1
 
 if AxialDM:
@@ -439,13 +435,7 @@ for model in models:
         #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/smearedDatacardsAug30/datacard_shapelimit13TeV"
         prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/crystalBallSmearedAug30/datacard_shapelimit13TeV"
     else:
-        #dire="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/"
-        #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/smearedDatacardsAug30/datacard_shapelimit13TeV"
-        dire="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/"
-        #prefix="/mnt/t3nfs01/data01/shome/hinzmann/CMSSW_7_4_7_patch2/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
-        #dire="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_8_0_25/src/cmsusercode/chi_analysis/"
-        #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_8_0_25/src/cmsusercode/chi_analysis/smearedDatacardsNov2/datacard_shapelimit13TeV"
-        #prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_8_0_25/src/cmsusercode/chi_analysis/smearedDatacardsNoPdfOct20/datacard_shapelimit13TeV"
+        prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/run2/datacard_shapelimit13TeV"
     if isInjection:
         prefix=prefix.replace("/datacard_","Injection0p75/datacard_")
     print prefix
@@ -542,14 +532,14 @@ for model in models:
     elif signalWithMass=="AntiCIplusLL12000":
         fname=prefix + '_GENnp-antici-run2_chi.root'
     elif signalWithMass=="QBH_"+str(signalMass)+"_6":
-        fname=prefix + "_" + signalWithMass + "_chi.root"
+        fname=prefix + "_" + signalWithMass + "-run2_chi.root"
     elif signalWithMass=="QBH_"+str(signalMass)+"_RS1":
-        fname=prefix + "_" + signalWithMass + "_chi.root"
+        fname=prefix + "_" + signalWithMass + "-run2_chi.root"
     elif "cs" in signal:
-        fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+        fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
     elif "DM" in signal and version=="_v1":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       if signalMass<=2000:
@@ -570,13 +560,13 @@ for model in models:
         massbins=[(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v2":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v3":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       if signalMass<=1500:
@@ -593,7 +583,7 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v4":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       if signalMass<=1500:
@@ -616,7 +606,26 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v5":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
+      signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
+      if signalMass<=2500:
+        massbins=[(2400,3000)]
+      elif signalMass<=3000:
+        massbins=[(2400,3000),(3000,3600)]
+      elif signalMass<=3500:
+        massbins=[(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4500:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+      elif signalMass<=5000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+      elif signalMass<=6000:
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+    elif "DM" in signal and version=="_v6":
+      signalWithMass=signal+'_'+str(signalMass)+signalExtra
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
       if signalMass<=2500:
@@ -633,6 +642,25 @@ for model in models:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    elif "DM" in signal and version=="_v7":
+      signalWithMass=signal+'_'+str(signalMass)+signalExtra
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
+      signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990")
+      if signalMass<=2500:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
+      elif signalMass<=3000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
+      elif signalMass<=3500:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4500:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+      elif signalMass<=5000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+      elif signalMass<=6000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     print fname
     if not "DM" in signal and not "cs" in signal and not "QBH" in signal:
         signalWithMass="QCD"+signalWithMass

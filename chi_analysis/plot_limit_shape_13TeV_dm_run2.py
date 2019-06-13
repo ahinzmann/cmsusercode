@@ -511,6 +511,6 @@ if __name__=="__main__":
     
     #canvas.SaveAs('limits'+testStat+asym+"_"+style+"_mdm"+mdm+version+'_noSys.pdf')
     if isInjection:
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'_2017.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'_run2.pdf')
     else:
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_2017.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_run2.pdf')

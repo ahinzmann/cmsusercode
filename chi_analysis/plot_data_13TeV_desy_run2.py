@@ -54,10 +54,10 @@ def createPlots(sample,prefix,triggers,massbins):
        print "error opening", f
        continue
      print f,nevents
-     #if event_count>1000000: break ###
+     #if event_count>100000: break ###
      for event in events:
          event_count+=1
-	 #if event_count>10000: break ###
+	 #if event_count>100000: break ###
          if event_count%10000==1:
 	   print "event",event_count
 	   trigger_indices={}
@@ -122,14 +122,14 @@ if __name__ == '__main__':
 	      (7000,13000),
               ]
  
-    samples=[("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
+    samples=[("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
             ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
             ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
           ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
-          ["HLT_PFHT650","HLT_PFHT600","HLT_PFHT475","HLT_PFJet400"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet400"],
           [],
           [],
           [],
