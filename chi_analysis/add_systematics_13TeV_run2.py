@@ -481,19 +481,22 @@ if __name__ == '__main__':
     #xsecs={}
     #for l in open("xsecs_13TeV_dm.txt").readlines():
     #  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
-    for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000]:
+    for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
     #for mass in [1000,1500,1750]:
-    #for mass in [2000,2250,2500,3000,3500,4000,4500,5000,6000]:
-    #for mass in [6000]:
-     if mass==6000:
-       mDMs=[1,2990]
-     elif mass==7000:
-       mDMs=[1,4000]
-     elif mass==8000:
-       mDMs=[1,3990]
+    #for mass in [2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
+    #for mass in [2250]:
+     #if mass==6000:
+     #  mDMs=[1,2990]
+     #elif mass==7000:
+     #  mDMs=[1,4000]
+     #elif mass==8000:
+     #  mDMs=[1,3990]
+     #else:
+     #  mDMs=[1,3000]
+     if mass==7000:
+       mDMs=[4000] #1 files are broken
      else:
-       mDMs=[1,3000]
-     mDMs=[1]
+       mDMs=[1]
      for mDM in mDMs:
       for weight in ['gdmv_1p0_gdma_0_gv_0p01_ga_0', 'gdmv_1p0_gdma_0_gv_0p05_ga_0', 'gdmv_1p0_gdma_0_gv_0p1_ga_0', 'gdmv_1p0_gdma_0_gv_0p2_ga_0', 'gdmv_1p0_gdma_0_gv_0p25_ga_0', 'gdmv_1p0_gdma_0_gv_0p3_ga_0', 'gdmv_1p0_gdma_0_gv_0p5_ga_0', 'gdmv_1p0_gdma_0_gv_0p75_ga_0', 'gdmv_1p0_gdma_0_gv_1_ga_0', 'gdmv_1p0_gdma_0_gv_1p5_ga_0', 'gdmv_1p0_gdma_0_gv_2p0_ga_0', 'gdmv_1p0_gdma_0_gv_2p5_ga_0', 'gdmv_1p0_gdma_0_gv_3p0_ga_0']:
          samples2+=[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
@@ -508,7 +511,7 @@ if __name__ == '__main__':
     for m in [[4500,0.05148],[5000,0.01829],[5500,0.006472],[6000,0.002250],[6500,0.0007599],[7000,0.0002461]]:
         samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
 
-    #samples=samples4
+    samples=samples4
 
     #print samples
 
@@ -653,7 +656,7 @@ if __name__ == '__main__':
       closefiles+=[nlofile3]
       
        # DM uncertainties
-      filename1dmpdf="datacards/chi_dm_pdf_plots6000_13TeV_2016.root"
+      filename1dmpdf="datacards/chi_dm_pdf_plots6000_13TeV_2016.root" # FIX recompute DM PDF uncertainties
       print filename1dmpdf
       dmpdffile = TFile.Open(filename1dmpdf)
       closefiles+=[dmpdffile]
@@ -1209,11 +1212,11 @@ if __name__ == '__main__':
               nloPDFdownci=hnloPDFdown
            nloPDFdownci.Add(cibackup,-1)
            nloPDFdownci.Scale(1./cibackup.Integral())
-        elif "DM" in samples[i][0] and "Mphi_6000" in samples[i][0]:
+        elif "DM" in samples[i][0] and ("Mphi_6000" in samples[i][0] or "Mphi_7000" in samples[i][0]):
            nloPDFdownci=nloPDFdownqcd.Clone("DM_pdf_down")
            nloPDFupci=nloPDFupqcd.Clone("DM_pdf_up")
 	   dmpdfcanvas=dmpdffile.Get("pdf")
-	   dmpdfplot=dmpdfcanvas.GetListOfPrimitives()[j+useUnfoldedData*1]
+	   dmpdfplot=dmpdfcanvas.GetListOfPrimitives()[7] # FIX compute for all massbins [j+useUnfoldedData*1]
 	   dmpdfhist=[a for a in dmpdfplot.GetListOfPrimitives() if "mean" in str(a)][0]
 	   for b in range(nloPDFupci.GetNbinsX()):
 	     slope=(ci.GetBinContent(b+1)/dataevents[j]-nloqcd.GetBinContent(b+1))*dmpdfhist.GetBinError(1)/dmpdfhist.GetBinContent(1)

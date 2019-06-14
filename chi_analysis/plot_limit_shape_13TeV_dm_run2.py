@@ -4,6 +4,7 @@ from math import *
 import numpy as np
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
+gROOT.SetBatch(True)
 gROOT.ForceStyle()
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
@@ -31,7 +32,7 @@ if __name__=="__main__":
   asym="a" # asymptotic CLS
   #testStat="LEP"
   #asym=""
-  version="_v5"
+  version="_v9"
 
   isGen=False
   isCB=False
@@ -44,8 +45,7 @@ if __name__=="__main__":
   elif isCB:
     prefix="limitsDetCB"
   else:
-    #prefix="limitsDet"
-    prefix="limits"
+    prefix="limitsDet"
     
   signalCounter={}
   if style=="DMVector":
@@ -55,8 +55,9 @@ if __name__=="__main__":
 
   gs=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
   gsplot=["0p1","0p2","0p25","0p3","0p5","0p75","1","1p5"]
-  mdms=["1","3000"]
-  signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
+  #mdms=["1","3000"]
+  mdms=["1"]
+  signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
   #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
   #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
  
@@ -71,11 +72,13 @@ if __name__=="__main__":
     
     g_q=TGraph(0)
     g_q_exp=TGraph(0)
+    g_q_exp1m=TGraph(0)
+    g_q_exp1p=TGraph(0)
+    g_q_exp2m=TGraph(0)
+    g_q_exp2p=TGraph(0)
     g_q_band=TGraphAsymmErrors(0)
     g_q_band_2sigma=TGraphAsymmErrors(0)
     for signalMass in signalMasses:
-      #if signalMass==6000:
-      #  mdm="2990"
       print "--------------------"
       signal=style+"_Mphi"+str(signalMass)+"_mdm"+mdm
 
@@ -87,20 +90,20 @@ if __name__=="__main__":
         if testStat!="LEP":
           try:
             if isInjection:
-              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_exp_"+str(signalMass)+"_2016"+version+".txt")
+              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_exp_"+str(signalMass)+"_run2"+version+".txt")
             else:
-              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_2016"+version+".txt")
+              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_run2"+version+".txt")
           except:
-            print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_2016"+version+".txt"
+            print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_run2"+version+".txt"
 	    continue
         else:
           try:
             if isInjection:
-              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_"+str(signalMass)+"_2016"+version+".txt")
+              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_"+str(signalMass)+"_run2"+version+".txt")
             else:
-              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_"+str(signalMass)+"_2016"+version+".txt")
+              f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_"+str(signalMass)+"_run2"+version+".txt")
           except:
-            print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_"+str(signalMass)+"_2016"+version+".txt"
+            print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_"+str(signalMass)+"_run2"+version+".txt"
             continue
           
         limits+=[[]]
@@ -133,11 +136,11 @@ if __name__=="__main__":
           
         try:
           if isInjection:
-            f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_exp_"+str(signalMass)+"_2016"+version+".txt")
+            f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi"+injectiontext+"_exp_"+str(signalMass)+"_run2"+version+".txt")
           else:
-            f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_2016"+version+".txt")
+            f=file(prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_run2"+version+".txt")
         except:
-          print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_2016"+version+".txt"
+          print "can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_run2"+version+".txt"
           del limits[-1]
 	  continue
         for line in f.readlines():
@@ -271,7 +274,7 @@ if __name__=="__main__":
       exp2p=0
       nseg=10000
       masses=np.linspace(max_x,min_x,num=nseg)      
-      if signalMass==6000:
+      if signalMass==7000:
         for mass in masses:  
           #if limit==0 and g.Eval(mass,0)>log10(cut) and mass<=max_mass:
           if limit==0 and g.Eval(mass,0)>log10(cut):
@@ -323,15 +326,19 @@ if __name__=="__main__":
             #print "exp2p:",i,mass
 
 
-      print "limit: %.2f" % (limit), "& %.2f" % (exp), "$\pm$ %.2f" % (max(exp-exp1p,exp1m-exp))
+      print "mass: %.0f" % (signalMass), "g_q limit: %.2f" % (limit), "& %.2f" % (exp), "$\pm$ %.2f" % (max(exp-exp1p,exp1m-exp))
 
       #print "limit: %.6f," % (limit), "%.6f," % (exp), "%.6f, %.6f, 0, 0" % ((-max(exp-exp1p,exp1m-exp)+exp),(exp+max(exp-exp1p,exp1m-exp)))
-      print "limit: %.6f," % (limit), "%.6f," % (exp), "%.6f, %.6f, %.6f, %.6f" % (exp-min(exp1p,exp1m),max(exp1p,exp1m)-exp, exp-min(exp2p,exp2m), max(exp2p,exp2m)-exp)
+      print "mass: %.0f" % (signalMass), "g_q limit: %.6f," % (limit), "%.6f," % (exp), "%.6f, %.6f, %.6f, %.6f" % (exp-min(exp1p,exp1m),max(exp1p,exp1m)-exp, exp-min(exp2p,exp2m), max(exp2p,exp2m)-exp)
 
       signalMass=signalMass/1000.
  
       g_q.SetPoint(g_q.GetN(),signalMass,limit)
       g_q_exp.SetPoint(g_q_exp.GetN(),signalMass,exp)
+      g_q_exp1m.SetPoint(g_q_exp1m.GetN(),signalMass,exp1m)
+      g_q_exp1p.SetPoint(g_q_exp1p.GetN(),signalMass,exp1p)
+      g_q_exp2m.SetPoint(g_q_exp2m.GetN(),signalMass,exp2m)
+      g_q_exp2p.SetPoint(g_q_exp2p.GetN(),signalMass,exp2p)
       g_q_band.SetPoint(g_q_band.GetN(),signalMass,exp)
       g_q_band_2sigma.SetPoint(g_q_band_2sigma.GetN(),signalMass,exp)
 
@@ -377,6 +384,32 @@ if __name__=="__main__":
         max_x_new=x
         break
     max_x_new=signalMasses[-1]/1000
+
+    limit=0
+    exp=0
+    exp1m=0
+    exp1p=0
+    exp2m=0
+    exp2p=0
+    cut=1
+    nseg=10000
+    masses=np.linspace(0.8*min_x_new,max_x_new*1.2,num=nseg)      
+    for mass in masses:
+      if limit==0 and g_q.Eval(mass,0)>cut:
+        limit=mass
+      if exp==0 and g_q_exp.Eval(mass,0)>cut:
+        exp=mass
+      if exp1m==0 and g_q_exp1m.Eval(mass,0)>cut:
+        exp1m=mass
+      if exp1p==0 and g_q_exp1p.Eval(mass,0)>cut:
+        exp1p=mass
+      if exp2m==0 and g_q_exp2m.Eval(mass,0)>cut:
+        exp2m=mass
+      if exp2p==0 and g_q_exp2p.Eval(mass,0)>cut:  
+        exp2p=mass
+    print "mass limit: %.1f" % (limit), "& %.1f" % (exp), "$\pm$ %.1f" % (max(exp-exp1m,exp1p-exp))
+
+    print "mass limit: %.2f," % (limit), "%.2f," % (exp), "%.2f, %.2f, %.2f, %.2f" % (exp-min(exp1p,exp1m),max(exp1p,exp1m)-exp, exp-min(exp2p,exp2m), max(exp2p,exp2m)-exp)
       
     g_q_band_2sigma.SetFillStyle(1001)
     g_q_band_2sigma.SetFillColor(kOrange)
@@ -503,7 +536,7 @@ if __name__=="__main__":
     leg2.SetTextSize(0.06)
     # lumi
     lumiPos=max_x_new-1450/1000.
-    leg3=TLatex(lumiPos,ymax+0.03,"78.3 fb^{-1} (13 TeV)")
+    leg3=TLatex(lumiPos,ymax+0.03,"137 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)
     leg2.Draw("same")

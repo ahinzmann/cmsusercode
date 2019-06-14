@@ -16,7 +16,8 @@ if VectorDM:
   counter=100
   signalName={}
   signalExtraName={}
-  for mdm in ["1","3000"]:
+  #for mdm in ["1","3000"]:
+  for mdm in ["1"]:
     for gv in gvs:
       models+=[counter]
       signalName[counter]="DMVector_Dijet_LO_Mphi"
@@ -31,7 +32,8 @@ if AxialDM:
   counter=1100
   signalName={}
   signalExtraName={}
-  for mdm in ["1","3000"]:
+  #for mdm in ["1","3000"]:
+  for mdm in ["1"]:
     for ga in gas:
       models+=[counter]
       signalName[counter]="DMAxial_Dijet_LO_Mphi"
