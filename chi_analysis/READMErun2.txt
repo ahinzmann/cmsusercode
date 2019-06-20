@@ -32,7 +32,8 @@ plot_chi_uncertainties_13TeV_2016.py # plot summary of all systematic uncertaint
 add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 submit_add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 
-plot_chi_combined_data_13TeV_v2_2016.py # final result plot
+plot_chi_combined_data_13TeV_v3_run2_DM.py # DM comparison plots
+plot_chi_combined_theory_13TeV_v2_run2.py # final result plot
 
 -------- Limit calculation in CMSSW_8_1_X:
 

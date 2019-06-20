@@ -52,7 +52,7 @@ if __name__ == '__main__':
     else:
       pdfset="ct14nlo"
 
-    prefixs=["run2NNLO/datacard_shapelimit13TeV"]
+    prefixs=["datacard_shapelimit13TeV"]
  
     # negligible jes sources removed
     jessources=["AbsoluteScale",
