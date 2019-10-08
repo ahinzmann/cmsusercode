@@ -73,6 +73,8 @@ if __name__ == '__main__':
 		"SumInQuadrature",
 		]
     print len(jessources)-1,"jes sources"
+    jersources=["JER12016","JER12017","JER12018",
+                "JER22016","JER22017","JER22018"]
 
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -137,6 +139,7 @@ if __name__ == '__main__':
     samples2=[]
     samples3=[]
     samples4=[]
+    samplesSkip=[]
 
     samples+=[("QCD",[("pythia8_ci_m1000_1500_50000_1_0_0_13TeV_Nov14",3.769e-05),
                        ("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),
@@ -166,7 +169,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples2=[("QCDCIplusLL8000",[("pythia8_ci_m1500_1900_8000_1_0_0_13TeV_Nov14",3.307e-06),
+    samplesSkip=[("QCDCIplusLL8000",[("pythia8_ci_m1500_1900_8000_1_0_0_13TeV_Nov14",3.307e-06),
                        ("pythia8_ci_m1900_2400_8000_1_0_0_13TeV_Nov14",8.836e-07),
                        ("pythia8_ci_m2400_2800_8000_1_0_0_13TeV_Nov14",1.649e-07),
                        ("pythia8_ci_m2800_3300_8000_1_0_0_13TeV_Nov14",6.446e-08),
@@ -239,7 +242,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_18000_1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples2+=[("QCDCIminusLL8000",[("pythia8_ci_m1500_1900_8000_-1_0_0_13TeV_Nov14",3.307e-06),
+    samplesSkip+=[("QCDCIminusLL8000",[("pythia8_ci_m1500_1900_8000_-1_0_0_13TeV_Nov14",3.307e-06),
                        ("pythia8_ci_m1900_2400_8000_-1_0_0_13TeV_Nov14",8.836e-07),
                        ("pythia8_ci_m2400_2800_8000_-1_0_0_13TeV_Nov14",1.649e-07),
                        ("pythia8_ci_m2800_3300_8000_-1_0_0_13TeV_Nov14",6.446e-08),
@@ -459,15 +462,15 @@ if __name__ == '__main__':
              ]
 
     for m in range(5,31):
-       samples2+=[("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_LL-",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_RR+",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_RR-",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_VV+",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_VV-",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_AA+",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_AA-",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_V-A+",[]),
+       samples2+=[#("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_LL-",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_RR+",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_RR-",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_VV+",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_VV-",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_AA+",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_AA-",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_V-A+",[]),
                ("cs_"+pdfset+"_"+str(m*1000)+"_V-A-",[]),
                ]
 
@@ -475,14 +478,17 @@ if __name__ == '__main__':
      for xsec in [5e-5,1e-4,2e-4,5e-4,1e-3,2e-3,5e-3,1e-2,2e-2,5e-2,1e-2]:
       for width in ["kMG1439","kMG2035","kMG2493","kMG3218"]:
         for decay in ["GluonGluon","QuarkQuark"]:
-          samples2+=[#("wide"+str(mass)+"_"+str(xsec)+"_"+decay+"_"+width,["wide"+str(mass)+"_"+str(xsec)+"_"+decay+"_"+width,1])
+          samplesSkip+=[#("wide"+str(mass)+"_"+str(xsec)+"_"+decay+"_"+width,["wide"+str(mass)+"_"+str(xsec)+"_"+decay+"_"+width,1])
 	            ]
 
     #xsecs={}
     #for l in open("xsecs_13TeV_dm.txt").readlines():
     #  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
     for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
-    #for mass in [1000,1500,1750]:
+    #for mass in [1000]:
+    #for mass in [2000,2250,2500]:
+    #for mass in [3000,3500,4000]:
+    #for mass in [4500,5000,6000,7000]:
     #for mass in [2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
     #for mass in [2250]:
      #if mass==6000:
@@ -499,9 +505,10 @@ if __name__ == '__main__':
        mDMs=[1]
      for mDM in mDMs:
       for weight in ['gdmv_1p0_gdma_0_gv_0p01_ga_0', 'gdmv_1p0_gdma_0_gv_0p05_ga_0', 'gdmv_1p0_gdma_0_gv_0p1_ga_0', 'gdmv_1p0_gdma_0_gv_0p2_ga_0', 'gdmv_1p0_gdma_0_gv_0p25_ga_0', 'gdmv_1p0_gdma_0_gv_0p3_ga_0', 'gdmv_1p0_gdma_0_gv_0p5_ga_0', 'gdmv_1p0_gdma_0_gv_0p75_ga_0', 'gdmv_1p0_gdma_0_gv_1_ga_0', 'gdmv_1p0_gdma_0_gv_1p5_ga_0', 'gdmv_1p0_gdma_0_gv_2p0_ga_0', 'gdmv_1p0_gdma_0_gv_2p5_ga_0', 'gdmv_1p0_gdma_0_gv_3p0_ga_0']:
-         samples2+=[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
+         samplesSkip+=[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
       for weight in ['gdmv_0_gdma_1p0_gv_0_ga_0p01', 'gdmv_0_gdma_1p0_gv_0_ga_0p05', 'gdmv_0_gdma_1p0_gv_0_ga_0p1', 'gdmv_0_gdma_1p0_gv_0_ga_0p2', 'gdmv_0_gdma_1p0_gv_0_ga_0p25', 'gdmv_0_gdma_1p0_gv_0_ga_0p3', 'gdmv_0_gdma_1p0_gv_0_ga_0p5', 'gdmv_0_gdma_1p0_gv_0_ga_0p75', 'gdmv_0_gdma_1p0_gv_0_ga_1', 'gdmv_0_gdma_1p0_gv_0_ga_1p5', 'gdmv_0_gdma_1p0_gv_0_ga_2p0', 'gdmv_0_gdma_1p0_gv_0_ga_2p5', 'gdmv_0_gdma_1p0_gv_0_ga_3p0']:
+      #for weight in ['gdmv_0_gdma_1p0_gv_0_ga_3p0']:
          samples4+=[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
 
@@ -511,7 +518,7 @@ if __name__ == '__main__':
     for m in [[4500,0.05148],[5000,0.01829],[5500,0.006472],[6000,0.002250],[6500,0.0007599],[7000,0.0002461]]:
         samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
 
-    samples=samples4
+    samples=samples
 
     #print samples
 
@@ -683,7 +690,7 @@ if __name__ == '__main__':
             jes=jespad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jeshists[str(j)+source]+=[a for a in jes.GetListOfPrimitives() if source in str(a)]
           if len(jeshists[str(j)+source])!=2:
-	    print "JES source not found", jesname
+	    print "JES source not found", source
 	    error
 
       # JES uncertainty CI
@@ -702,7 +709,45 @@ if __name__ == '__main__':
             jes=jespad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jescihists[str(j)+source]+=[a for a in jes.GetListOfPrimitives() if source in str(a)]
           if len(jescihists[str(j)+source])!=2:
-	    print "JES source not found", jesname
+	    print "JES source not found", source
+	    error
+
+      # JER uncertainty QCD
+      jerfiles=[]
+      for n in range(1):
+        filename1jer="chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV_run2.root"
+        print filename1jer
+        jerfiles += [TFile.Open(filename1jer)]
+        closefiles+=[jerfiles[-1]]
+      jerhists={}
+      for j in range(len(massbins)):
+        for source in jersources:
+          jerhists[str(j)+source]=[]
+	  for jerfile in jerfiles:
+	    jerpad=jerfile.Get("jer")
+            jer=jerpad.GetListOfPrimitives()[j+useUnfoldedData*1]
+            jerhists[str(j)+source]+=[a for a in jer.GetListOfPrimitives() if source in str(a)]
+          if len(jerhists[str(j)+source])!=2:
+	    print "JER source not found", source
+	    error
+
+      # JER uncertainty CI
+      jercifiles=[]
+      for n in range(1):
+        filename1jerci="chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV_run2.root"
+        print filename1jerci
+        jercifiles += [TFile.Open(filename1jerci)]
+        closefiles+=[jercifiles[-1]]
+      jercihists={}
+      for j in range(len(massbins)):
+        for source in jersources:
+          jercihists[str(j)+source]=[]
+	  for jercifile in jercifiles:
+	    jerpad=jercifile.Get("jer")
+            jer=jerpad.GetListOfPrimitives()[j+useUnfoldedData*1]
+            jercihists[str(j)+source]+=[a for a in jer.GetListOfPrimitives() if source in str(a)]
+          if len(jercihists[str(j)+source])!=2:
+	    print "JER source not found", source
 	    error
 
       canvas = TCanvas("","",0,0,800,600)
@@ -1028,12 +1073,12 @@ if __name__ == '__main__':
              out.Delete(histname+";"+str(k))
          data.Write(histname)
 
-        # JER uncertainty
+        # Model uncertainty
         histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         clone=ci.Clone(histname)
         clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
-        cijerup=clone.Clone(histname+"_jerUp")
-        cijerdown=clone.Clone(histname+"_jerDown")
+        cimodelup=clone.Clone(histname+"_modelUp")
+        cimodeldown=clone.Clone(histname+"_modelDown")
         slopes={}
         slopes[1200]=0.018 # FIX compute
         slopes[1500]=0.018 # FIX compute
@@ -1047,41 +1092,41 @@ if __name__ == '__main__':
         slopes[6000]=0.026
         slopes[7000]=0.026 # FIX compute
         for b in range(clone.GetNbinsX()):
-            cijerup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-            cijerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-        #cijerup.Scale(dataevents[j]/cijerup.Integral())
-        #cijerdown.Scale(dataevents[j]/cijerdown.Integral())
-        cijerup.SetLineColor(3)
-        cijerup.SetLineStyle(2)
-        cijerdown.SetLineColor(3)
-        cijerdown.SetLineStyle(3)
+            cimodelup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
+            cimodeldown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
+        #cimodelup.Scale(dataevents[j]/cimodelup.Integral())
+        #cimodeldown.Scale(dataevents[j]/cimodeldown.Integral())
+        cimodelup.SetLineColor(3)
+        cimodelup.SetLineStyle(2)
+        cimodeldown.SetLineColor(3)
+        cimodeldown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
-            out.Delete(histname+"_jerUp"+";"+str(k))
-            out.Delete(histname+"_jerDown"+";"+str(k))
-        cijerup.Write()
-        cijerdown.Write()
+            out.Delete(histname+"_modelUp"+";"+str(k))
+            out.Delete(histname+"_modelDown"+";"+str(k))
+        cimodelup.Write()
+        cimodeldown.Write()
 
         histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         clone=alt.Clone(histname)
         clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
-        jerup=clone.Clone(histname+"_jerUp")
-        jerdown=clone.Clone(histname+"_jerDown")
+        modelup=clone.Clone(histname+"_modelUp")
+        modeldown=clone.Clone(histname+"_modelDown")
         for b in range(clone.GetNbinsX()):
-            jerup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-            jerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-        #jerup.Scale(dataevents[j]/jerup.Integral())
-        #jerdown.Scale(dataevents[j]/jerdown.Integral())
-        jerup.SetLineColor(3)
-        jerup.SetLineStyle(2)
-        jerdown.SetLineColor(3)
-        jerdown.SetLineStyle(3)
+            modelup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
+            modeldown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
+        #modelup.Scale(dataevents[j]/modelup.Integral())
+        #modeldown.Scale(dataevents[j]/modeldown.Integral())
+        modelup.SetLineColor(3)
+        modelup.SetLineStyle(2)
+        modeldown.SetLineColor(3)
+        modeldown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
-            out.Delete(histname+"_jerUp"+";"+str(k))
-            out.Delete(histname+"_jerDown"+";"+str(k))
-        jerup.Write()
-        jerdown.Write()
+            out.Delete(histname+"_modelUp"+";"+str(k))
+            out.Delete(histname+"_modelDown"+";"+str(k))
+        modelup.Write()
+        modeldown.Write()
 
         # jes uncertainty
         for source in jessources:
@@ -1132,6 +1177,56 @@ if __name__ == '__main__':
               out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
           jesup.Write()
           jesdown.Write()
+
+        # jer uncertainty
+        for source in jersources:
+	  if source=="SumInQuadrature":
+	    jername=""
+	  else:
+	    jername=str(jersources.index(source)+1)
+          histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          clone=ci.Clone(histname)
+          clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+          cijerup=clone.Clone(histname+"_jer"+jername+"Up")
+          cijerdown=clone.Clone(histname+"_jer"+jername+"Down")
+          for b in range(clone.GetNbinsX()):
+              cijerup.SetBinContent(b+1,clone.GetBinContent(b+1)*jercihists[str(j)+source][0].GetBinContent(b+1))
+              cijerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*jercihists[str(j)+source][1].GetBinContent(b+1))
+          #cijerup.Scale(dataevents[j]/cijerup.Integral())
+          #cijerdown.Scale(dataevents[j]/cijerdown.Integral())
+          #print histname, "jer down", cijerdown.GetBinContent(1)/ci.GetBinContent(1)
+          #print histname, "jer up", cijerup.GetBinContent(1)/ci.GetBinContent(1)
+          cijerup.SetLineColor(28)
+          cijerup.SetLineStyle(2)
+          cijerdown.SetLineColor(28)
+          cijerdown.SetLineStyle(3)
+          out.cd()
+          for k in range(0,200):
+              out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
+              out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
+          cijerup.Write()
+          cijerdown.Write()
+
+          histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          clone=alt.Clone(histname)
+          clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+          jerup=clone.Clone(histname+"_jer"+jername+"Up")
+          jerdown=clone.Clone(histname+"_jer"+jername+"Down")
+	  for b in range(clone.GetNbinsX()):
+              jerup.SetBinContent(b+1,clone.GetBinContent(b+1)*jerhists[str(j)+source][0].GetBinContent(b+1))
+              jerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*jerhists[str(j)+source][1].GetBinContent(b+1))
+          #jerup.Scale(dataevents[j]/jerup.Integral())
+          #jerdown.Scale(dataevents[j]/jerdown.Integral())
+          jerup.SetLineColor(28)
+          jerup.SetLineStyle(2)
+          jerdown.SetLineColor(28)
+          jerdown.SetLineStyle(3)
+          out.cd()
+          for k in range(0,200):
+              out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
+              out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
+          jerup.Write()
+          jerdown.Write()
 
         # NLO PDFup/down
         nloPDFupqcd=None
@@ -1408,13 +1503,13 @@ if __name__ == '__main__':
         legend1.AddEntry(alt,"QCD","l")
         
         # background uncertainties
-        jerup=cloneNormalize(jerup)
-        plots+=[jerup]
-        jerup.Draw("hesame")
-        legend1.AddEntry(jerup,"JER","l")
-        jerdown=cloneNormalize(jerdown)
-        plots+=[jerdown]
-        jerdown.Draw("hesame")
+        modelup=cloneNormalize(modelup)
+        plots+=[modelup]
+        modelup.Draw("hesame")
+        legend1.AddEntry(modelup,"model","l")
+        modeldown=cloneNormalize(modeldown)
+        plots+=[modeldown]
+        modeldown.Draw("hesame")
         jesup=cloneNormalize(jesup)
         plots+=[jesup]
         jesup.Draw("hesame")
@@ -1422,6 +1517,13 @@ if __name__ == '__main__':
         jesdown=cloneNormalize(jesdown)
         plots+=[jesdown]
         jesdown.Draw("hesame")
+        jerup=cloneNormalize(jerup)
+        plots+=[jerup]
+        jerup.Draw("hesame")
+        legend1.AddEntry(jerup,"JER","l")
+        jerdown=cloneNormalize(jerdown)
+        plots+=[jerdown]
+        jerdown.Draw("hesame")
         pdfup=cloneNormalize(pdfup)
         plots+=[pdfup]
         pdfup.Draw("hesame")
@@ -1444,18 +1546,24 @@ if __name__ == '__main__':
          legend1.AddEntry(ci,"New Physics","l")
         
          # signal uncertainties
-         cijerup=cloneNormalize(cijerup)
-         plots+=[cijerup]
-         cijerup.Draw("hesame")
-         cijerdown=cloneNormalize(cijerdown)
-         plots+=[cijerdown]
-         cijerdown.Draw("hesame")
+         cimodelup=cloneNormalize(cimodelup)
+         plots+=[cimodelup]
+         cimodelup.Draw("hesame")
+         cimodeldown=cloneNormalize(cimodeldown)
+         plots+=[cimodeldown]
+         cimodeldown.Draw("hesame")
          cijesup=cloneNormalize(cijesup)
          plots+=[cijesup]
          cijesup.Draw("hesame")
          cijesdown=cloneNormalize(cijesdown)
          plots+=[cijesdown]
          cijesdown.Draw("hesame")
+         cijerup=cloneNormalize(cijerup)
+         plots+=[cijerup]
+         cijerup.Draw("hesame")
+         cijerdown=cloneNormalize(cijerdown)
+         plots+=[cijerdown]
+         cijerdown.Draw("hesame")
          cipdfup=cloneNormalize(cipdfup)
          plots+=[cipdfup]
          cipdfup.Draw("hesame")
@@ -1501,14 +1609,14 @@ if __name__ == '__main__':
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.pdf')
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.eps')
       
-      if not useUnfoldedData: # FIX reponse matrix for high mass bins
+      if not useUnfoldedData:
         canvas = TCanvas("","",0,0,800,600)
         canvas.Divide(4,3)
 	print "Applying response matrix"
-        matrix=TFile("datacards/responseMatrices.root",'READ')
+        matrix=TFile("datacards/responseMatrices_20190930.root",'READ')
         matrix1=matrix.Get("TMatrixT<double>;2") #low mass chi binning
         matrix2=matrix.Get("TMatrixT<double>;3") #highest mass chi binning
-        matrixMassBins=[1000,1200,1500,1900,2400,3000,3600,4200,4800,5400,6000,13000] # FIX compute high mass bins
+        matrixMassBins=[1000,1200,1500,1900,2400,3000,3600,4200,4800,5400,6000,7000,13000]
         #print (len(matrixMassBins)-1)*(len(chi_bins[0])-1)
         #matrix1.Print()
         #print (len(matrixMassBins)-1)*(len(chi_bins[-1])-1)
@@ -1537,8 +1645,6 @@ if __name__ == '__main__':
 		  # map massbins on matrixMassBins
 		  j1m=j1+1
 		  j2m=j2+1
-		  j1m-=1 # FIX compute high mass bins, then no shift is needed
-		  j2m-=1 # FIX compute high mass bins, then no shift is needed
                   response=0
                   if j1==(len(massbins)-1) and j2==(len(massbins)-1):
                     # both in highest mass bin
@@ -1587,10 +1693,12 @@ if __name__ == '__main__':
             plots+=[alt]
 	  syshists={}
 	  for j in range(len(massbins)):
-	    syss=["jer","pdf"]
+	    syss=["model","pdf"]
 	    #syss+=["jes"]
 	    for n in range(len(jessources)-1):
 	      syss+=["jes"+str(n+1)]
+	    for n in range(len(jersources)-1):
+	      syss+=["jer"+str(n+1)]
 	    syss+=["scale"]
             #syss+=["scaleMuR","scaleMuF"]
 	    for sys in syss:

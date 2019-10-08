@@ -32,6 +32,7 @@ injectSignal=False
 dataWithSignal="_DMAxial_Dijet_LO_Mphi_4000_3000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1_chi_inject.root"
 
 jesSources=23 # 1 corresponds to the single overall variation, 23 to all
+jerSources=6 # 1 corresponds to the single overall variation, 6 to all
 separateScaleUncertainties=False
 
 isGen=False
@@ -404,7 +405,7 @@ for model in models:
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
- prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/run2NNLO/datacard_shapelimit13TeV"
+ prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
 
  if model>=30 and model<60:
     name="pvalue_"+testStat+asym+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")    
@@ -565,8 +566,8 @@ for model in models:
       elif signalMass<=3000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
-        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
-      elif signalMass<=7000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v4":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -586,10 +587,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=4500:
-        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]  
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
       elif signalMass<=5000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
       elif signalMass<=6000:
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v5":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -605,10 +608,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(2400,3000),(3000,3600),(3600,4200)]
       elif signalMass<=4500:
-        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
     elif "DM" in signal and version=="_v6":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -624,10 +629,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(2400,3000),(3000,3600),(3600,4200)]
       elif signalMass<=4500:
-        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v7":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -643,10 +650,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
       elif signalMass<=4500:
-        massbins=[(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+        massbins=[(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
         massbins=[(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v8":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -662,10 +671,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
       elif signalMass<=4500:
-        massbins=[(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+        massbins=[(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
         massbins=[(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
+        massbins=[(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v9":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
@@ -681,10 +692,12 @@ for model in models:
       elif signalMass<=4000:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
       elif signalMass<=4500:
-        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
+        massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     print fname
     if not "DM" in signal and not "cs" in signal and not "QBH" in signal:
@@ -694,7 +707,7 @@ for model in models:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
-kmax """+str(3+jesSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
+kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -740,7 +753,7 @@ kmax """+str(3+jesSources+1*separateScaleUncertainties)+""" number of nuisance p
 -----------
 """)
     text=""
-    text+="jer shape "
+    text+="model shape "
     for i in range(len(massbins)):
        text+="1 1 - "
     if jesSources>1:
@@ -750,6 +763,15 @@ kmax """+str(3+jesSources+1*separateScaleUncertainties)+""" number of nuisance p
          text+="1 1 - "
     else:
       text+="\njes shape "
+      for i in range(len(massbins)):
+         text+="1 1 - "
+    if jerSources>1:
+     for n in range(jerSources):
+      text+="\njer"+str(n+1)+" shape "
+      for i in range(len(massbins)):
+         text+="1 1 - "
+    else:
+      text+="\njer shape "
       for i in range(len(massbins)):
          text+="1 1 - "
     text+="\npdf shape "

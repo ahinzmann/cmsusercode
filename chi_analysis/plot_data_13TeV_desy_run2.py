@@ -124,13 +124,13 @@ if __name__ == '__main__':
  
     samples=[("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
             ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
-            ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018"),
+            ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018JECv19"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
+          ["HLT_PFHT475","HLT_PFJet260"],
           ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
-          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet400"],
-          [],
+          [], #"HLT_PFHT900","HLT_PFJet450"
           [],
           [],
           [],
@@ -140,11 +140,11 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [["HLT_PFHT510"], #2017
-          ["HLT_PFHT590","HLT_PFHT510"],
-          ["HLT_PFHT680","HLT_PFHT590","HLT_PFHT510"],
-          [],
-          [],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [], #"HLT_PFHT1050","HLT_PFJet500"
           [],
           [],
           [],
@@ -153,11 +153,11 @@ if __name__ == '__main__':
           [],
           [],
           ],
-	  [["HLT_PFHT510"], #2018
-          ["HLT_PFHT590","HLT_PFHT510"],
-          ["HLT_PFHT680","HLT_PFHT590","HLT_PFHT510"],
-          [],
-          [],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [], #"HLT_PFHT1050","HLT_PFJet500"
           [],
           [],
           [],

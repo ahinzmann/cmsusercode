@@ -11,15 +11,15 @@ python plotSignal_jes_13TeV_run2.py 9
 python plotSignal_jes_13TeV_run2.py 10 &
 python plotSignal_jes_13TeV_run2.py 11 &
 python plotSignal_jes_13TeV_run2.py 12 &
-python plotSignal_jes_13TeV_run2.py 13 &
-python plotSignal_jes_13TeV_run2.py 14
+python plotSignal_jes_13TeV_run2.py 13 
+python plotSignal_jes_13TeV_run2.py 14 &
 python plotSignal_jes_13TeV_run2.py 15 &
 python plotSignal_jes_13TeV_run2.py 16 &
 python plotSignal_jes_13TeV_run2.py 17 &
 python plotSignal_jes_13TeV_run2.py 18 &
-python plotSignal_jes_13TeV_run2.py 19
+python plotSignal_jes_13TeV_run2.py 19 &
 python plotSignal_jes_13TeV_run2.py 20 &
-python plotSignal_jes_13TeV_run2.py 21 &
+python plotSignal_jes_13TeV_run2.py 21 
 python plotSignal_jes_13TeV_run2.py 22 &
 python plotSignal_jes_13TeV_run2.py 23 &
 python plotSignal_jes_13TeV_run2.py 24

@@ -79,8 +79,8 @@ else:
 
 normalizeBack=False  
 
-calcUncert=False        # calculate qcd+ci uncertainties
-compareUncert=True      # compare qcd uncertainty with qcd+ci uncertainty
+calcUncert=True        # calculate qcd+ci uncertainties
+compareUncert=False      # compare qcd uncertainty with qcd+ci uncertainty
 
 if calcUncert:
     

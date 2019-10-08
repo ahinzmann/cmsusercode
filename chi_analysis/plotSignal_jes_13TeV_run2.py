@@ -50,7 +50,7 @@ if doJES:
     JESuncertainties[source+"2017"] = JetCorrectionUncertainty(JESparameters[source+"2017"])
   print "load 2018 uncertainties"
   for source in JECsources:
-    JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Autumn18_V8_MC/Autumn18_V8_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Autumn18_V19_MC/Autumn18_V19_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2018"] = JetCorrectionUncertainty(JESparameters[source+"2018"])
 
 def createPlots(sample,prefix,xsec,massbins,year):
@@ -100,8 +100,9 @@ def createPlots(sample,prefix,xsec,massbins,year):
 
     for event in events:
        #if event_count>10000000:break
-       #if event_count>10000:break
-       
+       #if event_count>1000000:break
+       #if event_count>100000:break
+      
        event_count+=1
        if event_count%10000==1: print "event",event_count
 
@@ -117,7 +118,8 @@ def createPlots(sample,prefix,xsec,massbins,year):
        chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))
        yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
        for scale in scales:
-         if mjj>1000 and chi<16. and yboost<1.11 and scale!=1:
+         try:
+	  if mjj>1000 and chi<16. and yboost<1.11 and scale!=1:
            jes=JESuncertainties[scale.replace("_Up","")+year]
            jes.setJetPt(jet1.Pt())
            jes.setJetEta(jet1.Eta())
@@ -135,7 +137,9 @@ def createPlots(sample,prefix,xsec,massbins,year):
              factor2-=jes.getUncertainty(False)
            mjj=(jet1*factor1+jet2*factor2).M()
 	   #if mjj>4800 and mjj<5400: print scale, factor1, factor2
-         for massbin in massbins:
+         except:
+	   print "WARNING: JEC extraction failed", jet1.Pt(), jet1.Eta(), jet2.Pt(), jet2.Eta()
+	 for massbin in massbins:
            if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
              plots[irec].Fill(chi)
            irec+=1
@@ -169,6 +173,7 @@ if __name__ == '__main__':
     year="2016"
     if len(sys.argv)>1:
        name,bin,year = sets[int(sys.argv[1])]
+    if year!=2018: print "SKIPPING 2016 and 2017 !!!!!"; STOP
     prefix="datacard_shapelimit13TeV_"+name+"_JES_"+str(year)+"_"+str(bin)
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),

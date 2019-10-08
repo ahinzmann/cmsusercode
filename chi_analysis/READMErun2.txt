@@ -19,10 +19,12 @@ plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dij
 
 plotSignal_13TeV_desy_run2_DM.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 
-plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
+run_dataYEAR.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
 plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
 plot_chi_jes_plots_13TeV_run2_combine.py # plot JES uncertainty histograms
+plotSignal_jer_13TeV_run2.sh # calls plotSignal_jer_13TeV_run2.py # produce JER uncertainty histograms from CI and QCD GEN samples
+plot_chi_jer_plots_13TeV_run2_combine.py # plot JER uncertainty histograms
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
