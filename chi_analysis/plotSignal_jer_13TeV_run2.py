@@ -90,7 +90,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
        scales+=[s+"_Up",s]
 
     for event in events:
-       if event_count>10000000:break
+       #if event_count>10000000:break
        #if event_count>1000000:break
        #if event_count>100000:break
       

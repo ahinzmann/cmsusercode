@@ -30,6 +30,15 @@ if __name__ == '__main__':
    lumifactor["2017"]=41.53/137.42
    lumifactor["2018"]=59.97/137.42
 
+   samples=[("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
+     	    ("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),
+     	    ("pythia8_ci_m3300_3800_50000_1_0_0_13TeV_Nov14",1.863e-08),
+     	    ("pythia8_ci_m2800_3300_50000_1_0_0_13TeV_Nov14",6.446e-08),
+     	    ("pythia8_ci_m2400_2800_50000_1_0_0_13TeV_Nov14",1.649e-07),
+     	    ("pythia8_ci_m1900_2400_50000_1_0_0_13TeV_Nov14",8.836e-07),
+     	    ("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),]
+
+
    massbins=[(1200,1500),
               (1500,1900),
               (1900,2400),
@@ -43,7 +52,7 @@ if __name__ == '__main__':
               (7000,13000),
               ]
 
-   colors=[1,2,3,4,6,7,8,9,10,11,12,13]
+   colors=[1,2,3,4,6,7,8,9,11,12,13,14]
    styles=[1,2,3,4,5,6,7,8,9,11,12,13]
    
    sourcesets=[[("AbsoluteScale",""),
@@ -96,22 +105,30 @@ if __name__ == '__main__':
       hists=[]
       files=[]
       for mass in range(len(massbins)):
-	if mass>=6: b="1"
-	if mass==5: b="2"
-        if mass==4: b="3"
-        if mass==3: b="4"
-        if mass==2: b="6"
-        if mass<=1: b="7"
+	#if mass>=6: b="1"
+	#if mass==5: b="2"
+        #if mass==4: b="3"
+        #if mass==3: b="4"
+        #if mass==2: b="6"
+        #if mass<=1: b="7"
 	f_refmc={}
 	histyear={}
+	scalexsec={}
 	for year in ["2016","2017","2018"]:
+	 for b in ["1","2","3","4","5","6","7"]:
 	  print "datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root"
-          f_refmc[year]=TFile.Open("datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root")
-	  files+=[f_refmc[year]]
-          histyear[year]=f_refmc[year].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
-          histyear[year]=histyear[year].Clone(histyear[year].GetName()+"main"+str(sourcesets.index(sourceset)))
-	  hists+=[histyear[year]]
-          histyear[year]=histyear[year].Rebin(len(chi_binnings[mass])-1,histyear[year].GetName()+"_rebin1",chi_binnings[mass])
+          f_refmc[year+b]=TFile.Open("datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root")
+	  h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
+	  scalexsec[b]=samples[int(b)-1][1]
+	  files+=[f_refmc[year+b]]
+	  if b=="1":
+            histyear[year]=h
+	    histyear[year]=histyear[year].Clone(histyear[year].GetName()+year+"main"+str(sourcesets.index(sourceset)))
+            histyear[year].Scale(1./scalexsec[b])
+          else:
+            histyear[year].Add(h,1./scalexsec[b])
+         hists+=[histyear[year]]
+         histyear[year]=histyear[year].Rebin(len(chi_binnings[mass])-1,histyear[year].GetName()+"_rebin1",chi_binnings[mass])
         hist=histyear["2016"].Clone(histyear["2016"].GetName()+"combine")
 	hists+=[hist]
 	hist.Scale(lumifactor["2016"])
@@ -180,8 +197,15 @@ if __name__ == '__main__':
 	     updown="Up"
 	     histyear2={}
 	     for year in ["2016","2017","2018"]:
-	      print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
-              histyear2[year]=f_refmc[year].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+	      for b in ["1","2","3","4","5","6","7"]:
+	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
+	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+	       if b=="1":
+                  histyear2[year]=h
+	          histyear2[year]=histyear2[year].Clone(histyear2[year].GetName()+year+"up"+str(sourcesets.index(sourceset)))
+	          histyear2[year].Scale(1./scalexsec[b])
+               else:
+                  histyear2[year].Add(h,1./scalexsec[b])
               histyear2[year]=histyear2[year].Rebin(len(chi_binnings[mass])-1,histyear2[year].GetName()+"_rebin1",chi_binnings[mass])
               hists+=[histyear2[year]]
 	     if sourceset[i][1]=="":
@@ -207,6 +231,10 @@ if __name__ == '__main__':
              hist2.SetLineStyle(2)
 	     hist2.SetTitle("")
              hist2.SetStats(False)
+	     fit=TF1(hist2.GetName()+"smooth","pol3",1,16)
+	     hist2.Fit(fit,"NQ")
+             for chi_bin in range(len(chi_binnings[mass])):
+	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
              hist2.Draw("histsame")
 	     legend.AddEntry(hist2,"JEC "+sourceset[i][0]+" "+sourceset[i][1],"l")
              for chi_bin in range(len(chi_binnings[mass])):
@@ -218,9 +246,16 @@ if __name__ == '__main__':
 	     updown="Down"
 	     histyear3={}
 	     for year in ["2016","2017","2018"]:
-	      print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
-              histyear3[year]=f_refmc[year].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
-              histyear3[year]=histyear3[year].Rebin(len(chi_binnings[mass])-1,histyear3[year].GetName()+"_rebin1",chi_binnings[mass])
+	      for b in ["1","2","3","4","5","6","7"]:
+	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
+	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+	       if b=="1":
+                  histyear3[year]=h
+	          histyear3[year]=histyear3[year].Clone(histyear3[year].GetName()+year+"down"+str(sourcesets.index(sourceset)))
+	          histyear3[year].Scale(1./scalexsec[b])
+               else:
+                  histyear3[year].Add(h,1./scalexsec[b])
+	      histyear3[year]=histyear3[year].Rebin(len(chi_binnings[mass])-1,histyear3[year].GetName()+"_rebin1",chi_binnings[mass])
   	      hists+=[histyear3[year]]
              if sourceset[i][1]=="":
 	      hist3=histyear3["2016"].Clone(histyear3["2016"].GetName()+"combine")
@@ -245,6 +280,10 @@ if __name__ == '__main__':
              hist3.SetLineStyle(3)
 	     hist3.SetTitle("")
              hist3.SetStats(False)
+	     fit=TF1(hist3.GetName()+"smooth","pol3",1,16)
+	     hist3.Fit(fit,"NQ")
+             for chi_bin in range(len(chi_binnings[mass])):
+	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))
 	     hist3.Draw("histsame")
              for chi_bin in range(len(chi_binnings[mass])):
 	       if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:

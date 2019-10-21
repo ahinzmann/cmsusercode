@@ -193,6 +193,10 @@ if __name__ == '__main__':
              hist2.SetLineStyle(2)
 	     hist2.SetTitle("")
              hist2.SetStats(False)
+	     fit=TF1(hist2.GetName()+"smooth","pol3",1,16)
+	     hist2.Fit(fit,"NQ")
+             for chi_bin in range(len(chi_binnings[mass])):
+	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
              hist2.Draw("histsame")
 	     legend.AddEntry(hist2,"JER "+sourceset[i][0]+" "+sourceset[i][1],"l")
              for chi_bin in range(len(chi_binnings[mass])):
@@ -231,6 +235,10 @@ if __name__ == '__main__':
              hist3.SetLineStyle(3)
 	     hist3.SetTitle("")
              hist3.SetStats(False)
+	     fit=TF1(hist3.GetName()+"smooth","pol3",1,16)
+	     hist3.Fit(fit,"NQ")
+             for chi_bin in range(len(chi_binnings[mass])):
+	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))
 	     hist3.Draw("histsame")
              for chi_bin in range(len(chi_binnings[mass])):
 	       if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:

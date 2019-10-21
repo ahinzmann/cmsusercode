@@ -1,49 +1,49 @@
-python plot_data_13TeV_desy_run2.py 0 0 &
-python plot_data_13TeV_desy_run2.py 0 1 &
-python plot_data_13TeV_desy_run2.py 0 2 &
-python plot_data_13TeV_desy_run2.py 0 3 &
-python plot_data_13TeV_desy_run2.py 0 4
-python plot_data_13TeV_desy_run2.py 0 5 &
-python plot_data_13TeV_desy_run2.py 0 6 &
-python plot_data_13TeV_desy_run2.py 0 7 &
-python plot_data_13TeV_desy_run2.py 0 8 &
-python plot_data_13TeV_desy_run2.py 0 9
-python plot_data_13TeV_desy_run2.py 0 10 &
-python plot_data_13TeV_desy_run2.py 0 11 &
-python plot_data_13TeV_desy_run2.py 0 12 &
-python plot_data_13TeV_desy_run2.py 0 13 &
-python plot_data_13TeV_desy_run2.py 0 14
-python plot_data_13TeV_desy_run2.py 0 15 &
-python plot_data_13TeV_desy_run2.py 0 16 &
-python plot_data_13TeV_desy_run2.py 0 17 &
-python plot_data_13TeV_desy_run2.py 0 18 &
-python plot_data_13TeV_desy_run2.py 0 19
-python plot_data_13TeV_desy_run2.py 0 20 &
-python plot_data_13TeV_desy_run2.py 0 21 &
-python plot_data_13TeV_desy_run2.py 0 22 &
-python plot_data_13TeV_desy_run2.py 0 23 &
-python plot_data_13TeV_desy_run2.py 0 24
-python plot_data_13TeV_desy_run2.py 0 25 &
-python plot_data_13TeV_desy_run2.py 0 26 &
-python plot_data_13TeV_desy_run2.py 0 27 &
-python plot_data_13TeV_desy_run2.py 0 28 &
-python plot_data_13TeV_desy_run2.py 0 29
-python plot_data_13TeV_desy_run2.py 0 30 &
-python plot_data_13TeV_desy_run2.py 0 31 &
-python plot_data_13TeV_desy_run2.py 0 32 &
-python plot_data_13TeV_desy_run2.py 0 33 &
-python plot_data_13TeV_desy_run2.py 0 34
-python plot_data_13TeV_desy_run2.py 0 35 &
-python plot_data_13TeV_desy_run2.py 0 36 &
-python plot_data_13TeV_desy_run2.py 0 37 &
-python plot_data_13TeV_desy_run2.py 0 38 &
-python plot_data_13TeV_desy_run2.py 0 39
-python plot_data_13TeV_desy_run2.py 0 40 &
-python plot_data_13TeV_desy_run2.py 0 41 &
-python plot_data_13TeV_desy_run2.py 0 42 &
-python plot_data_13TeV_desy_run2.py 0 43 &
-python plot_data_13TeV_desy_run2.py 0 44
-python plot_data_13TeV_desy_run2.py 0 45 &
-python plot_data_13TeV_desy_run2.py 0 46 &
-python plot_data_13TeV_desy_run2.py 0 47 &
-python plot_data_13TeV_desy_run2.py 0 48 &
+python plot_data_13TeV_desy_run2.py 0 0 > events2016_0.txt &
+python plot_data_13TeV_desy_run2.py 0 1 > events2016_1.txt &
+python plot_data_13TeV_desy_run2.py 0 2 > events2016_2.txt &
+python plot_data_13TeV_desy_run2.py 0 3 > events2016_3.txt &
+python plot_data_13TeV_desy_run2.py 0 4 > events2016_4.txt
+python plot_data_13TeV_desy_run2.py 0 5 > events2016_5.txt &
+python plot_data_13TeV_desy_run2.py 0 6 > events2016_6.txt &
+python plot_data_13TeV_desy_run2.py 0 7 > events2016_7.txt &
+python plot_data_13TeV_desy_run2.py 0 8 > events2016_8.txt &
+python plot_data_13TeV_desy_run2.py 0 9 > events2016_9.txt
+python plot_data_13TeV_desy_run2.py 0 10 > events2016_10.txt &
+python plot_data_13TeV_desy_run2.py 0 11 > events2016_11.txt &
+python plot_data_13TeV_desy_run2.py 0 12 > events2016_12.txt &
+python plot_data_13TeV_desy_run2.py 0 13 > events2016_13.txt &
+python plot_data_13TeV_desy_run2.py 0 14 > events2016_14.txt
+python plot_data_13TeV_desy_run2.py 0 15 > events2016_15.txt &
+python plot_data_13TeV_desy_run2.py 0 16 > events2016_16.txt &
+python plot_data_13TeV_desy_run2.py 0 17 > events2016_17.txt &
+python plot_data_13TeV_desy_run2.py 0 18 > events2016_18.txt &
+python plot_data_13TeV_desy_run2.py 0 19 > events2016_19.txt
+python plot_data_13TeV_desy_run2.py 0 20 > events2016_20.txt &
+python plot_data_13TeV_desy_run2.py 0 21 > events2016_21.txt &
+python plot_data_13TeV_desy_run2.py 0 22 > events2016_22.txt &
+python plot_data_13TeV_desy_run2.py 0 23 > events2016_23.txt &
+python plot_data_13TeV_desy_run2.py 0 24 > events2016_24.txt
+python plot_data_13TeV_desy_run2.py 0 25 > events2016_25.txt &
+python plot_data_13TeV_desy_run2.py 0 26 > events2016_26.txt &
+python plot_data_13TeV_desy_run2.py 0 27 > events2016_27.txt &
+python plot_data_13TeV_desy_run2.py 0 28 > events2016_28.txt &
+python plot_data_13TeV_desy_run2.py 0 29 > events2016_29.txt
+python plot_data_13TeV_desy_run2.py 0 30 > events2016_30.txt &
+python plot_data_13TeV_desy_run2.py 0 31 > events2016_31.txt &
+python plot_data_13TeV_desy_run2.py 0 32 > events2016_32.txt &
+python plot_data_13TeV_desy_run2.py 0 33 > events2016_33.txt &
+python plot_data_13TeV_desy_run2.py 0 34 > events2016_34.txt
+python plot_data_13TeV_desy_run2.py 0 35 > events2016_35.txt &
+python plot_data_13TeV_desy_run2.py 0 36 > events2016_36.txt &
+python plot_data_13TeV_desy_run2.py 0 37 > events2016_37.txt &
+python plot_data_13TeV_desy_run2.py 0 38 > events2016_38.txt &
+python plot_data_13TeV_desy_run2.py 0 39 > events2016_39.txt
+python plot_data_13TeV_desy_run2.py 0 40 > events2016_40.txt &
+python plot_data_13TeV_desy_run2.py 0 41 > events2016_41.txt &
+python plot_data_13TeV_desy_run2.py 0 42 > events2016_42.txt &
+python plot_data_13TeV_desy_run2.py 0 43 > events2016_43.txt &
+python plot_data_13TeV_desy_run2.py 0 44 > events2016_44.txt
+python plot_data_13TeV_desy_run2.py 0 45 > events2016_45.txt &
+python plot_data_13TeV_desy_run2.py 0 46 > events2016_46.txt &
+python plot_data_13TeV_desy_run2.py 0 47 > events2016_47.txt &
+python plot_data_13TeV_desy_run2.py 0 48 > events2016_48.txt &

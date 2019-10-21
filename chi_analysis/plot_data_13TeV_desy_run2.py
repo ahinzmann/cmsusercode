@@ -56,6 +56,7 @@ def createPlots(sample,prefix,triggers,massbins):
      print f,nevents
      #if event_count>100000: break ###
      for event in events:
+	 #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
 	 #if event_count>100000: break ###
          if event_count%10000==1:
@@ -76,6 +77,7 @@ def createPlots(sample,prefix,triggers,massbins):
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
          if mjj<1000 or chi>16. or yboost>1.11: continue
+	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
          irec=0
 	 for massbin in massbins:
 	    passedHLT=len(triggers[massbins.index(massbin)])==0
@@ -122,7 +124,8 @@ if __name__ == '__main__':
 	      (7000,13000),
               ]
  
-    samples=[("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
+    samples=[#("datacard_shapelimit13TeV_run2_2016old","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
+            ("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
             ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
             ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018JECv19"),
             ]
