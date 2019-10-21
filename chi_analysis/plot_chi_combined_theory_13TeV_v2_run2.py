@@ -137,7 +137,7 @@ if __name__=="__main__":
         if unfoldedData:
             fdir='invertMatrixOct20/'
         else:
-            fdir='run2NNLO/'
+            fdir=''
             
         if unfoldedData:  
             filename="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
@@ -763,7 +763,7 @@ if __name__=="__main__":
     l2.SetTextSize(0.033)
     l2.SetMargin(0.33)
     l2.AddEntry(h14G,"Data","ple")
-    l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
+    l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
 #    if massbin>=5: #FIX
 #        l2.AddEntry(h4,"#Lambda_{LL}^{#font[122]{+}} (CI) = 14 TeV","l") #FIX
 #        l2.AddEntry(h4b,"#Lambda_{LL}^{#font[122]{-}} (CI) = 14 TeV","l") #FIX

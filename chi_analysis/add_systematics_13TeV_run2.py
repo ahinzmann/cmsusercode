@@ -136,6 +136,7 @@ if __name__ == '__main__':
             chi_binnings[-1].append(chi_bin)
 
     samples=[]
+    samples1=[]
     samples2=[]
     samples3=[]
     samples4=[]
@@ -151,7 +152,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
             ]
-    samples+=[("QCDAntiCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
+    samples1+=[("QCDAntiCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
                        ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
                        ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
                        ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
@@ -160,7 +161,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_12000_1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples+=[("QCDCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
+    samples1+=[("QCDCIplusLL12000",[("pythia8_ci_m1500_1900_12000_1_0_0_13TeV_Nov14",3.307e-06),
                        ("pythia8_ci_m1900_2400_12000_1_0_0_13TeV_Nov14",8.836e-07),
                        ("pythia8_ci_m2400_2800_12000_1_0_0_13TeV_Nov14",1.649e-07),
                        ("pythia8_ci_m2800_3300_12000_1_0_0_13TeV_Nov14",6.446e-08),
@@ -315,7 +316,7 @@ if __name__ == '__main__':
                        ("pythia8_ci_m4300_13000_18000_-1_0_0_13TeV_Nov14",3.507e-09),
                        ]),
              ]
-    samples+=[#("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
+    samples1+=[#("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",3.307e-06),
               #         ("pythia8_add_m1900_2400_6000_0_0_0_1_13TeV_Nov14",8.836e-07),
               #         ("pythia8_add_m2400_2800_6000_0_0_0_1_13TeV_Nov14",1.649e-07),
               #         ("pythia8_add_m2800_3300_6000_0_0_0_1_13TeV_Nov14",6.446e-08),
@@ -1045,13 +1046,13 @@ if __name__ == '__main__':
         # ALT (=NLO QCD)
         histname=samples[i][0].replace("Anti","")+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         print histname
-        if "LOCI" in samples[i][0] or "CT10" in samples[i][0] or "cteq" in samples[i][0] or "EWK" in samples[i][0]:
-            alt=nloqcd.Clone(histname)
-        else:
-            alt=out.Get(histname)
-        alt=alt.Rebin(len(chi_binnings[j])-1,alt.GetName(),chi_binnings[j])
-        alt.Add(alt,-1)
-        alt.Add(nloqcd)
+        #if "LOCI" in samples[i][0] or "CT10" in samples[i][0] or "cteq" in samples[i][0] or "EWK" in samples[i][0]:
+        alt=nloqcd.Clone(histname)
+        #else:
+        #    alt=out.Get(histname)
+        #alt=alt.Rebin(len(chi_binnings[j])-1,alt.GetName(),chi_binnings[j])
+        #alt.Add(alt,-1)
+        #alt.Add(nloqcd)
         alt.Scale(dataevents[j]/alt.Integral())
         for b in range(alt.GetXaxis().GetNbins()):
             alt.SetBinError(b+1,0)
@@ -1694,13 +1695,14 @@ if __name__ == '__main__':
 	  syshists={}
 	  for j in range(len(massbins)):
 	    syss=["model","pdf"]
-	    #syss+=["jes"]
+	    syss+=["jes"]
 	    for n in range(len(jessources)-1):
 	      syss+=["jes"+str(n+1)]
 	    for n in range(len(jersources)-1):
 	      syss+=["jer"+str(n+1)]
 	    syss+=["scale"]
-            #syss+=["scaleMuR","scaleMuF"]
+            syss+=["scaleMuR","scaleMuF"]
+	    skipInSum=["jes","scaleMuR","scaleMuF"]
 	    for sys in syss:
 	      for shift in ["Up","Down"]:
 	        histname=althists[j].GetName()+"_"+sys+shift
@@ -1719,7 +1721,7 @@ if __name__ == '__main__':
 		syshists[sys+shift]=sysHist
                 canvas.cd(j+1)#j-2
                 alt=cloneNormalize(sysHist)
-	        if samples[i][0]!="QCD"or "ALT" in pre:
+	        if (samples[i][0]!="QCD"or "ALT" in pre) and not sys in skipInSum:
                  alt.Draw("hesame")
                 plots+=[alt]
             dataplot[j].Draw("pe0zsame")
@@ -1733,6 +1735,7 @@ if __name__ == '__main__':
 	      unc2=max(pow(dataplot[j].GetErrorYlow(b),2),pow(dataplot[j].GetErrorYhigh(b),2))
 	      print "stat",sqrt(unc2)/datahist[j].GetBinContent(b+1)
 	      for sys in syss:
+	       if not sys in skipInSum:
 	        unc2+=max(pow(syshists[sys+"Up"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2),pow(syshists[sys+"Down"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2))
 	      print "stat+sys",sqrt(unc2)/datahist[j].GetBinContent(b+1)
 	      chi2+=pow(datahist[j].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2)/unc2
