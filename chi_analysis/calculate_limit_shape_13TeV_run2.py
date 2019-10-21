@@ -13,14 +13,15 @@ def system_call(command):
 massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] # did not calculate CI for lower mass bins yet
 
 models=[]
-models+=[3]
+#models+=[3]
 #models+=[11]
 #models+=[10,11]
 #models+=[60,61,62,63,64,65,66,67,68,69]
 #models+=[70,71,72,73,74,75,76,77]
 #models+=[78,79,80,81,82,83,84,85]
-#models+=[30,31,32,33,34,35,36,37,38]
-#models+=[40,41,42,43,44,45,46]
+#models+=[30,31,32,33,34,35,36,37,38,39,40]
+models+=[45,46,47,48,49,50,51,52,53,54,55]
+#models+=[41,42]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
@@ -195,79 +196,103 @@ for model in models:
 
  if model==30:
     signal="CIplusLL"
-    signalMasses=[13000] #12000 for 2016 #13000 for 2017
-    massbins=[(6000,13000),]
+    signalMasses=[12000]
+    massbins=[(7000,13000),]
  if model==31:
     signal="CIplusLL"
-    signalMasses=[13000] #12000 for 2016 #13000 for 2017
-    massbins=[(5400,6000),]
+    signalMasses=[12000]
+    massbins=[(6000,7000),]
  if model==32:
     signal="CIplusLL"
-    signalMasses=[13000] #12000 for 2016 #13000 for 2017
-    massbins=[(4800,5400),]
+    signalMasses=[12000]
+    massbins=[(5400,6000),]
  if model==33:
     signal="CIplusLL"
     signalMasses=[12000]
-    massbins=[(4200,4800),]
+    massbins=[(4800,5400),]
  if model==34:
     signal="CIplusLL"
     signalMasses=[12000]
-    massbins=[(3600,4200),]
+    massbins=[(4200,4800),]
  if model==35:
     signal="CIplusLL"
     signalMasses=[12000]
-    massbins=[(3000,3600),]
+    massbins=[(3600,4200),]
  if model==36:
     signal="CIplusLL"
     signalMasses=[12000]
-    massbins=[(2400,3000),]
+    massbins=[(3000,3600),]
  if model==37:
+    signal="CIplusLL"
+    signalMasses=[12000]
+    massbins=[(2400,3000),]
+ if model==38:
+    signal="CIplusLL"
+    signalMasses=[12000]
+    massbins=[(1900,2400),]
+ if model==39:
+    signal="CIplusLL"
+    signalMasses=[12000]
+    massbins=[(1500,1900),]
+ if model==40:
+    signal="CIplusLL"
+    signalMasses=[12000]
+    massbins=[(1200,1500),]
+ if model==41:
     signal="cs_ct14nlo_"
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
- if model==38:
+ if model==42:
     signal="cs_ct14nlo_"
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
- if model==40:
-    signal="AntiCIplusLL"    
-    signalMasses=[12000]
-    massbins=[(6000,13000),]
- if model==41:
-    signal="AntiCIplusLL"    
-    signalMasses=[12000]
-    massbins=[(5400,6000),]
- if model==42:
-    signal="AntiCIplusLL"    
-    signalMasses=[12000]
-    massbins=[(4800,5400),]
- if model==43:
-    signal="AntiCIplusLL"    
-    signalMasses=[12000]
-    massbins=[(4200,4800),]
- if model==44:
-    signal="AntiCIplusLL"    
-    signalMasses=[12000]
-    massbins=[(3600,4200),]
  if model==45:
     signal="AntiCIplusLL"    
     signalMasses=[12000]
-    massbins=[(3000,3600),]
+    massbins=[(7000,13000),]
  if model==46:
     signal="AntiCIplusLL"    
     signalMasses=[12000]
+    massbins=[(6000,7000),]
+ if model==47:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(5400,6000),]
+ if model==48:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(4800,5400),]
+ if model==49:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(4200,4800),]
+ if model==50:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(3600,4200),]
+ if model==51:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(3000,3600),]
+ if model==52:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
     massbins=[(2400,3000),]
- #if model==47:
- #   signal="AntiCIplusLL"    
- #   signalMasses=[12000]
- #   massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
- #if model==48:
- #   signal="AntiCIplusLL"    
- #   signalMasses=[12000]
- #   massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+ if model==53:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(1900,2400),]
+ if model==54:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(1500,1900),]
+ if model==55:
+    signal="AntiCIplusLL"    
+    signalMasses=[12000]
+    massbins=[(1200,1500),]
 
  if model>=60 and model<100:
     includeSignalTheoryUncertainties=True

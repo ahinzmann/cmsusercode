@@ -463,7 +463,7 @@ if __name__ == '__main__':
              ]
 
     for m in range(5,31):
-       samples2+=[#("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
+       samples2+=[("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
                #("cs_"+pdfset+"_"+str(m*1000)+"_LL-",[]),
                #("cs_"+pdfset+"_"+str(m*1000)+"_RR+",[]),
                #("cs_"+pdfset+"_"+str(m*1000)+"_RR-",[]),
@@ -472,7 +472,7 @@ if __name__ == '__main__':
                #("cs_"+pdfset+"_"+str(m*1000)+"_AA+",[]),
                #("cs_"+pdfset+"_"+str(m*1000)+"_AA-",[]),
                #("cs_"+pdfset+"_"+str(m*1000)+"_V-A+",[]),
-               ("cs_"+pdfset+"_"+str(m*1000)+"_V-A-",[]),
+               #("cs_"+pdfset+"_"+str(m*1000)+"_V-A-",[]),
                ]
 
     for mass in [1700,2000,2300,2600,2900,3200,3500,3800,4100,4400,4700,5000,5300,5600,5900,6200,6500,6800,7100]:
@@ -485,8 +485,8 @@ if __name__ == '__main__':
     #xsecs={}
     #for l in open("xsecs_13TeV_dm.txt").readlines():
     #  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
-    for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
-    #for mass in [1000]:
+    #for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
+    for mass in [2500]:
     #for mass in [2000,2250,2500]:
     #for mass in [3000,3500,4000]:
     #for mass in [4500,5000,6000,7000]:
@@ -519,7 +519,7 @@ if __name__ == '__main__':
     for m in [[4500,0.05148],[5000,0.01829],[5500,0.006472],[6000,0.002250],[6500,0.0007599],[7000,0.0002461]]:
         samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
 
-    samples=samples
+    samples=samples4
 
     #print samples
 
@@ -1695,14 +1695,16 @@ if __name__ == '__main__':
 	  syshists={}
 	  for j in range(len(massbins)):
 	    syss=["model","pdf"]
+	    skipInSum=[]
 	    syss+=["jes"]
 	    for n in range(len(jessources)-1):
 	      syss+=["jes"+str(n+1)]
+	      skipInSum+=["jes"+str(n+1)]
 	    for n in range(len(jersources)-1):
 	      syss+=["jer"+str(n+1)]
 	    syss+=["scale"]
             syss+=["scaleMuR","scaleMuF"]
-	    skipInSum=["jes","scaleMuR","scaleMuF"]
+	    skipInSum+=["scaleMuR","scaleMuF"]
 	    for sys in syss:
 	      for shift in ["Up","Down"]:
 	        histname=althists[j].GetName()+"_"+sys+shift
