@@ -20,8 +20,8 @@ models=[]
 #models+=[70,71,72,73,74,75,76,77]
 #models+=[78,79,80,81,82,83,84,85]
 #models+=[30,31,32,33,34,35,36,37,38,39,40]
-models+=[45,46,47,48,49,50,51,52,53,54,55]
-#models+=[41,42]
+#models+=[45,46,47,48,49,50,51,52,53,54,55]
+models+=[41,42]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
@@ -99,32 +99,32 @@ for model in models:
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4800
     #includeSignalTheoryUncertainties=True # from QCD-only though
  if model==4:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
     massbins=[(4200,4800),(4800,13000)]
  if model==5:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
     massbins=[(4800,13000)]
  if model==6:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
     massbins=[(4200,4800)]
  if model==7:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
     massbins=[(3600,4200)]
  if model==8:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4200,4800),(4800,13000)]
  if model==9:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4800,13000)]
@@ -141,53 +141,53 @@ for model in models:
     signalExtra="_RS1"
 
  if model==18:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
  if model==19:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
     includeSignalTheoryUncertainties=True
 
  if model==20:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
  if model==21:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
  if model==22:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_RR+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
  if model==23:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_RR-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
  if model==24:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_VV+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
  if model==25:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_VV-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000]
  if model==26:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_AA+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
  if model==27:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_AA-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000]
  if model==28:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_V-A+"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
  if model==29:
-    signal="cs_nn30nlo_0_"
+    signal="cs_ct14nnlo_0_"
     signalExtra="_V-A-"
     signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
 
@@ -239,15 +239,15 @@ for model in models:
     signalMasses=[12000]
     massbins=[(1200,1500),]
  if model==41:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==42:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[13000]
-    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
  if model==45:
     signal="AntiCIplusLL"    
@@ -298,133 +298,133 @@ for model in models:
     includeSignalTheoryUncertainties=True
 
  if model==60 or model==88:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000]
  if model==61 or model==89:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,25000,26000,28000,30000]
  if model==62:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_RR+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000]
  if model==63:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_RR-"
     signalMasses=[16000,17000,18000,19000,20000,22000,24000,25000,26000,27000,28000]
  if model==64:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_VV+"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,21000,22000,23000,24000]
  if model==65:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_VV-"
     signalMasses=[20000,22000,24000,26000,27000,28000,29000,30000]#,32000,34000,36000
  if model==66:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_AA+"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,21000,22000,23000,24000]
  if model==67:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_AA-"
     signalMasses=[20000,22000,24000,26000,27000,28000,29000,30000]#,32000,34000,36000
  if model==68:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_V-A+"
     signalMasses=[7000,8000,9000,10000,11000,12000,13000,14000,15000,16000]
  if model==69:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_V-A-"
     signalMasses=[7000,8000,9000,10000,11000,12000,13000,14000,15000,16000]
 
  if model==70:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000]
     massbins=[(6000,13000)]
  if model==71:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
     massbins=[(5400,6000)]
  if model==72:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
     massbins=[(4800,5400)]
  if model==73:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(5400,6000),(6000,7000),(7000,13000)]
  if model==74:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000]
     massbins=[(6000,13000)]
  if model==75:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(5400,6000)]
  if model==76:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4800,5400)]
  if model==77:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(5400,6000),(6000,7000),(7000,13000)]
  if model==78:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==79:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==80:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==81:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==82:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==83:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==84:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==85:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==86:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL+"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==87:
-    signal="cs_ct14nlo_"
+    signal="cs_ct14nnlo_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]

@@ -74,7 +74,9 @@ if __name__ == '__main__':
 		]
     print len(jessources)-1,"jes sources"
     jersources=["JER12016","JER12017","JER12018",
-                "JER22016","JER22017","JER22018"]
+                "JER22016","JER22017","JER22018",
+		"SumInQuadrature",
+		]
 
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -486,7 +488,7 @@ if __name__ == '__main__':
     #for l in open("xsecs_13TeV_dm.txt").readlines():
     #  xsecs[l.split("     ")[0]]=eval(l.split("     ")[1])
     #for mass in [1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]:
-    for mass in [2500]:
+    for mass in [4000]:
     #for mass in [2000,2250,2500]:
     #for mass in [3000,3500,4000]:
     #for mass in [4500,5000,6000,7000]:
@@ -508,8 +510,8 @@ if __name__ == '__main__':
       for weight in ['gdmv_1p0_gdma_0_gv_0p01_ga_0', 'gdmv_1p0_gdma_0_gv_0p05_ga_0', 'gdmv_1p0_gdma_0_gv_0p1_ga_0', 'gdmv_1p0_gdma_0_gv_0p2_ga_0', 'gdmv_1p0_gdma_0_gv_0p25_ga_0', 'gdmv_1p0_gdma_0_gv_0p3_ga_0', 'gdmv_1p0_gdma_0_gv_0p5_ga_0', 'gdmv_1p0_gdma_0_gv_0p75_ga_0', 'gdmv_1p0_gdma_0_gv_1_ga_0', 'gdmv_1p0_gdma_0_gv_1p5_ga_0', 'gdmv_1p0_gdma_0_gv_2p0_ga_0', 'gdmv_1p0_gdma_0_gv_2p5_ga_0', 'gdmv_1p0_gdma_0_gv_3p0_ga_0']:
          samplesSkip+=[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMVector_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
-      for weight in ['gdmv_0_gdma_1p0_gv_0_ga_0p01', 'gdmv_0_gdma_1p0_gv_0_ga_0p05', 'gdmv_0_gdma_1p0_gv_0_ga_0p1', 'gdmv_0_gdma_1p0_gv_0_ga_0p2', 'gdmv_0_gdma_1p0_gv_0_ga_0p25', 'gdmv_0_gdma_1p0_gv_0_ga_0p3', 'gdmv_0_gdma_1p0_gv_0_ga_0p5', 'gdmv_0_gdma_1p0_gv_0_ga_0p75', 'gdmv_0_gdma_1p0_gv_0_ga_1', 'gdmv_0_gdma_1p0_gv_0_ga_1p5', 'gdmv_0_gdma_1p0_gv_0_ga_2p0', 'gdmv_0_gdma_1p0_gv_0_ga_2p5', 'gdmv_0_gdma_1p0_gv_0_ga_3p0']:
-      #for weight in ['gdmv_0_gdma_1p0_gv_0_ga_3p0']:
+      #for weight in ['gdmv_0_gdma_1p0_gv_0_ga_0p01', 'gdmv_0_gdma_1p0_gv_0_ga_0p05', 'gdmv_0_gdma_1p0_gv_0_ga_0p1', 'gdmv_0_gdma_1p0_gv_0_ga_0p2', 'gdmv_0_gdma_1p0_gv_0_ga_0p25', 'gdmv_0_gdma_1p0_gv_0_ga_0p3', 'gdmv_0_gdma_1p0_gv_0_ga_0p5', 'gdmv_0_gdma_1p0_gv_0_ga_0p75', 'gdmv_0_gdma_1p0_gv_0_ga_1', 'gdmv_0_gdma_1p0_gv_0_ga_1p5', 'gdmv_0_gdma_1p0_gv_0_ga_2p0', 'gdmv_0_gdma_1p0_gv_0_ga_2p5', 'gdmv_0_gdma_1p0_gv_0_ga_3p0']:
+      for weight in ['gdmv_0_gdma_1p0_gv_0_ga_1p5']:
          samples4+=[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
 
@@ -715,7 +717,7 @@ if __name__ == '__main__':
 
       # JER uncertainty QCD
       jerfiles=[]
-      for n in range(1):
+      for n in range(2):
         filename1jer="chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV_run2.root"
         print filename1jer
         jerfiles += [TFile.Open(filename1jer)]
@@ -734,7 +736,7 @@ if __name__ == '__main__':
 
       # JER uncertainty CI
       jercifiles=[]
-      for n in range(1):
+      for n in range(2):
         filename1jerci="chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV_run2.root"
         print filename1jerci
         jercifiles += [TFile.Open(filename1jerci)]
@@ -1700,8 +1702,10 @@ if __name__ == '__main__':
 	    for n in range(len(jessources)-1):
 	      syss+=["jes"+str(n+1)]
 	      skipInSum+=["jes"+str(n+1)]
+	    syss+=["jer"]
 	    for n in range(len(jersources)-1):
 	      syss+=["jer"+str(n+1)]
+	      skipInSum+=["jer"+str(n+1)]
 	    syss+=["scale"]
             syss+=["scaleMuR","scaleMuF"]
 	    skipInSum+=["scaleMuR","scaleMuF"]

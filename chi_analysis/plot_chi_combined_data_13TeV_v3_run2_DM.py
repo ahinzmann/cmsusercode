@@ -5,9 +5,11 @@ import os
 from math import *
 from scipy import stats
 
-uncertaintynames=["jer","pdf","scale"]
+uncertaintynames=["pdf","scale","model"]
 for i in range(1,23):
     uncertaintynames.append("jes"+str(i))
+for i in range(1,6):
+    uncertaintynames.append("jer"+str(i))
 
 
 def rebin(h1,nbins,binning):
@@ -90,7 +92,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
         for up,down,central in uncertainties:
             addup=fitConstraints[nn]*pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
             adddown=fitConstraints[nn]*pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
-            if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])]:
+            if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])]:
                 exp_sumup+=addup
                 exp_sumdown+=adddown
                 #print uncertaintynames[uncertainties.index([up,down,central])]
@@ -143,6 +145,7 @@ if __name__=="__main__":
 
     unfoldedData=False
     isCB=False
+    version="v9"
 
     print "start ROOT"
     #gROOT.Reset()
@@ -170,12 +173,13 @@ if __name__=="__main__":
     elif isCB:
         SaveDir="./fitcheckDETCBv6/"
     else:
-        SaveDir="./run2NNLO/"
+        SaveDir="./"
     
     if os.path.exists(SaveDir)==False:
         os.mkdir(SaveDir)
 
     signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+    signalMasses=[7000]
 
     gas=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
 
@@ -190,28 +194,48 @@ if __name__=="__main__":
 
     #print signalName,signalExtraName
 
-    prefix="datacard_shapelimit"
+    prefix="datacard_shapelimit13TeV"
     if unfoldedData:
             prefix+="_unfolded"
 
     new_hists=[]
-    for j in [1102,1103,1104,1105,1106,1107,1108]:
-    #for j in [1105]:
+    #for j in [1102,1103,1104,1105,1106,1107,1108]:
+    for j in [1108]:
         for signalMass in signalMasses:
-            if signalMass<=2500:
-                massbins=[(2400,3000)]
-            elif signalMass<=3000:
-                massbins=[(2400,3000),(3000,3600)]
-            elif signalMass<=3500:
-                massbins=[(2400,3000),(3000,3600),(3600,4200)]
-            elif signalMass<=4000:
-                massbins=[(2400,3000),(3000,3600),(3600,4200)]
-            elif signalMass<=4500:
-                massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
-            elif signalMass<=5000:
-                massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
-            elif signalMass<=6000:
-                massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+	    if version=="v6":
+              if signalMass<=2500:
+            	  massbins=[(2400,3000)]
+              elif signalMass<=3000:
+            	  massbins=[(2400,3000),(3000,3600)]
+              elif signalMass<=3500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+              elif signalMass<=5000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+              elif signalMass<=6000:
+            	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+              else:
+            	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+            elif version=="v9":
+  	      if signalMass<=2500:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
+  	      elif signalMass<=3000:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
+  	      elif signalMass<=3500:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+  	      elif signalMass<=4000:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+  	      elif signalMass<=4500:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+  	      elif signalMass<=5000:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+  	      elif signalMass<=6000:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+  	      else:
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix="datacard_shapelimit13TeV_"+histnameprefix
@@ -247,11 +271,11 @@ if __name__=="__main__":
                     filename=SaveDir+filenameprefix+"-run2_chi.root"
 
                 if unfoldedData:
-                    fitFile=TFile("limitsGenLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_v6/fitDiagnostics"+histnameprefix+".root")
+                    fitFile=TFile("limitsGenLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
                 elif isCB:
-                    fitFile=TFile("limitsDetCBLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_v6/fitDiagnostics"+histnameprefix+".root")
+                    fitFile=TFile("limitsDetCBLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
                 else:
-                    fitFile=TFile("limitsDetLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_v6/fitDiagnostics"+histnameprefix+".root")
+                    fitFile=TFile("limitsDetLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
 
                 print "Fit Parameters from:", fitFile.GetName()
 
@@ -369,30 +393,16 @@ if __name__=="__main__":
                 canvas=TCanvas("post-fit", "post-fit", 0, 0, 1500, 1200)
                 canvas.cd()
 
-                #if signalMass==6000:
-                #    massbin=massbin+1
-                #if massbin<1:
-                #    hNloQcd.SetMaximum(33000*1.2)
-                #    hNloQcd.SetMinimum(20000)
-                #elif massbin<2:
-                #    hNloQcd.SetMaximum(6000*1.2)
-                #    hNloQcd.SetMinimum(4000)
-                #elif massbin<3:
-                #    hNloQcd.SetMaximum(1400*1.2)
-                #    hNloQcd.SetMinimum(900)
-                #elif massbin<4:
-                #    hNloQcd.SetMaximum(400*1.2)
-                #    hNloQcd.SetMinimum(200)
-                #elif massbin<5:
-                #    hNloQcd.SetMaximum(110*1.2)
-                #    hNloQcd.SetMinimum(50)
-                #elif massbin<6:
-                #    hNloQcd.SetMaximum(50*1.2)
-                #    hNloQcd.SetMinimum(0) 
-                #else:
-                #    hNloQcd.SetMaximum(15*1.2)
-                #    hNloQcd.SetMinimum(0)
-        
+   	        if massbins[massbin][0]>=7000:
+   	   	    hNloQcd.SetMinimum(0)
+   	   	    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*3.)
+   	        elif massbins[massbin][0]>=5400:
+   	   	    hNloQcd.SetMinimum(0.02*hNloQcd.Integral()*15/12)
+   	   	    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*15/12)
+   	        else:
+   	   	    hNloQcd.SetMinimum(0.045*hNloQcd.Integral()*15/12)
+   	   	    hNloQcd.SetMaximum(0.12*hNloQcd.Integral()*15/12)
+
                 hNloQcd.Draw("axissame")
                 h3bnew.Draw("histsame")
                 h2bnew.Draw("histsame")
@@ -419,7 +429,7 @@ if __name__=="__main__":
                 elif isCB:
                     l2=TLegend(0.45,0.6,0.95,0.93,"Detector-Level CB Smeared")
                 else:
-                    l2=TLegend(0.45,0.6,0.95,0.93,"Detector-Level RM Smeared")
+                    l2=TLegend(0.45,0.6,0.95,0.93,"Detector-Level")
                 
                 l2.SetTextSize(0.035)
                 l2.AddEntry(h14,"Data","ple")
@@ -440,6 +450,6 @@ if __name__=="__main__":
 
                 print "systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1)
         
-                canvas.SaveAs(SaveDir + prefix + "_combined_RunII_25ns_v3_run2_fit_"+histnameprefix+"_"+masstext+".pdf")
+                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+histnameprefix+"_"+masstext+"_run2.pdf")
 
                 #sys.exit()
