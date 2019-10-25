@@ -204,5 +204,5 @@ if __name__=="__main__":
     l2c.Draw("same")
     
     canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.pdf')
-    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
+    #canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
     

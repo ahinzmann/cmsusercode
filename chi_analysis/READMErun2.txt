@@ -17,30 +17,30 @@ copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
 plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
 
-plotSignal_13TeV_desy_run2_DM.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
+plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 
 run_dataYEAR.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
 plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
-plot_chi_jes_plots_13TeV_run2_combine.py # plot JES uncertainty histograms
+plot_chi_jes_plots_13TeV_combine_run2.py # plot JES uncertainty histograms
 plotSignal_jer_13TeV_run2.sh # calls plotSignal_jer_13TeV_run2.py # produce JER uncertainty histograms from CI and QCD GEN samples
-plot_chi_jer_plots_13TeV_run2_combine.py # plot JER uncertainty histograms
+plot_chi_jer_plots_13TeV_combine_run2.py # plot JER uncertainty histograms
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
-add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD and DM signal
+add_systematics_13TeV_loop_run2.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD and DM signal
 plot_chi_uncertainties_13TeV_2016.py # plot summary of all systematic uncertainties
 
 add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 submit_add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 
-plot_chi_combined_data_13TeV_v3_run2_DM.py # DM comparison plots
-plot_chi_combined_theory_13TeV_v2_run2.py # final result plot
+plot_chi_combined_data_13TeV_dm_run2.py # DM comparison plots
+plot_chi_combined_theory_13TeV_run2.py # final result plot
 
 -------- Limit calculation in CMSSW_8_1_X:
 
 calculate_limit_shape_13TeV_run2.py # calculate CLS for each CI, ADD, DM and QBH model
-calculate_limit_shape_13TeV_run2_DM.py # calculate CLS for each DM model
+calculate_limit_shape_13TeV_dm_run2.py # calculate CLS for each DM model
 plot_limit_shape_13TeV_run2.py # compute CLS limit for each CI, ADD and QBH model
 plot_limit_shape_13TeV_dm_run2.py # compute CLS limit for each DM model
 plot_limit_summary.py #  summary of limits on various models (still 8 TeV version)

@@ -240,6 +240,6 @@ if __name__ == '__main__':
   	legend1.Draw("same")
 
       canvas.SaveAs(prefix+postfix + '_chi.pdf')
-      canvas.SaveAs(prefix+postfix + '_chi.eps')
-      if wait:
-  	  os.system("ghostview "+prefix + '_chi.eps')
+      #canvas.SaveAs(prefix+postfix + '_chi.eps')
+      #if wait:
+      #  os.system("ghostview "+prefix + '_chi.eps')

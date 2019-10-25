@@ -8,12 +8,16 @@ def system_call(command):
     print command
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     return p.stdout.read()
-    
+ 
+only6000=True
+   
 #massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] # did not calculate CI for lower mass bins yet
+if only6000:
+  massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)] # did not calculate CI for lower mass bins yet
 
 models=[]
-#models+=[3]
+models+=[3]
 #models+=[11]
 #models+=[10,11]
 #models+=[60,61,62,63,64,65,66,67,68,69]
@@ -21,7 +25,7 @@ models=[]
 #models+=[78,79,80,81,82,83,84,85]
 #models+=[30,31,32,33,34,35,36,37,38,39,40]
 #models+=[45,46,47,48,49,50,51,52,53,54,55]
-models+=[41,42]
+#models+=[41,42,43]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
@@ -41,6 +45,8 @@ isGen=False
 isCB=False
 
 isInjection=False
+
+DMpvalue=True
 
 signalName={}
 signalExtraName={}
@@ -73,7 +79,7 @@ asym="a" #"a" for asymptotic CLS
 # The POI for LHC-style CLS is not clear, since CI models have no freedom  in signal strength or cross section.
 # The LEP-style and TEV-style CLS do not fit the POI.
 
-version="_v9" #version number controls how many massbin to use for DM
+version="_v5" #version number controls how many massbin to use for DM
 
 if len(sys.argv)>1:
    models=[int(sys.argv[1])]
@@ -97,6 +103,8 @@ for model in models:
     signalMasses=[9000,10000,11000,12000,13000,14000,15000,16000,17000]
     #massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4800
+    if only6000:
+      massbins=[(4800,5400),(5400,6000),(6000,13000)] #signal MC statistics not enough in bins <4800
     #includeSignalTheoryUncertainties=True # from QCD-only though
  if model==4:
     signal="cs_ct14nnlo_0_"
@@ -202,6 +210,8 @@ for model in models:
     signal="CIplusLL"
     signalMasses=[12000]
     massbins=[(6000,7000),]
+    if only6000:
+      massbins=[(6000,13000),]
  if model==32:
     signal="CIplusLL"
     signalMasses=[12000]
@@ -239,15 +249,24 @@ for model in models:
     signalMasses=[12000]
     massbins=[(1200,1500),]
  if model==41:
-    signal="cs_ct14nnlo_"
+    signal="cs_ct14nlo_" #nnlo
+    signalExtra="_LL+"
+    signalMasses=[13000]
+    massbins=[(6000,7000),(7000,13000)]
+ if model==42:
+    signal="cs_ct14nlo_" #nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
- if model==42:
-    signal="cs_ct14nnlo_"
+    if only6000:
+      massbins=[(4800,5400),(5400,6000),(6000,13000)]
+ if model==43:
+    signal="cs_ct14nlo_" #nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    if only6000:
+      massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)]
 
  if model==45:
     signal="AntiCIplusLL"    
@@ -257,6 +276,8 @@ for model in models:
     signal="AntiCIplusLL"    
     signalMasses=[12000]
     massbins=[(6000,7000),]
+    if only6000:
+      massbins=[(6000,13000),]
  if model==47:
     signal="AntiCIplusLL"    
     signalMasses=[12000]
@@ -430,7 +451,7 @@ for model in models:
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
- prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacard_shapelimit13TeV"
+ prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/2016NLO6000/datacard_shapelimit13TeV"
 
  if model>=30 and model<60:
     name="pvalue_"+testStat+asym+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")    
@@ -438,8 +459,8 @@ for model in models:
     signal=signalName[model]
     signalExtra=signalExtraName[model]
     #if float(signalExtraName[model].split("_")[2])<=2:
-    signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+    #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+    signalMasses=[4000,4500,5000,6000,7000]
     #signalMasses=[6000]
     includeSignalTheoryUncertainties=True # Assign QCD-only scale uncertainty to QCD+DM
     
@@ -454,13 +475,15 @@ for model in models:
     print prefix
 
     name="limits"+testStat+asym+str(model)+"_"+signal
-   
+     
     if isGen:
         name=name.replace("limits","limitsGen")
     elif isCB:
         name=name.replace("limits","limitsDetCB")
     else:
         name=name.replace("limits","limitsDet")
+    if DMpvalue:
+        name=name.replace("limitsDet","pvalue")
         
     if isInjection:
         name=name+"Injection0p75"
@@ -637,9 +660,9 @@ for model in models:
       elif signalMass<=5000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
       elif signalMass<=6000:
-        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)]
       else:
-        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+        massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)]
     elif "DM" in signal and version=="_v6":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
       fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"

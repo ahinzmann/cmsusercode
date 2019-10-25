@@ -137,7 +137,7 @@ if __name__=="__main__":
         if unfoldedData:
             fdir='invertMatrixOct20/'
         else:
-            fdir=''
+            fdir='versions/run2NNLO/'
             
         if unfoldedData:  
             filename="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
@@ -230,18 +230,22 @@ if __name__=="__main__":
 	nevents=0
 	for b in range(h14G.GetN()):
 	    if unfoldedData:
-	        N=origh14.GetBinContent(b+1)
+	      N=origh14.GetBinContent(b+1)
 	    else:
-	        N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
+	      if h14.GetBinContent(b+1)>0:
+	         N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
+              else:
+		 N=0
 	    #print N
 	    nevents+=N
 	    L=0
 	    if N>0:
 	        L=ROOT.Math.gamma_quantile(alpha/2.,N,1.)
             U=ROOT.Math.gamma_quantile_c(alpha/2.,N+1,1.)
-            h14G.SetPointEYlow(b,(N-L)/N*h14.GetBinContent(b+1))
-            h14G.SetPointEYhigh(b,(U-N)/N*h14.GetBinContent(b+1))
-            print N, sqrt(N)/N, origh14.GetBinError(b+1)/origh14.GetBinContent(b+1), h14.GetBinError(b+1)/h14.GetBinContent(b+1), (N-L)/N, (U-N)/N
+	    if N>0:
+              h14G.SetPointEYlow(b,(N-L)/N*h14.GetBinContent(b+1))
+              h14G.SetPointEYhigh(b,(U-N)/N*h14.GetBinContent(b+1))
+            #print N, sqrt(N)/N, origh14.GetBinError(b+1)/origh14.GetBinContent(b+1), h14.GetBinError(b+1)/h14.GetBinContent(b+1), (N-L)/N, (U-N)/N
         print "data events:", nevents
 	
 	h14Gsys=h14G.Clone(histname+"sys")
@@ -292,7 +296,8 @@ if __name__=="__main__":
             theory_sumdown=sqrt(theory_sumdown)
             theory_sumup=sqrt(theory_sumup)
 
-	    chi2+=pow(hNloQcdbackup.GetBinContent(b+1)-h14G.GetY()[b],2) / \
+            if h14G.GetY()[b]>0:
+	      chi2+=pow(hNloQcdbackup.GetBinContent(b+1)-h14G.GetY()[b],2) / \
 	           (pow(max(exp_sumdown,exp_sumup)*h14G.GetY()[b],2)+pow(max(theory_sumdown,theory_sumup)*h14G.GetY()[b],2)+pow(max(h14G.GetErrorYlow(b),h14G.GetErrorYhigh(b)),2))
 
             h14Gsys.SetPointEXlow(b,0)
@@ -591,7 +596,7 @@ if __name__=="__main__":
             h0Div.GetYaxis().SetRangeUser(0.7,1.3)
         else:
             h0Div.GetYaxis().SetRangeUser(0.7,1.3)
-        h0Div.GetYaxis().SetTitle("#frac{Data}{NLO QCD + EW}")
+        h0Div.GetYaxis().SetTitle("#frac{Data}{NNLO QCD + EW}")
         h0Div.GetXaxis().SetTitle("#chi_{dijet}")
         h0Div.GetYaxis().SetTitleOffset(0.65)
         h0Div.GetYaxis().SetTitleSize(0.1)
