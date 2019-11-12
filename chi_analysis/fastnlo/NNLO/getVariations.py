@@ -9,6 +9,7 @@ order="NNLO"
 if order=="NNLO":
   PDF="ct14nnlo"
   mscale="m2"
+  #mscale="pt12"
 else:
   PDF="ct14nlo"
   mscale="pt12"

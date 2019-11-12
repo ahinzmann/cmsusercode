@@ -73,6 +73,7 @@ order="NNLO"
 if order=="NNLO":
   PDF="ct14nnlo"
   mscale="m2"
+  #mscale="pt12"
 else:
   PDF="ct14nlo"
   mscale="pt12"
@@ -103,7 +104,7 @@ if calcUncert:
         print f
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        newfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"RECREATE")
+        newfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"RECREATE")
         for massbin in massbins:
             if massbins.index(massbin)<5:
                 for scale in scales:
@@ -133,7 +134,7 @@ if calcUncert:
     for f in cimemfiles:
         scaleFactorsmem[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"UPDATE")
+        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
         for massbin in massbins:
             if massbins.index(massbin)<5:
                 for i in range(0,57):
@@ -158,7 +159,7 @@ if calcUncert:
                     qcdhistadd.Write()
                         
     for f in cimufiles:
-        myfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"UPDATE")
+        myfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
         for massbin in massbins:
             histcentral=TH1F("chi-"+str(massbin[0])+"-"+str(massbin[1]),"chi-"+str(massbin[0])+"-"+str(massbin[1]),len(chibins)-1,chibins)
             histcentral.Sumw2()
@@ -191,7 +192,7 @@ if calcUncert:
             histscaledown.Write()
     
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF).replace("_001_","_"),"UPDATE")
+        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
         print f
         for massbin in massbins:
             #print massbin[0],massbin[1]
