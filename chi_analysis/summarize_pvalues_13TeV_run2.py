@@ -4,7 +4,7 @@ import os
 from ROOT import *
 import array
 
-only6000=True
+only6000=False
 
 massbinssets1=[[(6000,7000),(7000,13000)],
 	      [(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
@@ -47,6 +47,8 @@ for signal,signalMass,massbinsset in [("CIplusLL","12000",massbinssets2),
     limits={}
     if "DM" in signal:
       name="pvalue"+signal
+      if only6000:
+        name=name.replace("v6","v5")
     else:
       name="pvalue_LHCa"+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")+"_exp_"+signalMass+"_run2"
     print name

@@ -32,7 +32,7 @@ if __name__=="__main__":
   asym="a" # asymptotic CLS
   #testStat="LEP"
   #asym=""
-  version="_v5"
+  version="_v6"
 
   isGen=False
   isCB=False

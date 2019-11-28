@@ -22,7 +22,13 @@ gStyle.SetLabelSize(0.05, "XYZ")
 gStyle.SetNdivisions(506, "XYZ")
 gStyle.SetLegendBorderSize(0)
 
-def createPlots(sample,prefix,triggers,massbins):
+def deltaPhi(phi1, phi2):
+  deltaphi = phi2 - phi1
+  if abs(deltaphi) > math.pi:
+    deltaphi = 2 * math.pi - abs(deltaphi)
+  return deltaphi
+
+def createPlots(sample,prefix,triggers,massbins,chi_bins):
     files=[]
     print "list files"
     if not ".root" in sample:
@@ -39,6 +45,29 @@ def createPlots(sample,prefix,triggers,massbins):
     plots=[]
     for massbin in massbins:
       plots += [TH1F(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#chi;N',15,1,16)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'y_{boost}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{boost};N',12,0,1.2)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'p_{T1}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';p_{T1};N',50,0,5000)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'p_{T2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';p_{T2};N',50,0,5000)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'y_{1}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{1};N',25,-2.5,2.5)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'y_{2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{2};N',25,-2.5,2.5)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'METsumET'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';missing E_{T} / #sum E_{T};N',50,0,1)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'dPtsumPt'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';(p_{T1}-p_{T2})/(p_{T1}+p_{T2});N',25,0,0.5)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'#Delta#phi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#Delta#phi;N',32,0,3.15)]
+    plots += [TH1F(prefix+'mass',';dijet mass;N',260,0,13000)]
+    for c in range(len(chi_bins[0])-1):
+      plots += [TH1F(prefix+'mass-reftrig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
+    plots += [TH1F(prefix+'mass-reftrig',';dijet mass;N',260,0,13000)]
+    for c in range(len(chi_bins[0])-1):
+      plots += [TH1F(prefix+'mass-trig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
+    plots += [TH1F(prefix+'mass-trig',';dijet mass;N',260,0,13000)]
     
     for plot in plots:
         plot.Sumw2()
@@ -58,17 +87,17 @@ def createPlots(sample,prefix,triggers,massbins):
      for event in events:
 	 #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
-	 #if event_count>100000: break ###
+	 #if event_count>100000 and not "QCD" in prefix: break ###
          if event_count%10000==1:
 	   print "event",event_count
 	   trigger_indices={}
-           for massbin in massbins:
-	     trigger_indices[massbin]=[]
+           for t in range(len(triggers)):
+	     trigger_indices[t]=[]
            for a,b in event.HLT_isFired:
-             for massbin in massbins:
-	       for trig in triggers[massbins.index(massbin)]:
+             for t in range(len(triggers)):
+	       for trig in triggers[t]:
 	         if a.startswith(trig):
-	           trigger_indices[massbin]+=[a]
+	           trigger_indices[t]+=[a]
 	 jet1=TLorentzVector()
          jet2=TLorentzVector()
          jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
@@ -76,18 +105,47 @@ def createPlots(sample,prefix,triggers,massbins):
          mjj=(jet1+jet2).M()
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
-         if mjj<1000 or chi>16. or yboost>1.11: continue
+         if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
 	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
          irec=0
 	 for massbin in massbins:
 	    passedHLT=len(triggers[massbins.index(massbin)])==0
-	    for i in trigger_indices[massbin]:
+	    for i in trigger_indices[massbins.index(massbin)]:
 	      if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
 	        passedHLT=True
 		break
-	    if passedHLT and yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
+	    if passedHLT and mjj>=massbin[0] and mjj<massbin[1]:
                plots[irec].Fill(chi)
+               plots[irec+1*len(massbins)].Fill(yboost)
+               plots[irec+2*len(massbins)].Fill(jet1.Pt())
+               plots[irec+3*len(massbins)].Fill(jet2.Pt())
+               plots[irec+4*len(massbins)].Fill(jet1.Rapidity())
+               plots[irec+5*len(massbins)].Fill(jet2.Rapidity())
+               plots[irec+6*len(massbins)].Fill(event.MET_et/event.MET_sumEt)
+               plots[irec+7*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()))
+               plots[irec+8*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()))
 	    irec+=1
+         irec=9*len(massbins)
+	 plots[irec].Fill(mjj)
+	 irec+=1
+	 for i in trigger_indices[len(triggers)-2]:
+	    if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+	        for c in range(len(chi_bins[0])-1):
+		  if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
+	            plots[irec].Fill(mjj)
+		  irec+=1
+	        plots[irec].Fill(mjj)
+		irec+=1
+	        for i in trigger_indices[len(triggers)-1]:
+	           if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+	               for c in range(len(chi_bins[0])-1):
+       		         if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
+	                   plots[irec].Fill(mjj)
+		         irec+=1
+	               plots[irec].Fill(mjj)
+		       irec+=1
+		       break
+		break
     #for plot in plots:
     #  if event_count>0:
     #    plot.Scale(xsec/event_count)
@@ -128,12 +186,14 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
             ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
             ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018JECv19"),
+            ("datacard_shapelimit13TeV_run2_2016_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2016"),
+            ("datacard_shapelimit13TeV_run2_2017_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2017"),
+            ("datacard_shapelimit13TeV_run2_2018_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2018"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
           ["HLT_PFHT475","HLT_PFJet260"],
           ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
-          [], #"HLT_PFHT900","HLT_PFJet450"
           [],
           [],
           [],
@@ -142,12 +202,45 @@ if __name__ == '__main__':
           [],
           [],
           [],
+          [],
+	  ["HLT_PFHT650"],
+	  ["HLT_PFHT900","HLT_PFJet450"],
          ],
 	  [["HLT_PFHT510","HLT_PFJet260"], #2017
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
-          [], #"HLT_PFHT1050","HLT_PFJet500"
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT1050","HLT_PFJet500"],
+          ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT1050","HLT_PFJet500"],
+          ],
+	  [[],
+          [],
+          [],
+          [],
+          [], 
           [],
           [],
           [],
@@ -156,11 +249,24 @@ if __name__ == '__main__':
           [],
           [],
           ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2017
-          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
-          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
-          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
-          [], #"HLT_PFHT1050","HLT_PFJet500"
+	  [[],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ],
+	  [[],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -178,7 +284,10 @@ if __name__ == '__main__':
     if len(sys.argv)>2:
       folders=os.listdir(samples[0][2])
       print len(folders)
-      samples=[(samples[0][0],"-"+sys.argv[2],"dcap://dcache-cms-dcap.desy.de/"+samples[0][2]+"/"+folders[int(sys.argv[2])])]
+      name=sys.argv[2]
+      for s in folders[int(sys.argv[2])].split("_"):
+        if "HT" in s: name=s
+      samples=[(samples[0][0],"-"+name,"dcap://dcache-cms-dcap.desy.de/"+samples[0][2]+"/"+folders[int(sys.argv[2])])]
  
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -189,7 +298,7 @@ if __name__ == '__main__':
     print samples
 
     for prefix,postfix,files in samples:
-      plots=[createPlots(files,prefix,triggers[samples.index((prefix,postfix,files))],massbins)]
+      plots=[createPlots(files,prefix,triggers[samples.index((prefix,postfix,files))],massbins,chi_bins)]
 
       out=TFile(prefix+postfix + '_chi.root','RECREATE')
       for j in range(len(massbins)):
@@ -214,7 +323,10 @@ if __name__ == '__main__':
   	     # signal backup
   	     clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
   	     clonebackup.Write()
-
+      for j in range(len(massbins),len(plots[0])):
+  	for i in range(1):
+          plots[i][j].Write()
+  
       for j in range(len(massbins)):
   	for i in range(1):
   	  if plots[i][j].Integral()>0:

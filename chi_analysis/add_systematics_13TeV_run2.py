@@ -45,13 +45,18 @@ if __name__ == '__main__':
     useLensData=False
     useUnfoldedData=False
     injectSignal=False
-    useNNLO=True
-    only6000=False
+    only6000=False # mass binning
+    useNNLO=True # choice for QCD
+    useM2=True # choice of mu-scale for QCD
     
     if useNNLO:
       pdfset="ct14nnlo"
     else:
       pdfset="ct14nlo"
+    if useM2:
+      muScale="m2"
+    else:
+      muScale="pt12"
 
     prefixs=["versions/run2NNLO/datacard_shapelimit13TeV"]
  
@@ -695,7 +700,7 @@ if __name__ == '__main__':
       # (N)NLO correction
       #filename1nu2="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
       if useNNLO:
-        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_m2.root"
+        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
       else:
         filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
       print filename1nu2
@@ -703,7 +708,7 @@ if __name__ == '__main__':
       closefiles+=[nlofile2]
 
       # (N)NLO uncertainties
-      filename1nu3="fastnlo/NNLO/fnl5662j_cs_"+pdfset+"_30000_LL+.root"
+      filename1nu3="fastnlo/NNLO/fnl5662j_cs_"+pdfset+"_"+muScale+"_30000_LL+.root"
       print filename1nu3
       nlofile3 = TFile.Open(filename1nu3)
       closefiles+=[nlofile3]
@@ -926,7 +931,7 @@ if __name__ == '__main__':
             ci.SetBinContent(b+1,ci.GetBinContent(b+1)*correction)
           ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
-          filenamecinlo="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","")+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinlo="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           print filenamecinlo
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]

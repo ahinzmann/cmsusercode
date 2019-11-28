@@ -194,7 +194,7 @@ if __name__=="__main__":
 
     #print signalName,signalExtraName
 
-    prefix="datacard_shapelimit13TeV"
+    prefix="versions/run2NNLO/datacard_shapelimit13TeV"
     if unfoldedData:
             prefix+="_unfolded"
 
@@ -233,12 +233,12 @@ if __name__=="__main__":
   	      elif signalMass<=5000:
   	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
   	      elif signalMass<=6000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
   	      else:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
-            filenameprefix="datacard_shapelimit13TeV_"+histnameprefix
+            filenameprefix=prefix+"_"+histnameprefix
         
             for massbin in range(len(massbins)):
             
@@ -390,7 +390,7 @@ if __name__=="__main__":
                 new_hists+=[h2bnew]
                 new_hists+=[h3bnew]
         
-                canvas=TCanvas("post-fit", "post-fit", 0, 0, 1500, 1200)
+                canvas=TCanvas("post-fit", "post-fit", 0, 0, 300, 350)
                 canvas.cd()
 
    	        if massbins[massbin][0]>=7000:
