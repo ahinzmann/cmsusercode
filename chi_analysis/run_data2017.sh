@@ -37,3 +37,12 @@ python plot_data_13TeV_desy_run2.py 1 35 > events2017_35.txt &
 python plot_data_13TeV_desy_run2.py 1 36 > events2017_36.txt &
 python plot_data_13TeV_desy_run2.py 1 37 > events2017_37.txt &
 python plot_data_13TeV_desy_run2.py 1 38 > events2017_38.txt &
+python plot_data_13TeV_desy_run2.py 1 39 > events2017_39.txt
+python plot_data_13TeV_desy_run2.py 1 40 > events2017_40.txt &
+python plot_data_13TeV_desy_run2.py 1 41 > events2017_41.txt &
+python plot_data_13TeV_desy_run2.py 1 42 > events2017_42.txt &
+python plot_data_13TeV_desy_run2.py 1 43 > events2017_43.txt &
+python plot_data_13TeV_desy_run2.py 1 44 > events2017_44.txt
+python plot_data_13TeV_desy_run2.py 1 45 > events2017_45.txt &
+python plot_data_13TeV_desy_run2.py 1 46 > events2017_46.txt &
+python plot_data_13TeV_desy_run2.py 1 47 > events2017_47.txt &

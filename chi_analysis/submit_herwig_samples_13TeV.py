@@ -6,12 +6,12 @@ maxMasses=[1500,1900,2400,2800,3300,3800,4300,13000] # for mass bins 1.9, 2.4, 3
 samples=[]
 
 for minMass in minMasses:
-    #samples+=[('herwigpp_qcd',minMass,maxMasses[minMasses.index(minMass)],"",""),]
-    samples+=[('herwigpp_qcdNonPert',minMass,maxMasses[minMasses.index(minMass)],"",""),]
+    samples+=[('herwigpp_qcd',minMass,maxMasses[minMasses.index(minMass)],"",""),]
+    #samples+=[('herwigpp_qcdNonPert',minMass,maxMasses[minMasses.index(minMass)],"",""),]
 
 version="Nov28"
 
-numjobs=100
+numjobs=1
 
 for sample,minMass,maxMass,signalMass,coupling in samples:
 
@@ -147,4 +147,4 @@ process.schedule = cms.Schedule(process.p,process.endpath)
 process.out.outputCommands=cms.untracked.vstring('keep *','drop edmHepMCProduct_generator_*_*','drop *_genParticles*_*_*','drop *_genParticlesForJets*_*_*')
 """)
     cfg.close()
-    os.system("qsub -q all.q -o /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+".out -e /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+".err submitJobsOnT3batch.sh GEN.root dijet_angular /shome/hinzmann/CMSSW_7_1_20_patch2 cmsusercode/chi_analysis/"+samplename+str(jobnum)+".py "+str(jobnum)+" jobtmp_"+samplename+" /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+"")
+    #os.system("qsub -q all.q -o /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+".out -e /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+".err submitJobsOnT3batch.sh GEN.root dijet_angular /shome/hinzmann/CMSSW_7_1_20_patch2 cmsusercode/chi_analysis/"+samplename+str(jobnum)+".py "+str(jobnum)+" jobtmp_"+samplename+" /shome/hinzmann/CMSSW_7_1_20_patch2/src/cmsusercode/chi_analysis/jobout_"+samplename+"")

@@ -65,9 +65,10 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
     for c in range(len(chi_bins[0])-1):
       plots += [TH1F(prefix+'mass-reftrig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
     plots += [TH1F(prefix+'mass-reftrig',';dijet mass;N',260,0,13000)]
-    for c in range(len(chi_bins[0])-1):
-      plots += [TH1F(prefix+'mass-trig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
-    plots += [TH1F(prefix+'mass-trig',';dijet mass;N',260,0,13000)]
+    for t in range(len(triggers)-len(massbins)-1):
+      for c in range(len(chi_bins[0])-1):
+        plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t])+'-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
+      plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t]),';dijet mass;N',260,0,13000)]
     
     for plot in plots:
         plot.Sumw2()
@@ -84,13 +85,17 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
        continue
      print f,nevents
      #if event_count>100000: break ###
+     trigger_indices_len=0
      for event in events:
 	 #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
 	 #if event_count>100000 and not "QCD" in prefix: break ###
          if event_count%10000==1:
 	   print "event",event_count
+	 if len(event.HLT_isFired)!=trigger_indices_len:
 	   trigger_indices={}
+	   trigger_indices_len=len(event.HLT_isFired)
+	   print "read trigger names", event_count
            for t in range(len(triggers)):
 	     trigger_indices[t]=[]
            for a,b in event.HLT_isFired:
@@ -107,6 +112,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
 	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
+         if jet1.Pt()>13000: continue
          irec=0
 	 for massbin in massbins:
 	    passedHLT=len(triggers[massbins.index(massbin)])==0
@@ -128,24 +134,30 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          irec=9*len(massbins)
 	 plots[irec].Fill(mjj)
 	 irec+=1
-	 for i in trigger_indices[len(triggers)-2]:
-	    if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
-	        for c in range(len(chi_bins[0])-1):
-		  if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
-	            plots[irec].Fill(mjj)
-		  irec+=1
-	        plots[irec].Fill(mjj)
-		irec+=1
-	        for i in trigger_indices[len(triggers)-1]:
-	           if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
-	               for c in range(len(chi_bins[0])-1):
-       		         if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
-	                   plots[irec].Fill(mjj)
-		         irec+=1
-	               plots[irec].Fill(mjj)
-		       irec+=1
-		       break
-		break
+         for i in trigger_indices[len(massbins)]:
+          if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+            for c in range(len(chi_bins[0])-1):
+              if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
+                plots[irec].Fill(mjj)
+              irec+=1
+            plots[irec].Fill(mjj)
+            irec+=1
+            for t in range(len(triggers)-len(massbins)-1):
+              passHLT=False
+	      for i in trigger_indices[len(massbins)+1+t]:
+                if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+                  passHLT=True
+                  break
+              if passHLT:  
+                for c in range(len(chi_bins[0])-1):
+                  if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
+                    plots[irec].Fill(mjj)
+                  irec+=1
+                plots[irec].Fill(mjj)
+                irec+=1
+	      else:
+	        irec+=len(chi_bins[0])
+            break
     #for plot in plots:
     #  if event_count>0:
     #    plot.Scale(xsec/event_count)
@@ -183,12 +195,15 @@ if __name__ == '__main__':
               ]
  
     samples=[#("datacard_shapelimit13TeV_run2_2016old","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
-            ("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016"),
-            ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017"),
-            ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018JECv19"),
+            ("datacard_shapelimit13TeV_run2_2016","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016dec"),
+            ("datacard_shapelimit13TeV_run2_2017","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017dec"),
+            ("datacard_shapelimit13TeV_run2_2018","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018dec"),
             ("datacard_shapelimit13TeV_run2_2016_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2016"),
             ("datacard_shapelimit13TeV_run2_2017_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2017"),
             ("datacard_shapelimit13TeV_run2_2018_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2018"),
+            ("datacard_shapelimit13TeV_run2_2016_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2016"),
+            ("datacard_shapelimit13TeV_run2_2017_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2017"),
+            ("datacard_shapelimit13TeV_run2_2018_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2018"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -203,13 +218,13 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT650"],
-	  ["HLT_PFHT900","HLT_PFJet450"],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
 	  [["HLT_PFHT510","HLT_PFJet260"], #2017
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
-          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
           [],
           [],
           [],
@@ -218,13 +233,13 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT680"],
-	  ["HLT_PFHT1050","HLT_PFJet500"],
-          ],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
 	  [["HLT_PFHT510","HLT_PFJet260"], #2018
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
-          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
           [],
           [],
           [],
@@ -233,10 +248,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT680"],
-	  ["HLT_PFHT1050","HLT_PFJet500"],
-          ],
-	  [[],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [[], #QCD 2016
           [],
           [],
           [],
@@ -248,8 +263,8 @@ if __name__ == '__main__':
           [],
           [],
           [],
-          ],
-	  [[],
+         ],
+	  [[], #QCD 2017
           [],
           [],
           [],
@@ -261,8 +276,8 @@ if __name__ == '__main__':
           [],
           [],
           [],
-          ],
-	  [[],
+         ],
+	  [[], #QCD 2018
           [],
           [],
           [],
@@ -274,7 +289,92 @@ if __name__ == '__main__':
           [],
           [],
           [],
-          ],]
+         ],
+	  [[], #2016 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu45"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+	  ["HLT_PFHT900"],
+	  ["HLT_PFHT800"],
+	  ["HLT_PFJet450"],
+	  ["HLT_PFJet500"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_PFHT475"],
+          ["HLT_PFHT600"],
+          ["HLT_PFHT650"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+         ],
+	  [[], #2017 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu50"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT1050"],
+	  ["HLT_PFJet500"],
+	  ["HLT_PFJet550"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT590"],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT780"],
+	  ["HLT_PFHT890"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+	  ["HLT_PFJet450"],
+         ],
+	  [[], #2018 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu50"],#"HLT_PFHT510",
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT1050"],
+	  ["HLT_PFJet500"],
+	  ["HLT_PFJet550"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT590"],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT780"],
+	  ["HLT_PFHT890"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+	  ["HLT_PFJet450"],
+         ],
+          ]
 
     if len(sys.argv)>1:
       samplenum=int(sys.argv[1])

@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
    variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","METsumET","dPtsumPt","#Delta#phi"]
    label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","missing E_{T} / #sum E_{T}","(p_{T1}-p_{T2})/(p_{T1}+p_{T2})","#Delta#phi"]
-   variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#Delta#phi"]
-   label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","#Delta#phi"]
+   #variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#Delta#phi"]
+   #label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","#Delta#phi"]
 
    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -62,11 +62,11 @@ if __name__ == '__main__':
    prefix="datacard_shapelimit13TeV_run2_"
    postfix="_run2"
 
-   data=["data_2016",
+   data=["2016",
          ]
-   data2=["data_2017",
+   data2=["2017",
          ]
-   data3=["data_2018",
+   data3=["2018",
          ]
    mc=[("2016_QCDmadgraph-HT200to300",1712000./56709875),
        ("2016_QCDmadgraph-HT300to500",347700./53096517),
@@ -134,9 +134,9 @@ if __name__ == '__main__':
 
      legend=TLegend(0.5,0.5,0.95,0.9,"1<=#Chi<16 , y_{boost}<1.11")
 
-     hist=f_data[0].Get(prefix+data[0].replace("data_","")+var)
+     hist=f_data[0].Get(prefix+data[0]+var)
      for i in range(1,len(data)):
-    	 hist.Add(f_data[i].Get(prefix+data[i].replace("data_","")+var))
+    	 hist.Add(f_data[i].Get(prefix+data[i]+var))
      hist.SetLineColor(1)
      hist.SetMarkerStyle(24)
      hist.SetMarkerColor(1)
@@ -156,9 +156,9 @@ if __name__ == '__main__':
      hist.Draw("pe")
      legend.AddEntry(hist,"Data (2016)","lpe")
 
-     hist2=f_data2[0].Get(prefix+data2[0].replace("data_","")+var)
+     hist2=f_data2[0].Get(prefix+data2[0]+var)
      for i in range(1,len(data2)):
-    	 hist2.Add(f_data2[i].Get(prefix+data2[i].replace("data_","")+var))
+    	 hist2.Add(f_data2[i].Get(prefix+data2[i]+var))
      hist2.SetLineColor(2)
      hist2.SetMarkerStyle(25)
      hist2.SetMarkerColor(2)
@@ -167,9 +167,9 @@ if __name__ == '__main__':
      hist2.Draw("pesame")
      legend.AddEntry(hist2,"Data (2017)","lpe")
      
-     hist3=f_data3[0].Get(prefix+data3[0].replace("data_","")+var)
+     hist3=f_data3[0].Get(prefix+data3[0]+var)
      for i in range(1,len(data3)):
-    	 hist3.Add(f_data3[i].Get(prefix+data3[i].replace("data_","")+var))
+    	 hist3.Add(f_data3[i].Get(prefix+data3[i]+var))
      hist3.SetLineColor(4)
      hist3.SetMarkerStyle(26)
      hist3.SetMarkerColor(4)
@@ -322,7 +322,7 @@ if __name__ == '__main__':
         legend=TLegend(0.45,0.6,0.95,0.90,(str(massbins[mass][0])+"<m_{jj}<"+str(massbins[mass][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
 	legends+=[legend]
     
-        name=prefix+data[0].replace("data_","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        name=prefix+data[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
         hist=f_data[0].Get(name)
         for i in range(1,len(data)):
@@ -354,7 +354,7 @@ if __name__ == '__main__':
         hist.Draw("pe")
         legend.AddEntry(hist,"Data (2016)","lpe")
 
-        name=prefix+data2[0].replace("data_","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        name=prefix+data2[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
         hist2=f_data2[0].Get(name)
         for i in range(1,len(data2)):
@@ -377,7 +377,7 @@ if __name__ == '__main__':
         hist2.Draw("pesame")
         legend.AddEntry(hist2,"Data (2017)","lpe")
 
-        name=prefix+data3[0].replace("data_","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        name=prefix+data3[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
         hist3=f_data3[0].Get(name)
         for i in range(1,len(data3)):

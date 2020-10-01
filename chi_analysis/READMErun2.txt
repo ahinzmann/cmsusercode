@@ -19,7 +19,7 @@ plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dij
 
 plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 
-run_dataYEAR.sh run_qcd.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
+run_dataYEAR.sh run_dataSingleMuon.sh run_qcd.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
 plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
 plot_chi_jes_plots_13TeV_combine_run2.py # plot JES uncertainty histograms
@@ -27,6 +27,7 @@ plotSignal_jer_13TeV_run2.sh # calls plotSignal_jer_13TeV_run2.py # produce JER 
 plot_chi_jer_plots_13TeV_combine_run2.py # plot JER uncertainty histograms
 
 plot_chi_control_plots_13TeV_run2.py # plot data-MC comparisons
+plot_chi_model_plots_13TeV_run2.py # plot smearing vs fullsim comparisons
 plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms

@@ -31,7 +31,7 @@ colors=[1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,
 doJER=True
 
 if doJER:
-  JERuncertainties=["JER1","JER2"]
+  JERuncertainties=["JER","JER1","JER2"]
   JER={}
   JERSF={}
   print "load 2016 JER"
@@ -51,6 +51,8 @@ def createPlots(sample,prefix,xsec,massbins,year):
 	for line in filelist.readlines():
 	    if ".root" in line:
 	        files+=[line.strip()]
+    elif "HT" in sample:
+      files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"/"+sample+".root"]
     else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
 	for folder in folders:
@@ -64,20 +66,24 @@ def createPlots(sample,prefix,xsec,massbins,year):
     plots=[]
     for massbin in massbins:
       plots += [TH1F(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#chi;N',15,1,16)]
-      #plots += [TH1F(prefix+'y_{boost}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{boost};N',20,0,2)]
+    plots += [TH1F(prefix+'mass',';dijet mass;N',260,0,13000)]
     if doJER:
       for source in JERuncertainties:
        for massbin in massbins:
         plots += [TH1F(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',"")+"_"+source+"Up",';#chi;N',15,1,16)]
+       plots += [TH1F(prefix+'mass'+"_"+source+"Up",';dijet mass;N',260,0,13000)]
        for massbin in massbins:
         plots += [TH1F(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',"")+"_"+source+"Down",';#chi;N',15,1,16)]
+       plots += [TH1F(prefix+'mass'+"_"+source+"Down",';dijet mass;N',260,0,13000)]
     
     for plot in plots:
         plot.Sumw2()
 	print plot.GetName()
 
     event_count=0
-    events=TChain('Events')
+    tree='Events'
+    if "HT" in sample: tree="tree"
+    events=TChain(tree)
     for f in files[:]:
       events.Add(f)
     
@@ -97,14 +103,19 @@ def createPlots(sample,prefix,xsec,massbins,year):
        event_count+=1
        if event_count%10000==1: print "event",event_count
 
-       if len(event.recoGenJets_ak4GenJets__GEN.product())<2: continue
-       if event.recoGenJets_ak4GenJets__GEN.product()[0].pt()<100 or event.recoGenJets_ak4GenJets__GEN.product()[1].pt()<100 or abs(event.recoGenJets_ak4GenJets__GEN.product()[0].eta())>3 or abs(event.recoGenJets_ak4GenJets__GEN.product()[1].eta())>3: continue
-       
-       irec=0
        jet1=TLorentzVector()
        jet2=TLorentzVector()
-       jet1.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[0].pt(),event.recoGenJets_ak4GenJets__GEN.product()[0].eta(),event.recoGenJets_ak4GenJets__GEN.product()[0].phi(),event.recoGenJets_ak4GenJets__GEN.product()[0].mass())
-       jet2.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[1].pt(),event.recoGenJets_ak4GenJets__GEN.product()[1].eta(),event.recoGenJets_ak4GenJets__GEN.product()[1].phi(),event.recoGenJets_ak4GenJets__GEN.product()[1].mass())
+       if "HT" in sample:
+         if event.genJetAK4_pt2<30: continue
+         jet1.SetPtEtaPhiM(event.genJetAK4_pt1,event.genJetAK4_eta1,event.genJetAK4_phi1,event.genJetAK4_mass1)
+         jet2.SetPtEtaPhiM(event.genJetAK4_pt2,event.genJetAK4_eta2,event.genJetAK4_phi2,event.genJetAK4_mass2)
+       else:
+         if len(event.recoGenJets_ak4GenJets__GEN.product())<2: continue
+         jet1.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[0].pt(),event.recoGenJets_ak4GenJets__GEN.product()[0].eta(),event.recoGenJets_ak4GenJets__GEN.product()[0].phi(),event.recoGenJets_ak4GenJets__GEN.product()[0].mass())
+         jet2.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[1].pt(),event.recoGenJets_ak4GenJets__GEN.product()[1].eta(),event.recoGenJets_ak4GenJets__GEN.product()[1].phi(),event.recoGenJets_ak4GenJets__GEN.product()[1].mass())
+       if jet1.Pt()<100 or jet2.Pt()<100 or abs(jet1.Eta())>3 or abs(jet2.Eta())>3: continue
+
+       irec=0
        mjj=(jet1+jet2).M()
        chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))
        yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
@@ -119,7 +130,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
            record=JER[year].getRecord(pars)
 	   factor1=JER[year].evaluateFormula(record,pars)
            record=JERSF[year].getRecord(pars)
-	   if scale!=1 and (("JER1" in scale and abs(jet1.Eta())<=1.93) or ("JER2" in scale and abs(jet1.Eta())>1.93)):
+	   if scale!=1 and (("JER1_" in scale and abs(jet1.Eta())<=1.93) or ("JER2_" in scale and abs(jet1.Eta())>1.93) or ("JER_" in scale)):
 	     if scale[-1]=="p":
 	       factor1*=record.getParametersValues()[2]
 	     else:
@@ -135,7 +146,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
            record=JER[year].getRecord(pars)
 	   factor2=JER[year].evaluateFormula(record,pars)
            record=JERSF[year].getRecord(pars)
-	   if scale!=1 and (("JER1" in scale and abs(jet2.Eta())<=1.93) or ("JER2" in scale and abs(jet2.Eta())>1.93)):
+	   if scale!=1 and (("JER1_" in scale and abs(jet2.Eta())<=1.93) or ("JER2_" in scale and abs(jet2.Eta())>1.93) or ("JER_" in scale)):
 	     if scale[-1]=="p":
 	       factor2*=record.getParametersValues()[2]
 	     else:
@@ -152,6 +163,8 @@ def createPlots(sample,prefix,xsec,massbins,year):
            if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
              plots[irec].Fill(chi)
            irec+=1
+         plots[irec].Fill(mjj)
+         irec+=1
 
     #jets="recoGenJets_ak4GenJets__GEN.obj"
     #yboost='abs('+jets+'[0].y()+'+jets+'[1].y())/2.'
@@ -160,15 +173,17 @@ def createPlots(sample,prefix,xsec,massbins,year):
     #for massbin in massbins:
     #  events.Project(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),chi,'('+yboost+'<1.11)*('+mass+'>='+str(massbin[0])+')*('+mass+'<'+str(massbin[1])+')')
     #  #events.Project(prefix+'y_{boost}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),yboost,'('+chi+'<16)*('+mass+'>='+str(massbin[0])+')*('+mass+'<='+str(massbin[1])+')')
+    if "HT" in sample:
+      event_count/=nevents
     for plot in plots:
-      if nevents>0:
-        plot.Scale(xsec/nevents)
+      if event_count>0:
+        plot.Scale(xsec/event_count)
     return plots
 
 if __name__ == '__main__':
     sets=[]
     i=0
-    for name in ["QCD","QCDCIplusLL10000"]:
+    for name in ["QCD","QCDCIplusLL10000","QCDherwig","QCDmadgraph"]:
       for year in [2016,2017,2018]:
         for bin in [1,2,3,4,5,6,7]:
 	   print i,name,bin,year
@@ -280,7 +295,125 @@ if __name__ == '__main__':
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m1500_1900_10000_1_0_0_13TeV_Nov14",3.307e-06),
 		       ]),
 	    ]
-    xsecs=eval(open("xsecs_13TeV.txt").readline())
+
+    if bin==1 and name=="QCDherwig": 
+      samples=[("QCDherwig",[("herwigpp_qcd_m4300_13000___Nov28",0.00253067e-6),
+		       ]),
+	    ]
+    if bin==2 and name=="QCDherwig":
+      samples=[("QCDherwig",[("herwigpp_qcd_m3800_4300___Nov28",0.00404967e-6),
+		       ]),
+	    ]
+    if bin==3 and name=="QCDherwig":
+      samples=[("QCDherwig",[("herwigpp_qcd_m3300_3800___Nov28",0.0126252e-6),
+		       ]),
+	    ]
+    if bin==4 and name=="QCDherwig":
+      samples=[("QCDherwig",[("herwigpp_qcd_m2800_3300___Nov28",0.0431171e-6),
+		       ]),
+	    ]
+    if bin==5 and name=="QCDherwig":
+      samples=[("QCDherwig",[("herwigpp_qcd_m2400_2800___Nov28",0.109694e-6),
+		       ]),
+	    ]
+    if bin==6 and name=="QCDherwig":
+      samples=[("QCDherwig",[("herwigpp_qcd_m1900_2400___Nov28",0.588676e-6),
+		       ]),
+	    ]
+    if bin==7 and name=="QCDherwig": 
+      samples=[("QCDherwig",[("herwigpp_qcd_m1500_1900___Nov28",2.26487e-6),
+		       ]),
+	    ]
+
+    if str(year)=="2016":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_2016v3",1712000./56709875),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_2016v3",347700./53096517),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_2016v3",32100./52906552),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_2016v3",6831./36741540),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_2016v3",1207./15210939),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_2016v3",119.9/11839357),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_2016v3",25.24/5947849),
+  	  		 ]),
+  	      ]
+    if str(year)=="2017":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_94X_v2",1545000./58990434),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_94X_v2",323300./58748739),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_94X_v2",30000./54366431),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_94X_v2",6324./46924322),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_94X_v2",1090./16495598),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_94X_v2",101./11196479),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_94X_v2",20.43/5362513),
+  	  		 ]),
+  	      ]
+    if str(year)=="2018":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_102X_v1",1461000./54289442),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_102X_v1",311900./54512704),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_102X_v1",29070./53919811),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_102X_v1",5962./48158738),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_102X_v1",1005./14945819),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_102X_v1",101.8/10707847),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_102X_v1",20.54/5329144),
+  	  		 ]),
+  	      ]
+
+    #xsecs=eval(open("xsecs_13TeV.txt").readline())
     #print xsecs
 
     chi_binnings=[]
@@ -297,7 +430,7 @@ if __name__ == '__main__':
       i=0
       for filename,xsec in files:
         i+=1
-        ps=createPlots(filename,name,float(xsecs[filename]),massbins,str(year))
+        ps=createPlots(filename,name,xsec,massbins,str(year))
         if i==1:
           plots[-1]+=ps
 	else:
@@ -305,8 +438,11 @@ if __name__ == '__main__':
             plots[-1][j].Add(ps[j])
 
     out=TFile(prefix + '_chi.root','RECREATE')
-    for j in range(len(massbins)):
+    for j in range((len(massbins)+1)):
       for i in range(len(samples)):
+       if j==len(massbins): # mass histogram
+         plots[i][j].Write()
+       else: 
         #if plots[i][j].Integral()>0:
         #  plots[i][j].Scale(expectedevents[j]/plots[i][j].Integral())
         plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
@@ -330,8 +466,11 @@ if __name__ == '__main__':
 	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
 	   clonebackup.Write()
     if doJER:
-     for j in range(len(massbins),len(massbins)+2*len(massbins)*len(JERuncertainties)):
+     for j in range((len(massbins)+1),len(massbins)+1+2*(len(massbins)+1)*len(JERuncertainties)):
       for i in range(len(samples)):
+       if j%(len(massbins)+1)==len(massbins): # mass histogram
+         plots[i][j].Write()
+       else: 
         plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j%len(massbins)])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j%len(massbins)])
 	if samples[i][0]=="QCD":
 	   # QCD
@@ -348,7 +487,7 @@ if __name__ == '__main__':
 	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
 	   clonebackup.Write()
 
-    for j in range(len(massbins)+doJER*2*len(massbins)*len(JERuncertainties)):
+    for j in range((len(massbins)+1)+doJER*2*(len(massbins)+1)*len(JERuncertainties)):
       for i in range(len(samples)):
 	if plots[i][j].Integral()>0:
           plots[i][j].Scale(1./plots[i][j].Integral())
@@ -381,20 +520,20 @@ if __name__ == '__main__':
         legend1.AddEntry(plots[i][j],samples[i][0],"l")
       if doJER:
        for k in range(len(JERuncertainties)):
-        plots[0][j+len(massbins)+2*len(massbins)*k].SetLineColor(colors[k+1])
-        plots[0][j+len(massbins)+2*len(massbins)*k].SetLineStyle(2)
-	plots[0][j+len(massbins)+2*len(massbins)*k].Divide(plots[0][j+len(massbins)+2*len(massbins)*k],plots[0][j])
-        for b in range(plots[0][j+len(massbins)+2*len(massbins)*k].GetNbinsX()):
-	    plots[0][j+len(massbins)+2*len(massbins)*k].SetBinError(b+1,0)
-        plots[0][j+len(massbins)+2*len(massbins)*k].Draw("hesame")
-        legend1.AddEntry(plots[0][j+len(massbins)+2*len(massbins)*k],plots[0][j+len(massbins)+2*len(massbins)*k].GetName().split("_")[-2],"l")
-        plots[0][j+2*len(massbins)+2*len(massbins)*k].SetLineColor(colors[k+1])
-        plots[0][j+2*len(massbins)+2*len(massbins)*k].SetLineStyle(3)
-	plots[0][j+2*len(massbins)+2*len(massbins)*k].Divide(plots[0][j+2*len(massbins)+2*len(massbins)*k],plots[0][j])
-        for b in range(plots[0][j+2*len(massbins)+2*len(massbins)*k].GetNbinsX()):
-	    plots[0][j+2*len(massbins)+2*len(massbins)*k].SetBinError(b+1,0)
-        plots[0][j+2*len(massbins)+2*len(massbins)*k].Draw("hesame")
-        legend1.AddEntry(plots[0][j+2*len(massbins)+2*len(massbins)*k],plots[0][j+2*len(massbins)+2*len(massbins)*k].GetName().split("_")[-2],"l")
+        plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineColor(colors[k+1])
+        plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineStyle(2)
+	plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
+        for b in range(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].GetNbinsX()):
+	    plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
+        plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].Draw("hesame")
+        legend1.AddEntry(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].GetName().split("_")[-2],"l")
+        plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineColor(colors[k+1])
+        plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineStyle(3)
+	plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
+        for b in range(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].GetNbinsX()):
+	    plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
+        plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].Draw("hesame")
+        legend1.AddEntry(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].GetName().split("_")[-2],"l")
       legend1.SetTextSize(0.04)
       legend1.SetFillStyle(0)
       legend1.Draw("same")

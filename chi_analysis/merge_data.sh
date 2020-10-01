@@ -1,3 +1,6 @@
 hadd -f datacard_shapelimit13TeV_run2_2016_chi.root datacard_shapelimit13TeV_run2_2016-*_chi.root
 hadd -f datacard_shapelimit13TeV_run2_2017_chi.root datacard_shapelimit13TeV_run2_2017-*_chi.root
 hadd -f datacard_shapelimit13TeV_run2_2018_chi.root datacard_shapelimit13TeV_run2_2018-*_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2016_SingleMuon_chi.root datacard_shapelimit13TeV_run2_2016_SingleMuon-*_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2017_SingleMuon_chi.root datacard_shapelimit13TeV_run2_2017_SingleMuon-*_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2018_SingleMuon_chi.root datacard_shapelimit13TeV_run2_2018_SingleMuon-*_chi.root

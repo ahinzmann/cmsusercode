@@ -19,6 +19,9 @@ gStyle.SetLabelSize(0.05, "XYZ")
 gStyle.SetNdivisions(506, "XYZ")
 gStyle.SetLegendBorderSize(0)
 
+def effErf(x, p):
+  return ((TMath.Erf((x[0] - p[0]) / p[1]) + 1) / 2. *  p[2] + (1. - p[2]))
+
 if __name__ == '__main__':
 
   colors=[1,2,4,6,7,8,9,11,40,41,42,43,44,45,46,47,48,49]
@@ -29,23 +32,158 @@ if __name__ == '__main__':
 
   chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16)]
 
-  samples=["data_2016","data_2017","data_2018"]
-  for sample in samples:
-    f=TFile.Open(prefix+sample+"_chi.root")
+  samples=["2016","2017","2018","2016_SingleMuon","2017_SingleMuon","2018_SingleMuon"]
+  
+  triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          ["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [[], #2016 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu45"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+	  ["HLT_PFHT900"],
+	  ["HLT_PFHT800"],
+	  ["HLT_PFJet450"],
+	  ["HLT_PFJet500"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_PFHT475"],
+          ["HLT_PFHT600"],
+          ["HLT_PFHT650"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+         ],
+	  [[], #2017 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu50"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT1050"],
+	  ["HLT_PFJet500"],
+	  ["HLT_PFJet550"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT590"],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT780"],
+	  ["HLT_PFHT890"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+	  ["HLT_PFJet450"],
+         ],
+	  [[], #2018 SingleMuon
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_Mu50"],#"HLT_PFHT510",
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT1050"],
+	  ["HLT_PFJet500"],
+	  ["HLT_PFJet550"],
+	  ["HLT_CaloJet500_NoJetID"],
+	  ["HLT_CaloJet550_NoJetID"],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT590"],
+	  ["HLT_PFHT680"],
+	  ["HLT_PFHT780"],
+	  ["HLT_PFHT890"],
+	  ["HLT_PFJet260"],
+	  ["HLT_PFJet320"],
+	  ["HLT_PFJet400"],
+	  ["HLT_PFJet450"],
+         ],
+          ]
 
+  for sample in samples:
+   f=TFile.Open(prefix+sample+"_chi.root")
+   for t in range(13,len(triggers[samples.index(sample)])):
+    print sample,t
+    name="or".join(triggers[samples.index(sample)][t])
+    print name
     canvas = TCanvas("","",0,0,200,200)
-    legend=TLegend(0.75,0.3,0.9,0.85,"")
+    legend=TLegend(0.65,0.2,0.9,0.8,"")
     hists=[]
     i=0
     for chi_bin in [""]+["-chi-"+str(c) for c in chi_bins[0][:-1]]:
-      #bins=[500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000,2500,5000]
-      #binning=array.array('d')
-      #for bin in bins:
-      #    binning.append(bin)
-      hist1=f.Get(prefix+sample.replace("data_","")+"mass-reftrig"+chi_bin)
-      #hist1=hist1.Rebin(len(binning)-1,hist1.GetName()+"_rebin",binning)
-      hist2=f.Get(prefix+sample.replace("data_","")+"mass-trig"+chi_bin)
-      #hist2=hist2.Rebin(len(binning)-1,hist2.GetName()+"_rebin",binning)
+      bins=[1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2800,3000]
+      binning=array.array('d')
+      for bin in bins:
+          binning.append(bin)
+      hist1=f.Get(prefix+sample+"mass-reftrig"+chi_bin)
+      hist1=hist1.Rebin(len(binning)-1,hist1.GetName()+"_rebin",binning)
+      hist2=f.Get(prefix+sample+"mass-trig"+name+chi_bin)
+      hist2=hist2.Rebin(len(binning)-1,hist2.GetName()+"_rebin",binning)
       hist=TGraphAsymmErrors(hist1)
       hist.Divide(hist2,hist1,"cl=0.683 b(1,1) mode")
       hist.SetLineWidth(2)
@@ -56,18 +194,46 @@ if __name__ == '__main__':
       hist.GetXaxis().SetRangeUser(1200,3000)
       hist.SetLineColor(colors[i])
       hist.SetLineStyle(styles[i])
+      startfit=0
+      for b in reversed(range(hist.GetN())):
+        x = Double(0.)
+        y = Double(0.)
+        hist.GetPoint(b, x, y)
+	if hist.Eval(x)>0.85:
+	   startfit=x
+      endfit=0
+      for b in range(hist.GetN()):
+        x = Double(0.)
+        y = Double(0.)
+        hist.GetPoint(b, x, y)
+	if hist.Eval(x)>0.85:
+	   endfit=x
+      fit=TF1("erf"+name+chi_bin,effErf,startfit,endfit,3)
+      fit.SetParameter(0, startfit+100.)
+      fit.SetParameter(1, 100.)
+      fit.SetParameter(2, 1.)
+      hist.Fit(fit,"q0")
+      fit.SetLineColor(colors[i])
+      fit.SetLineStyle(styles[i])
+      print fit.GetParameter(0), fit.GetParameter(1), fit.GetParameter(2)
+      s999=0
+      for s in reversed(range(int(startfit),int(endfit))):
+        if fit.Eval(s)>0.999:
+	  s999=s
       if chi_bin=="":
-        legend.AddEntry(hist,"1<#chi<16","le")
-        hist.Draw("ale")
+        legend.AddEntry(hist,"1<#chi<16 ("+str(s999)+")","le")
+        hist.Draw("apez")
       else:
-        legend.AddEntry(hist,chi_bin.split("-")[-1]+"<#chi<"+str(chi_bins[0][chi_bins[0].index(int(chi_bin.split("-")[-1]))+1]),"le")
-        hist.Draw("lesame")
+        legend.AddEntry(hist,chi_bin.split("-")[-1]+"<#chi<"+str(chi_bins[0][chi_bins[0].index(int(chi_bin.split("-")[-1]))+1])+" ("+str(s999)+")","le")
+        hist.Draw("pezsame")
+      fit.Draw("lsame")
       hists+=[hist]
+      hists+=[fit]
       i+=1
 
     legend.SetTextSize(0.04)
     legend.SetFillStyle(0)
     legend.Draw("same")
 
-    canvas.SaveAs("chi_trigger_plots_"+sample+postfix+".root")
-    canvas.SaveAs("chi_trigger_plots_"+sample+postfix+".pdf")
+    canvas.SaveAs("chi_trigger_plots_"+sample+name+postfix+".root")
+    canvas.SaveAs("chi_trigger_plots_"+sample+name+postfix+".pdf")
