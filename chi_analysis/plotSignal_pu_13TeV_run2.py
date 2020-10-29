@@ -116,9 +116,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
          jet2.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[1].pt(),event.recoGenJets_ak4GenJets__GEN.product()[1].eta(),event.recoGenJets_ak4GenJets__GEN.product()[1].phi(),event.recoGenJets_ak4GenJets__GEN.product()[1].mass())
 	 nPuVtxTrue=event.PileupSummaryInfo_genInfo__GEN.product().pileup_TrueNumInteractions()
        if jet1.Pt()<100 or jet2.Pt()<100 or abs(jet1.Eta())>3 or abs(jet2.Eta())>3: continue
-       
-       print "nPUVtxTrue",nPuVtxTrue
-       
+              
        irec=0
        mjj=(jet1+jet2).M()
        chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))

@@ -1,3 +1,4 @@
+
 import os, sys
 import array
 from ROOT import * 
@@ -99,7 +100,7 @@ if __name__ == '__main__':
        sum_in_quadrature_up+=[len(chi_binnings[mass])*[0]]
        sum_in_quadrature_down+=[len(chi_binnings[mass])*[0]]
 
-     canvas = TCanvas("jes","jes",0,0,800,600)
+     canvas = TCanvas("PU","PU",0,0,800,600)
      canvas.Divide(4,3)
      log=False
      legends=[]
@@ -120,7 +121,7 @@ if __name__ == '__main__':
          print dire+"datacard_shapelimit13TeV_"+prefix+"_PU_"+str(year)+"_"+b+"_chi.root"
      	 f_refmc[year+b]=TFile.Open(dire+"datacard_shapelimit13TeV_"+prefix+"_PU_"+str(year)+"_"+b+"_chi.root")
          h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
-         scalexsec[b]=mc[year][int(b)-1][1]
+         scalexsec[b]=1.#mc[year][int(b)-1][1]
          files+=[f_refmc[year+b]]
          if b=="1":
      	   histyear[year]=h
@@ -146,7 +147,7 @@ if __name__ == '__main__':
            hist.SetBinContent(b+1,1)
        hist.GetXaxis().SetTitle(label)
        hist.GetYaxis().SetTitle("N")
-       hist.GetYaxis().SetRangeUser(0.9,1.15)
+       hist.GetYaxis().SetRangeUser(0.98,1.03)
        hist.GetXaxis().SetTitleOffset(1.1)
        hist.GetYaxis().SetTitleOffset(1.1)
        hist.GetXaxis().SetLabelSize(0.05)
@@ -183,15 +184,16 @@ if __name__ == '__main__':
          hist2.Scale(histref.Integral()/hist2.Integral())
        hist2.Divide(hist2,histref)
        hist2.SetLineWidth(1)
-       hist2.SetLineColor(colors[i])
+       hist2.SetLineColor(colors[0])
        hist2.SetLineStyle(2)
        hist2.SetTitle("")
        hist2.SetStats(False)
-       fit=TF1(hist2.GetName()+"smooth","pol3",1,16)
-       hist2.Fit(fit,"NQ")
-       for chi_bin in range(len(chi_binnings[mass])):
-         hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
-       hist2.Draw("histsame")
+       fit2=TF1(hist2.GetName()+"smooth","pol1",1,16)
+       hist2.Fit(fit2,"NQ")
+       #for chi_bin in range(len(chi_binnings[mass])):
+       #  hist2.SetBinContent(chi_bin+1,fit2.Eval(hist2.GetBinCenter(chi_bin+1)))
+       hist2.Draw("hesame")
+       fit2.Draw("lsame")
        legend.AddEntry(hist2,"PU","l")
        for chi_bin in range(len(chi_binnings[mass])):
          if (hist2.GetBinContent(chi_bin+1)-1.0)*(hist2.GetBinCenter(chi_bin+1)-8.5)>0:
@@ -222,15 +224,16 @@ if __name__ == '__main__':
          hist3.Scale(histref.Integral()/hist3.Integral())
        hist3.Divide(hist3,histref)
        hist3.SetLineWidth(1)
-       hist3.SetLineColor(colors[i])
+       hist3.SetLineColor(colors[0])
        hist3.SetLineStyle(3)
        hist3.SetTitle("")
        hist3.SetStats(False)
-       fit=TF1(hist3.GetName()+"smooth","pol3",1,16)
-       hist3.Fit(fit,"NQ")
-       for chi_bin in range(len(chi_binnings[mass])):
-         hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))
-       hist3.Draw("histsame")
+       fit3=TF1(hist3.GetName()+"smooth","pol1",1,16)
+       hist3.Fit(fit3,"NQ")
+       #for chi_bin in range(len(chi_binnings[mass])):
+       #  hist3.SetBinContent(chi_bin+1,fit3.Eval(hist3.GetBinCenter(chi_bin+1)))
+       hist3.Draw("hesame")
+       fit3.Draw("lsame")
        for chi_bin in range(len(chi_binnings[mass])):
          if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:
           sum_in_quadrature_up[mass][chi_bin]=sqrt(pow(sum_in_quadrature_up[mass][chi_bin],2)+pow(hist3.GetBinContent(chi_bin+1)-1.0,2))
@@ -241,5 +244,5 @@ if __name__ == '__main__':
        legend.SetFillStyle(0)
        legend.Draw("same")
 
-     canvas.SaveAs("chi_systematic_plots"+var+"_"+prefix+"PU_13TeV_run2.root")
-     canvas.SaveAs("chi_systematic_plots"+var+"_"+prefix+"PU_13TeV_run2.pdf")
+     canvas.SaveAs(dire+"chi_systematic_plots"+var+"_"+prefix+"PU_13TeV_run2.root")
+     canvas.SaveAs(dire+"chi_systematic_plots"+var+"_"+prefix+"PU_13TeV_run2.pdf")
