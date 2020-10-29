@@ -215,7 +215,7 @@ if __name__ == '__main__':
       hist.Fit(fit,"q0")
       fit.SetLineColor(colors[i])
       fit.SetLineStyle(styles[i])
-      print fit.GetParameter(0), fit.GetParameter(1), fit.GetParameter(2)
+      print chi_bin, fit.GetParameter(0), fit.GetParameter(1), fit.GetParameter(2)
       s999=0
       for s in reversed(range(int(startfit),int(endfit))):
         if fit.Eval(s)>0.999:

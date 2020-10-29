@@ -25,6 +25,8 @@ plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES 
 plot_chi_jes_plots_13TeV_combine_run2.py # plot JES uncertainty histograms
 plotSignal_jer_13TeV_run2.sh # calls plotSignal_jer_13TeV_run2.py # produce JER uncertainty histograms from CI and QCD GEN samples
 plot_chi_jer_plots_13TeV_combine_run2.py # plot JER uncertainty histograms
+plotSignal_pu_13TeV_run2.sh # calls plotSignal_pu_13TeV_run2.py # produce PU uncertainty histograms from QCD Fullsim samples
+plot_chi_pu_plots_13TeV_combine_run2.py # plot PU uncertainty histograms
 
 plot_chi_control_plots_13TeV_run2.py # plot data-MC comparisons
 plot_chi_model_plots_13TeV_run2.py # plot smearing vs fullsim comparisons
