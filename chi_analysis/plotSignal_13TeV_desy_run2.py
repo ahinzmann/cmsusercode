@@ -30,7 +30,19 @@ def createPlots(sample,prefix,weightname,massbins):
 	    if ".root" in line:
 	        files+=[line.strip()]
     else:
-      if "DM" in prefix:
+      if "alp" in prefix:
+        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph5/"+sample)
+	for folder in folders:
+	  if sample in folder and ".root" in folder:
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph5/"+sample+"/"+folder]
+	    #break
+      elif "tripleG" in prefix:
+        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph6/"+sample)
+	for folder in folders:
+	  if sample in folder and ".root" in folder:
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph6/"+sample+"/"+folder]
+	    #break
+      elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
 	for folder in folders:
 	  if sample in folder and ".root" in folder:
@@ -68,7 +80,7 @@ def createPlots(sample,prefix,weightname,massbins):
     sumweights=0
     firstxsec=0
     for event in events:
-         if "DM" in prefix:
+         if "DM" in prefix or "alp" in prefix or "tripleG" in prefix:
 	  xsec=event.LHEEventProduct_externalLHEProducer__GEN.product().originalXWGTUP()*1000. # convert to pb
 	  if firstxsec>0 and xsec!=firstxsec:
 	     print "inconsistent xsec",firstxsec,xsec
@@ -119,12 +131,19 @@ if __name__ == '__main__':
     if len(sys.argv)>1:
       if len(sys.argv)>2:
        point=sys.argv[1]
+       nxsec=int(sys.argv[2])
        if "Vector" in point:
          weights=['gdmv_1p0_gdma_0_gv_0p01_ga_0', 'gdmv_1p0_gdma_0_gv_0p05_ga_0', 'gdmv_1p0_gdma_0_gv_0p1_ga_0', 'gdmv_1p0_gdma_0_gv_0p2_ga_0', 'gdmv_1p0_gdma_0_gv_0p25_ga_0', 'gdmv_1p0_gdma_0_gv_0p3_ga_0', 'gdmv_1p0_gdma_0_gv_0p5_ga_0', 'gdmv_1p0_gdma_0_gv_0p75_ga_0', 'gdmv_1p0_gdma_0_gv_1_ga_0', 'gdmv_1p0_gdma_0_gv_1p5_ga_0', 'gdmv_1p0_gdma_0_gv_2p0_ga_0', 'gdmv_1p0_gdma_0_gv_2p5_ga_0', 'gdmv_1p0_gdma_0_gv_3p0_ga_0']
-       else:
+         prefix="datacard_shapelimit13TeV_DM"+point+"_"+weights[nxsec]+"-run2"
+       elif "Axial" in point:
          weights=['gdmv_0_gdma_1p0_gv_0_ga_0p01', 'gdmv_0_gdma_1p0_gv_0_ga_0p05', 'gdmv_0_gdma_1p0_gv_0_ga_0p1', 'gdmv_0_gdma_1p0_gv_0_ga_0p2', 'gdmv_0_gdma_1p0_gv_0_ga_0p25', 'gdmv_0_gdma_1p0_gv_0_ga_0p3', 'gdmv_0_gdma_1p0_gv_0_ga_0p5', 'gdmv_0_gdma_1p0_gv_0_ga_0p75', 'gdmv_0_gdma_1p0_gv_0_ga_1', 'gdmv_0_gdma_1p0_gv_0_ga_1p5', 'gdmv_0_gdma_1p0_gv_0_ga_2p0', 'gdmv_0_gdma_1p0_gv_0_ga_2p5', 'gdmv_0_gdma_1p0_gv_0_ga_3p0']
-       nxsec=int(sys.argv[2])
-       prefix="datacard_shapelimit13TeV_DM"+point+"_"+weights[nxsec]+"-run2"
+         prefix="datacard_shapelimit13TeV_DM"+point+"_"+weights[nxsec]+"-run2"
+       elif "alp" in point:
+         weights=['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']
+         prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
+       elif "tripleG" in point:
+         weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p00"]
+         prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
       else:
        prefix="datacard_shapelimit13TeV_GENnp-"+sys.argv[1]+"-run2"
  
@@ -487,13 +506,15 @@ if __name__ == '__main__':
     
     if "np" in prefix:
        samples=[samples[int(prefix.split("-")[1])]]
-    if "DM" in prefix:
+    elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
-    if "QCD" in prefix:
+    elif "alp" in prefix or "tripleG" in prefix:
+       samples=[(""+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
+    elif "QCD" in prefix:
        samples=samples3
     
-    xsecs=eval(open("xsecs_13TeV.txt").readline())
-    print xsecs
+    #xsecs=eval(open("xsecs_13TeV.txt").readline())
+    #print xsecs
 
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -523,7 +544,7 @@ if __name__ == '__main__':
       i=0
       for filename,xsec in files:
         i+=1
-	if "DM" in prefix:
+	if "DM" in prefix or "alp" in prefix or "tripleG" in prefix:
           ps=createPlots(filename,name,xsec,massbins)
         else:
 	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)

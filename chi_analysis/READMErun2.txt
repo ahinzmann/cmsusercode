@@ -13,11 +13,23 @@ xsdj_table.py # extract LO DM cross sections from LHC headers
 copy-samples.py # copy GEN samples from PSI to CERN
 copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
+--------- MC production in CMSSW_10_6_19 -------:
+
+source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+# setup https://twiki.cern.ch/twiki/bin/view/CMS/QuickGuideMadGraph5aMCatNLO#Quick_tutorial_on_how_to_produce
+cp tripleG*.dat /nfs/dust/cms/user/hinzmann/dijetangular/madgraphProduction/genproductions/bin/MadGraph5_aMCatNLO
+nohup ./gridpack_generation.sh tripleG_QCD_HT2000toInf ./ # create gridpacks for tripleG
+cp alp*.dat /nfs/dust/cms/user/hinzmann/dijetangular/madgraphProduction/genproductions/bin/MadGraph5_aMCatNLO
+nohup ./gridpack_generation.sh alp_QCD_HT2000toInf ./ # create gridpacks for alp
+submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
+
 -------- Data analysis in CMSSW_8_1_X:
 
 plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
-
 plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
+plotSignal_13TeV_desy_alp_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for alp samples
+plotSignal_13TeV_desy_tripleG_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for tripleG samples
 
 run_dataYEAR.sh run_dataSingleMuon.sh run_qcd.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
