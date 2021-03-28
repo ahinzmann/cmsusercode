@@ -31,16 +31,16 @@ def createPlots(sample,prefix,weightname,massbins):
 	        files+=[line.strip()]
     else:
       if "alp" in prefix:
-        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph5/"+sample)
+        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample)
 	for folder in folders:
 	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph5/"+sample+"/"+folder]
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample+"/"+folder]
 	    #break
       elif "tripleG" in prefix:
-        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph6/"+sample)
+        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample)
 	for folder in folders:
 	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph6/"+sample+"/"+folder]
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample+"/"+folder]
 	    #break
       elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
@@ -509,7 +509,9 @@ if __name__ == '__main__':
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
-       samples=[(""+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
+       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT2000toInf",weights[nxsec]),
+                                              (point+"_HT4000toInf",weights[nxsec])]),
+	       ]
     elif "QCD" in prefix:
        samples=samples3
     
@@ -550,6 +552,10 @@ if __name__ == '__main__':
 	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)
         if i==1:
           plots[-1]+=ps
+	elif "alp" in prefix or "tripleG" in prefix:
+	  for i in range(len(plots[-1])):
+	    if massbins>5:
+	      plots[-1]=ps
 	else:
 	  for i in range(len(plots[-1])):
             plots[-1][i].Add(ps[i])

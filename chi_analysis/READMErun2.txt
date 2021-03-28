@@ -20,8 +20,10 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 # setup https://twiki.cern.ch/twiki/bin/view/CMS/QuickGuideMadGraph5aMCatNLO#Quick_tutorial_on_how_to_produce
 cp tripleG*.dat /nfs/dust/cms/user/hinzmann/dijetangular/madgraphProduction/genproductions/bin/MadGraph5_aMCatNLO
 nohup ./gridpack_generation.sh tripleG_QCD_HT2000toInf ./ # create gridpacks for tripleG
+nohup ./gridpack_generation.sh tripleG_QCD_HT4000toInf ./ # create gridpacks for tripleG
 cp alp*.dat /nfs/dust/cms/user/hinzmann/dijetangular/madgraphProduction/genproductions/bin/MadGraph5_aMCatNLO
 nohup ./gridpack_generation.sh alp_QCD_HT2000toInf ./ # create gridpacks for alp
+nohup ./gridpack_generation.sh alp_QCD_HT4000toInf ./ # create gridpacks for alp
 submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
 
 -------- Data analysis in CMSSW_8_1_X:
