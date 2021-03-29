@@ -14,12 +14,12 @@ gridpack_suffix = '_slc7_amd64_gcc700_CMSSW_10_6_19_tarball.tar.xz'
 
 names=[
     'tripleG_QCD_HT2000toInf',
-    'tripleG_QCD_HT4000toInf',
+    #'tripleG_QCD_HT4000toInf',
     'alp_QCD_HT2000toInf',
-    'alp_QCD_HT2000toInf'
+    #'alp_QCD_HT4000toInf'
 ]
 
-workdir='/nfs/dust/cms/user/hinzmann/dijetangular/madgraph3/'
+workdir='/nfs/dust/cms/user/hinzmann/dijetangular/madgraph7/'
 
 if(options.clean):
     print('deleting workdirs..')

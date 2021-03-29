@@ -31,16 +31,22 @@ def createPlots(sample,prefix,weightname,massbins):
 	        files+=[line.strip()]
     else:
       if "alp" in prefix:
-        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample)
-	for folder in folders:
+        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
+	for folderM in foldersM:
+	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+	 for folder in folders:
 	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample+"/"+folder]
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample+"/"+folder]
 	    #break
       elif "tripleG" in prefix:
-        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample)
-	for folder in folders:
+        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
+	for folderM in foldersM:
+	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+  	 for folder in folders:
 	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/madgraph/"+sample+"/"+folder]
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample+"/"+folder]
 	    #break
       elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
@@ -96,7 +102,7 @@ def createPlots(sample,prefix,weightname,massbins):
 	  xsec=weightname
 	  weight=1.
 	 event_count+=1
-	 #if event_count>10000000: break
+	 #if event_count>1000: break
          if event_count%10000==1: print "event",event_count
 	 sumweights+=weight
          jet1=TLorentzVector()
@@ -142,7 +148,7 @@ if __name__ == '__main__':
          weights=['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
        elif "tripleG" in point:
-         weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p00"]
+         weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p0"]
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
       else:
        prefix="datacard_shapelimit13TeV_GENnp-"+sys.argv[1]+"-run2"
@@ -509,8 +515,7 @@ if __name__ == '__main__':
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
-       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT2000toInf",weights[nxsec]),
-                                              (point+"_HT4000toInf",weights[nxsec])]),
+       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT2000toInf",weights[nxsec]), ]),
 	       ]
     elif "QCD" in prefix:
        samples=samples3
@@ -548,14 +553,14 @@ if __name__ == '__main__':
         i+=1
 	if "DM" in prefix or "alp" in prefix or "tripleG" in prefix:
           ps=createPlots(filename,name,xsec,massbins)
+	#elif ("alp" in prefix or "tripleG" in prefix) and "HT2000" in filename:
+        #  ps=createPlots(filename,name,xsec,massbins[:7]) # For mass bins < 4800 GeV
+	#elif ("alp" in prefix or "tripleG" in prefix) and "HT4000" in filename:
+        #  ps=createPlots(filename,name,xsec,massbins[7:]) # For mass bins >= 4800 GeV
         else:
 	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)
-        if i==1:
+        if i==1: # or "alp" in prefix or "tripleG" in prefix
           plots[-1]+=ps
-	elif "alp" in prefix or "tripleG" in prefix:
-	  for i in range(len(plots[-1])):
-	    if massbins>5:
-	      plots[-1]=ps
 	else:
 	  for i in range(len(plots[-1])):
             plots[-1][i].Add(ps[i])

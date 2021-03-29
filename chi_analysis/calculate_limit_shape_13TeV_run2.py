@@ -8,6 +8,11 @@ def system_call(command):
     print command
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     return p.stdout.read()
+
+def remove_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text  # or whatever
  
 only6000=False
    
@@ -25,10 +30,11 @@ models=[]
 #models+=[78,79,80,81,82,83,84,85]
 #models+=[30,31,32,33,34,35,36,37,38,39,40]
 #models+=[45,46,47,48,49,50,51,52,53,54,55]
-models+=[41,42,43]
+#models+=[41,42,43]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
+models=[90,91]
 
 VectorDM=False
 AxialDM=True
@@ -450,8 +456,17 @@ for model in models:
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
+ if model==90:
+    signal="alp_QCD_fa"
+    signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
+    massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal HT>2000 only good for >4200
+ if model==91:
+    signal="tripleG_QCD_CG"
+    signalMasses=[0.005,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal HT>2000 only good for >4200
+
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
- prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2NNLO/datacard_shapelimit13TeV"
+ prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2NNLOMar25/datacard_shapelimit13TeV"
 
  if model>=30 and model<60:
     name="pvalue_"+testStat+asym+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")    
@@ -573,6 +588,9 @@ for model in models:
         fname=prefix + "_" + signalWithMass + "-run2_chi.root"
     elif "cs" in signal:
         fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+    elif "alp" in signal or "tripleG" in signal:
+      signalWithMass=signal+str(signalMass).replace(".","p")+signalExtra
+      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
     elif "DM" in signal and version=="_v1":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
       fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
@@ -748,10 +766,10 @@ for model in models:
       else:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     print fname
-    if not "DM" in signal and not "cs" in signal and not "QBH" in signal:
+    if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal:
         signalWithMass="QCD"+signalWithMass
     f=TFile(fname)
-    cfg=open("chi_datacard13TeV"+str(model)+"_"+signalWithMass.replace("QCD","")+"_run2.txt","w")
+    cfg=open("chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt","w")
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
@@ -855,7 +873,7 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
     cfg.close()
 
     out=system_call("cp "+dire+"HiggsJPC.py ${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/python")
-    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+signalWithMass.replace("QCD","")+"_run2.txt -P HiggsAnalysis.CombinedLimit.HiggsJPC:twoHypothesisHiggs -o fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
+    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt -P HiggsAnalysis.CombinedLimit.HiggsJPC:twoHypothesisHiggs -o fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
     
     if testStat=="LEP":
      poi=""
@@ -875,30 +893,30 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
     
     if asym:
      if "limit" in name:
-      out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
+      out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
       # -H ProfileLikelihood
       f = open(name+"_exp_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
      else: 
-      out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
+      out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
       f = open(name+"_exp_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
 
     elif testStat=="LHC":
      
      for point in [0.1,0.2,0.4,0.6,0.8,1.0,1.3,1.6,2.0,5.0,10.0]:
-       out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --singlePoint "+str(point)+" -s 10000"+str(int(point*100))+" --saveToys --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" -i 2 --clsAcc 0 -n "+signal+signalExtra+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
+       out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --singlePoint "+str(point)+" -s 10000"+str(int(point*100))+" --saveToys --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" -i 2 --clsAcc 0 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
        f = open(name+"_"+str(signalMass)+str(point)+"_run2"+version+".txt","w");f.write(out);f.close()
      system_call("hadd -f grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root higgsCombine"+signal+signalExtra+".HybridNew.mH"+str(signalMass)+".10000*.root")
 
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &> "+name+"_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.5 fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.84 fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.16 fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.975 fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.025 fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &> "+name+"_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.5 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.84 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.16 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.975 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.025 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
 
     else:
     
-     out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" --clsAcc 0.1 -n "+signal+signalExtra+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
+     out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" --clsAcc 0.1 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
      f = open(name+"_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
     
      out=system_call('root -q -b higgsCombine'+signal+signalExtra+'.HybridNew.mH'+str(signalMass)+'.root "${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/test/plotting/hypoTestResultTree.cxx(\\"qmu_'+signal+str(signalMass)+signalExtra+'_'+testStat+version+'.root\\",'+str(signalMass)+',1,\\"x\\")"')
@@ -910,8 +928,8 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
     diagnostic=True
     if diagnostic:
       out=system_call("mkdir "+name+version)
-      out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+signalWithMass.replace("QCD","")+" fixedMu_"+signalWithMass.replace("QCD","")+"_run2.root")
-      out=system_call("python diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+signalWithMass.replace("QCD","")+".root -A")
+      out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
+      out=system_call("python diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
       print out
 
  for signalMass in signalMasses:

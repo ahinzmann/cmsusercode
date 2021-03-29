@@ -32,6 +32,7 @@ if __name__=="__main__":
  #models=[88,89]
  #models=[60,61]
  #models=[10,11]
+ models=[90,91]
  
  testStat="LHC"
  asym="a" #asymptotic CLS
@@ -73,6 +74,10 @@ if __name__=="__main__":
        signal="cs_ct14nlo_"
     if model>=70 and model<90:
        signal="cs_ct14nlo_"
+    if model==90:
+       signal="alp_QCD_fa"
+    if model==91:
+       signal="tripleG_QCD_CG"
 
     print signal,model
 
@@ -86,6 +91,12 @@ if __name__=="__main__":
 
     min_x=5000
     max_x=40000
+    if "alp" in signal:
+      min_x=1000
+      max_x=5000
+    if "tripleG" in signal:
+      min_x=1000
+      max_x=20000
     g0=TGraph(0)
     g0.SetPoint(0,min_x,0)
     g0.SetPoint(1,max_x,0)
@@ -96,6 +107,7 @@ if __name__=="__main__":
     g_exp1m=TGraph(0)
     g_exp1p=TGraph(0)
     for mass,limit,error,exp,exp1m,exp1p,exp2m,exp2p in limits:
+      if "tripleG" in signal: mass=100./mass
       if limit==0: limit=1e-5
       if not testStat=="LHC":
        if exp>=1: exp=1e-5
@@ -178,11 +190,7 @@ if __name__=="__main__":
     err=0
     if exp1m>0: err=exp-exp1m
     if exp1p>0 and exp1p-exp>exp-exp1m: err=exp1p-exp
-
-    print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
-
-    print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, 0, 0" % ((exp1m)/1000.,(exp1p)/1000.)
-    
+     
     l2=TLine(limit,miny,limit,log10(cut))
     l2.SetLineColor(1)
     l2.SetLineStyle(2)
@@ -202,6 +210,13 @@ if __name__=="__main__":
     l2c.SetLineColor(3)
     l2c.SetLineStyle(2)
     l2c.Draw("same")
+    
+    if "tripleG" in signal:
+      print "limit: %.3f" % (100./limit), "& %.3f" % (100./exp), "$\pm$ %.3f" % (100./err)
+      print "limit: %.4f," % (100./limit), "%.4f," % (100./exp), "%.4f, %.4f, 0, 0" % ((100./exp1m),(100./exp1p))
+    else:
+      print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
+      print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, 0, 0" % ((exp1m)/1000.,(exp1p)/1000.)
     
     canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.pdf')
     #canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')

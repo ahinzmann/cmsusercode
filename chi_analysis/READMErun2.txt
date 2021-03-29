@@ -48,7 +48,7 @@ plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
-add_systematics_13TeV_loop_run2.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD and DM signal
+add_systematics_13TeV_loop_run2.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, alp, tripleG and DM signal
 plot_chi_uncertainties_13TeV_2016.py # plot summary of all systematic uncertainties
 
 add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
@@ -59,9 +59,9 @@ plot_chi_combined_theory_13TeV_run2.py # final result plot
 
 -------- Limit calculation in CMSSW_8_1_X:
 
-calculate_limit_shape_13TeV_run2.py # calculate CLS for each CI, ADD, DM and QBH model
+calculate_limit_shape_13TeV_run2.py # calculate CLS for each CI, ADD, DM and QBH, alp, tripleG model
 calculate_limit_shape_13TeV_dm_run2.py # calculate CLS for each DM model
-plot_limit_shape_13TeV_run2.py # compute CLS limit for each CI, ADD and QBH model
+plot_limit_shape_13TeV_run2.py # compute CLS limit for each CI, ADD and QBH, alp, tripleG model
 plot_limit_shape_13TeV_dm_run2.py # compute CLS limit for each DM model
 plot_limit_summary.py #  summary of limits on various models (still 8 TeV version)
 

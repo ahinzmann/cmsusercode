@@ -587,10 +587,10 @@ if __name__ == '__main__':
         samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
 
     for weight in ['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']:
-         samples5+=[("alp_QCD_HT2000toInf_"+weight,[("alp_QCD_HT2000toInf_"+weight,0)]),]
+         samples5+=[("alp_QCD_"+weight,[("alp_QCD_"+weight,0)]),]
 
-    for weight in ["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p00"]:
-         samples6+=[("tripleG_QCD_HT2000toInf_"+weight,[("tripleG_QCD_HT2000toInf_"+weight,0)]),]
+    for weight in ["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p0"]:
+         samples6+=[("tripleG_QCD_"+weight,[("tripleG_QCD_"+weight,0)]),]
 
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
     
@@ -708,7 +708,7 @@ if __name__ == '__main__':
       in2=TFile(sample2,'READ')
 
       # Madgraph QCD file
-      sampleMadgraph='datacard_shapelimit13TeV_alp_QCD_HT2000toInf_fa5000-run2_chi.root'
+      sampleMadgraph='datacard_shapelimit13TeV_alp_QCD_fa50000-run2_chi.root'
       print sampleMadgraph
       inMadgraph=TFile(sampleMadgraph,'READ')
 
@@ -956,7 +956,7 @@ if __name__ == '__main__':
         print "k-factor", nloqcdbackup.Integral()/qcd.Integral()
 
         # Madgraph reference sample
-        histname='alp_QCD_HT2000toInf_fa5000#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
+        histname='alp_QCD_fa50000#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
         print histname
         if only6000:
           qcdMadgraph=inMadgraph.Get(histname.replace("6000_13000","6000_7000"))
