@@ -137,7 +137,7 @@ if __name__=="__main__":
         if unfoldedData:
             fdir='invertMatrixOct20/'
         else:
-            fdir='versions/run2NNLO/'
+            fdir='versions/run2NNLOMar25/'
             
         if unfoldedData:  
             filename="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
@@ -326,132 +326,132 @@ if __name__=="__main__":
         h3new.SetFillColor(kGray)
         
         if massbin>=0:
-         if False: #FIX
-	  filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_LL+_run2_chi.root"
-          histname='cs_ct14nlo_14000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+         if True: #FIX
+	  filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_LL+-run2_chi.root"
+          histname='cs_ct14nnlo_14000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4=f.Get(histname)
-          h4.SetLineColor(kRed)
-          h4.SetLineWidth(3)
-          h4.SetLineStyle(8)
-	  h4.Scale(1./h4.Integral())
-	  for b in range(h4.GetNbinsX()):
-	       h4.SetBinContent(b+1,h4.GetBinContent(b+1)/h4.GetBinWidth(b+1))
+          hci=f.Get(histname)
+          hci.SetLineColor(kRed)
+          hci.SetLineWidth(3)
+          hci.SetLineStyle(8)
+	  hci.Scale(1./hci.Integral())
+	  for b in range(hci.GetNbinsX()):
+	       hci.SetBinContent(b+1,hci.GetBinContent(b+1)/hci.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_LL-_run2_chi.root"
-          histname='cs_ct14nlo_14000_LL-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_LL--run2_chi.root"
+          histname='cs_ct14nnlo_14000_LL-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4b=f.Get(histname)
-          h4b.SetLineColor(kAzure+3)
-          h4b.SetLineStyle(6)
-          h4b.SetLineWidth(3)
-	  h4b.Scale(1./h4b.Integral())
-	  for b in range(h4b.GetNbinsX()):
-	       h4b.SetBinContent(b+1,h4b.GetBinContent(b+1)/h4b.GetBinWidth(b+1))
+          hcib=f.Get(histname)
+          hcib.SetLineColor(kAzure+3)
+          hcib.SetLineStyle(6)
+          hcib.SetLineWidth(3)
+	  hcib.Scale(1./hcib.Integral())
+	  for b in range(hcib.GetNbinsX()):
+	       hcib.SetBinContent(b+1,hcib.GetBinContent(b+1)/hcib.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_VV+_run2_chi.root"
-          histname='cs_ct14nlo_14000_VV+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_VV+-run2_chi.root"
+          histname='cs_ct14nnlo_14000_VV+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4c=f.Get(histname)
-          h4c.SetLineColor(36)
-          h4c.SetLineStyle(5)
-          h4c.SetLineWidth(3)
-	  h4c.Scale(1./h4c.Integral())
-	  for b in range(h4c.GetNbinsX()):
-	       h4c.SetBinContent(b+1,h4c.GetBinContent(b+1)/h4c.GetBinWidth(b+1))
+          hcic=f.Get(histname)
+          hcic.SetLineColor(36)
+          hcic.SetLineStyle(5)
+          hcic.SetLineWidth(3)
+	  hcic.Scale(1./hcic.Integral())
+	  for b in range(hcic.GetNbinsX()):
+	       hcic.SetBinContent(b+1,hcic.GetBinContent(b+1)/hcic.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_VV-_run2_chi.root"
-          histname='cs_ct14nlo_14000_VV-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_VV--run2_chi.root"
+          histname='cs_ct14nnlo_14000_VV-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4d=f.Get(histname)
-          h4d.SetLineColor(28)
-          h4d.SetLineStyle(5)
-          h4d.SetLineWidth(3)
-	  h4d.Scale(1./h4d.Integral())
-	  for b in range(h4d.GetNbinsX()):
-	       h4d.SetBinContent(b+1,h4d.GetBinContent(b+1)/h4d.GetBinWidth(b+1))
+          hcid=f.Get(histname)
+          hcid.SetLineColor(28)
+          hcid.SetLineStyle(5)
+          hcid.SetLineWidth(3)
+	  hcid.Scale(1./hcid.Integral())
+	  for b in range(hcid.GetNbinsX()):
+	       hcid.SetBinContent(b+1,hcid.GetBinContent(b+1)/hcid.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_AA+_run2_chi.root"
-          histname='cs_ct14nlo_14000_AA+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_AA+-run2_chi.root"
+          histname='cs_ct14nnlo_14000_AA+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4e=f.Get(histname)
-          h4e.SetLineColor(8)
-          h4e.SetLineStyle(5)
-          h4e.SetLineWidth(3)
-	  h4e.Scale(1./h4e.Integral())
-	  for b in range(h4e.GetNbinsX()):
-	       h4e.SetBinContent(b+1,h4e.GetBinContent(b+1)/h4e.GetBinWidth(b+1))
+          hcie=f.Get(histname)
+          hcie.SetLineColor(8)
+          hcie.SetLineStyle(5)
+          hcie.SetLineWidth(3)
+	  hcie.Scale(1./hcie.Integral())
+	  for b in range(hcie.GetNbinsX()):
+	       hcie.SetBinContent(b+1,hcie.GetBinContent(b+1)/hcie.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_AA-_run2_chi.root"
-          histname='cs_ct14nlo_14000_AA-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_AA--run2_chi.root"
+          histname='cs_ct14nnlo_14000_AA-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4f=f.Get(histname)
-          h4f.SetLineColor(9)
-          h4f.SetLineStyle(5)
-          h4f.SetLineWidth(3)
-	  h4f.Scale(1./h4f.Integral())
-	  for b in range(h4f.GetNbinsX()):
-	       h4f.SetBinContent(b+1,h4f.GetBinContent(b+1)/h4f.GetBinWidth(b+1))
+          hcif=f.Get(histname)
+          hcif.SetLineColor(9)
+          hcif.SetLineStyle(5)
+          hcif.SetLineWidth(3)
+	  hcif.Scale(1./hcif.Integral())
+	  for b in range(hcif.GetNbinsX()):
+	       hcif.SetBinContent(b+1,hcif.GetBinContent(b+1)/hcif.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_V-A+_run2_chi.root"
-          histname='cs_ct14nlo_14000_V-A+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_V-A+-run2_chi.root"
+          histname='cs_ct14nnlo_14000_V-A+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4g=f.Get(histname)
-          h4g.SetLineColor(kAzure+3)
-          h4g.SetLineStyle(5)
-          h4g.SetLineWidth(3)
-	  h4g.Scale(1./h4g.Integral())
-	  for b in range(h4g.GetNbinsX()):
-	       h4g.SetBinContent(b+1,h4g.GetBinContent(b+1)/h4g.GetBinWidth(b+1))
+          hcig=f.Get(histname)
+          hcig.SetLineColor(kAzure+3)
+          hcig.SetLineStyle(5)
+          hcig.SetLineWidth(3)
+	  hcig.Scale(1./hcig.Integral())
+	  for b in range(hcig.GetNbinsX()):
+	       hcig.SetBinContent(b+1,hcig.GetBinContent(b+1)/hcig.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nlo_14000_V-A-_run2_chi.root"
-          histname='cs_ct14nlo_14000_V-A-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_V-A--run2_chi.root"
+          histname='cs_ct14nnlo_14000_V-A-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
           print histname
-          h4h=f.Get(histname)
-          h4h.SetLineColor(kAzure+3)
-          h4h.SetLineStyle(5)
-          h4h.SetLineWidth(3)
-	  h4h.Scale(1./h4h.Integral())
-	  for b in range(h4h.GetNbinsX()):
-	       h4h.SetBinContent(b+1,h4h.GetBinContent(b+1)/h4h.GetBinWidth(b+1))
+          hcih=f.Get(histname)
+          hcih.SetLineColor(kAzure+3)
+          hcih.SetLineStyle(5)
+          hcih.SetLineWidth(3)
+	  hcih.Scale(1./hcih.Integral())
+	  for b in range(hcih.GetNbinsX()):
+	       hcih.SetBinContent(b+1,hcih.GetBinContent(b+1)/hcih.GetBinWidth(b+1))
          if True:
-          filename=fdir+"datacard_shapelimit13TeV_GENnp-22-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_GENnp-24-run2_chi.root"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
-          histname='QCDADD10000#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          histname='QCDADD12000#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname
-          h5=f.Get(histname)
-          h5.SetLineColor(kAzure+7)
-          h5.SetLineStyle(7)
-          h5.SetLineWidth(4)
-	  h5.Scale(1./h5.Integral())
-	  for b in range(h5.GetNbinsX()):
-	       h5.SetBinContent(b+1,h5.GetBinContent(b+1)/h5.GetBinWidth(b+1))
+          hgrw=f.Get(histname)
+          hgrw.SetLineColor(kAzure+7)
+          hgrw.SetLineStyle(7)
+          hgrw.SetLineWidth(4)
+	  hgrw.Scale(1./hgrw.Integral())
+	  for b in range(hgrw.GetNbinsX()):
+	       hgrw.SetBinContent(b+1,hgrw.GetBinContent(b+1)/hgrw.GetBinWidth(b+1))
             
           coupling="1"
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
@@ -460,8 +460,8 @@ if __name__=="__main__":
           f7 = TFile.Open(filename)
           new_hists+=[f7]
           print histname
-          h7=f7.Get(histname)
-          setUpDMHists(h7,kBlue,4,2)
+          hdm=f7.Get(histname)
+          setUpDMHists(hdm,kBlue,4,2)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -469,8 +469,8 @@ if __name__=="__main__":
           f7a = TFile.Open(filename)
           new_hists+=[f7a]
           print histname
-          h7a=f7a.Get(histname)
-          setUpDMHists(h7a,kMagenta,7,2)
+          hdma=f7a.Get(histname)
+          setUpDMHists(hdma,kMagenta,7,2)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_1000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_1000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -478,8 +478,8 @@ if __name__=="__main__":
           f7b = TFile.Open(filename)
           new_hists+=[f7b]
           print histname
-          h7b=f7b.Get(histname)
-          setUpDMHists(h7b,kTeal+4,10,2)
+          hdmb=f7b.Get(histname)
+          setUpDMHists(hdmb,kTeal+4,10,2)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -487,8 +487,8 @@ if __name__=="__main__":
           f7c = TFile.Open(filename)
           new_hists+=[f7c]
           print histname
-          h7c=f7c.Get(histname)
-          setUpDMHists(h7c,kOrange+7,1,2)
+          hdmc=f7c.Get(histname)
+          setUpDMHists(hdmc,kOrange+7,1,2)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_1500_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_1500_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -496,8 +496,8 @@ if __name__=="__main__":
           f7d = TFile.Open(filename)
           new_hists+=[f7d]
           print histname
-          h7d=f7d.Get(histname)
-          setUpDMHists(h7d,kAzure+8,1,2)
+          hdmd=f7d.Get(histname)
+          setUpDMHists(hdmd,kAzure+8,1,2)
 
         if massbin>3:
          if False: #FIX
@@ -513,14 +513,43 @@ if __name__=="__main__":
           else:
               histname='QBH_8000_6#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname
-          h6=f.Get(histname)
-          h6=h6.Rebin(len(chi_binnings[massbin])-1,h6.GetName()+"_rebin",chi_binnings[massbin])
-          h6.SetLineColor(kGreen+3)
-          h6.SetLineStyle(5)
-          h6.SetLineWidth(4)
-          h6.Scale(1./h6.Integral())
-          for b in range(h6.GetNbinsX()):
-              h6.SetBinContent(b+1,h6.GetBinContent(b+1)/h6.GetBinWidth(b+1))
+          hqbh=f.Get(histname)
+          hqbh=hqbh.Rebin(len(chi_binnings[massbin])-1,hqbh.GetName()+"_rebin",chi_binnings[massbin])
+          hqbh.SetLineColor(kGreen+3)
+          hqbh.SetLineStyle(5)
+          hqbh.SetLineWidth(4)
+          hqbh.Scale(1./hqbh.Integral())
+          for b in range(hqbh.GetNbinsX()):
+              hqbh.SetBinContent(b+1,hqbh.GetBinContent(b+1)/hqbh.GetBinWidth(b+1))
+
+         if massbins>5: #FIX
+	  filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2000-run2_chi.root"
+          histname='alp_QCD_fa2000#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print filename
+          f = TFile.Open(filename)
+          new_hists+=[f]
+          print histname
+          halp=f.Get(histname)
+          halp.SetLineColor(kBlue)
+          halp.SetLineWidth(3)
+          halp.SetLineStyle(9)
+	  halp.Scale(1./halp.Integral())
+	  for b in range(halp.GetNbinsX()):
+	       halp.SetBinContent(b+1,halp.GetBinContent(b+1)/halp.GetBinWidth(b+1))
+
+	  filename=fdir+"datacard_shapelimit13TeV_tripleG_QCD_CG0p01-run2_chi.root"
+          histname='tripleG_QCD_CG0p01#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print filename
+          f = TFile.Open(filename)
+          new_hists+=[f]
+          print histname
+          htripleG=f.Get(histname)
+          htripleG.SetLineColor(kRed)
+          htripleG.SetLineWidth(3)
+          htripleG.SetLineStyle(10)
+	  htripleG.Scale(1./htripleG.Integral())
+	  for b in range(htripleG.GetNbinsX()):
+	       htripleG.SetBinContent(b+1,htripleG.GetBinContent(b+1)/htripleG.GetBinWidth(b+1))
 
 #        if massbin>4:
 #            h0.GetYaxis().SetRangeUser(0.02,0.22)
@@ -633,60 +662,63 @@ if __name__=="__main__":
         h2new.Draw("histsame")
         h0.Draw("histsame")
 #        if massbin>=5: #FIX
-#            h4.Draw("histsame") #FIX
-#            h4b.Draw("histsame") #FIX
-            #h4c.Draw("histsame")
-            #h4d.Draw("histsame")
-            #h4e.Draw("histsame")
-            #h4f.Draw("histsame")
-            #h4g.Draw("histsame")
-            #h4h.Draw("histsame")
+#            hci.Draw("histsame") #FIX
+#            hcib.Draw("histsame") #FIX
+            #hcic.Draw("histsame")
+            #hcid.Draw("histsame")
+            #hcie.Draw("histsame")
+            #hcif.Draw("histsame")
+            #hcig.Draw("histsame")
+            #hcih.Draw("histsame")
         if massbin>5:
-            h5.Draw("histsame")
+            hgrw.Draw("histsame")
 #        if massbin>6: #FIX
-#            h6.Draw("histsame") #FIX
-        if massbin == 3:
-            h7.Draw("histsame")
-            h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
-        if massbin == 4:
-            #h7.Draw("histsame")
-            h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
-        if massbin == 5:
-            #h7.Draw("histsame")
-            #h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
-        if massbin == 6:
-            #h7.Draw("histsame")
-            #h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
-        if massbin == 7:
-            #h7.Draw("histsame")
-            #h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
-        if massbin == 8:
-            #h7.Draw("histsame")
-            #h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            h7c.Draw("histsame")
-            #h7d.Draw("histsame")
+#            hqbh.Draw("histsame") #FIX
+        if massbin == 3 and False:
+            hdm.Draw("histsame")
+            hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin == 4 and False:
+            #hdm.Draw("histsame")
+            hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin == 5 and False:
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin == 6 and False:
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin == 7 and False:
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin == 8 and False:
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
         #if massbin == 9:
-            #h7.Draw("histsame")
-            #h7a.Draw("histsame")
-            #h7b.Draw("histsame")
-            #h7c.Draw("histsame")
-            #h7d.Draw("histsame")
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            #hdmb.Draw("histsame")
+            #hdmc.Draw("histsame")
+            #hdmd.Draw("histsame")
+        if massbin>5:
+            halp.Draw("histsame")
+            htripleG.Draw("histsame")
         #h14G.Draw("pzesame")
         h14Gsys.Draw("||same")
         h14Gsysstat.Draw("zesame")
@@ -770,60 +802,63 @@ if __name__=="__main__":
     l2.AddEntry(h14G,"Data","ple")
     l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
 #    if massbin>=5: #FIX
-#        l2.AddEntry(h4,"#Lambda_{LL}^{#font[122]{+}} (CI) = 14 TeV","l") #FIX
-#        l2.AddEntry(h4b,"#Lambda_{LL}^{#font[122]{-}} (CI) = 14 TeV","l") #FIX
-        #l2.AddEntry(h4c,"#Lambda_{VV}^{#font[122]{+}} (CI) = 14 TeV","l")
-        #l2.AddEntry(h4d,"#Lambda_{VV}^{#font[122]{-}} (CI) = 14 TeV","l")
-        #l2.AddEntry(h4e,"#Lambda_{AA}^{#font[122]{+}} (CI) = 14 TeV","l")
-        #l2.AddEntry(h4f,"#Lambda_{AA}^{#font[122]{-}} (CI) = 14 TeV","l")
-        #l2.AddEntry(h4g,"#Lambda_{V-A} (CI) = 14 TeV","l")
-        #l2.AddEntry(h4h,"#Lambda_{V-A}^{#font[122]{-}} (CI) = 14 TeV","l")
+#        l2.AddEntry(hci,"#Lambda_{LL}^{#font[122]{+}} (CI) = 14 TeV","l") #FIX
+#        l2.AddEntry(hcib,"#Lambda_{LL}^{#font[122]{-}} (CI) = 14 TeV","l") #FIX
+        #l2.AddEntry(hcic,"#Lambda_{VV}^{#font[122]{+}} (CI) = 14 TeV","l")
+        #l2.AddEntry(hcid,"#Lambda_{VV}^{#font[122]{-}} (CI) = 14 TeV","l")
+        #l2.AddEntry(hcie,"#Lambda_{AA}^{#font[122]{+}} (CI) = 14 TeV","l")
+        #l2.AddEntry(hcif,"#Lambda_{AA}^{#font[122]{-}} (CI) = 14 TeV","l")
+        #l2.AddEntry(hcig,"#Lambda_{V-A} (CI) = 14 TeV","l")
+        #l2.AddEntry(hcih,"#Lambda_{V-A}^{#font[122]{-}} (CI) = 14 TeV","l")
     if massbin > 5:
-        l2.AddEntry(h5,"#Lambda_{T} (GRW) = 10 TeV","l")
+        l2.AddEntry(hgrw,"#Lambda_{T} (GRW) = 12 TeV","l")
 #    if massbin > 6: #FIX
-#        l2.AddEntry(h6,"M_{QBH} (n_{ED} = 6 ADD) = 8 TeV","l") #FIX
-    if massbin == 3:
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 1 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 1.5 TeV","l")
-        l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2 TeV","l")
-        l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-    if massbin == 4:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 5:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 6:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 7:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 8:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+#        l2.AddEntry(hqbh,"M_{QBH} (n_{ED} = 6 ADD) = 8 TeV","l") #FIX
+    if massbin == 3 and False:
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 1 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 1.5 TeV","l")
+        l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2 TeV","l")
+        l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+    if massbin == 4 and False:
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+    if massbin == 5 and False:
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+    if massbin == 6 and False:
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+    if massbin == 7 and False:
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+    if massbin == 8 and False:
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
     #if massbin == 9:
-        #l2.AddEntry(h7,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(h7a,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(h7b,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        #l2.AddEntry(h7c,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
-        #l2.AddEntry(h7d,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
+        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
+        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
+        #l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
+        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
+    if massbin > 5:
+        l2.AddEntry(halp,"f_{a} = 2 TeV","l")
+        l2.AddEntry(htripleG,"C_{G}/#Lambda^{2} = 0.010 TeV","l")
     l2.SetFillStyle(0)
     l2.Draw("same")
 
@@ -831,16 +866,16 @@ if __name__=="__main__":
 #    l2b.SetTextSize(0.035)
 #    l2b.AddEntry(h14G," ","")
 #    l2b.AddEntry(h0," ","l")
-#    #l2b.AddEntry(h6," ","")
-#    l2b.AddEntry(h4," ","")
-#    l2b.AddEntry(h4b," ","")
-#    l2b.AddEntry(h4c," ","")
-#    l2b.AddEntry(h4d," ","")
-#    #l2b.AddEntry(h4e," ","")
-#    #l2b.AddEntry(h4f," ","")
-#    l2b.AddEntry(h4g," ","")
-#    #l2b.AddEntry(h4h," ","")
-#    l2b.AddEntry(h5," ","")
+#    #l2b.AddEntry(hqbh," ","")
+#    l2b.AddEntry(hci," ","")
+#    l2b.AddEntry(hcib," ","")
+#    l2b.AddEntry(hcic," ","")
+#    l2b.AddEntry(hcid," ","")
+#    #l2b.AddEntry(hcie," ","")
+#    #l2b.AddEntry(hcif," ","")
+#    l2b.AddEntry(hcig," ","")
+#    #l2b.AddEntry(hcih," ","")
+#    l2b.AddEntry(hgrw," ","")
 #    l2b.SetFillStyle(0)
 #    #l2b.Draw("same")
     

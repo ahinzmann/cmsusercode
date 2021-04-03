@@ -515,7 +515,10 @@ if __name__ == '__main__':
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
-       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT2000toInf",weights[nxsec]), ]),
+       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT200to1000",weights[nxsec]),
+                                              (point+"_HT1000to2000",weights[nxsec]),
+                                              (point+"_HT2000toInf",weights[nxsec]),
+                                              ]),
 	       ]
     elif "QCD" in prefix:
        samples=samples3

@@ -34,9 +34,17 @@ launch --rwgt_name=CG0p015
 launch --rwgt_name=CG0p01
 	set param_card dim6 8 0.010000e+00
 
+#******************** CG0p0075 ********************
+launch --rwgt_name=CG0p0075
+	set param_card dim6 8 0.007500e+00
+
 #******************** CG0p005 ********************
 launch --rwgt_name=CG0p005
 	set param_card dim6 8 0.005000e+00
+
+#******************** CG0p0025 ********************
+launch --rwgt_name=CG0p0025
+	set param_card dim6 8 0.002500e+00
 
 #******************** CG0p0 ********************
 launch --rwgt_name=CG0p0
