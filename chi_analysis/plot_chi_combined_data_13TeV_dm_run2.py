@@ -5,13 +5,6 @@ import os
 from math import *
 from scipy import stats
 
-uncertaintynames=["pdf","scale","model"]
-for i in range(1,23):
-    uncertaintynames.append("jes"+str(i))
-for i in range(1,6):
-    uncertaintynames.append("jer"+str(i))
-
-
 def rebin(h1,nbins,binning):
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)*h1.GetBinWidth(b+1))
@@ -191,7 +184,7 @@ if __name__=="__main__":
             signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_"+ga
             GA[counter]=ga
             counter+=1
-
+    print (counter-1)
     #print signalName,signalExtraName
 
     prefix="versions/run2NNLOMar25/datacard_shapelimit13TeV"
@@ -239,6 +232,15 @@ if __name__=="__main__":
 
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
+
+            uncertaintynames=["pdf","scaleAlt"] # "scale"
+            #uncertaintynames.append("model")
+            for m in massbins:
+                uncertaintynames.append("model"+str(m[0]))
+            for i in range(1,23):
+                uncertaintynames.append("jes"+str(i))
+            for i in range(1,6):
+                uncertaintynames.append("jer"+str(i))
         
             for massbin in range(len(massbins)):
             

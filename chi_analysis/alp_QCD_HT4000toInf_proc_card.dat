@@ -24,7 +24,7 @@
 import model ALP_linear_UFO
 define p = g u u~ d d~ c c~ s s~
 define j = g u u~ d d~ c c~ s s~
-generate p p > j j NP<=2 @0
-add process p p > j j j NP<=2 @1
-%add process p p > j j j j NP<=2 @2
+generate p p > j j NP<=2 QED=0 @0
+add process p p > j j j NP<=2 QED=0 @1
+%add process p p > j j j j NP<=2 QED=0 @2
 output alp_QCD_HT4000toInf -nojpeg

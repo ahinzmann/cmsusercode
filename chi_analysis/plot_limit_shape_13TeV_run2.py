@@ -96,7 +96,7 @@ if __name__=="__main__":
       max_x=5000
     if "tripleG" in signal:
       min_x=1000
-      max_x=20000
+      max_x=40000
     g0=TGraph(0)
     g0.SetPoint(0,min_x,0)
     g0.SetPoint(1,max_x,0)
@@ -212,8 +212,11 @@ if __name__=="__main__":
     l2c.Draw("same")
     
     if "tripleG" in signal:
-      print "limit: %.3f" % (100./limit), "& %.3f" % (100./exp), "$\pm$ %.3f" % (100./err)
-      print "limit: %.4f," % (100./limit), "%.4f," % (100./exp), "%.4f, %.4f, 0, 0" % ((100./exp1m),(100./exp1p))
+      err=0
+      if exp1m>0: err=100./exp-100./exp1m
+      if exp1p>0 and 100./exp1p-100./exp>100./exp-100./exp1m: err=100./exp1p-100./exp
+      print "limit: %.4f" % (100./limit), "& %.4f" % (100./exp), "$\pm$ %.4f" % (-err)
+      print "limit: %.4f," % (100./limit), "%.4f," % (100./exp), "%.4f, %.4f, 0, 0" % ((100./(max(1e-5,exp1m)),(100./max(1e-5,exp1p))))
     else:
       print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
       print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, 0, 0" % ((exp1m)/1000.,(exp1p)/1000.)

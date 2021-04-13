@@ -257,7 +257,7 @@ if __name__=="__main__":
         print filename
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
-        uncertaintynames=["jer","jes","pdf","scale","model"]
+        uncertaintynames=["jer","jes","pdf","scaleAlt","model"]
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"
@@ -522,9 +522,9 @@ if __name__=="__main__":
           for b in range(hqbh.GetNbinsX()):
               hqbh.SetBinContent(b+1,hqbh.GetBinContent(b+1)/hqbh.GetBinWidth(b+1))
 
-         if massbins>5: #FIX
-	  filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2000-run2_chi.root"
-          histname='alp_QCD_fa2000#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+        if True: #FIX
+	  filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2500-run2_chi.root"
+          histname='alp_QCD_fa2500#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -716,7 +716,7 @@ if __name__=="__main__":
             #hdmb.Draw("histsame")
             #hdmc.Draw("histsame")
             #hdmd.Draw("histsame")
-        if massbin>5:
+        if True:
             halp.Draw("histsame")
             htripleG.Draw("histsame")
         #h14G.Draw("pzesame")
@@ -856,8 +856,8 @@ if __name__=="__main__":
         #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
         #l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
         #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin > 5:
-        l2.AddEntry(halp,"f_{a} = 2 TeV","l")
+    if True:
+        l2.AddEntry(halp,"f_{a} = 2.5 TeV","l")
         l2.AddEntry(htripleG,"C_{G}/#Lambda^{2} = 0.010 TeV","l")
     l2.SetFillStyle(0)
     l2.Draw("same")

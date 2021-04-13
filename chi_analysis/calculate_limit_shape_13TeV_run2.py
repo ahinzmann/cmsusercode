@@ -44,7 +44,10 @@ dataWithSignal="_DMAxial_Dijet_LO_Mphi_4000_3000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv
 
 jesSources=23 # 1 corresponds to the single overall variation, 23 to all
 jerSources=6 # 1 corresponds to the single overall variation, 6 to all
+correlatedModelUncertainties=False
+uncorrelatedModelUncertainties=True
 separateScaleUncertainties=False
+alternateScaleUncertainty=True
 
 isGen=False
 
@@ -72,7 +75,7 @@ if AxialDM:
   #for mdm in ["1","3000"]:
   for mdm in ["1"]:
     for ga in ["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]:
-      #models+=[counter]
+      models+=[counter]
       signalName[counter]="DMAxial_Dijet_LO_Mphi"
       signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_"+ga
       counter+=1    
@@ -459,11 +462,11 @@ for model in models:
  if model==90:
     signal="alp_QCD_fa"
     signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
-    massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal HT>2000 only good for >4200
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==91:
     signal="tripleG_QCD_CG"
-    signalMasses=[0.005,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
-    massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal HT>2000 only good for >4200
+    signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2NNLOMar25/datacard_shapelimit13TeV"
@@ -773,7 +776,7 @@ for model in models:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
-kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
+kmax """+str(2+correlatedModelUncertainties+len(massbins)*uncorrelatedModelUncertainties+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -819,9 +822,15 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
 -----------
 """)
     text=""
-    text+="model shape "
-    for i in range(len(massbins)):
-       text+="1 1 - "
+    if uncorrelatedModelUncertainties:
+     for mn in massbins:
+      text+="\nmodel"+str(mn[0])+" shape "
+      for i in range(len(massbins)):
+        text+="1 1 - "
+    if correlatedModelUncertainties:
+     text+="\nmodel shape "
+     for i in range(len(massbins)):
+        text+="1 1 - "
     if jesSources>1:
      for n in range(jesSources):
       text+="\njes"+str(n+1)+" shape "
@@ -860,7 +869,10 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
         else:
          text+="- 1 - "
     else:
-      text+="\nscale shape "
+      if alternateScaleUncertainty:
+        text+="\nscaleAlt shape "
+      else:
+        text+="\nscale shape "
       for i in range(len(massbins)):
         if includeSignalTheoryUncertainties:
          text+="1 1 - "
@@ -935,14 +947,14 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
  for signalMass in signalMasses:
     limits[signalMass]=[]
     if testStat!="LEP" and (testStat!="LHC" or asym!=""):
-     fname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
+     tname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
     else:
-     fname=name+"_"+str(signalMass)+"_run2"+version+".txt"
+     tname=name+"_"+str(signalMass)+"_run2"+version+".txt"
     try:
-      print "open",fname
-      f=file(fname)
+      print "open",tname
+      f=file(tname)
     except:
-      print "file not found", fname
+      print "file not found", tname
       continue
     for line in f.readlines():
         if "Observed Limit" in line and asym:
@@ -962,10 +974,10 @@ kmax """+str(3+jesSources+jerSources+1*separateScaleUncertainties)+""" number of
     if len(limits[signalMass])==0:
          limits[signalMass]+=[signalMass,0,0]
     try:
-      fname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
-      f=file(fname)
+      tname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
+      f=file(tname)
     except:
-      print "file not found", fname
+      print "file not found", tname
       continue
     for line in f.readlines():
         if "Expected" in line and asym:

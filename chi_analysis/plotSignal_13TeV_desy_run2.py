@@ -34,6 +34,7 @@ def createPlots(sample,prefix,weightname,massbins):
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
 	for folderM in foldersM:
 	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 if not "mg" in folderM: continue
          folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
 	 for folder in folders:
 	  if sample in folder and ".root" in folder:
@@ -43,6 +44,7 @@ def createPlots(sample,prefix,weightname,massbins):
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
 	for folderM in foldersM:
 	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 if not "mg" in folderM: continue
          folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
   	 for folder in folders:
 	  if sample in folder and ".root" in folder:
@@ -148,7 +150,7 @@ if __name__ == '__main__':
          weights=['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
        elif "tripleG" in point:
-         weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p005","CG0p0"]
+         weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p0075","CG0p005","CG0p0025","CG0p0"]
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
       else:
        prefix="datacard_shapelimit13TeV_GENnp-"+sys.argv[1]+"-run2"
@@ -517,7 +519,8 @@ if __name__ == '__main__':
     elif "alp" in prefix or "tripleG" in prefix:
        samples=[(""+point+"_"+weights[nxsec],[(point+"_HT200to1000",weights[nxsec]),
                                               (point+"_HT1000to2000",weights[nxsec]),
-                                              (point+"_HT2000toInf",weights[nxsec]),
+                                              (point+"_HT2000to4000",weights[nxsec]),
+                                              (point+"_HT4000toInf",weights[nxsec]),
                                               ]),
 	       ]
     elif "QCD" in prefix:

@@ -212,7 +212,7 @@
 # Control the Ht(k)=Sum of k leading jets                            *
 #*********************************************************************
  2000  = htjmin ! minimum jet HT=Sum(jet pt)
- 13000 = htjmax ! maximum jet HT=Sum(jet pt)
+ 4000 = htjmax ! maximum jet HT=Sum(jet pt)
  0   = ihtmin  !inclusive Ht for all partons (including b)
  -1  = ihtmax  !inclusive Ht for all partons (including b)
  0   = ht2min ! minimum Ht for the two leading jets
