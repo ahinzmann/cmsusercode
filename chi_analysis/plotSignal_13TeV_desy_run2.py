@@ -34,7 +34,7 @@ def createPlots(sample,prefix,weightname,massbins):
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
 	for folderM in foldersM:
 	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "mg" in folderM: continue
+	 if not "newsamples0" in folderM: continue
          folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
 	 for folder in folders:
 	  if sample in folder and ".root" in folder:
@@ -517,10 +517,10 @@ if __name__ == '__main__':
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
-       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT200to1000",weights[nxsec]),
-                                              (point+"_HT1000to2000",weights[nxsec]),
-                                              (point+"_HT2000to4000",weights[nxsec]),
-                                              (point+"_HT4000toInf",weights[nxsec]),
+       samples=[(""+point+"_"+weights[nxsec],[(point+"_Mjj200to1000",weights[nxsec]),
+                                              (point+"_Mjj1000to2000",weights[nxsec]),
+                                              (point+"_Mjj2000to4000",weights[nxsec]),
+                                              (point+"_Mjj4000toInf",weights[nxsec]),
                                               ]),
 	       ]
     elif "QCD" in prefix:

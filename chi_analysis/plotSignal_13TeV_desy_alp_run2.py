@@ -12,7 +12,7 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /afs/desy.de/user/h/hinzmann/rivet/CMSSW_10_6_16/src
 cmsenv
 cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
-python plotSignal_13TeV_desy_run2.py alp_QCD """+str(fas.index(fa))+"""
+python plotSignal_13TeV_desy_run2.py """+samplename+""" """+str(fas.index(fa))+"""
 """)
     with open(samplename+str(fas.index(fa))+".submit",'w+') as htc_config:
             htc_config.write("""
@@ -22,9 +22,9 @@ universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
 initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
-output            = datacard_shapelimit13TeV_alp_QCD_"""+fa+"""-run2_chi.root
-error             = alp_QCD_"""+fa+""".e
-log               = alp_QCD_"""+fa+""".log
+output            = datacard_shapelimit13TeV_"""+samplename+"""_"""+fa+"""-run2_chi.root
+error             = """+samplename+"""_"""+fa+""".e
+log               = """+samplename+"""_"""+fa+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
 +RequestRuntime   = 170000
 #RequestMemory     = 10G
@@ -32,7 +32,7 @@ JobBatchName      = """+fa+"""
 RequestDisk       = 10G
 getenv            = True
 executable        = /usr/bin/sh
-arguments         = "alp_QCD"""+str(fas.index(fa))+""".sh"
+arguments         = " """+samplename+str(fas.index(fa))+""".sh"
 queue 1
 """)
     string="condor_submit "+samplename+str(fas.index(fa))+".submit"

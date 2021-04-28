@@ -597,7 +597,7 @@ if __name__ == '__main__':
     # all samples
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
     # for alp+tripleG
-    #samples=samples5
+    samples=samples5
     #samples=samples6
     # for postfit plots
     #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
@@ -715,7 +715,7 @@ if __name__ == '__main__':
       in2=TFile(sample2,'READ')
 
       # Madgraph QCD file
-      sampleMadgraph='datacard_shapelimit13TeV_alp_QCD_fa50000-run2_chi.root'
+      sampleMadgraph=prefix + '_alp_QCD_fa50000-run2_chi.root'
       print sampleMadgraph
       inMadgraph=TFile(sampleMadgraph,'READ')
 
@@ -1061,7 +1061,9 @@ if __name__ == '__main__':
 	    cibackup=out.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
+	  print "ALP:",ci.Integral(), "QCDMG:",qcdMadgraph.Integral(), "QCDPY:",qcd.Integral(), "QCDNLO:",nloqcdbackup.Integral()
 	  ci.Add(qcdMadgraph,-1)
+	  ci.Scale(nloqcdbackup.Integral()/qcdMadgraph.Integral()) # CORRECT FOR MISSING FACTOR LO->NNLO k-factor of ~10 in Madgraph QCD cross sections
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1./nloqcdbackup.Integral())
 	  print histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1)
