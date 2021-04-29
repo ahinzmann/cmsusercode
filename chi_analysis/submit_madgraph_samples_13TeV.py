@@ -17,13 +17,17 @@ names=[
     #'tripleG_QCD_Mjj1000to2000',
     #'tripleG_QCD_Mjj2000to4000',
     #'tripleG_QCD_Mjj4000toInf',
-    'alp_QCD_Mjj200to1000',
-    'alp_QCD_Mjj1000to2000',
-    'alp_QCD_Mjj2000to4000',
-    'alp_QCD_Mjj4000toInf',
+    #'alp_QCD_Mjj200to1000',
+    #'alp_QCD_Mjj1000to2000',
+    #'alp_QCD_Mjj2000to4000',
+    #'alp_QCD_Mjj4000toInf',
+    'QCD_Mjj200to1000',
+    'QCD_Mjj1000to2000',
+    'QCD_Mjj2000to4000',
+    'QCD_Mjj4000toInf',
 ]
 
-workdir='/nfs/dust/cms/user/hinzmann/dijetangular/newsamples03/'
+workdir='/nfs/dust/cms/user/hinzmann/dijetangular/newsamples10/'
 
 if(options.clean):
     print('deleting workdirs..')

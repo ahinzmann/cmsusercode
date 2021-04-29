@@ -101,6 +101,7 @@ if __name__ == '__main__':
       f_data2+=[TFile.Open(prefix+name+"_chi.root")]
    for name in data3:
       f_data3+=[TFile.Open(prefix+name+"_chi.root")]
+   lumi=[36.33,41.53,59.74]
    f_mc=[]
    f_mc2=[]
    f_mc3=[]
@@ -137,14 +138,15 @@ if __name__ == '__main__':
      hist=f_data[0].Get(prefix+data[0]+var)
      for i in range(1,len(data)):
     	 hist.Add(f_data[i].Get(prefix+data[i]+var))
+     hist.Scale(1./lumi[0])
      hist.SetLineColor(1)
      hist.SetMarkerStyle(24)
      hist.SetMarkerColor(1)
      hist.SetMarkerSize(0.2)
      hist.SetTitle("")
      hist.GetXaxis().SetLabelColor(0)
-     hist.GetYaxis().SetTitle("N")
-     hist.GetXaxis().SetRangeUser(1200,8400)
+     hist.GetYaxis().SetTitle("d#sigma/dm [fb/GeV]")
+     hist.GetXaxis().SetRangeUser(2400,8400)
      hist.GetYaxis().SetRangeUser(0.5,hist.GetMaximum()*1.5)
      hist.GetXaxis().SetTitleOffset(1.1)
      hist.GetYaxis().SetTitleOffset(1.1)
@@ -159,6 +161,7 @@ if __name__ == '__main__':
      hist2=f_data2[0].Get(prefix+data2[0]+var)
      for i in range(1,len(data2)):
     	 hist2.Add(f_data2[i].Get(prefix+data2[i]+var))
+     hist2.Scale(1./lumi[1])
      hist2.SetLineColor(2)
      hist2.SetMarkerStyle(25)
      hist2.SetMarkerColor(2)
@@ -170,6 +173,7 @@ if __name__ == '__main__':
      hist3=f_data3[0].Get(prefix+data3[0]+var)
      for i in range(1,len(data3)):
     	 hist3.Add(f_data3[i].Get(prefix+data3[i]+var))
+     hist3.Scale(1./lumi[2])
      hist3.SetLineColor(4)
      hist3.SetMarkerStyle(26)
      hist3.SetMarkerColor(4)
@@ -275,18 +279,18 @@ if __name__ == '__main__':
      ddratio.GetXaxis().SetTitleOffset(1.1)
      ddratio.GetXaxis().SetLabelSize(0.12)
      ddratio.Draw("histe")
-     ddratio_mc2=hist_mc2.Clone(hist_mc2.GetName()+"ddratio")
-     ddratio_mc2.Divide(hist_mc2,hist_mc)
-     for b in range(hist_mc.GetNbinsX()):
-       if hist_mc.GetBinContent(b+1)>0:
-    	 ddratio_mc2.SetBinError(b+1,hist_mc.GetBinError(b+1)/hist_mc.GetBinContent(b+1))
-     ddratio_mc2.Draw("histsame")
-     ddratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ddratio")
-     ddratio_mc3.Divide(hist_mc3,hist_mc)
-     for b in range(hist_mc.GetNbinsX()):
-       if hist_mc.GetBinContent(b+1)>0:
-    	 ddratio_mc3.SetBinError(b+1,hist_mc.GetBinError(b+1)/hist_mc.GetBinContent(b+1))
-     ddratio_mc3.Draw("histsame")
+     ddratio2=hist2.Clone(hist2.GetName()+"ddratio")
+     ddratio2.Divide(hist2,hist)
+     for b in range(hist.GetNbinsX()):
+       if hist.GetBinContent(b+1)>0:
+    	 ddratio2.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+     ddratio2.Draw("histsame")
+     ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
+     ddratio3.Divide(hist3,hist)
+     for b in range(hist.GetNbinsX()):
+       if hist.GetBinContent(b+1)>0:
+    	 ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+     ddratio3.Draw("histsame")
      ratio.Draw("axissame")
 
      canvas.cd(1)
@@ -527,18 +531,18 @@ if __name__ == '__main__':
      	ddratio.GetXaxis().SetTitleOffset(1.1)
      	ddratio.GetXaxis().SetLabelSize(0.12)
      	ddratio.Draw("histe")
-     	ddratio_mc2=hist_mc2.Clone(hist_mc2.GetName()+"ddratio")
-     	ddratio_mc2.Divide(hist_mc2,hist_mc)
-     	for b in range(hist_mc.GetNbinsX()):
-     	  if hist_mc.GetBinContent(b+1)>0:
-     	    ddratio_mc2.SetBinError(b+1,hist_mc.GetBinError(b+1)/hist_mc.GetBinContent(b+1))
-     	ddratio_mc2.Draw("histsame")
-     	ddratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ddratio")
-     	ddratio_mc3.Divide(hist_mc3,hist_mc)
-     	for b in range(hist_mc.GetNbinsX()):
-     	  if hist_mc.GetBinContent(b+1)>0:
-     	    ddratio_mc3.SetBinError(b+1,hist_mc.GetBinError(b+1)/hist_mc.GetBinContent(b+1))
-     	ddratio_mc3.Draw("histsame")
+     	ddratio2=hist2.Clone(hist2.GetName()+"ddratio")
+     	ddratio2.Divide(hist2,hist)
+     	for b in range(hist.GetNbinsX()):
+     	  if hist.GetBinContent(b+1)>0:
+     	    ddratio2.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+     	ddratio2.Draw("histsame")
+     	ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
+     	ddratio3.Divide(hist3,hist)
+     	for b in range(hist.GetNbinsX()):
+     	  if hist.GetBinContent(b+1)>0:
+     	    ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+     	ddratio3.Draw("histsame")
      	ratio.Draw("axissame")
 
         canvas.cd(1)

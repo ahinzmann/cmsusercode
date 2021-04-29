@@ -20,7 +20,7 @@ gStyle.SetNdivisions(506, "XYZ")
 gStyle.SetLegendBorderSize(0)
 
 def effErf(x, p):
-  return ((TMath.Erf((x[0] - p[0]) / p[1]) + 1) / 2. *  p[2] + (1. - p[2]))
+  return ((TMath.Erf((x[0] - p[0]) / p[1]) + 1) / 2. *  p[2] + (1. - p[2]))*p[3]
 
 if __name__ == '__main__':
 
@@ -184,13 +184,30 @@ if __name__ == '__main__':
       hist1=hist1.Rebin(len(binning)-1,hist1.GetName()+"_rebin",binning)
       hist2=f.Get(prefix+sample+"mass-trig"+name+chi_bin)
       hist2=hist2.Rebin(len(binning)-1,hist2.GetName()+"_rebin",binning)
+      if chi_bin=="":
+       prescalefactor=1e10
+       factor=1e10
+       for b in range(hist1.GetNbinsX()):
+        if hist2.GetBinContent(b+1)>0:
+          factor=hist1.GetBinContent(b+1)/hist2.GetBinContent(b+1)
+	if factor<prescalefactor:
+	  prescalefactor=factor
+       print prescalefactor
+      hist2.Scale(prescalefactor) # Scale to account for pre-scales
       hist=TGraphAsymmErrors(hist1)
-      hist.Divide(hist2,hist1,"cl=0.683 b(1,1) mode")
+      if prescalefactor==1:
+        mode="cl=0.683 b(1,1) mode"
+      else:
+        mode="pois"
+      hist.Divide(hist2,hist1,mode)
       hist.SetLineWidth(2)
       hist.SetTitle("")
       hist.GetXaxis().SetTitle("dijet mass [GeV]")
       hist.GetYaxis().SetTitle("trigger efficiency")
-      hist.GetYaxis().SetRangeUser(0.8,1)
+      if prescalefactor==1:
+        hist.GetYaxis().SetRangeUser(0.8,1)
+      else:
+        hist.GetYaxis().SetRangeUser(0,1.5)
       hist.GetXaxis().SetRangeUser(1200,3000)
       hist.SetLineColor(colors[i])
       hist.SetLineStyle(styles[i])
@@ -208,17 +225,23 @@ if __name__ == '__main__':
         hist.GetPoint(b, x, y)
 	if hist.Eval(x)>0.85:
 	   endfit=x
-      fit=TF1("erf"+name+chi_bin,effErf,startfit,endfit,3)
+      if startfit==0: startfit=1200
+      if endfit<=startfit: endfit=3000
+      fit=TF1("erf"+name+chi_bin,effErf,startfit,endfit,4)
       fit.SetParameter(0, startfit+100.)
       fit.SetParameter(1, 100.)
       fit.SetParameter(2, 1.)
+      if prescalefactor==1:
+        fit.FixParameter(3, 1.)
+      else:
+        fit.SetParameter(3, 1.)
       hist.Fit(fit,"q0")
       fit.SetLineColor(colors[i])
       fit.SetLineStyle(styles[i])
-      print chi_bin, fit.GetParameter(0), fit.GetParameter(1), fit.GetParameter(2)
+      print chi_bin, fit.GetParameter(0), fit.GetParameter(1), fit.GetParameter(2), fit.GetParameter(3)
       s999=0
       for s in reversed(range(int(startfit),int(endfit))):
-        if fit.Eval(s)>0.999:
+        if fit.Eval(s)>0.999*fit.GetParameter(3):
 	  s999=s
       if chi_bin=="":
         legend.AddEntry(hist,"1<#chi<16 ("+str(s999)+")","le")

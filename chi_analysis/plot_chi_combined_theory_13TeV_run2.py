@@ -372,22 +372,18 @@ if __name__=="__main__":
         #    h14.SetBinError(b+1,h14.GetBinError(b+1)*h14.GetBinWidth(b+1))
 	origh14=h14.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebinorig",chi_binnings[massbin])
 	h14=rebin2(h14,len(chi_binnings[massbin])-1,chi_binnings[massbin])
-	    
-	hQCDraw=fData.Get("QCD#chi"+massbintext+"_rebin1_backup") # TEMPORARY BIN-BY-BIN UNFOLDING
-	hQCDsmear=fData.Get("QCD#chi"+massbintext+"_rebin1")
-	hQCDraw=hQCDraw.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebin",chi_binnings[massbin])
-	hQCDsmear=hQCDraw.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebin",chi_binnings[massbin])
-        for b in range(h14.GetXaxis().GetNbins()):
-            h14.SetBinContent(b+1,h14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-            h14.SetBinError(b+1,h14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-        h14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
-        for b in range(h14.GetXaxis().GetNbins()):
+	if unfoldedData:
+	  hQCDraw=fData.Get("QCD#chi"+massbintext+"_rebin1_backup") # TEMPORARY BIN-BY-BIN UNFOLDING
+	  hQCDsmear=fData.Get("QCD#chi"+massbintext+"_rebin1")
+	  hQCDraw=hQCDraw.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebin",chi_binnings[massbin])
+	  hQCDsmear=hQCDsmear.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebin",chi_binnings[massbin])
+          for b in range(h14.GetXaxis().GetNbins()):
             h14.SetBinContent(b+1,h14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
             h14.SetBinError(b+1,h14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
             origh14.SetBinContent(b+1,origh14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
             origh14.SetBinError(b+1,origh14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-        h14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
-        origh14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
+          h14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
+          origh14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
       
 	h14G=TGraphAsymmErrors(h14.Clone(histname+"G"))
 	new_hists+=[h14G]
@@ -689,8 +685,8 @@ if __name__=="__main__":
               hqbh.SetBinContent(b+1,hqbh.GetBinContent(b+1)/hqbh.GetBinWidth(b+1))
 
         if True: #FIX
-	  filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa3000-run2_chi.root"
-          histname='alp_QCD_fa3000#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+	  filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2500-run2_chi.root"
+          histname='alp_QCD_fa2500#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -757,7 +753,8 @@ if __name__=="__main__":
         h0Div=h0.Clone(h0.GetName()+"_ratio")
         h3newDiv=h3new.Clone(h3new.GetName()+"_ratio")
         h2newDiv=h2new.Clone(h2new.GetName()+"_ratio")
-        hNloQcdOldDiv=hNloQcdOld.Clone(hNloQcdOld.GetName()+"_ratio")
+	if oldTheory:
+          hNloQcdOldDiv=hNloQcdOld.Clone(hNloQcdOld.GetName()+"_ratio")
 
         h14GDiv=h14G.Clone(h14G.GetName()+"_ratio")
         h14GsysDiv=h14Gsys.Clone(h14Gsys.GetName()+"_ratio")
@@ -766,16 +763,18 @@ if __name__=="__main__":
         h0Div.Divide(h0)
         h3newDiv.Divide(h0)
         h2newDiv.Divide(h0)
-	hNloQcdOldDiv.Divide(h0)
+	if oldTheory:
+	  hNloQcdOldDiv.Divide(h0)
 	hDataDivs=[]
-	for hData2 in hDatas:
-         hData2Div=divideAsymErrors(hData2,h0,True)
-         hData2Div.SetMarkerStyle(hData2.GetMarkerStyle())
-         hData2Div.SetMarkerSize(hData2.GetMarkerSize())
-         hData2Div.SetMarkerColor(hData2.GetMarkerColor())
-         hData2Div.SetLineColor(hData2.GetLineColor())
-         hData2Div.SetLineWidth(hData2.GetLineWidth())
-	 hDataDivs+=[hData2Div]
+	if oldMeasurements:
+	 for hData2 in hDatas:
+          hData2Div=divideAsymErrors(hData2,h0,True)
+          hData2Div.SetMarkerStyle(hData2.GetMarkerStyle())
+          hData2Div.SetMarkerSize(hData2.GetMarkerSize())
+          hData2Div.SetMarkerColor(hData2.GetMarkerColor())
+          hData2Div.SetLineColor(hData2.GetLineColor())
+          hData2Div.SetLineWidth(hData2.GetLineWidth())
+	  hDataDivs+=[hData2Div]
         #print h14G.GetN(),h14G.Eval(1),h14G.Eval(1.5), h14.GetBinContent(1)
         #print h14G.GetX()[0], h14G.GetY()[0]
         h14GDiv=divideAsymErrors(h14G,h0,True)
@@ -844,8 +843,9 @@ if __name__=="__main__":
         h2new.Draw("histsame")
 	if oldTheory:
 	 hNloQcdOld.Draw("histsame")
-	for hData2 in hDatas:
-	 hData2.Draw("pzesame")
+	if oldMeasurements:
+	 for hData2 in hDatas:
+	  hData2.Draw("pzesame")
         h0.Draw("histsame")
 #        if massbin>=5: #FIX
 #            hci.Draw("histsame") #FIX
@@ -987,9 +987,10 @@ if __name__=="__main__":
     l2.SetMargin(0.33)
     if oldMeasurements:
       l2.AddEntry(h14G,"13 TeV 137/fb","ple")
-      for hData2 in hDatas:
-       if hData2.GetN()>0:
-        l2.AddEntry(hData2,measurements[hDatas.index(hData2)],"ple")
+      if oldMeasurements:
+       for hData2 in hDatas:
+        if hData2.GetN()>0:
+         l2.AddEntry(hData2,measurements[hDatas.index(hData2)],"ple")
     else:
       l2.AddEntry(h14G,"Data","ple")
     l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
@@ -1051,7 +1052,7 @@ if __name__=="__main__":
         #l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
         #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
     if signals:
-        l2.AddEntry(halp,"f_{a} = 3.0 TeV","l")
+        l2.AddEntry(halp,"f_{a} = 2.5 TeV","l")
         l2.AddEntry(htripleG,"C_{G}/#Lambda^{2} = 0.010 TeV","l")
     l2.SetFillStyle(0)
     l2.Draw("same")
@@ -1082,5 +1083,8 @@ if __name__=="__main__":
     #// writing the lumi information and the CMS "logo"
     CMS_lumi( c, iPeriod, iPos );
 
-    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+"_run2.pdf")
-    #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+"_run2.eps")
+    postfix=""
+    if not unfoldedData:
+      postfix="_detector"
+    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
+    #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")

@@ -22,6 +22,11 @@ gStyle.SetLabelSize(0.05, "XYZ")
 gStyle.SetNdivisions(506, "XYZ")
 gStyle.SetLegendBorderSize(0)
 
+prefire2016file=TFile.Open("L1prefiring_jetpt_2016BtoH.root")
+prefire2016=prefire2016file.Get("L1prefiring_jetpt_2016BtoH")
+prefire2017file=TFile.Open("L1prefiring_jetpt_2017BtoF.root")
+prefire2017=prefire2017file.Get("L1prefiring_jetpt_2017BtoF")
+
 def deltaPhi(phi1, phi2):
   deltaphi = phi2 - phi1
   if abs(deltaphi) > math.pi:
@@ -37,6 +42,13 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
     	files+=["dcap://dcache-cms-dcap.desy.de/"+sample+"/"+f]
     else:
       files=[sample]
+
+    if correctPrefire and "2016" in sample:
+      prefiremap=prefire2016
+    elif correctPrefire and "2017" in sample:
+      prefiremap=prefire2017
+    else:
+      prefiremap=None  
 
     print files
     
@@ -56,11 +68,15 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
     for massbin in massbins:
       plots += [TH1F(prefix+'y_{2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{2};N',25,-2.5,2.5)]
     for massbin in massbins:
+      plots += [TH1F(prefix+'#phi_{1}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#phi_{1};N',64,-3.1415,3.1415)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'#phi_{2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#phi_{2};N',64,-3.1415,3.1415)]
+    for massbin in massbins:
       plots += [TH1F(prefix+'METsumET'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';missing E_{T} / #sum E_{T};N',50,0,1)]
     for massbin in massbins:
       plots += [TH1F(prefix+'dPtsumPt'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';(p_{T1}-p_{T2})/(p_{T1}+p_{T2});N',25,0,0.5)]
     for massbin in massbins:
-      plots += [TH1F(prefix+'#Delta#phi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#Delta#phi;N',32,0,3.15)]
+      plots += [TH1F(prefix+'#Delta#phi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#Delta#phi;N',32,0,3.1415)]
     plots += [TH1F(prefix+'mass',';dijet mass;N',260,0,13000)]
     for c in range(len(chi_bins[0])-1):
       plots += [TH1F(prefix+'mass-reftrig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
@@ -84,12 +100,13 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
        print "error opening", f
        continue
      print f,nevents
-     #if event_count>100000: break ###
+     #if event_count>1000: break ###
      trigger_indices_len=0
      for event in events:
 	 #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
 	 #if event_count>100000 and not "QCD" in prefix: break ###
+	 #if event_count>1000: break
          if event_count%10000==1:
 	   print "event",event_count
 	 if len(event.HLT_isFired)!=trigger_indices_len:
@@ -110,6 +127,13 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          mjj=(jet1+jet2).M()
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
+	 weight=1.0
+	 if vetoHEM and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+	 if prefiremap:
+            if abs(jet1.Eta())>2:
+	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
+	    if abs(jet2.Eta())>2:
+	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
 	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
          if jet1.Pt()>13000: continue
@@ -121,26 +145,28 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	        passedHLT=True
 		break
 	    if passedHLT and mjj>=massbin[0] and mjj<massbin[1]:
-               plots[irec].Fill(chi)
-               plots[irec+1*len(massbins)].Fill(yboost)
-               plots[irec+2*len(massbins)].Fill(jet1.Pt())
-               plots[irec+3*len(massbins)].Fill(jet2.Pt())
-               plots[irec+4*len(massbins)].Fill(jet1.Rapidity())
-               plots[irec+5*len(massbins)].Fill(jet2.Rapidity())
-               plots[irec+6*len(massbins)].Fill(event.MET_et/event.MET_sumEt)
-               plots[irec+7*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()))
-               plots[irec+8*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()))
+               plots[irec].Fill(chi,weight)
+               plots[irec+1*len(massbins)].Fill(yboost,weight)
+               plots[irec+2*len(massbins)].Fill(jet1.Pt(),weight)
+               plots[irec+3*len(massbins)].Fill(jet2.Pt(),weight)
+               plots[irec+4*len(massbins)].Fill(jet1.Rapidity(),weight)
+               plots[irec+5*len(massbins)].Fill(jet2.Rapidity(),weight)
+               plots[irec+6*len(massbins)].Fill(jet1.Phi(),weight)
+               plots[irec+7*len(massbins)].Fill(jet2.Phi(),weight)
+               plots[irec+8*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
+               plots[irec+9*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
+               plots[irec+10*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
 	    irec+=1
-         irec=9*len(massbins)
-	 plots[irec].Fill(mjj)
+         irec=11*len(massbins)
+	 plots[irec].Fill(mjj,weight)
 	 irec+=1
          for i in trigger_indices[len(massbins)]:
           if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
             for c in range(len(chi_bins[0])-1):
               if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
-                plots[irec].Fill(mjj)
+                plots[irec].Fill(mjj,weight)
               irec+=1
-            plots[irec].Fill(mjj)
+            plots[irec].Fill(mjj,weight)
             irec+=1
             for t in range(len(triggers)-len(massbins)-1):
               passHLT=False
@@ -151,9 +177,9 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
               if passHLT:  
                 for c in range(len(chi_bins[0])-1):
                   if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
-                    plots[irec].Fill(mjj)
+                    plots[irec].Fill(mjj,weight)
                   irec+=1
-                plots[irec].Fill(mjj)
+                plots[irec].Fill(mjj,weight)
                 irec+=1
 	      else:
 	        irec+=len(chi_bins[0])
@@ -166,6 +192,8 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 if __name__ == '__main__':
 
     wait=False
+    vetoHEM=False
+    correctPrefire=False
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -389,6 +417,12 @@ if __name__ == '__main__':
         if "HT" in s: name=s
       samples=[(samples[0][0],"-"+name,"dcap://dcache-cms-dcap.desy.de/"+samples[0][2]+"/"+folders[int(sys.argv[2])])]
  
+    if len(sys.argv)>3:
+      if "HEM" in sys.argv[3]:
+        vetoHEM=True
+      if "L1Prefire" in sys.argv[3]:
+        correctPrefire=True
+
     chi_binnings=[]
     for mass_bin in chi_bins:
         chi_binnings+=[array.array('d')]
@@ -399,6 +433,10 @@ if __name__ == '__main__':
 
     for prefix,postfix,files in samples:
       plots=[createPlots(files,prefix,triggers[samples.index((prefix,postfix,files))],massbins,chi_bins)]
+      if vetoHEM:
+        postfix+="-HEM"
+      if correctPrefire:
+        postfix+="-L1prefire"
 
       out=TFile(prefix+postfix + '_chi.root','RECREATE')
       for j in range(len(massbins)):
