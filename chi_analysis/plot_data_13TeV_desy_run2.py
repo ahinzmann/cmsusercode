@@ -128,7 +128,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
 	 weight=1.0
-	 if vetoHEM and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+	 if vetoHEM and (event.EVENT_run>=319077) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
 	 if prefiremap:
             if abs(jet1.Eta())>2:
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
@@ -160,6 +160,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          irec=11*len(massbins)
 	 plots[irec].Fill(mjj,weight)
 	 irec+=1
+	 if not trigger_indices.has_key(len(massbins)): continue # for MC
          for i in trigger_indices[len(massbins)]:
           if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
             for c in range(len(chi_bins[0])-1):
@@ -229,6 +230,8 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2016_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2016"),
             ("datacard_shapelimit13TeV_run2_2017_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2017"),
             ("datacard_shapelimit13TeV_run2_2018_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2018"),
+            ("datacard_shapelimit13TeV_run2_2018_QCDpythia","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdpy2018"),
+            ("datacard_shapelimit13TeV_run2_2018_QCDherwig","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdhw2018"),
             ("datacard_shapelimit13TeV_run2_2016_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2016"),
             ("datacard_shapelimit13TeV_run2_2017_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2017"),
             ("datacard_shapelimit13TeV_run2_2018_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2018"),
@@ -306,6 +309,32 @@ if __name__ == '__main__':
           [],
          ],
 	  [[], #QCD 2018
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], #QCD Py 2018
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], #QCD Hw 2018
           [],
           [],
           [],
@@ -420,7 +449,7 @@ if __name__ == '__main__':
     if len(sys.argv)>3:
       if "HEM" in sys.argv[3]:
         vetoHEM=True
-      if "L1Prefire" in sys.argv[3]:
+      if "L1prefire" in sys.argv[3]:
         correctPrefire=True
 
     chi_binnings=[]

@@ -59,7 +59,7 @@
 #*********************************************************************
 # Matching - Warning! ickkw > 1 is still beta
 #*********************************************************************
- 0        = ickkw            ! 0 no matching, 1 MLM, 2 CKKW matching
+ 1        = ickkw            ! 0 no matching, 1 MLM, 2 CKKW matching
  1        = highestmult      ! for ickkw=2, highest mult group
  1        = ktscheme         ! for ickkw=1, 1 Durham kT, 2 Pythia pTE
  1        = alpsfact         ! scale factor for QCD emission vx
@@ -95,11 +95,12 @@
 #*******************                                                 
 # Standard Cuts
 #*******************                                                 
-#                                                                    
+#-1  = jetalgo ! FastJet jet algorithm (1=kT, 0=C/A, -1=anti-kT)
+#0.4 = jetradius ! The radius parameter for the jet algorithm
 #*********************************************************************
 # Minimum and maximum pt's (for max, -1 means no cut)                *
 #*********************************************************************
- 30.0 = ptj       ! minimum pt for the jets 
+100.0 = ptj       ! minimum pt for the jets 
   0  = ptb       ! minimum pt for the b 
  10  = pta       ! minimum pt for the photons 
  10  = ptl       ! minimum pt for the charged leptons 
@@ -125,7 +126,7 @@
 #*********************************************************************
 # Maximum and minimum absolute rapidity (for max, -1 means no cut)   *
 #*********************************************************************
-   5  = etaj    ! max rap for the jets 
+   3  = etaj    ! max rap for the jets 
   -1  = etab    ! max rap for the b
  2.5  = etaa    ! max rap for the photons 
  2.5  = etal    ! max rap for the charged leptons 
@@ -188,8 +189,8 @@
 #*********************************************************************
 # Control the pt's of the jets sorted by pt                          *
 #*********************************************************************
- 0   = ptj1min ! minimum pt for the leading jet in pt
- 0   = ptj2min ! minimum pt for the second jet in pt
+ 100   = ptj1min ! minimum pt for the leading jet in pt
+ 100   = ptj2min ! minimum pt for the second jet in pt
  0   = ptj3min ! minimum pt for the third jet in pt
  0   = ptj4min ! minimum pt for the fourth jet in pt
  -1  = ptj1max ! maximum pt for the leading jet in pt 

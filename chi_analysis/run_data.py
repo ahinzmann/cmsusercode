@@ -1,24 +1,29 @@
 import os
 
-samples=[#(2016,0,74,""),
-         #(2017,1,47,""),
-	 #(2018,2,120,""),
-	 #(2018,2,120,"HEM"),
-	 (2016,0,74,"L1Prefire"),
-         (2017,1,47,"L1Prefire"),
+samples=[#("data2016",0,74,""),
+         #("data2017",1,47,""),
+	 #("data2018",2,120,""),
+	 #("data2018",2,120,"-HEM"),
+	 #("data2016",0,74,"-L1prefire"),
+         #("data2017",1,47,"-L1prefire"),
+	 #("QCD2016",3,7,""),
+	 #("QCD2017",4,7,""),
+	 #("QCD2018",5,7,""),
+	 ("QCDpy2018",6,1,""),
+	 ("QCDhw2018",7,1,""),
 	 ]
 
 count=0
 
 for year,number,ns,postfix in samples:
   for n in range(ns):
-    name="run_data"+str(year)+"_"+str(n)+postfix
+    name="run_"+str(year)+"_"+str(n)+postfix
     with open(name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 cmsenv
-python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix+"""
+python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
 """)
     with open(name+".submit",'w+') as htc_config:
             htc_config.write("""
@@ -28,13 +33,13 @@ universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
 initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
-output            = datacard_shapelimit13TeV_run2_"""+str(year)+"""-"""+str(n)+"""-"""+postfix+"""_chi.root
-error             = name.e
-log               = name.log
+output            = """+name+""".o
+error             = """+name+""".e
+log               = """+name+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
 +RequestRuntime   = 170000
 #RequestMemory     = 10G
-JobBatchName      = run_data"""+str(year)+postfix+"""
+JobBatchName      = run_"""+str(year)+postfix+"""
 #RequestDisk       = 10G
 getenv            = True
 executable        = /usr/bin/sh

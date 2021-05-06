@@ -13,21 +13,21 @@ gridpack_path = '/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsuse
 gridpack_suffix = '_slc7_amd64_gcc700_CMSSW_10_6_19_tarball.tar.xz'
 
 names=[
-    #'tripleG_QCD_Mjj200to1000',
-    #'tripleG_QCD_Mjj1000to2000',
-    #'tripleG_QCD_Mjj2000to4000',
-    #'tripleG_QCD_Mjj4000toInf',
-    #'alp_QCD_Mjj200to1000',
-    #'alp_QCD_Mjj1000to2000',
-    #'alp_QCD_Mjj2000to4000',
-    #'alp_QCD_Mjj4000toInf',
-    'QCD_Mjj200to1000',
-    'QCD_Mjj1000to2000',
-    'QCD_Mjj2000to4000',
-    'QCD_Mjj4000toInf',
+    #'tripleG_QCD_HT200to1000',
+    #'tripleG_QCD_HT1000to2000',
+    #'tripleG_QCD_HT2000to4000',
+    #'tripleG_QCD_HT4000toInf',
+    'alp_QCD_HT200to1000',
+    'alp_QCD_HT1000to2000',
+    'alp_QCD_HT2000to4000',
+    'alp_QCD_HT4000toInf',
+    #'QCD_HT200to1000',
+    #'QCD_HT1000to2000',
+    #'QCD_HT2000to4000',
+    #'QCD_HT4000toInf',
 ]
 
-workdir='/nfs/dust/cms/user/hinzmann/dijetangular/newsamples10/'
+workdir='/nfs/dust/cms/user/hinzmann/dijetangular/newsamples23/'
 
 if(options.clean):
     print('deleting workdirs..')

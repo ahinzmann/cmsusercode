@@ -849,6 +849,9 @@ kmax """+str(2+correlatedModelUncertainties+len(massbins)*uncorrelatedModelUncer
       text+="\njer shape "
       for i in range(len(massbins)):
          text+="1 1 - "
+    text+="\nprefire shape "
+    for i in range(len(massbins)):
+        text+="1 1 - "
     text+="\npdf shape "
     for i in range(len(massbins)):
       if includeSignalTheoryUncertainties:

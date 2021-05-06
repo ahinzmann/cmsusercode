@@ -21,8 +21,10 @@ gStyle.SetLegendBorderSize(0)
 
 if __name__ == '__main__':
 
-   variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","METsumET","dPtsumPt","#Delta#phi"]
-   label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","missing E_{T} / #sum E_{T}","(p_{T1}-p_{T2})/(p_{T1}+p_{T2})","#Delta#phi"]
+   variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#phi_{1}","#phi_{2}","METsumET","dPtsumPt","#Delta#phi"]
+   label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","#phi_{1}","#phi_{2}","missing E_{T} / #sum E_{T}","(p_{T1}-p_{T2})/(p_{T1}+p_{T2})","#Delta#phi"]
+   #variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","METsumET","dPtsumPt","#Delta#phi"]
+   #label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","missing E_{T} / #sum E_{T}","(p_{T1}-p_{T2})/(p_{T1}+p_{T2})","#Delta#phi"]
    #variables=["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#Delta#phi"]
    #label=["#chi","y_{boost}","p_{T1} [GeV]","p_{T2} [GeV]","y_{1}","y_{2}","#Delta#phi"]
 
@@ -60,7 +62,8 @@ if __name__ == '__main__':
             chi_binnings[-1].append(chi_bin)
    
    prefix="datacard_shapelimit13TeV_run2_"
-   postfix="_run2"
+   version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
+   #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
 
    data=["2016",
          ]
@@ -96,11 +99,11 @@ if __name__ == '__main__':
    f_data2=[]
    f_data3=[]
    for name in data:
-      f_data+=[TFile.Open(prefix+name+"_chi.root")]
+      f_data+=[TFile.Open(prefix+name+postfix1617+"_chi.root")]
    for name in data2:
-      f_data2+=[TFile.Open(prefix+name+"_chi.root")]
+      f_data2+=[TFile.Open(prefix+name+postfix1617+"_chi.root")]
    for name in data3:
-      f_data3+=[TFile.Open(prefix+name+"_chi.root")]
+      f_data3+=[TFile.Open(prefix+name+postfix18+"_chi.root")]
    lumi=[36.33,41.53,59.74]
    f_mc=[]
    f_mc2=[]
@@ -138,16 +141,17 @@ if __name__ == '__main__':
      hist=f_data[0].Get(prefix+data[0]+var)
      for i in range(1,len(data)):
     	 hist.Add(f_data[i].Get(prefix+data[i]+var))
-     hist.Scale(1./lumi[0])
+     normfactor=hist.Integral(hist.FindBin(2400),hist.FindBin(8400))
+     hist.Scale(1./normfactor)
      hist.SetLineColor(1)
      hist.SetMarkerStyle(24)
      hist.SetMarkerColor(1)
      hist.SetMarkerSize(0.2)
      hist.SetTitle("")
      hist.GetXaxis().SetLabelColor(0)
-     hist.GetYaxis().SetTitle("d#sigma/dm [fb/GeV]")
+     hist.GetYaxis().SetTitle("Normalized distribution")
      hist.GetXaxis().SetRangeUser(2400,8400)
-     hist.GetYaxis().SetRangeUser(0.5,hist.GetMaximum()*1.5)
+     hist.GetYaxis().SetRangeUser(0.5/normfactor,hist.GetMaximum()*1.5)
      hist.GetXaxis().SetTitleOffset(1.1)
      hist.GetYaxis().SetTitleOffset(1.1)
      hist.GetXaxis().SetLabelSize(0.05)
@@ -161,7 +165,7 @@ if __name__ == '__main__':
      hist2=f_data2[0].Get(prefix+data2[0]+var)
      for i in range(1,len(data2)):
     	 hist2.Add(f_data2[i].Get(prefix+data2[i]+var))
-     hist2.Scale(1./lumi[1])
+     hist2.Scale(1./hist2.Integral(hist2.FindBin(2400),hist2.FindBin(8400)))
      hist2.SetLineColor(2)
      hist2.SetMarkerStyle(25)
      hist2.SetMarkerColor(2)
@@ -173,7 +177,7 @@ if __name__ == '__main__':
      hist3=f_data3[0].Get(prefix+data3[0]+var)
      for i in range(1,len(data3)):
     	 hist3.Add(f_data3[i].Get(prefix+data3[i]+var))
-     hist3.Scale(1./lumi[2])
+     hist3.Scale(1./hist3.Integral(hist3.FindBin(2400),hist3.FindBin(8400)))
      hist3.SetLineColor(4)
      hist3.SetMarkerStyle(26)
      hist3.SetMarkerColor(4)
@@ -270,7 +274,7 @@ if __name__ == '__main__':
      ddratio.GetYaxis().SetTitleOffset(0.5)
      ddratio.SetMarkerSize(0.1)
      ddratio.GetYaxis().SetLabelSize(0.13)
-     ddratio.GetYaxis().SetRangeUser(0,2)
+     ddratio.GetYaxis().SetRangeUser(0.8,1.2)
      ddratio.GetXaxis().SetNdivisions(506)
      ddratio.GetYaxis().SetNdivisions(503)
      ddratio.GetXaxis().SetLabelColor(1)
@@ -296,8 +300,8 @@ if __name__ == '__main__':
      canvas.cd(1)
      hist.GetYaxis().SetTitleOffset(1.2)
      
-     canvas.SaveAs("chi_control_plots_mass"+postfix+".root")
-     canvas.SaveAs("chi_control_plots_mass"+postfix+".pdf")
+     canvas.SaveAs("chi_control_plots_mass"+version+".root")
+     canvas.SaveAs("chi_control_plots_mass"+version+".pdf")
 
    for var in variables:
     log=(var=="p_{T1}" or var=="p_{T2}" or var=="METsumET" or var=="#Delta#phi")
@@ -331,12 +335,15 @@ if __name__ == '__main__':
         hist=f_data[0].Get(name)
         for i in range(1,len(data)):
             hist.Add(f_data[i].Get(name))
+	print "mass bin",mass,"data 2016 integral",hist.Integral()
 	if var=="#chi":
             hist=hist.Rebin(len(chi_binnings[mass])-1,hist.GetName()+"_rebin1",chi_binnings[mass])
  	    for b in range(hist.GetNbinsX()):
 	       hist.SetBinContent(b+1,hist.GetBinContent(b+1)/hist.GetBinWidth(b+1))
 	       hist.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinWidth(b+1))
-       	hist.SetLineColor(1)
+       	if var.startswith("#phi"):
+	   hist=hist.Rebin(2)
+	hist.SetLineColor(1)
         hist.SetMarkerStyle(24)
         hist.SetMarkerSize(0.2)
 	miny=0
@@ -363,11 +370,14 @@ if __name__ == '__main__':
         hist2=f_data2[0].Get(name)
         for i in range(1,len(data2)):
             hist2.Add(f_data2[i].Get(name))
+	print "mass bin",mass,"data 2017 integral",hist2.Integral()
 	if var=="#chi":
             hist2=hist2.Rebin(len(chi_binnings[mass])-1,hist2.GetName()+"_rebin1",chi_binnings[mass])
  	    for b in range(hist2.GetNbinsX()):
 	       hist2.SetBinContent(b+1,hist2.GetBinContent(b+1)/hist2.GetBinWidth(b+1))
 	       hist2.SetBinError(b+1,hist2.GetBinError(b+1)/hist2.GetBinWidth(b+1))
+       	if var.startswith("#phi"):
+	   hist2=hist2.Rebin(2)
       	hist2.SetLineColor(2)
         hist2.SetMarkerStyle(25)
         hist2.SetMarkerColor(2)
@@ -386,11 +396,14 @@ if __name__ == '__main__':
         hist3=f_data3[0].Get(name)
         for i in range(1,len(data3)):
             hist3.Add(f_data3[i].Get(name))
+	print "mass bin",mass,"data 2018 integral",hist3.Integral()
 	if var=="#chi":
             hist3=hist3.Rebin(len(chi_binnings[mass])-1,hist3.GetName()+"_rebin1",chi_binnings[mass])
  	    for b in range(hist3.GetNbinsX()):
 	       hist3.SetBinContent(b+1,hist3.GetBinContent(b+1)/hist3.GetBinWidth(b+1))
 	       hist3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinWidth(b+1))
+       	if var.startswith("#phi"):
+	   hist3=hist3.Rebin(2)
       	hist3.SetLineColor(4)
         hist3.SetMarkerStyle(25)
         hist3.SetMarkerColor(4)
@@ -404,8 +417,6 @@ if __name__ == '__main__':
         hist3.Draw("pesame")
         legend.AddEntry(hist3,"Data (2018)","lpe")
 
-	print "mass bin",mass,"data integral",hist.Integral()
-
         name=prefix+mc[0][0].replace("-HT200to300","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
      	hist_mc=f_mc[0].Get(name)
@@ -416,6 +427,8 @@ if __name__ == '__main__':
  	    for b in range(hist_mc.GetNbinsX()):
 	       hist_mc.SetBinContent(b+1,hist_mc.GetBinContent(b+1)/hist_mc.GetBinWidth(b+1))
 	       hist_mc.SetBinError(b+1,hist_mc.GetBinError(b+1)/hist_mc.GetBinWidth(b+1))
+       	if var.startswith("#phi"):
+	   hist_mc=hist_mc.Rebin(2)
 	if hist_mc.Integral()>0:
             hist_mc.Scale(hist.Integral()/hist_mc.Integral())
       	hist_mc.SetLineColor(1)
@@ -433,6 +446,8 @@ if __name__ == '__main__':
  	    for b in range(hist_mc2.GetNbinsX()):
 	       hist_mc2.SetBinContent(b+1,hist_mc2.GetBinContent(b+1)/hist_mc2.GetBinWidth(b+1))
 	       hist_mc2.SetBinError(b+1,hist_mc2.GetBinError(b+1)/hist_mc2.GetBinWidth(b+1))
+       	if var.startswith("#phi"):
+	   hist_mc2=hist_mc2.Rebin(2)
 	if hist_mc2.Integral()>0:
             hist_mc2.Scale(hist2.Integral()/hist_mc2.Integral())
       	hist_mc2.SetLineColor(2)
@@ -450,6 +465,8 @@ if __name__ == '__main__':
  	    for b in range(hist_mc3.GetNbinsX()):
 	       hist_mc3.SetBinContent(b+1,hist_mc3.GetBinContent(b+1)/hist_mc3.GetBinWidth(b+1))
 	       hist_mc3.SetBinError(b+1,hist_mc3.GetBinError(b+1)/hist_mc3.GetBinWidth(b+1))
+       	if var.startswith("#phi"):
+	   hist_mc3=hist_mc3.Rebin(2)
 	if hist_mc3.Integral()>0:
             hist_mc3.Scale(hist3.Integral()/hist_mc3.Integral())
       	hist_mc3.SetLineColor(4)
@@ -479,7 +496,9 @@ if __name__ == '__main__':
      	ratio.SetMarkerSize(0.1)
      	ratio.GetYaxis().SetLabelSize(0.2)
      	ratio.GetYaxis().SetRangeUser(0,2)
-	if var=="#chi":
+	if var=="#chi" and mass<=7:
+	  ratio.GetYaxis().SetRangeUser(0.5,1.5)
+	if var=="#chi" and mass<=5:
 	  ratio.GetYaxis().SetRangeUser(0.8,1.2)
      	ratio.GetXaxis().SetNdivisions(506)
      	ratio.GetYaxis().SetNdivisions(503)
@@ -521,8 +540,12 @@ if __name__ == '__main__':
      	ddratio.SetMarkerSize(0.1)
      	ddratio.GetYaxis().SetLabelSize(0.13)
      	ddratio.GetYaxis().SetRangeUser(0,2)
-	if var=="#chi":
-	  ddratio.GetYaxis().SetRangeUser(0.8,1.2)
+	if var in ["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#phi_{1}","#phi_{2}"] and mass<=7:
+	  ddratio.GetYaxis().SetRangeUser(0.5,1.5)
+	if var=="#chi" and mass<=5:
+	  ddratio.GetYaxis().SetRangeUser(0.9,1.1)
+	if var=="#chi" and mass<=4:
+	  ddratio.GetYaxis().SetRangeUser(0.95,1.05)
      	ddratio.GetXaxis().SetNdivisions(506)
      	ddratio.GetYaxis().SetNdivisions(503)
      	ddratio.GetXaxis().SetLabelColor(1)
@@ -548,5 +571,5 @@ if __name__ == '__main__':
         canvas.cd(1)
         hist.GetYaxis().SetTitleOffset(1.2)
 
-        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".root")
-        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".pdf")
+        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".root")
+        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".pdf")

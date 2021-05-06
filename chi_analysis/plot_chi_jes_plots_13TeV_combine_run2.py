@@ -26,9 +26,9 @@ if __name__ == '__main__':
    label="#chi"
    
    lumifactor={}
-   lumifactor["2016"]=35.92/137.42
-   lumifactor["2017"]=41.53/137.42
-   lumifactor["2018"]=59.97/137.42
+   lumifactor["2016"]=36.33/137.6
+   lumifactor["2017"]=41.53/137.6
+   lumifactor["2018"]=59.74/137.6
 
    samples=[("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
      	    ("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),

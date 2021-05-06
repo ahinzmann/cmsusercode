@@ -722,15 +722,15 @@ if __name__ == '__main__':
       # data file
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
-      insample="datacard_shapelimit13TeV_run2_2016_chi.root" # Aug rereco
+      insample="datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
       print insample
       infile=TFile(insample,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
-      insample17="datacard_shapelimit13TeV_run2_2017_chi.root"
+      insample17="datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
       print insample17
       infile17=TFile(insample17,'READ')
       #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
-      insample18="datacard_shapelimit13TeV_run2_2018_chi.root"
+      insample18="datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
       print insample18
       infile18=TFile(insample18,'READ')
 
@@ -846,6 +846,23 @@ if __name__ == '__main__':
             jercihists[str(j)+source]+=[a for a in jer.GetListOfPrimitives() if source in str(a)]
           if len(jercihists[str(j)+source])!=2:
 	    print "JER source not found", source
+	    error
+
+      # prefire uncertainty
+      prefirefiles=[]
+      filename1prefire="chi_systematic_plotschi_run2prefire_13TeV_run2.root"
+      print filename1prefire
+      prefirefiles += [TFile.Open(filename1prefire)]
+      closefiles+=[prefirefiles[-1]]
+      prefirehists={}
+      for j in range(len(massbins)):
+          prefirehists[str(j)]=[]
+	  for prefirefile in prefirefiles:
+	    prefirepad=prefirefile.Get("prefire")
+            prefire=prefirepad.GetListOfPrimitives()[j+useUnfoldedData*1]
+            prefirehists[str(j)]+=[a for a in prefire.GetListOfPrimitives() if "TF1" in str(a)]
+          if len(prefirehists[str(j)])!=2:
+	    print "prefire source not found"
 	    error
 
       canvas = TCanvas("","",0,0,800,600)
@@ -1362,6 +1379,45 @@ if __name__ == '__main__':
           jerup.Write()
           jerdown.Write()
 
+        # prefire uncertainty
+        histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+        clone=ci.Clone(histname)
+        clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+        ciprefireup=clone.Clone(histname+"_prefireUp")
+        ciprefiredown=clone.Clone(histname+"_prefireDown")
+        for b in range(clone.GetNbinsX()):
+            ciprefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+            ciprefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+        ciprefireup.SetLineColor(38)
+        ciprefireup.SetLineStyle(2)
+        ciprefiredown.SetLineColor(38)
+        ciprefiredown.SetLineStyle(3)
+        out.cd()
+        for k in range(0,200):
+            out.Delete(histname+"_prefireUp"+";"+str(k))
+            out.Delete(histname+"_prefireDown"+";"+str(k))
+        ciprefireup.Write()
+        ciprefiredown.Write()
+
+        histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+        clone=alt.Clone(histname)
+        clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+        prefireup=clone.Clone(histname+"_prefireUp")
+        prefiredown=clone.Clone(histname+"_prefireDown")
+	for b in range(clone.GetNbinsX()):
+            prefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.0+0.2*(1.0-prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))))
+            prefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.0+0.2*(1.0-prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))))
+        prefireup.SetLineColor(38)
+        prefireup.SetLineStyle(2)
+        prefiredown.SetLineColor(38)
+        prefiredown.SetLineStyle(3)
+        out.cd()
+        for k in range(0,200):
+            out.Delete(histname+"_prefireUp"+";"+str(k))
+            out.Delete(histname+"_prefireDown"+";"+str(k))
+        prefireup.Write()
+        prefiredown.Write()
+
         # NLO PDFup/down
         nloPDFupqcd=None
         for k in mass_bins_nlo_list[j]:
@@ -1670,6 +1726,13 @@ if __name__ == '__main__':
         jerdown=cloneNormalize(jerdown)
         plots+=[jerdown]
         jerdown.Draw("hesame")
+        prefireup=cloneNormalize(prefireup)
+        plots+=[prefireup]
+        prefireup.Draw("hesame")
+        legend1.AddEntry(prefireup,"prefire","l")
+        prefiredown=cloneNormalize(prefiredown)
+        plots+=[prefiredown]
+        prefiredown.Draw("hesame")
         pdfup=cloneNormalize(pdfup)
         plots+=[pdfup]
         pdfup.Draw("hesame")
@@ -1710,6 +1773,12 @@ if __name__ == '__main__':
          cijerdown=cloneNormalize(cijerdown)
          plots+=[cijerdown]
          cijerdown.Draw("hesame")
+         ciprefireup=cloneNormalize(ciprefireup)
+         plots+=[ciprefireup]
+         ciprefireup.Draw("hesame")
+         ciprefiredown=cloneNormalize(ciprefiredown)
+         plots+=[ciprefiredown]
+         ciprefiredown.Draw("hesame")
          cipdfup=cloneNormalize(cipdfup)
          plots+=[cipdfup]
          cipdfup.Draw("hesame")
@@ -1850,6 +1919,7 @@ if __name__ == '__main__':
 	    for n in range(len(jersources)-1):
 	      syss+=["jer"+str(n+1)]
 	      skipInSum+=["jer"+str(n+1)]
+	    syss+=["prefire"]
 	    syss+=["scaleAlt"]
             syss+=["scale","scaleMuR","scaleMuF"]
 	    skipInSum+=["scale","scaleMuR","scaleMuF"]

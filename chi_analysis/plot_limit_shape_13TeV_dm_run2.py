@@ -536,7 +536,7 @@ if __name__=="__main__":
     leg2.SetTextSize(0.06)
     # lumi
     lumiPos=max_x_new-1450/1000.
-    leg3=TLatex(lumiPos,ymax+0.03,"137 fb^{-1} (13 TeV)")
+    leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)
     leg2.Draw("same")

@@ -22,7 +22,7 @@ universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
 initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
-output            = datacard_shapelimit13TeV_"""+samplename+"""_"""+fa+"""-run2_chi.root
+output            = """+samplename+"""_"""+fa+""".o
 error             = """+samplename+"""_"""+fa+""".e
 log               = """+samplename+"""_"""+fa+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered

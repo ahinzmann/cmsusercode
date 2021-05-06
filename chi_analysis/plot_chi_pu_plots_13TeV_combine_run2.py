@@ -29,9 +29,9 @@ if __name__ == '__main__':
    label="#chi"
    
    lumifactor={}
-   lumifactor["2016"]=35.92/137.42
-   lumifactor["2017"]=41.53/137.42
-   lumifactor["2018"]=59.97/137.42
+   lumifactor["2016"]=36.33/137.60
+   lumifactor["2017"]=41.53/137.60
+   lumifactor["2018"]=59.74/137.60
 
    mc={}
    mc["2016"]=[("2016_QCDmadgraph-HT200to300",1712000./56709875),

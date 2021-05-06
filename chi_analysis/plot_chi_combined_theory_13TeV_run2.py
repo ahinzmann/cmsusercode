@@ -961,13 +961,13 @@ if __name__=="__main__":
     #l5.Draw("same")
     new_hists+=[l5]
      
-    l=TLegend(0.7,0.82,1.0,0.82,"L = 137 fb^{-1}")
+    l=TLegend(0.7,0.82,1.0,0.82,"L = 138 fb^{-1}")
     l.SetTextSize(0.035)
     l.SetFillStyle(0)
     #l.Draw("same")
     new_hists+=[l]
     
-    banner=TLatex(0.33,0.96,"CMS,   L = 137 fb^{-1},   #sqrt{s} = 13 TeV")
+    banner=TLatex(0.33,0.96,"CMS,   L = 138 fb^{-1},   #sqrt{s} = 13 TeV")
     banner.SetNDC()
     banner.SetTextSize(0.035)
     #banner.Draw()
@@ -986,7 +986,7 @@ if __name__=="__main__":
     l2.SetTextSize(0.033)
     l2.SetMargin(0.33)
     if oldMeasurements:
-      l2.AddEntry(h14G,"13 TeV 137/fb","ple")
+      l2.AddEntry(h14G,"13 TeV 138/fb","ple")
       if oldMeasurements:
        for hData2 in hDatas:
         if hData2.GetN()>0:

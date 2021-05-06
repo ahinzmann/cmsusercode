@@ -34,11 +34,21 @@ def createPlots(sample,prefix,weightname,massbins):
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
 	for folderM in foldersM:
 	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "newsamples0" in folderM: continue
+	 if not "newsamples2" in folderM: continue
          folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
 	 for folder in folders:
 	  if sample in folder and ".root" in folder:
             files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample+"/"+folder]
+	    #break
+      elif "qcd" in prefix:
+        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
+	for folderM in foldersM:
+	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")): continue
+	 if not "newsamples1" in folderM: continue
+         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_",""))
+	 for folder in folders:
+	  if sample.replace("qcd_","") in folder and ".root" in folder:
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")+"/"+folder]
 	    #break
       elif "tripleG" in prefix:
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
@@ -71,6 +81,7 @@ def createPlots(sample,prefix,weightname,massbins):
     for massbin in massbins:
       plots += [TH1F(prefix+'#chi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#chi;N',15,1,16)]
       #plots += [TH1F(prefix+'y_{boost}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{boost};N',20,0,2)]
+    plots += [TH1F(prefix+'mass',';dijet mass;N',260,0,13000)]
     
     for plot in plots:
         plot.Sumw2()
@@ -88,11 +99,14 @@ def createPlots(sample,prefix,weightname,massbins):
     sumweights=0
     firstxsec=0
     for event in events:
-         if "DM" in prefix or "alp" in prefix or "tripleG" in prefix:
+         if "DM" in prefix or "alp" in prefix or "qcd" in prefix or "tripleG" in prefix:
 	  xsec=event.LHEEventProduct_externalLHEProducer__GEN.product().originalXWGTUP()*1000. # convert to pb
 	  if firstxsec>0 and xsec!=firstxsec:
 	     print "inconsistent xsec",firstxsec,xsec
-	     inconsistent
+	     firstxsec=xsec
+	  if firstxsec==0:
+	     firstxsec=xsec
+	     print "xsec", xsec
 	  #weights=[(w.id,w.wgt) for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights()]
 	  #print weights
 	  try:
@@ -104,7 +118,7 @@ def createPlots(sample,prefix,weightname,massbins):
 	  xsec=weightname
 	  weight=1.
 	 event_count+=1
-	 #if event_count>1000: break
+	 #if event_count>10000: break
          if event_count%10000==1: print "event",event_count
 	 sumweights+=weight
          jet1=TLorentzVector()
@@ -125,6 +139,7 @@ def createPlots(sample,prefix,weightname,massbins):
             if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
                plots[irec].Fill(chi,weight)
 	    irec+=1
+	 plots[irec].Fill(mjj,weight)
     print sample,weightname,"acceptance",acceptance/sumweights, "xsec",xsec*sumweights/event_count
     for plot in plots:
       if event_count>0:
@@ -149,6 +164,9 @@ if __name__ == '__main__':
        elif "alp" in point:
          weights=['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
+       elif "qcd" in point:
+         weights=['default']
+         prefix="datacard_shapelimit13TeV_"+point+"-run2"
        elif "tripleG" in point:
          weights=["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p0075","CG0p005","CG0p0025","CG0p0"]
          prefix="datacard_shapelimit13TeV_"+point+"_"+weights[nxsec]+"-run2"
@@ -517,10 +535,17 @@ if __name__ == '__main__':
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
-       samples=[(""+point+"_"+weights[nxsec],[(point+"_Mjj200to1000",weights[nxsec]),
-                                              (point+"_Mjj1000to2000",weights[nxsec]),
-                                              (point+"_Mjj2000to4000",weights[nxsec]),
-                                              (point+"_Mjj4000toInf",weights[nxsec]),
+       samples=[(""+point+"_"+weights[nxsec],[(point+"_HT200to1000",weights[nxsec]),
+                                              (point+"_HT1000to2000",weights[nxsec]),
+                                              (point+"_HT2000to4000",weights[nxsec]),
+                                              (point+"_HT4000toInf",weights[nxsec]),
+                                              ]),
+	       ]
+    elif "qcd" in prefix:
+       samples=[(""+point,[(point+"_HT200to1000",weights[nxsec]),
+                                              (point+"_HT1000to2000",weights[nxsec]),
+                                              (point+"_HT2000to4000",weights[nxsec]),
+                                              (point+"_HT4000toInf",weights[nxsec]),
                                               ]),
 	       ]
     elif "QCD" in prefix:
@@ -557,15 +582,11 @@ if __name__ == '__main__':
       i=0
       for filename,xsec in files:
         i+=1
-	if "DM" in prefix or "alp" in prefix or "tripleG" in prefix:
+	if "DM" in prefix or "alp" in prefix or "qcd" in prefix or "tripleG" in prefix:
           ps=createPlots(filename,name,xsec,massbins)
-	#elif ("alp" in prefix or "tripleG" in prefix) and "HT2000" in filename:
-        #  ps=createPlots(filename,name,xsec,massbins[:7]) # For mass bins < 4800 GeV
-	#elif ("alp" in prefix or "tripleG" in prefix) and "HT4000" in filename:
-        #  ps=createPlots(filename,name,xsec,massbins[7:]) # For mass bins >= 4800 GeV
         else:
 	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)
-        if i==1: # or "alp" in prefix or "tripleG" in prefix
+        if i==1:
           plots[-1]+=ps
 	else:
 	  for i in range(len(plots[-1])):
@@ -596,6 +617,9 @@ if __name__ == '__main__':
 	   # signal backup
 	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
 	   clonebackup.Write()
+    for j in range(len(massbins),len(plots[0])):
+      for i in range(1):
+        plots[i][j].Write()
 
     for j in range(len(massbins)):
       for i in range(len(samples)):
@@ -614,7 +638,7 @@ if __name__ == '__main__':
       canvas.cd(j+1)
       plots[0][j].Draw("he")
       print "number of events passed:",plots[0][j].GetEntries()
-      legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("4200<m_{jj}<13000","m_{jj}>4200"))
+      legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
       legends+=[legend1]
       legend1.AddEntry(plots[0][j],samples[0][0],"l")
       for i in range(1,len(samples)):

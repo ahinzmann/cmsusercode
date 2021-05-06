@@ -22,7 +22,7 @@ universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
 initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
-output            = datacard_shapelimit13TeV_tripleG_QCD_"""+CG+"""-run2_chi.root
+output            = tripleG_QCD_"""+CG+""".o
 error             = tripleG_QCD_"""+CG+""".e
 log               = tripleG_QCD_"""+CG+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
