@@ -107,6 +107,7 @@ if __name__ == '__main__':
 		"SumInQuadrature",
 		]
 
+    colors=[1,2,3,4,6,7,8,9,11,12,20,28,34,38,40,41,42,43,44,45,46,47,48,49]
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -595,12 +596,12 @@ if __name__ == '__main__':
          samples6+=[("tripleG_QCD_"+weight,[("tripleG_QCD_"+weight,0)]),]
 
     # all samples
-    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
+    #samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
     # for alp+tripleG
-    samples=samples5
+    #samples=samples5
     #samples=samples6
     # for postfit plots
-    #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
     
     if len(sys.argv)>1:
@@ -871,7 +872,8 @@ if __name__ == '__main__':
       legends=[]
 
       for j in range(len(massbins)):
-        histname="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi"
+        col=1
+	histname="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi"
         print histname
         if useLensData:
           if "13000" in str(massbins[j]):
@@ -1206,12 +1208,13 @@ if __name__ == '__main__':
         out.cd()
         histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         alt.SetName(histname)
-        alt.SetLineColor(2)
+        alt.SetLineColor(colors[col])
         alt.SetTitle("")
         alt.GetYaxis().SetTitle("dN/d#chi")
         for k in range(0,200):
             out.Delete(histname+";"+str(k))
         alt.Write(histname)
+	col+=1
         
         if injectSignal:
          data.Add(ci,1)
@@ -1221,63 +1224,71 @@ if __name__ == '__main__':
              out.Delete(histname+";"+str(k))
          data.Write(histname)
 
-        # Model uncertainty
-	for modeln in [str(mn[0]) for mn in massbins]+[""]:
-     	 histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-     	 clone=ci.Clone(histname)
-     	 clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
-     	 cimodelup=clone.Clone(histname+"_model"+modeln+"Up")
-     	 cimodeldown=clone.Clone(histname+"_model"+modeln+"Down")
-     	 slopes={}
-     	 slopes[1200]=0.03 # FIX compute
-     	 slopes[1500]=0.03 # FIX compute
-     	 slopes[1900]=0.018
-     	 slopes[2400]=0.018 
-     	 slopes[3000]=0.020 
-     	 slopes[3600]=0.020
-     	 slopes[4200]=0.034
-     	 slopes[4800]=0.034
-     	 slopes[5400]=0.026
-     	 slopes[6000]=0.026
-     	 slopes[7000]=0.03 # FIX compute
-     	 if modeln=="" or str(massbins[j][0])==modeln:
-	   for b in range(clone.GetNbinsX()):
-     	     cimodelup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-     	     cimodeldown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-     	 #cimodelup.Scale(dataevents[j]/cimodelup.Integral())
-     	 #cimodeldown.Scale(dataevents[j]/cimodeldown.Integral())
-     	 cimodelup.SetLineColor(3)
-     	 cimodelup.SetLineStyle(2)
-     	 cimodeldown.SetLineColor(3)
-     	 cimodeldown.SetLineStyle(3)
-     	 out.cd()
-     	 for k in range(0,200):
-     	     out.Delete(histname+"_model"+modeln+"Up"+";"+str(k))
-     	     out.Delete(histname+"_model"+modeln+"Down"+";"+str(k))
-     	 cimodelup.Write()
-     	 cimodeldown.Write()
+        # model, JERtail, sim uncertainty
+	uncertainties=["model","JERtail","sim"]
+     	slopes={}
+     	slopes[1200]=[0.002,0.01,0.004] # FIX compute
+     	slopes[1500]=[0.002,0.01,0.004] # FIX compute
+     	slopes[1900]=[0.002,0.01,0.004]
+     	slopes[2400]=[0.002,0.01,0.006]
+     	slopes[3000]=[0.002,0.015,0.004]
+     	slopes[3600]=[0.002,0.012,0.003]
+     	slopes[4200]=[0.001,0.01,0.010]
+     	slopes[4800]=[0.004,0.015,0.015]
+     	slopes[5400]=[0.005,0.015,0.013]
+     	slopes[6000]=[0.03,0.015,0.015]
+     	slopes[7000]=[0.03,0.015,0.015] # FIX compute
+	modelup={}
+	modeldown={}
+	cimodelup={}
+	cimodeldown={}
+	uncertaintyvariants=[[""],[""],[str(mn[0]) for mn in massbins]+[""]]
+	for unc in uncertainties:
+	 for modeln in uncertaintyvariants[uncertainties.index(unc)]:
+     	  histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+     	  clone=ci.Clone(histname)
+     	  clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+     	  cimodelup[unc]=clone.Clone(histname+"_"+unc+modeln+"Up")
+     	  cimodeldown[unc]=clone.Clone(histname+"_"+unc+modeln+"Down")
+     	  if modeln=="" or str(massbins[j][0])==modeln:
+	    for b in range(clone.GetNbinsX()):
+     	      cimodelup[unc].SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]][uncertainties.index(unc)]))
+     	      cimodeldown[unc].SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]][uncertainties.index(unc)]))
+     	  #cimodelup[unc].Scale(dataevents[j]/cimodelup[unc].Integral())
+     	  #cimodeldown[unc].Scale(dataevents[j]/cimodeldown[unc].Integral())
+     	  cimodelup[unc].SetLineColor(colors[col])
+     	  cimodelup[unc].SetLineStyle(2)
+     	  cimodeldown[unc].SetLineColor(colors[col])
+     	  cimodeldown[unc].SetLineStyle(3)
+     	  out.cd()
+     	  for k in range(0,200):
+     	      out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
+     	      out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
+     	  cimodelup[unc].Write()
+     	  cimodeldown[unc].Write()
 
-     	 histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-     	 clone=alt.Clone(histname)
-     	 clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
-     	 modelup=clone.Clone(histname+"_model"+modeln+"Up")
-     	 modeldown=clone.Clone(histname+"_model"+modeln+"Down")
-     	 if modeln=="" or str(massbins[j][0])==modeln:
-     	   for b in range(clone.GetNbinsX()):
-     	     modelup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-     	     modeldown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]]))
-     	 #modelup.Scale(dataevents[j]/modelup.Integral())
-     	 #modeldown.Scale(dataevents[j]/modeldown.Integral())
-     	 modelup.SetLineColor(3)
-     	 modelup.SetLineStyle(2)
-     	 modeldown.SetLineColor(3)
-     	 modeldown.SetLineStyle(3)
-     	 out.cd()
-     	 for k in range(0,200):
-     	     out.Delete(histname+"_model"+modeln+"Up"+";"+str(k))
-     	     out.Delete(histname+"_model"+modeln+"Down"+";"+str(k))
-     	 modelup.Write()
-     	 modeldown.Write()
+     	  histname=samples[i][0]+'_ALT#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+     	  clone=alt.Clone(histname)
+     	  clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
+     	  modelup[unc]=clone.Clone(histname+"_"+unc+modeln+"Up")
+     	  modeldown[unc]=clone.Clone(histname+"_"+unc+modeln+"Down")
+     	  if modeln=="" or str(massbins[j][0])==modeln:
+     	    for b in range(clone.GetNbinsX()):
+     	      modelup[unc].SetBinContent(b+1,clone.GetBinContent(b+1)*(1.+(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]][uncertainties.index(unc)]))
+     	      modeldown[unc].SetBinContent(b+1,clone.GetBinContent(b+1)*(1.-(clone.GetBinCenter(b+1)-8.5)/7.5*slopes[massbins[j][0]][uncertainties.index(unc)]))
+     	  #modelup[unc].Scale(dataevents[j]/modelup[unc].Integral())
+     	  #modeldown[unc].Scale(dataevents[j]/modeldown[unc].Integral())
+     	  modelup[unc].SetLineColor(colors[col])
+     	  modelup[unc].SetLineStyle(2)
+     	  modeldown[unc].SetLineColor(colors[col])
+     	  modeldown[unc].SetLineStyle(3)
+     	  out.cd()
+     	  for k in range(0,200):
+     	      out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
+     	      out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
+     	  modelup[unc].Write()
+     	  modeldown[unc].Write()
+	  if modeln=="": col+=1
 
         # jes uncertainty
         for source in jessources:
@@ -1297,9 +1308,9 @@ if __name__ == '__main__':
           #cijesdown.Scale(dataevents[j]/cijesdown.Integral())
           #print histname, "jes down", cijesdown.GetBinContent(1)/ci.GetBinContent(1)
           #print histname, "jes up", cijesup.GetBinContent(1)/ci.GetBinContent(1)
-          cijesup.SetLineColor(4)
+          cijesup.SetLineColor(colors[col])
           cijesup.SetLineStyle(2)
-          cijesdown.SetLineColor(4)
+          cijesdown.SetLineColor(colors[col])
           cijesdown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1318,9 +1329,9 @@ if __name__ == '__main__':
               jesdown.SetBinContent(b+1,clone.GetBinContent(b+1)*jeshists[str(j)+source][1].GetBinContent(b+1))
           #jesup.Scale(dataevents[j]/jesup.Integral())
           #jesdown.Scale(dataevents[j]/jesdown.Integral())
-          jesup.SetLineColor(4)
+          jesup.SetLineColor(colors[col])
           jesup.SetLineStyle(2)
-          jesdown.SetLineColor(4)
+          jesdown.SetLineColor(colors[col])
           jesdown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1328,6 +1339,7 @@ if __name__ == '__main__':
               out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
           jesup.Write()
           jesdown.Write()
+	  if jesname=="": col+=1
 
         # jer uncertainty
         for source in jersources:
@@ -1347,9 +1359,9 @@ if __name__ == '__main__':
           #cijerdown.Scale(dataevents[j]/cijerdown.Integral())
           #print histname, "jer down", cijerdown.GetBinContent(1)/ci.GetBinContent(1)
           #print histname, "jer up", cijerup.GetBinContent(1)/ci.GetBinContent(1)
-          cijerup.SetLineColor(28)
+          cijerup.SetLineColor(colors[col])
           cijerup.SetLineStyle(2)
-          cijerdown.SetLineColor(28)
+          cijerdown.SetLineColor(colors[col])
           cijerdown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1368,9 +1380,9 @@ if __name__ == '__main__':
               jerdown.SetBinContent(b+1,clone.GetBinContent(b+1)*jerhists[str(j)+source][1].GetBinContent(b+1))
           #jerup.Scale(dataevents[j]/jerup.Integral())
           #jerdown.Scale(dataevents[j]/jerdown.Integral())
-          jerup.SetLineColor(28)
+          jerup.SetLineColor(colors[col])
           jerup.SetLineStyle(2)
-          jerdown.SetLineColor(28)
+          jerdown.SetLineColor(colors[col])
           jerdown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1378,6 +1390,7 @@ if __name__ == '__main__':
               out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
           jerup.Write()
           jerdown.Write()
+	  if jername=="": col+=1
 
         # prefire uncertainty
         histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1388,9 +1401,9 @@ if __name__ == '__main__':
         for b in range(clone.GetNbinsX()):
             ciprefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))
             ciprefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))
-        ciprefireup.SetLineColor(38)
+        ciprefireup.SetLineColor(colors[col])
         ciprefireup.SetLineStyle(2)
-        ciprefiredown.SetLineColor(38)
+        ciprefiredown.SetLineColor(colors[col])
         ciprefiredown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
@@ -1405,11 +1418,11 @@ if __name__ == '__main__':
         prefireup=clone.Clone(histname+"_prefireUp")
         prefiredown=clone.Clone(histname+"_prefireDown")
 	for b in range(clone.GetNbinsX()):
-            prefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.0+0.2*(1.0-prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))))
-            prefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*(1.0+0.2*(1.0-prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))))
-        prefireup.SetLineColor(38)
+            prefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+            prefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+        prefireup.SetLineColor(colors[col])
         prefireup.SetLineStyle(2)
-        prefiredown.SetLineColor(38)
+        prefiredown.SetLineColor(colors[col])
         prefiredown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
@@ -1417,6 +1430,7 @@ if __name__ == '__main__':
             out.Delete(histname+"_prefireDown"+";"+str(k))
         prefireup.Write()
         prefiredown.Write()
+	col+=1
 
         # NLO PDFup/down
         nloPDFupqcd=None
@@ -1462,9 +1476,9 @@ if __name__ == '__main__':
                pdfdown.SetBinContent(b+1,tmp)
         #pdfup.Scale(dataevents[j]/pdfup.Integral())
         #pdfdown.Scale(dataevents[j]/pdfdown.Integral())
-        pdfup.SetLineColor(6)
+        pdfup.SetLineColor(colors[col])
         pdfup.SetLineStyle(2)
-        pdfdown.SetLineColor(6)
+        pdfdown.SetLineColor(colors[col])
         pdfdown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
@@ -1526,9 +1540,9 @@ if __name__ == '__main__':
                cipdfdown.SetBinContent(b+1,tmp)
         #cipdfup.Scale(dataevents[j]/cipdfup.Integral())
         #cipdfdown.Scale(dataevents[j]/cipdfdown.Integral())
-        cipdfup.SetLineColor(6)
+        cipdfup.SetLineColor(colors[col])
         cipdfup.SetLineStyle(2)
-        cipdfdown.SetLineColor(6)
+        cipdfdown.SetLineColor(colors[col])
         cipdfdown.SetLineStyle(3)
         out.cd()
         for k in range(0,200):
@@ -1536,6 +1550,7 @@ if __name__ == '__main__':
           out.Delete(ci.GetName()+"_pdfDown"+";"+str(k))
         cipdfup.Write()
         cipdfdown.Write()
+	col+=1
 
         # NLO Scaleup/down
 	for scaleVariation in ["MuR","MuF","","Alt"]:
@@ -1596,9 +1611,9 @@ if __name__ == '__main__':
          	 scaledown.SetBinContent(b+1,tmp)
           #scaleup.Scale(dataevents[j]/scaleup.Integral())
           #scaledown.Scale(dataevents[j]/scaledown.Integral())
-          scaleup.SetLineColor(7)
+          scaleup.SetLineColor(colors[col])
           scaleup.SetLineStyle(2)
-          scaledown.SetLineColor(7)
+          scaledown.SetLineColor(colors[col])
           scaledown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1665,9 +1680,9 @@ if __name__ == '__main__':
                  ciscaledown.SetBinContent(b+1,tmp)
           #ciscaleup.Scale(dataevents[j]/ciscaleup.Integral())
           #ciscaledown.Scale(dataevents[j]/ciscaledown.Integral())
-          ciscaleup.SetLineColor(7)
+          ciscaleup.SetLineColor(colors[col])
           ciscaleup.SetLineStyle(2)
-          ciscaledown.SetLineColor(7)
+          ciscaledown.SetLineColor(colors[col])
           ciscaledown.SetLineStyle(3)
           out.cd()
           for k in range(0,200):
@@ -1675,6 +1690,7 @@ if __name__ == '__main__':
             out.Delete(ci.GetName()+"_scale"+scaleVariation+"Down"+";"+str(k))
           ciscaleup.Write()
           ciscaledown.Write()
+	  if scaleVariation=="Alt": col+=1
         
         # DATA BLINDED
         #data=alt.Clone("data_blinded")
@@ -1705,13 +1721,14 @@ if __name__ == '__main__':
         legend1.AddEntry(alt,"QCD","l")
         
         # background uncertainties
-        modelup=cloneNormalize(modelup)
-        plots+=[modelup]
-        modelup.Draw("hesame")
-        legend1.AddEntry(modelup,"model","l")
-        modeldown=cloneNormalize(modeldown)
-        plots+=[modeldown]
-        modeldown.Draw("hesame")
+	for unc in uncertainties:
+          modelup[unc]=cloneNormalize(modelup[unc])
+          plots+=[modelup[unc]]
+          modelup[unc].Draw("hesame")
+          legend1.AddEntry(modelup[unc],unc,"l")
+          modeldown[unc]=cloneNormalize(modeldown[unc])
+          plots+=[modeldown[unc]]
+          modeldown[unc].Draw("hesame")
         jesup=cloneNormalize(jesup)
         plots+=[jesup]
         jesup.Draw("hesame")
@@ -1755,12 +1772,13 @@ if __name__ == '__main__':
          legend1.AddEntry(ci,"New Physics","l")
         
          # signal uncertainties
-         cimodelup=cloneNormalize(cimodelup)
-         plots+=[cimodelup]
-         cimodelup.Draw("hesame")
-         cimodeldown=cloneNormalize(cimodeldown)
-         plots+=[cimodeldown]
-         cimodeldown.Draw("hesame")
+	 for unc in uncertainties:
+           cimodelup[unc]=cloneNormalize(cimodelup[unc])
+           plots+=[cimodelup[unc]]
+           cimodelup[unc].Draw("hesame")
+           cimodeldown[unc]=cloneNormalize(cimodeldown[unc])
+           plots+=[cimodeldown[unc]]
+           cimodeldown[unc].Draw("hesame")
          cijesup=cloneNormalize(cijesup)
          plots+=[cijesup]
          cijesup.Draw("hesame")
@@ -1907,22 +1925,22 @@ if __name__ == '__main__':
 	       alt.Draw("hesame")
             plots+=[alt]
 	  syshists={}
+	  syss=["model","JERtail","sim","pdf"]
+	  syss+=["sim"+str(mn[0]) for mn in massbins]
+	  skipInSum=["sim"+str(mn[0]) for mn in massbins]
+	  syss+=["jes"]
+	  for n in range(len(jessources)-1):
+	    syss+=["jes"+str(n+1)]
+	    skipInSum+=["jes"+str(n+1)]
+	  syss+=["jer"]
+	  for n in range(len(jersources)-1):
+	    syss+=["jer"+str(n+1)]
+	    skipInSum+=["jer"+str(n+1)]
+	  syss+=["prefire"]
+	  syss+=["scaleAlt"]
+          syss+=["scale","scaleMuR","scaleMuF"]
+	  skipInSum+=["scale","scaleMuR","scaleMuF"]
 	  for j in range(len(massbins)):
-	    syss=["model","pdf"]
-	    syss+=["model"+str(mn[0]) for mn in massbins]
-	    skipInSum=["model"+str(mn[0]) for mn in massbins]
-	    syss+=["jes"]
-	    for n in range(len(jessources)-1):
-	      syss+=["jes"+str(n+1)]
-	      skipInSum+=["jes"+str(n+1)]
-	    syss+=["jer"]
-	    for n in range(len(jersources)-1):
-	      syss+=["jer"+str(n+1)]
-	      skipInSum+=["jer"+str(n+1)]
-	    syss+=["prefire"]
-	    syss+=["scaleAlt"]
-            syss+=["scale","scaleMuR","scaleMuF"]
-	    skipInSum+=["scale","scaleMuR","scaleMuF"]
 	    for sys in syss:
 	      for shift in ["Up","Down"]:
 	        histname=althists[j].GetName()+"_"+sys+shift

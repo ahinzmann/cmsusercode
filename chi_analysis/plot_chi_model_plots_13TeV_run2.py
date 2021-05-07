@@ -73,7 +73,7 @@ if __name__ == '__main__':
      mclegend={}
      mc={}
      if scenario=="model":
-       mclegend[1]="MG+Py QCD (fullsim)"
+       mclegend[1]="Madgraph+Pythia"
        mc[1]=[("2016_QCDmadgraph-HT200to300",1712000./56709875*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT300to500",347700./53096517*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT500to700",32100./52906552*lumifactor["2016"]),
@@ -81,48 +81,54 @@ if __name__ == '__main__':
      	   ("2016_QCDmadgraph-HT1000to1500",1207./15210939*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT1500to2000",119.9/11839357*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT2000toInf",25.24/5947849*lumifactor["2016"]),
-     	   #("2017_QCDmadgraph-HT200to300",1545000./58990434*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT300to500",323300./58748739*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT500to700",30000./54366431*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT700to1000",6324./46924322*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT1000to1500",1090./16495598*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT1500to2000",101./11196479*lumifactor["2017"]),
-     	   #("2017_QCDmadgraph-HT2000toInf",20.43/5362513*lumifactor["2017"]),
-     	   #("2018_QCDmadgraph-HT200to300",1461000./54289442*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT300to500",311900./54512704*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT500to700",29070./53919811*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT700to1000",5962./48158738*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT1000to1500",1005./14945819*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT1500to2000",101.8/10707847*lumifactor["2018"]),
-     	   #("2018_QCDmadgraph-HT2000toInf",20.54/5329144*lumifactor["2018"]),
+     	   ("2017_QCDmadgraph-HT200to300",1545000./58990434*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT300to500",323300./58748739*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT500to700",30000./54366431*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT700to1000",6324./46924322*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT1000to1500",1090./16495598*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT1500to2000",101./11196479*lumifactor["2017"]),
+     	   ("2017_QCDmadgraph-HT2000toInf",20.43/5362513*lumifactor["2017"]),
+     	   ("2018_QCDmadgraph-HT200to300",1461000./54289442*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT300to500",311900./54512704*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT500to700",29070./53919811*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT700to1000",5962./48158738*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT1000to1500",1005./14945819*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT1500to2000",101.8/10707847*lumifactor["2018"]),
+     	   ("2018_QCDmadgraph-HT2000toInf",20.54/5329144*lumifactor["2018"]),
      	   ]
-       mclegend[2]="MG+Py QCD (smeared)"
-       mc[2]=[("QCDmadgraph_JER_2016_1",1),
-     	    ("QCDmadgraph_JER_2016_2",1),
-     	    ("QCDmadgraph_JER_2016_3",1),
-     	    ("QCDmadgraph_JER_2016_4",1),
-     	    ("QCDmadgraph_JER_2016_5",1),
-     	    ("QCDmadgraph_JER_2016_6",1),
-     	    ("QCDmadgraph_JER_2016_7",1),
+       mclegend[2]="Pythia"
+       mc[2]=[("2018_QCDpythia",1),
      	   ]
-       mclegend[3]="Py QCD (smeared)"
-       mc[3]=[("QCD_JER_2016_1",1),
-     	    ("QCD_JER_2016_2",1),
-     	    ("QCD_JER_2016_3",1),
-     	    ("QCD_JER_2016_4",1),
-     	    ("QCD_JER_2016_5",1),
-     	    ("QCD_JER_2016_6",1),
-     	    ("QCD_JER_2016_7",1),
+       mclegend[3]="Herwig7"
+       mc[3]=[("2018_QCDherwig",1),
      	   ]
-       mclegend[4]="Py QCD (particle)"
-       mc[4]=[("QCD_JES_2017_1",1),
-     	    ("QCD_JES_2017_2",1),
-     	    ("QCD_JES_2017_3",1),
-     	    ("QCD_JES_2017_4",1),
-     	    ("QCD_JES_2017_5",1),
-     	    ("QCD_JES_2017_6",1),
-     	    ("QCD_JES_2017_7",1),
-     	   ]
+       #mclegend[4]="MG+Py QCD (smeared)"
+       #mc[2]=[("QCDmadgraph_JER_2016_1",1),
+     #	    ("QCDmadgraph_JER_2016_2",1),
+     #	    ("QCDmadgraph_JER_2016_3",1),
+     #	    ("QCDmadgraph_JER_2016_4",1),
+     #	    ("QCDmadgraph_JER_2016_5",1),
+     #	    ("QCDmadgraph_JER_2016_6",1),
+     #	    ("QCDmadgraph_JER_2016_7",1),
+     #	   ]
+       #mclegend[3]="Py QCD (smeared)"
+       #mc[3]=[("QCD_JER_2016_1",1),
+     	#    ("QCD_JER_2016_2",1),
+     	#    ("QCD_JER_2016_3",1),
+     	#    ("QCD_JER_2016_4",1),
+     	#    ("QCD_JER_2016_5",1),
+     	#    ("QCD_JER_2016_6",1),
+     	#    ("QCD_JER_2016_7",1),
+     	#   ]
+       #mclegend[4]="Py QCD (particle)"
+       #mc[4]=[("QCD_JES_2017_1",1),
+     #	    ("QCD_JES_2017_2",1),
+     #	    ("QCD_JES_2017_3",1),
+     #	    ("QCD_JES_2017_4",1),
+     #	    ("QCD_JES_2017_5",1),
+     #	    ("QCD_JES_2017_6",1),
+     #	    ("QCD_JES_2017_7",1),
+     	#   ]
        #mclegend[5]="Py QCD (2018 smeared)"
        #mc[5]=[("QCD_JER_2018_1",1),
      #	    ("QCD_JER_2018_2",1),
@@ -147,9 +153,10 @@ if __name__ == '__main__':
      f_mc={}
      for m in range(1,len(mc.keys())+1):
        f_mc[m]=[]
-     for name,xsec in mc[1]:
-  	f_mc[1]+=[TFile.Open(prefix+name+"_chi.root")]
-     for m in range(2,len(mc.keys())+1):
+     for m in [1,2,3]:
+       for name,xsec in mc[m]:
+  	f_mc[m]+=[TFile.Open(prefix+name+"_chi.root")]
+     for m in range(4,len(mc.keys())+1):
        for name,xsec in mc[m]:
   	f_mc[m]+=[TFile.Open(prefix.replace("_run2","")+name+"_chi.root")]
 
@@ -181,7 +188,7 @@ if __name__ == '__main__':
        hist.SetTitle("")
        hist.GetXaxis().SetLabelColor(0)
        hist.GetYaxis().SetTitle("N")
-       hist.GetXaxis().SetRangeUser(1200,8400)
+       hist.GetXaxis().SetRangeUser(2400,8400)
        hist.GetYaxis().SetRangeUser(0.5,hist.GetMaximum()*1.5)
        hist.GetXaxis().SetTitleOffset(1.1)
        hist.GetYaxis().SetTitleOffset(1.1)
@@ -194,18 +201,21 @@ if __name__ == '__main__':
        legend.AddEntry(hist,"Data","lpe")
 
        hist_mc={}
-       v=prefix+mc[1][0][0].replace("-HT200to300","")+var
-       hist_mc[1]=f_mc[1][0].Get(v)
-       for i in range(1,len(mc[1])):
-  	   v=prefix+mc[1][0][0].replace("-HT200to300","").replace("2016",mc[1][i][0].split("_")[0])+var
-  	   hist_mc[1].Add(f_mc[1][i].Get(v),mc[1][i][1]/mc[1][0][1])
-       hist_mc[1].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[1].Integral(hist_mc[1].FindBin(2400),hist_mc[1].GetNbinsX()))
-       hist_mc[1].SetLineColor(1)
-       hist_mc[1].SetStats(False)
-       hist_mc[1].Draw("histesame")
-       legend.AddEntry(hist_mc[1],mclegend[1],"l")
+       for m in [1,2,3]:
+         v=prefix+mc[m][0][0].replace("-HT200to300","").replace("-0","")+var
+	 print v
+         hist_mc[m]=f_mc[m][0].Get(v)
+         for i in range(1,len(mc[m])):
+   	     v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0])+var
+	     print v
+  	     hist_mc[m].Add(f_mc[m][i].Get(v),mc[m][i][1]/mc[m][0][1])
+         hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
+         hist_mc[m].SetLineColor(colors[m])
+         hist_mc[m].SetStats(False)
+         hist_mc[m].Draw("histesame")
+         legend.AddEntry(hist_mc[m],mclegend[m],"l")
 
-       for m in range(2,len(mc.keys())+1):
+       for m in range(4,len(mc.keys())+1):
          v=mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var
          hist_mc[m]=f_mc[m][0].Get(v)
          for i in range(1,len(mc[m])):
@@ -316,24 +326,25 @@ if __name__ == '__main__':
 
   	  print "mass bin",mass,"data integral",hist.Integral()
 
-  	  name=prefix+mc[1][0][0].replace("-HT200to300","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-  	  if var=="#chi": name+="_rebin1"
-  	  hist_mc[1]=f_mc[1][0].Get(name)
-  	  for i in range(1,len(mc[1])):
-  	      hist_mc[1].Add(f_mc[1][i].Get(name.replace("2016",mc[1][i][0].split("_")[0])),mc[1][i][1]/mc[1][0][1])
-  	  if var=="#chi":
-  	      hist_mc[1]=hist_mc[1].Rebin(len(chi_binnings[mass])-1,hist_mc[1].GetName()+"_rebin1",chi_binnings[mass])
-  	      for b in range(hist_mc[1].GetNbinsX()):
-  		 hist_mc[1].SetBinContent(b+1,hist_mc[1].GetBinContent(b+1)/hist_mc[1].GetBinWidth(b+1))
-  		 hist_mc[1].SetBinError(b+1,hist_mc[1].GetBinError(b+1)/hist_mc[1].GetBinWidth(b+1))
-  	  if hist_mc[1].Integral()>0:
-  	      hist_mc[1].Scale(hist.Integral()/hist_mc[1].Integral())
-  	  hist_mc[1].SetLineColor(1)
-  	  hist_mc[1].SetStats(False)
-  	  hist_mc[1].Draw("histesame")
-  	  legend.AddEntry(hist_mc[1],mclegend[1],"l")
+          for m in [1,2,3]:
+  	    name=prefix+mc[m][0][0].replace("-HT200to300","").replace("-0","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+  	    if var=="#chi": name+="_rebin1"
+  	    hist_mc[m]=f_mc[m][0].Get(name)
+  	    for i in range(1,len(mc[m])):
+  	   	hist_mc[m].Add(f_mc[m][i].Get(name.replace("2016",mc[m][i][0].split("_")[0])),mc[m][i][1]/mc[m][0][1])
+  	    if var=="#chi":
+  	   	hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
+  	   	for b in range(hist_mc[m].GetNbinsX()):
+  	 	   hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
+  	 	   hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
+  	    if hist_mc[m].Integral()>0:
+  	   	hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
+  	    hist_mc[m].SetLineColor(colors[m])
+  	    hist_mc[m].SetStats(False)
+  	    hist_mc[m].Draw("histesame")
+  	    legend.AddEntry(hist_mc[m],mclegend[m],"l")
 
-          for m in range(2,len(mc.keys())+1):
+          for m in range(4,len(mc.keys())+1):
   	    name=mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
   	    if var=="#chi": name+="_rebin1"
   	    hist_mc[m]=f_mc[m][0].Get(name)
@@ -372,7 +383,7 @@ if __name__ == '__main__':
   	  ratio.GetYaxis().SetLabelSize(0.13)
   	  ratio.GetYaxis().SetRangeUser(0,2)
   	  if var=="#chi":
-  	    ratio.GetYaxis().SetRangeUser(0.8,1.2)
+  	    ratio.GetYaxis().SetRangeUser(0.5,1.5)
   	  ratio.GetXaxis().SetNdivisions(506)
   	  ratio.GetYaxis().SetNdivisions(503)
   	  ratio.GetXaxis().SetLabelColor(1)

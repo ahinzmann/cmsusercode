@@ -26,7 +26,7 @@ nohup ./gridpack_generation.sh alp_QCD_HT2000toInf ./ # create gridpacks for alp
 nohup ./gridpack_generation.sh alp_QCD_HT4000toInf ./ # create gridpacks for alp
 submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
 
--------- Data analysis in CMSSW_8_1_X:
+-------- Data analysis in CMSSW_10_6_X:
 
 plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
 plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
@@ -49,7 +49,7 @@ plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
 add_systematics_13TeV_loop_run2.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, alp, tripleG and DM signal
-plot_chi_uncertainties_13TeV_2016.py # plot summary of all systematic uncertainties
+plot_chi_uncertainties_13TeV_run2.py # plot summary of all systematic uncertainties
 
 add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 submit_add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal

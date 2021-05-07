@@ -34,7 +34,7 @@ models=[]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
-models=[90,91]
+#models=[90,91]
 
 VectorDM=False
 AxialDM=True
@@ -44,8 +44,8 @@ dataWithSignal="_DMAxial_Dijet_LO_Mphi_4000_3000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv
 
 jesSources=23 # 1 corresponds to the single overall variation, 23 to all
 jerSources=6 # 1 corresponds to the single overall variation, 6 to all
-correlatedModelUncertainties=False
-uncorrelatedModelUncertainties=True
+correlatedSimUncertainties=False
+uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=True
 
@@ -478,8 +478,8 @@ for model in models:
     signalExtra=signalExtraName[model]
     #if float(signalExtraName[model].split("_")[2])<=2:
     #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[4000,4500,5000,6000,7000]
-    #signalMasses=[6000]
+    #signalMasses=[4000,4500,5000,6000,7000]
+    signalMasses=[7000]
     includeSignalTheoryUncertainties=True # Assign QCD-only scale uncertainty to QCD+DM
     
     if isGen:
@@ -776,7 +776,7 @@ for model in models:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
-kmax """+str(2+correlatedModelUncertainties+len(massbins)*uncorrelatedModelUncertainties+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
+kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -822,13 +822,19 @@ kmax """+str(2+correlatedModelUncertainties+len(massbins)*uncorrelatedModelUncer
 -----------
 """)
     text=""
-    if uncorrelatedModelUncertainties:
+    text+="\nmodel shape "
+    for i in range(len(massbins)):
+       text+="1 1 - "
+    text+="\nJERtail shape "
+    for i in range(len(massbins)):
+       text+="1 1 - "
+    if uncorrelatedSimUncertainties:
      for mn in massbins:
-      text+="\nmodel"+str(mn[0])+" shape "
+      text+="\nsim"+str(mn[0])+" shape "
       for i in range(len(massbins)):
         text+="1 1 - "
-    if correlatedModelUncertainties:
-     text+="\nmodel shape "
+    if correlatedSimUncertainties:
+     text+="\nsim shape "
      for i in range(len(massbins)):
         text+="1 1 - "
     if jesSources>1:

@@ -419,7 +419,7 @@ if __name__=="__main__":
         print filename
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
-        uncertaintynames=["jer","jes","pdf","scale","model"]
+        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","pdf","scale"]
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"

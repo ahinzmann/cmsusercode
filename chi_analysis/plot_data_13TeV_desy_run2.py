@@ -134,6 +134,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
 	    if abs(jet2.Eta())>2:
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
+         if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
 	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
          if jet1.Pt()>13000: continue
