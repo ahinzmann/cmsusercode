@@ -598,7 +598,7 @@ if __name__ == '__main__':
     # all samples
     #samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
     # for alp+tripleG
-    #samples=samples5
+    samples=samples5
     #samples=samples6
     # for postfit plots
     samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
@@ -1227,17 +1227,17 @@ if __name__ == '__main__':
         # model, JERtail, sim uncertainty
 	uncertainties=["model","JERtail","sim"]
      	slopes={}
-     	slopes[1200]=[0.002,0.01,0.004] # FIX compute
-     	slopes[1500]=[0.002,0.01,0.004] # FIX compute
-     	slopes[1900]=[0.002,0.01,0.004]
-     	slopes[2400]=[0.002,0.01,0.006]
-     	slopes[3000]=[0.002,0.015,0.004]
-     	slopes[3600]=[0.002,0.012,0.003]
-     	slopes[4200]=[0.001,0.01,0.010]
-     	slopes[4800]=[0.004,0.015,0.015]
-     	slopes[5400]=[0.005,0.015,0.013]
-     	slopes[6000]=[0.03,0.015,0.015]
-     	slopes[7000]=[0.03,0.015,0.015] # FIX compute
+     	slopes[1200]=[0.002,0.01*0.5,0.020] # FIX compute
+     	slopes[1500]=[0.002,0.01*0.5,0.020] # FIX compute
+     	slopes[1900]=[0.002,0.006*0.5,0.020]
+     	slopes[2400]=[0.002,0.007*0.5,0.009]
+     	slopes[3000]=[0.002,0.010*0.5,0.010]
+     	slopes[3600]=[0.002,0.014*0.5,0.020]
+     	slopes[4200]=[0.001,0.017*0.5,0.018]
+     	slopes[4800]=[0.004,0.005*0.5,0.029]
+     	slopes[5400]=[0.005,0.045*0.5,0.051]
+     	slopes[6000]=[0.03,0.072*0.5,0.064]
+     	slopes[7000]=[0.03,0.105*0.5,0.126]
 	modelup={}
 	modeldown={}
 	cimodelup={}
@@ -1399,8 +1399,8 @@ if __name__ == '__main__':
         ciprefireup=clone.Clone(histname+"_prefireUp")
         ciprefiredown=clone.Clone(histname+"_prefireDown")
         for b in range(clone.GetNbinsX()):
-            ciprefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))
-            ciprefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+            ciprefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
+            ciprefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
         ciprefireup.SetLineColor(colors[col])
         ciprefireup.SetLineStyle(2)
         ciprefiredown.SetLineColor(colors[col])
@@ -1418,8 +1418,8 @@ if __name__ == '__main__':
         prefireup=clone.Clone(histname+"_prefireUp")
         prefiredown=clone.Clone(histname+"_prefireDown")
 	for b in range(clone.GetNbinsX()):
-            prefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1)))
-            prefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1)))
+            prefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
+            prefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
         prefireup.SetLineColor(colors[col])
         prefireup.SetLineStyle(2)
         prefiredown.SetLineColor(colors[col])
