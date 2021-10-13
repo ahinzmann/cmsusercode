@@ -90,7 +90,7 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
    
-   for prefix in ["QCD","QCDCIplusLL10000"]:
+   for prefix in ["QCD","QCDCIplusLL10000","QCDmadgraph"]:
      sum_in_quadrature_up=[]
      sum_in_quadrature_down=[]
      for mass in range(len(massbins)):
@@ -170,7 +170,7 @@ if __name__ == '__main__':
                hist2b.SetBinError(chi_bin+1,sum_in_quadrature_up[mass][chi_bin]/10.)
               hist2b.SetLineColor(colors[i+1])
     	      hists+=[hist2b]
-	      fit=TF1(hist2b.GetName()+"smooth","pol3",1,16)
+	      fit=TF1(hist2b.GetName()+"smooth","pol2" if "mad" in prefix else "pol3",1,16)
 	      hist2b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
 	        hist2b.SetBinContent(chi_bin+1,fit.Eval(hist2b.GetBinCenter(chi_bin+1)))
@@ -186,7 +186,7 @@ if __name__ == '__main__':
                hist3b.SetBinError(chi_bin+1,sum_in_quadrature_down[mass][chi_bin]/10.)
               hist3b.SetLineColor(colors[i+1])
     	      hists+=[hist3b]
-	      fit=TF1(hist3b.GetName()+"smooth","pol3",1,16)
+	      fit=TF1(hist3b.GetName()+"smooth","pol2" if "mad" in prefix else "pol3",1,16)
 	      hist3b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
 	        hist3b.SetBinContent(chi_bin+1,fit.Eval(hist3b.GetBinCenter(chi_bin+1)))
@@ -231,7 +231,7 @@ if __name__ == '__main__':
              hist2.SetLineStyle(2)
 	     hist2.SetTitle("")
              hist2.SetStats(False)
-	     fit=TF1(hist2.GetName()+"smooth","pol3",1,16)
+	     fit=TF1(hist2.GetName()+"smooth","pol2" if "mad" in prefix else "pol3",1,16)
 	     hist2.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
 	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
@@ -280,7 +280,7 @@ if __name__ == '__main__':
              hist3.SetLineStyle(3)
 	     hist3.SetTitle("")
              hist3.SetStats(False)
-	     fit=TF1(hist3.GetName()+"smooth","pol3",1,16)
+	     fit=TF1(hist3.GetName()+"smooth","pol2" if "mad" in prefix else "pol3",1,16)
 	     hist3.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
 	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))

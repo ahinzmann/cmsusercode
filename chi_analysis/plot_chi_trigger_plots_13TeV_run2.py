@@ -193,6 +193,8 @@ if __name__ == '__main__':
 	if factor<prescalefactor:
 	  prescalefactor=factor
        print prescalefactor
+      if prescalefactor<1.1:
+        prescalefactor=1 # don't
       hist2.Scale(prescalefactor) # Scale to account for pre-scales
       hist=TGraphAsymmErrors(hist1)
       if prescalefactor==1:

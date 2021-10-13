@@ -87,9 +87,9 @@ if __name__=="__main__":
     muAltScale="m2"
 
   unfoldedData=True
-  oldMeasurements=True
-  oldTheory=True
-  signals=False
+  oldMeasurements=False
+  oldTheory=False
+  signals=True
 
   massbins=[(1200,1500),
   	      (1500,1900),
