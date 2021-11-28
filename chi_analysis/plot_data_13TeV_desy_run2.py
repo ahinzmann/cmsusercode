@@ -26,6 +26,10 @@ prefire2016file=TFile.Open("L1prefiring_jetpt_2016BtoH.root")
 prefire2016=prefire2016file.Get("L1prefiring_jetpt_2016BtoH")
 prefire2017file=TFile.Open("L1prefiring_jetpt_2017BtoF.root")
 prefire2017=prefire2017file.Get("L1prefiring_jetpt_2017BtoF")
+prefireULfile=TFile.Open("L1PrefiringMaps_UL17andUL16_new.root")
+prefireUL16preVFP=prefireULfile.Get("L1prefiring_jetptvseta_UL2016preVFP")
+prefireUL16postVFP=prefireULfile.Get("L1prefiring_jetptvseta_UL2016postVFP")
+prefireUL17=prefireULfile.Get("L1prefiring_jetptvseta_UL2017BtoF")
 
 def deltaPhi(phi1, phi2):
   deltaphi = phi2 - phi1
@@ -39,11 +43,22 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
     if not ".root" in sample:
       folders=os.listdir(sample)
       for f in folders:
+       if "pnfs" in sample:
     	files+=["dcap://dcache-cms-dcap.desy.de/"+sample+"/"+f]
+       elif "dijetChi" in f:
+        files+=[sample+"/"+f]
     else:
       files=[sample]
-
-    if correctPrefire and "2016" in sample:
+    #files=["/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/dijetangular/dijetChi_tree.root"]
+    #files=["/nfs/dust/cms/user/hinzmann/dijetangular/workdir/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1_0_tree.root"]
+    #files=["/nfs/dust/cms/user/hinzmann/dijetangular/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1-0.root"]
+    if correctPrefire and "UL16preVFP" in sample:
+      prefiremap=prefireUL16preVFP
+    elif correctPrefire and "UL16postVFP" in sample:
+      prefiremap=prefireUL16postVFP
+    elif correctPrefire and "UL17" in sample:
+      prefiremap=prefireUL17
+    elif correctPrefire and "2016" in sample:
       prefiremap=prefire2016
     elif correctPrefire and "2017" in sample:
       prefiremap=prefire2017
@@ -124,6 +139,10 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          jet2=TLorentzVector()
          jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
          jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
+         if jet2.Pt()>jet1.Pt():
+           jetTmp=jet1
+           jet1=jet2
+           jet2=jetTmp
          mjj=(jet1+jet2).M()
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
@@ -236,6 +255,14 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2016_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2016"),
             ("datacard_shapelimit13TeV_run2_2017_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2017"),
             ("datacard_shapelimit13TeV_run2_2018_SingleMuon","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataSingleMuon2018"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16preVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16postVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL17","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL17oct"),
+            ("datacard_shapelimit13TeV_run2_UL18","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18oct"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16preVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17oct"),
+            ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18oct"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -432,6 +459,119 @@ if __name__ == '__main__':
 	  ["HLT_PFJet400"],
 	  ["HLT_PFJet450"],
          ],
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [[], #QCD 2016 preVFP
+          [],
+          [],
+          [],
+          [], 
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], #QCD 2016 postVFP
+          [],
+          [],
+          [],
+          [], 
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], #QCD 2017
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], #QCD 2018
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+
           ]
 
     if len(sys.argv)>1:
@@ -441,11 +581,13 @@ if __name__ == '__main__':
 
     if len(sys.argv)>2:
       folders=os.listdir(samples[0][2])
+      folders=[f for f in folders if "dijetChi" in f]
       print len(folders)
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
-        if "HT" in s: name=s
-      samples=[(samples[0][0],"-"+name,"dcap://dcache-cms-dcap.desy.de/"+samples[0][2]+"/"+folders[int(sys.argv[2])])]
+        if "HT" in s: name=s+"_"+name; break
+      samples=[(samples[0][0],"-"+name,samples[0][2].replace("/pnfs/","dcap://dcache-cms-dcap.desy.de//pnfs/")+"/"+folders[int(sys.argv[2])])]
+      print samples
  
     if len(sys.argv)>3:
       if "HEM" in sys.argv[3]:

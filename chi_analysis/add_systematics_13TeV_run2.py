@@ -81,7 +81,7 @@ if __name__ == '__main__':
       muScale="pt12"
       muAltScale="m2"
 
-    prefixs=["versions/run2NNLOMar25/datacard_shapelimit13TeV"]
+    prefixs=["versions/run2ULNNLONov21/datacard_shapelimit13TeV"]
  
     # negligible jes sources removed
     jessources=["AbsoluteScale",
@@ -596,12 +596,12 @@ if __name__ == '__main__':
          samples6+=[("tripleG_QCD_"+weight,[("tripleG_QCD_"+weight,0)]),]
 
     # all samples
-    #samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
+    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
     # for alp+tripleG
-    samples=samples5
+    #samples=samples5
     #samples=samples6
     # for postfit plots
-    samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
     
     if len(sys.argv)>1:
@@ -723,15 +723,21 @@ if __name__ == '__main__':
       # data file
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
-      insample="datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
+      #insample="datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
+      insample="datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # Aug rereco
       print insample
       infile=TFile(insample,'READ')
+      insample16postVFP="datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
+      print insample16postVFP
+      infile16postVFP=TFile(insample16postVFP,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
-      insample17="datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
+      #insample17="datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
+      insample17="datacard_shapelimit13TeV_run2_UL17_L1prefire_chi.root"
       print insample17
       infile17=TFile(insample17,'READ')
       #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
-      insample18="datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
+      #insample18="datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
+      insample18="datacard_shapelimit13TeV_run2_UL18_HEM_chi.root"
       print insample18
       infile18=TFile(insample18,'READ')
 
@@ -892,21 +898,26 @@ if __name__ == '__main__':
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
         else:
           #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi"
-          histname2="datacard_shapelimit13TeV_run2_2016#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          histname2="datacard_shapelimit13TeV_run2_UL16preVFP#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname2
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
 	  #if j<2: data.Scale(0) # FIX Recompute lowest mass bins for 2016
           #if j>=10: data.Scale(0) # FIX Recompute highest mass bins for 2016
+          histname16postVFP="datacard_shapelimit13TeV_run2_UL16postVFP#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print histname16postVFP
+          data16postVFP = TH1F(infile16postVFP.Get(histname16postVFP))
+          data16postVFP=data16postVFP.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+          data.Add(data16postVFP)
           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000")
-          histname17="datacard_shapelimit13TeV_run2_2017#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          histname17="datacard_shapelimit13TeV_run2_UL17#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname17
           data17 = TH1F(infile17.Get(histname17))
           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           data.Add(data17)
           #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
-          histname18="datacard_shapelimit13TeV_run2_2018#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          histname18="datacard_shapelimit13TeV_run2_UL18#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname18
           data18 = TH1F(infile18.Get(histname18))
           data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])

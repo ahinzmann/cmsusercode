@@ -87,9 +87,9 @@ if __name__=="__main__":
     muAltScale="m2"
 
   unfoldedData=True
-  oldMeasurements=False
-  oldTheory=False
-  signals=True
+  oldMeasurements=True
+  oldTheory=True
+  signals=False
 
   massbins=[(1200,1500),
   	      (1500,1900),
@@ -190,7 +190,7 @@ if __name__=="__main__":
     c.Divide(1,1)
     new_hists=[]
     if True:
-        fdir='versions/run2NNLOMar25/'
+        fdir='versions/run2ULNNLONov21/'
             
         if unfoldedData:  
             if useNNLO:
