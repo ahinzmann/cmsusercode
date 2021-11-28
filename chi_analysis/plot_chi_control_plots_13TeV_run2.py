@@ -94,20 +94,20 @@ if __name__ == '__main__':
     mc3=[("2018", 1, "Data (EOY 2018)")
          ]
    elif use_UL:
-    mc=[("UL16preVFP_QCDmadgraph-HT200to300",1710000./44805214, "MG+Py QCD (UL16)"),
-       ("UL16preVFP_QCDmadgraph-HT300to500",347500./48404535, ""),
-       ("UL16preVFP_QCDmadgraph-HT500to700",30363.051/46063160, ""),
-       ("UL16preVFP_QCDmadgraph-HT700to1000",6428.869/37259115, ""),
-       ("UL16preVFP_QCDmadgraph-HT1000to1500",1122.659/13511726, ""),
-       ("UL16preVFP_QCDmadgraph-HT1500to2000",108.163/6059830, ""),
-       ("UL16preVFP_QCDmadgraph-HT2000toInf",22.008/3812684, ""),
-       ("UL16postVFP_QCDmadgraph-HT200to300",1710000./41210455, "MG+Py QCD (UL16)"),
-       ("UL16postVFP_QCDmadgraph-HT300to500",347500./47426214, ""),
-       ("UL16postVFP_QCDmadgraph-HT500to700",30363.051/49068426, ""),
-       ("UL16postVFP_QCDmadgraph-HT700to1000",6428.869/38188739, ""),
-       ("UL16postVFP_QCDmadgraph-HT1000to1500",1122.659/10707004, ""),
-       ("UL16postVFP_QCDmadgraph-HT1500to2000",108.163/7591790, ""),
-       ("UL16postVFP_QCDmadgraph-HT2000toInf",22.008/3620418, ""),
+    mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./44805214, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+       ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./48404535, ""),
+       ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/46063160, ""),
+       ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/37259115, ""),
+       ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13511726, ""),
+       ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/6059830, ""),
+       ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/3812684, ""),
+       ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./41210455, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
+       ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./47426214, ""),
+       ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/49068426, ""),
+       ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/38188739, ""),
+       ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/10707004, ""),
+       ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/7591790, ""),
+       ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/3620418, ""),
        ]
     mc2=[("UL17_QCDmadgraph-HT200to300",1710000./57721120, "MG+Py QCD (UL17)"),
        ("UL17_QCDmadgraph-HT300to500",347500./57191140, ""),
