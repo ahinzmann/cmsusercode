@@ -59,22 +59,64 @@ if __name__ == '__main__':
    
    prefix="datacard_shapelimit13TeV_run2_"
    postfix="_run2"
+   use_UL=True
+   if use_UL:
+     postfix="_UL_run2"
    
    for scenario in ["model"]:
-
-     data=["2016",
-  	   "2017",
-  	   "2018",
+     if use_UL:
+       data=["UL16preVFP_L1prefire",
+  	   "UL16preVFP_L1prefire",
+  	   "UL17_L1prefire",
+  	   "UL18_HEM",
+  	   ]
+     else:
+       data=["2016_L1prefire",
+  	   "2017_L1prefire",
+  	   "2018_HEM",
   	   ]
      lumifactor={}
+     lumifactor["2016preVFP"]=19.52/137.6
+     lumifactor["2016postVFP"]=16.81/137.6
      lumifactor["2016"]=36.33/137.6
-     lumifactor["2017"]=41.53/137.6
-     lumifactor["2018"]=59.74/137.6
+     lumifactor["2017"]=41.48/137.6
+     lumifactor["2018"]=59.83/137.6
      mclegend={}
      mc={}
      if scenario=="model":
        mclegend[1]="Madgraph+Pythia"
-       mc[1]=[("2016_QCDmadgraph-HT200to300",1712000./56709875*lumifactor["2016"]),
+       if use_UL:
+         mc[1]=[("UL16preVFP_QCDmadgraph-HT200to300",1710000./44805214*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT300to500",347500./48404535*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT500to700",30363.051/46063160*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT700to1000",6428.869/37259115*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT1000to1500",1122.659/13511726*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT1500to2000",108.163/6059830*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT2000toInf",22.008/3812684*lumifactor["2016preVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT200to300",1710000./41210455*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT300to500",347500./47426214*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT500to700",30363.051/49068426*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT700to1000",6428.869/38188739*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT1000to1500",1122.659/10707004*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT1500to2000",108.163/7591790*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT2000toInf",22.008/3620418*lumifactor["2016postVFP"]),
+           ("UL17_QCDmadgraph-HT200to300",1710000./57721120*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT300to500",347500./57191140*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT500to700",30363.051/9188310*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT700to1000",6428.869/45812757*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT1000to1500",1122.659/15346629*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT1500to2000",108.163/10598209*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT2000toInf",22.008/5416717*lumifactor["2017"]),
+           ("UL18_QCDmadgraph-HT200to300",1710000./22826901*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT300to500",347500./54463611*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT500to700",30363.051/58487165*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT700to1000",6428.869/47703400*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT1000to1500",1122.659/15675643*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT1500to2000",108.163/10612885*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT2000toInf",22.008/4504262*lumifactor["2018"]),
+           ]
+       else:
+         mc[1]=[("2016_QCDmadgraph-HT200to300",1712000./56709875*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT300to500",347700./53096517*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT500to700",32100./52906552*lumifactor["2016"]),
      	   ("2016_QCDmadgraph-HT700to1000",6831./36741540*lumifactor["2016"]),
@@ -178,9 +220,9 @@ if __name__ == '__main__':
 
        legend=TLegend(0.5,0.5,0.95,0.9,"1<=#Chi<16 , y_{boost}<1.11")
 
-       hist=f_data[0].Get(prefix+data[0]+var)
+       hist=f_data[0].Get(prefix+data[0].replace("_L1prefire","").replace("_HEM","")+var)
        for i in range(1,len(data)):
-  	   hist.Add(f_data[i].Get(prefix+data[i]+var))
+  	   hist.Add(f_data[i].Get(prefix+data[i].replace("_L1prefire","").replace("_HEM","")+var))
        hist.SetLineColor(1)
        hist.SetMarkerStyle(24)
        hist.SetMarkerColor(1)
@@ -206,7 +248,7 @@ if __name__ == '__main__':
 	 print v
          hist_mc[m]=f_mc[m][0].Get(v)
          for i in range(1,len(mc[m])):
-   	     v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0])+var
+   	     v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])+var
 	     print v
   	     hist_mc[m].Add(f_mc[m][i].Get(v),mc[m][i][1]/mc[m][0][1])
          hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
@@ -294,9 +336,9 @@ if __name__ == '__main__':
       
   	  name=prefix+data[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
   	  if var=="#chi": name+="_rebin1"
-  	  hist=f_data[0].Get(name)
+  	  hist=f_data[0].Get(name.replace("_L1prefire","").replace("_HEM",""))
   	  for i in range(1,len(data)):
-  	      hist.Add(f_data[i].Get(name.replace("2016",data[i])))
+  	      hist.Add(f_data[i].Get(name.replace("2016",data[i]).replace("UL16preVFP",data[i]).replace("_L1prefire","").replace("_HEM","")))
   	  if var=="#chi":
   	      hist=hist.Rebin(len(chi_binnings[mass])-1,hist.GetName()+"_rebin1",chi_binnings[mass])
   	      for b in range(hist.GetNbinsX()):
@@ -331,7 +373,7 @@ if __name__ == '__main__':
   	    if var=="#chi": name+="_rebin1"
   	    hist_mc[m]=f_mc[m][0].Get(name)
   	    for i in range(1,len(mc[m])):
-  	   	hist_mc[m].Add(f_mc[m][i].Get(name.replace("2016",mc[m][i][0].split("_")[0])),mc[m][i][1]/mc[m][0][1])
+  	   	hist_mc[m].Add(f_mc[m][i].Get(name.replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])),mc[m][i][1]/mc[m][0][1])
   	    if var=="#chi":
   	   	hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
   	   	for b in range(hist_mc[m].GetNbinsX()):

@@ -1,41 +1,15 @@
 import os
 
-samples=[#("data2016",0,74,""),
-         #("data2017",1,47,""),
-	 #("data2018",2,120,""),
-	 #("data2018",2,120,"-HEM"),
-	 #("data2016",0,74,"-L1prefire"),
-         #("data2017",1,47,"-L1prefire"),
-         #("QCD2016",3,7,""),
-	 #("QCD2017",4,7,""),
-	 #("QCD2018",5,7,""),
-	 #("QCDpy2018",6,1,""),
-	 #("QCDhw2018",7,1,""),
-	 ("dataUL16preVFP",11,58,""),
-         ("dataUL16postVFP",12,38,""),
-         ("dataUL17",13,61,""),
-	 ("dataUL18",14,97,""),
-	 #("dataUL16preVFP",11,58,"-L1prefire"),
-         #("dataUL16postVFP",12,38,"-L1prefire"),
-         #("dataUL17",13,61,"-L1prefire"),
-	 #("dataUL18",14,97,"-HEM"),
-	 #("qcdUL16preVFP",15,75,""),
-         #("qcdUL16postVFP",16,140,""),
-         #("qcdUL17",17,71,""),
-	 #("qcdUL18",18,140,""),
-	 ]
-
 count=0
 
-for year,number,ns,postfix in samples:
-  for n in range(ns):
-    name="run_"+str(year)+"_"+str(n)+postfix
+for n in range(84):
+    name="jer_"+str(n)
     with open(name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 cmsenv
-python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
+python plotSignal_jer_13TeV_run2.py """+str(n)+"""
 """)
     with open(name+".submit",'w+') as htc_config:
             htc_config.write("""
@@ -51,7 +25,7 @@ log               = """+name+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
 +RequestRuntime   = 170000
 #RequestMemory     = 10G
-JobBatchName      = run_"""+str(year)+postfix+"""
+JobBatchName      = jer
 #RequestDisk       = 10G
 getenv            = True
 executable        = /usr/bin/sh

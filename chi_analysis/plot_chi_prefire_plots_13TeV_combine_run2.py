@@ -27,6 +27,11 @@ if __name__ == '__main__':
 
    var="chi"
    label="#chi"
+   use_UL=True
+   if use_UL:
+     years=["UL16preVFP","UL16postVFP","UL17","UL18"]
+   else:
+     years=["2016","2017","2018"]
 
    massbins=[(1200,1500),
               (1500,1900),
@@ -79,8 +84,8 @@ if __name__ == '__main__':
        f_refmc={}
        histyear={}
        scalexsec={}
-       for year in ["2016","2017","2018"]:
-        filename=(dire+"datacard_shapelimit13TeV_"+prefix+"_"+str(year)+"_L1prefire_chi.root").replace("2018_L1prefire","2018_HEM")
+       for year in years:
+        filename=(dire+"datacard_shapelimit13TeV_"+prefix+"_"+str(year)+"_L1prefire_chi.root").replace("18_L1prefire","18_HEM")
 	print filename
      	f_refmc[year]=TFile.Open(filename)
 	histname="datacard_shapelimit13TeV_"+prefix+"_"+str(year)+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup"
@@ -91,10 +96,10 @@ if __name__ == '__main__':
         histyear[year]=histyear[year].Clone(histyear[year].GetName()+year+"main")
      	hists+=[histyear[year]]
      	histyear[year]=histyear[year].Rebin(len(chi_binnings[mass])-1,histyear[year].GetName()+"_rebin1",chi_binnings[mass])
-       hist=histyear["2016"].Clone(histyear["2016"].GetName()+"combine")
+       hist=histyear[years[0]].Clone(histyear[years[0]].GetName()+"combine")
        hists+=[hist]
-       hist.Add(histyear["2017"])
-       hist.Add(histyear["2018"])
+       for y in years[1:]:
+         hist.Add(histyear[y])
        canvas.cd(mass+1)
        canvas.GetPad(mass+1).SetLogy(log)
        hist.SetLineWidth(2)
@@ -122,7 +127,7 @@ if __name__ == '__main__':
 
        updown="prefire_Up"
        histyear2={}
-       for year in ["2016","2017","2018"]:
+       for year in years:
         filename=(dire+"datacard_shapelimit13TeV_"+prefix+"_"+str(year)+"_chi.root")
 	print filename
      	f_refmc[year]=TFile.Open(filename)
@@ -134,10 +139,10 @@ if __name__ == '__main__':
         histyear2[year]=histyear2[year].Clone(histyear2[year].GetName()+year+"prefireUp")
      	hists+=[histyear2[year]]
      	histyear2[year]=histyear2[year].Rebin(len(chi_binnings[mass])-1,histyear2[year].GetName()+"_rebin1",chi_binnings[mass])
-       hist2=histyear2["2016"].Clone(histyear2["2016"].GetName()+"combine")
+       hist2=histyear2[years[0]].Clone(histyear2[years[0]].GetName()+"combine")
        hists+=[hist2]
-       hist2.Add(histyear2["2017"])
-       hist2.Add(histyear2["2018"])
+       for y in years[1:]:
+         hist2.Add(histyear2[y])
        if hist2.Integral()>0:
          hist2.Scale(histref.Integral()/hist2.Integral())
        hist3=hist2.Clone(hist2.GetName()+"prefireDown")

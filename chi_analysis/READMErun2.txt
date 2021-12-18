@@ -35,12 +35,13 @@ plotSignal_13TeV_desy_tripleG_run2.py # call plotSignal_13TeV_desy_run2.py # pro
 
 run_data.py run_dataSingleMuon.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
 
-plotSignal_jes_13TeV_run2.sh # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
+plotSignal_jes_13TeV_run2_loop.py # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
 plot_chi_jes_plots_13TeV_combine_run2.py # plot JES uncertainty histograms
-plotSignal_jer_13TeV_run2.sh # calls plotSignal_jer_13TeV_run2.py # produce JER uncertainty histograms from CI and QCD GEN samples
+plotSignal_jer_13TeV_run2_loop.py # calls plotSignal_jer_13TeV_run2.py # produce JER uncertainty histograms from CI and QCD GEN samples
 plot_chi_jer_plots_13TeV_combine_run2.py # plot JER uncertainty histograms
 plotSignal_pu_13TeV_run2.sh # calls plotSignal_pu_13TeV_run2.py # produce PU uncertainty histograms from QCD Fullsim samples
 plot_chi_pu_plots_13TeV_combine_run2.py # plot PU uncertainty histograms
+plot_chi_prefire_plots_13TeV_combine_run2.py # plot prefire uncertainty histograms
 
 plot_chi_control_plots_13TeV_run2.py # plot data-MC comparisons
 plot_chi_model_plots_13TeV_run2.py # plot smearing vs fullsim comparisons
@@ -48,7 +49,7 @@ plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
-add_systematics_13TeV_loop_run2.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, alp, tripleG and DM signal
+add_systematics_13TeV_run2_loop.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, alp, tripleG and DM signal
 plot_chi_uncertainties_13TeV_run2.py # plot summary of all systematic uncertainties
 
 add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal

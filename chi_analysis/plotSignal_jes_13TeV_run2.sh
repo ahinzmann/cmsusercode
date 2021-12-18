@@ -61,3 +61,28 @@ python plotSignal_jes_13TeV_run2.py 59 > plotSignal_jes_13TeV_run2-59.log
 python plotSignal_jes_13TeV_run2.py 60 > plotSignal_jes_13TeV_run2-60.log &
 python plotSignal_jes_13TeV_run2.py 61 > plotSignal_jes_13TeV_run2-61.log &
 python plotSignal_jes_13TeV_run2.py 62 > plotSignal_jes_13TeV_run2-62.log
+python plotSignal_jes_13TeV_run2.py 61 > plotSignal_jes_13TeV_run2-61.log &
+python plotSignal_jes_13TeV_run2.py 62 > plotSignal_jes_13TeV_run2-62.log &
+python plotSignal_jes_13TeV_run2.py 63 > plotSignal_jes_13TeV_run2-63.log
+python plotSignal_jes_13TeV_run2.py 64 > plotSignal_jes_13TeV_run2-64.log &
+python plotSignal_jes_13TeV_run2.py 65 > plotSignal_jes_13TeV_run2-65.log &
+python plotSignal_jes_13TeV_run2.py 66 > plotSignal_jes_13TeV_run2-66.log &
+python plotSignal_jes_13TeV_run2.py 67 > plotSignal_jes_13TeV_run2-67.log &
+python plotSignal_jes_13TeV_run2.py 68 > plotSignal_jes_13TeV_run2-68.log &
+python plotSignal_jes_13TeV_run2.py 69 > plotSignal_jes_13TeV_run2-69.log 
+python plotSignal_jes_13TeV_run2.py 70 > plotSignal_jes_13TeV_run2-70.log &
+python plotSignal_jes_13TeV_run2.py 71 > plotSignal_jes_13TeV_run2-71.log &
+python plotSignal_jes_13TeV_run2.py 72 > plotSignal_jes_13TeV_run2-72.log
+python plotSignal_jes_13TeV_run2.py 71 > plotSignal_jes_13TeV_run2-71.log &
+python plotSignal_jes_13TeV_run2.py 72 > plotSignal_jes_13TeV_run2-72.log &
+python plotSignal_jes_13TeV_run2.py 73 > plotSignal_jes_13TeV_run2-73.log
+python plotSignal_jes_13TeV_run2.py 74 > plotSignal_jes_13TeV_run2-74.log &
+python plotSignal_jes_13TeV_run2.py 75 > plotSignal_jes_13TeV_run2-75.log &
+python plotSignal_jes_13TeV_run2.py 76 > plotSignal_jes_13TeV_run2-76.log &
+python plotSignal_jes_13TeV_run2.py 77 > plotSignal_jes_13TeV_run2-77.log &
+python plotSignal_jes_13TeV_run2.py 78 > plotSignal_jes_13TeV_run2-78.log &
+python plotSignal_jes_13TeV_run2.py 79 > plotSignal_jes_13TeV_run2-79.log 
+python plotSignal_jes_13TeV_run2.py 80 > plotSignal_jes_13TeV_run2-80.log &
+python plotSignal_jes_13TeV_run2.py 81 > plotSignal_jes_13TeV_run2-81.log &
+python plotSignal_jes_13TeV_run2.py 82 > plotSignal_jes_13TeV_run2-82.log
+python plotSignal_jes_13TeV_run2.py 83 > plotSignal_jes_13TeV_run2-83.log

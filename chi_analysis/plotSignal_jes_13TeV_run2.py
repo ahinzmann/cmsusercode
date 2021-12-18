@@ -28,6 +28,7 @@ gStyle.SetLegendBorderSize(0)
 colors=[1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,10,11,12,13,]
 
 doJES=True
+use_UL=True
 
 if doJES:
   JECsources = ["AbsoluteStat", "AbsoluteScale", "AbsoluteMPFBias", "Fragmentation",
@@ -52,6 +53,22 @@ if doJES:
   for source in JECsources:
     JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Autumn18_V19_MC/Autumn18_V19_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2018"] = JetCorrectionUncertainty(JESparameters[source+"2018"])
+  print "load UL16preVFP uncertainties"
+  for source in JECsources:
+    JESparameters[source+"UL16preVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL16APV_V7_MC/Summer19UL16APV_V7_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESuncertainties[source+"UL16preVFP"] = JetCorrectionUncertainty(JESparameters[source+"UL16preVFP"])
+  print "load UL16postVFP uncertainties"
+  for source in JECsources:
+    JESparameters[source+"UL16postVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL16_V7_MC/Summer19UL16_V7_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESuncertainties[source+"UL16postVFP"] = JetCorrectionUncertainty(JESparameters[source+"UL16postVFP"])
+  print "load UL17 uncertainties"
+  for source in JECsources:
+    JESparameters[source+"UL17"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL17_V5_MC/Summer19UL17_V5_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESuncertainties[source+"UL17"] = JetCorrectionUncertainty(JESparameters[source+"UL17"])
+  print "load UL18 uncertainties"
+  for source in JECsources:
+    JESparameters[source+"UL18"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL18_V5_MC/Summer19UL18_V5_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESuncertainties[source+"UL18"] = JetCorrectionUncertainty(JESparameters[source+"UL18"])
 
 def createPlots(sample,prefix,xsec,massbins,year):
     files=[]
@@ -61,7 +78,10 @@ def createPlots(sample,prefix,xsec,massbins,year):
 	    if ".root" in line:
 	        files+=[line.strip()]
     elif "HT" in sample:
-      files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"/"+sample+".root"]
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"oct/")
+	for folder in folders:
+	  if sample in folder:
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"oct/"+folder]
     else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
 	for folder in folders:
@@ -174,8 +194,12 @@ def createPlots(sample,prefix,xsec,massbins,year):
 if __name__ == '__main__':
     sets=[]
     i=0
+    if use_UL:
+      years=["UL16preVFP","UL16postVFP","UL17","UL18"]
+    else:
+      years=[2016,2017,2018]
     for name in ["QCD","QCDCIplusLL10000","QCDmadgraph"]:
-      for year in [2016,2017,2018]:
+      for year in years:
         for bin in [1,2,3,4,5,6,7]:
 	   print i,name,bin,year
 	   sets+=[(name,bin,year)]
@@ -185,7 +209,7 @@ if __name__ == '__main__':
     name="QCD"
     #name="QCDCIplusLL10000"
     bin=1 #1-6
-    year="2016"
+    year="UL16preVFP"
     if len(sys.argv)>1:
        name,bin,year = sets[int(sys.argv[1])]
     #if year!=2018: print "SKIPPING 2016 and 2017 !!!!!"; STOP
@@ -372,6 +396,123 @@ if __name__ == '__main__':
   	      ]
       if bin==7 and name=="QCDmadgraph": 
     	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_102X_v1",20.54/5329144),
+  	  		 ]),
+  	      ]
+
+    if str(year)=="UL16preVFP":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./44805214),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./48404535),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/46063160),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/37259115),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/13511726),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/6059830),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/3812684),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL16postVFP":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./41210455),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./47426214),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/49068426),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/38188739),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/10707004),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/7591790),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/3620418),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL17":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./57721120),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./57191140),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/9188310),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/45812757),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/15346629),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/10598209),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/5416717),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL18":
+      if bin==1 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./22826901),
+  	  		 ]),
+  	      ]
+      if bin==2 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./54463611),
+  	  		 ]),
+  	      ]
+      if bin==3 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/58487165),
+  	  		 ]),
+  	      ]
+      if bin==4 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/47703400),
+  	  		 ]),
+  	      ]
+      if bin==5 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/15675643),
+  	  		 ]),
+  	      ]
+      if bin==6 and name=="QCDmadgraph":
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/10612885),
+  	  		 ]),
+  	      ]
+      if bin==7 and name=="QCDmadgraph": 
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/4504262),
   	  		 ]),
   	      ]
 

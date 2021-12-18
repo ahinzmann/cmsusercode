@@ -67,9 +67,9 @@ if __name__ == '__main__':
    compare_EOYvsUL=False
    use_UL=True
    if use_UL:
-     version="_UL_run2"
+     version="_UL"+version
    if compare_EOYvsUL:
-     version="_EOYvsUL_run2"
+     version="_EOYvsUL"+version
 
    if compare_EOYvsUL or use_UL:
     data=[("UL16preVFP", 1, "Data (UL 2016)"),
