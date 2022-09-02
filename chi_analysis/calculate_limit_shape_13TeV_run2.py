@@ -34,7 +34,7 @@ models=[]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
-models=[90,91]
+#models=[90,91]
 
 VectorDM=False
 AxialDM=True
@@ -47,7 +47,26 @@ jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
-alternateScaleUncertainty=True
+alternateScaleUncertainty=False
+theoryStatUncertainties=True
+
+statUncertainties=[]
+if theoryStatUncertainties:
+  chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,3,6,9,12,16),
+              ]
+  for massbin in range(len(chi_bins)):
+     for chibin in range(len(chi_bins[massbin])-1):
+         statUncertainties+=["stat"+str(massbin)+"_"+str(chibin)]
 
 isGen=False
 
@@ -776,7 +795,7 @@ for model in models:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
-kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties)+""" number of nuisance parameters""")
+kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -882,6 +901,13 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
         text+="\nscaleAlt shape "
       else:
         text+="\nscale shape "
+      for i in range(len(massbins)):
+        if includeSignalTheoryUncertainties:
+         text+="1 1 - "
+        else:
+         text+="- 1 - "
+    for su in statUncertainties:
+      text+="\n"+su+" shape "
       for i in range(len(massbins)):
         if includeSignalTheoryUncertainties:
          text+="1 1 - "

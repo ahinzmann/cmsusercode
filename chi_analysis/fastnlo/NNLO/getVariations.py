@@ -33,7 +33,8 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
     def getqcdallmu(self):
       allmulist=[]
       for m in range(len(massbins)):
-        fileallmu=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_7_"+mscale+".log"
+        #fileallmu=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_7_"+mscale+".log"
+        fileallmu=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_allmu_"+mscale.replace("m2","m12")+".log"
 	print "load",fileallmu
         mu=["start"]
         muxsecs=["start"]
@@ -49,9 +50,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 if line.split()[0]=="LHAPDF": continue
                 if line.split()[0]=="CT14nlo": continue
 		if order=="NNLO":
-  		  x=float(line.split()[8])/(massbins[m][1]-massbins[m][0])
+  		  x=float(line.split()[8])#/(massbins[m][1]-massbins[m][0])
   		else:
-		  x=float(line.split()[7])/(massbins[m][1]-massbins[m][0])
+		  x=float(line.split()[7])#/(massbins[m][1]-massbins[m][0])
                 xsec=[massbins[m][0],massbins[m][1],float(line.split()[3]),float(line.split()[4]),x]
                 muxsecs.append(xsec)
             allmulist.append([mu,muxsecs])
@@ -61,7 +62,8 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
     def getqcdallmem(self):
       allmemlist=[]
       for m in range(len(massbins)):
-        fileallmem=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_0_"+mscale+".log"
+        #fileallmem=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_0_"+mscale+".log"
+        fileallmem=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_allmem_"+mscale.replace("m2","m12")+".log"
 	print "load",fileallmem
         mem=["start"]
         memxsecs=["start"]
@@ -77,14 +79,43 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 if line.split()[0]=="LHAPDF": continue
                 if line.split()[0]=="CT14nlo": continue
 		if order=="NNLO":
-  		  x=float(line.split()[8])/(massbins[m][1]-massbins[m][0])
+  		  x=float(line.split()[8])#/(massbins[m][1]-massbins[m][0])
   		else:
-		  x=float(line.split()[7])/(massbins[m][1]-massbins[m][0])
+		  x=float(line.split()[7])#/(massbins[m][1]-massbins[m][0])
                 xsec=[massbins[m][0],massbins[m][1],float(line.split()[3]),float(line.split()[4]),x]
                 memxsecs.append(xsec)
             allmemlist.append([mem,memxsecs])
         print "found",len(allmemlist),"elements"
       return allmemlist
+
+    def getqcdstat(self):
+      statlist=[]
+      for m in range(len(massbins)):
+        filestat=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_stat_"+mscale.replace("m2","m12")+".log"
+	print "load",filestat
+        stat=["start"]
+        statxsecs=["start"]
+        with open(filestat) as f:
+            for line in f:
+                if "Relative statistical uncertainties" in line:
+                    if stat != ["start"] and statxsecs !=["start"]:
+                        statlist.append([stat,statxsecs])
+                    stat=["stat"]
+                    statxsecs=[]
+                if "#" in line: continue
+                if line.split()==[]: continue
+                if line.split()[0]=="LHAPDF": continue
+                if line.split()[0]=="CT14nlo": continue
+		if order=="NNLO":
+  		  x=float(line.split()[3])/(massbins[m][1]-massbins[m][0])/(self.bins[int(line.split()[0])]-self.bins[int(line.split()[0])-1])
+  		else:
+                  print "WARNING: No log file for NLO stat uncertainty available, only for NNLO"
+                  x=0
+                xsec=[massbins[m][0],massbins[m][1],self.bins[int(line.split()[0])-1],self.bins[int(line.split()[0])],x]
+                statxsecs.append(xsec)
+            statlist.append([stat,statxsecs])
+        print "found",len(statlist),"elements"
+      return statlist
 
     def getciallmu(self):
 ##         ls = subprocess.Popen(['ls',self.BaseDir+'/'+self.cixsecDir],stdout=subprocess.PIPE)    
@@ -192,7 +223,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
             print list
             
     def listFill(self,mylist,uncerttype):
-        myfile=TFile(self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj_chi_"+PDF+"_cppread_"+uncerttype+"_"+mscale+".root","RECREATE")
+        myfile=TFile(self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj_chi_norm_v25_"+PDF+"_cppread_"+uncerttype+"_"+mscale+".root","RECREATE")
         for list in mylist:
             if uncerttype=="mu":
                 mur=str(list[0][0])
@@ -220,8 +251,19 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                     if i==12:
                         hist.Write()
                         i=0
+            elif uncerttype=="stat":
+                i=0
+                for point in list[1]:
+                    if i==0:
+                        hist=TH1F("qcd_chi-"+str(int(point[0]))+"-"+str(int(point[1]))+"stat","chi-"+str(int(point[0]))+"-"+str(int(point[1]))+"stat",len(self.bins)-1,self.bins)
+                        hist.Sumw2()
+                    hist.Fill(point[2]+(point[3]-point[2])/2,point[4]*(point[3]-point[2])*(point[1]-point[0]))
+                    i+=1
+                    if i==12:
+                        hist.Write()
+                        i=0
             else:
-                print "Please specify tyle: mu or mem."
+                print "Please specify style: mu or mem or stat."
                     
     
     def dictFill(self,mydict,uncerttype):
@@ -259,8 +301,19 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                         if i==12:
                             hist.Write()
                             i=0
+                elif uncerttype=="stat":
+                    i=0
+                    for j in range(1,len(list)):
+                        if i==0:
+                            hist=TH1F(key+"_"+"chi-"+str(int(list[j][0]))+"-"+str(int(list[j][1]))+"stat","chi-"+str(int(list[j][0]))+"-"+str(int(list[j][1]))+"stat",len(self.bins)-1,self.bins)
+                            hist.Sumw2()
+                        hist.Fill(list[j][2]+(list[j][3]-list[j][2])/2,list[j][4])
+                        i+=1
+                        if i==12:
+                            hist.Write()
+                            i=0
                 else:
-                    print "Please specify tyle: mu or mem."
+                    print "Please specify style: mu or mem ot stat."
                 
             
 if __name__ == "__main__":
@@ -271,6 +324,9 @@ if __name__ == "__main__":
     
     qcdallmem=myVariations.getqcdallmem()
     myVariations.listFill(qcdallmem,"mem")
+
+    qcdstat=myVariations.getqcdstat()
+    myVariations.listFill(qcdstat,"stat")
 
     ciallmu=myVariations.getciallmu()
     myVariations.dictFill(ciallmu,"mu")

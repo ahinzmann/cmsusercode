@@ -121,6 +121,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
 def getUncertainties(fsys,basename,pname,masstext):
     uncertainties=[]
     for u in uncertaintynames:
+        print basename+"_"+u+"Up"
         hup_orig=fsys.Get(basename+"_"+u+"Up")
         up=hup_orig.Clone(pname+'#chi'+masstext+"_rebin1_"+u+"Up")
         divBinWidth(up)
@@ -149,6 +150,19 @@ if __name__=="__main__":
     unfoldedData=False
     isCB=False
     version="v9"
+
+    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,3,6,9,12,16),
+              ]
 
     print "start ROOT"
     #gROOT.Reset()
@@ -243,13 +257,16 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scaleAlt","pdf"] # "scale"
+            uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf","stat"] # "scaleAlt"
             #for m in massbins:
             #    uncertaintynames.append("sim"+str(m[0]))
             #for i in range(1,23):
             #    uncertaintynames.append("jes"+str(i))
-            #for i in range(1,6):
+            #for i in range(1,1):
             #    uncertaintynames.append("jer"+str(i))
+            #for m in massbins:
+            #  for chibin in range(len(chi_bins[massbins.index(m)])-1):
+            #    uncertaintynames.append("theorystat"+str(massbins.index(m))+"_"+str(chibin))
         
             for massbin in range(len(massbins)):
             
@@ -291,6 +308,7 @@ if __name__=="__main__":
                 print "Fit Parameters from:", fitFile.GetName()
 
                 f=TFile.Open(filename)
+                print "File:",filename
                 new_hists+=[f]
 
 		dataname="data_obs#chi"+masstext+"_rebin1"
@@ -364,7 +382,7 @@ if __name__=="__main__":
                 # DM systematics
 
                 pname='DM'
-                uncertainties=getUncertainties(f,basename,pname,masstext)
+                suncertainties=getUncertainties(f,basename,pname,masstext)
                 
                 new_hists+=[uncertainties]
 
@@ -378,14 +396,14 @@ if __name__=="__main__":
                 # Shift theory predictions according to fitted signal strength
                 tree=fitFile.Get('fit_s')
                 mu=tree.floatParsFinal().find("x").getVal()
-                shiftWRTmu(uncertainties,mu,hDm,hbPrefit,hsPrefit)
+                shiftWRTmu(suncertainties,mu,hDm,hbPrefit,hsPrefit)
                 
                 # Shift theory prediction according to fitted nuisance parameters
                 
                 #sfitParameters,sfitConstraints=getFitResults(fitFile, 'fit_s')
 		sfitParameters,sfitConstraints=None,None
 
-                h2snew,h3snew,h14Gsysstat_sb=applyFitResults(sfitParameters,sfitConstraints,uncertainties,hDm,h14,False)
+                h2snew,h3snew,h14Gsysstat_sb=applyFitResults(sfitParameters,sfitConstraints,suncertainties,hDm,h14,False)
         
                 # Plotting
                 h2bnew.SetLineStyle(1)

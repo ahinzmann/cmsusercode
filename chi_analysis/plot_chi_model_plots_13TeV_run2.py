@@ -59,7 +59,7 @@ if __name__ == '__main__':
    
    prefix="datacard_shapelimit13TeV_run2_"
    postfix="_run2"
-   use_UL=True
+   use_UL=False
    if use_UL:
      postfix="_UL_run2"
    
@@ -240,7 +240,10 @@ if __name__ == '__main__':
        hist.GetYaxis().SetTitleSize(0.06)
        hist.SetStats(False)
        hist.Draw("pe")
-       legend.AddEntry(hist,"Data","lpe")
+       if use_UL:
+         legend.AddEntry(hist,"Data (UL)","lpe")
+       else:
+         legend.AddEntry(hist,"Data (EOY)","lpe")
 
        hist_mc={}
        for m in [1,2,3]:
@@ -364,7 +367,10 @@ if __name__ == '__main__':
   	  hist.GetYaxis().SetTitleSize(0.06)
   	  hist.SetStats(False)
   	  hist.Draw("pe")
-  	  legend.AddEntry(hist,"Data","lpe")
+          if use_UL:
+            legend.AddEntry(hist,"Data (UL)","lpe")
+          else:
+            legend.AddEntry(hist,"Data (EOY)","lpe")
 
   	  print "mass bin",mass,"data integral",hist.Integral()
 

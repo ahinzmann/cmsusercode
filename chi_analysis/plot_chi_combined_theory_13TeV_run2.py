@@ -87,9 +87,9 @@ if __name__=="__main__":
     muAltScale="m2"
 
   unfoldedData=True
-  oldMeasurements=True
-  oldTheory=True
-  signals=False
+  oldMeasurements=False
+  oldTheory=False
+  signals=True
 
   massbins=[(1200,1500),
   	      (1500,1900),
@@ -303,14 +303,14 @@ if __name__=="__main__":
         if oldMeasurements:
 	 measurements=["13 TeV, 35.9/fb",
 	               "13 TeV, 2.6/fb",
-	               "8 TeV, 19.7/fb",
-		       "7 TeV, 2.2/fb",
+	               #"8 TeV, 19.7/fb",
+		       #"7 TeV, 2.2/fb",
 		       #"7 TeV, 36/pb",
 		       ]
          filenames=["hepdata/HEPData-ins1663452-v1-root.root",
 	            "hepdata/HEPData-ins1519995-v2-root.root",
-	            "hepdata/HEPData-ins1327224-v1-root.root",
-	            "hepdata/HEPData-ins1090423-v1-root.root",
+	            #"hepdata/HEPData-ins1327224-v1-root.root",
+	            #"hepdata/HEPData-ins1090423-v1-root.root",
 	            #"hepdata/HEPData-ins889175-v1-root.root",
 		    ]
          bins={}
@@ -419,7 +419,7 @@ if __name__=="__main__":
         print filename
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
-        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","pdf","scale"]
+        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf","stat"] # "scaleAlt"
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"
@@ -447,7 +447,7 @@ if __name__=="__main__":
                     print massbins[massbin],b,uncertaintynames[uncertainties.index([up,down,central])],abs(up.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1),abs(down.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1)
                 addup=pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
 		adddown=pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
-                if uncertaintynames[uncertainties.index([up,down,central])]=="jer" or uncertaintynames[uncertainties.index([up,down,central])]=="jes" or uncertaintynames[uncertainties.index([up,down,central])]=="model":
+                if uncertaintynames[uncertainties.index([up,down,central])] in ["jes","jer","JERtail","prefire","model","sim"]:
 		    exp_sumup+=addup
                     exp_sumdown+=adddown
 		else:
@@ -1086,5 +1086,7 @@ if __name__=="__main__":
     postfix=""
     if not unfoldedData:
       postfix="_detector"
+    if oldMeasurements:
+      postfix+="_compare"
     c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")
