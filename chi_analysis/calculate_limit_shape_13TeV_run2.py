@@ -24,7 +24,7 @@ if only6000:
 models=[]
 #models+=[3]
 #models+=[11]
-#models+=[10,11]
+models+=[10,11]
 #models+=[60,61,62,63,64,65,66,67,68,69]
 #models+=[70,71,72,73,74,75,76,77]
 #models+=[78,79,80,81,82,83,84,85]
@@ -49,24 +49,6 @@ uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
 theoryStatUncertainties=True
-
-statUncertainties=[]
-if theoryStatUncertainties:
-  chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,2,3,4,5,6,7,8,9,10,12,14,16),
-               (1,3,6,9,12,16),
-              ]
-  for massbin in range(len(chi_bins)):
-     for chibin in range(len(chi_bins[massbin])-1):
-         statUncertainties+=["stat"+str(massbin)+"_"+str(chibin)]
 
 isGen=False
 
@@ -790,6 +772,26 @@ for model in models:
     print fname
     if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal:
         signalWithMass="QCD"+signalWithMass
+
+    statUncertainties=[]
+    if theoryStatUncertainties:
+      chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,3,6,9,12,16),
+              ]
+      for massbin in massbins:
+         massindex=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)].index(massbin)
+         for chibin in range(len(chi_bins[massindex])-1):
+             statUncertainties+=["stat"+str(massindex)+"_"+str(chibin)]
+
     f=TFile(fname)
     cfg=open("chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt","w")
     cfg.writelines("""
@@ -909,9 +911,6 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     for su in statUncertainties:
       text+="\n"+su+" shape "
       for i in range(len(massbins)):
-        if includeSignalTheoryUncertainties:
-         text+="1 1 - "
-        else:
          text+="- 1 - "
     cfg.writelines(text+"""
 -----------

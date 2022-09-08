@@ -88,6 +88,7 @@ if __name__ == '__main__':
       muAltScale="m2"
 
     prefixs=["versions/run2ULNNLONov21/datacard_shapelimit13TeV"]
+    input_prefix="versions/2016NLO/datacard_shapelimit13TeV"
  
     # negligible jes sources removed
     jessources=["AbsoluteScale",
@@ -710,18 +711,22 @@ if __name__ == '__main__':
       #  sample=prefix + '_GENciminusv3_chi2016.root'
       else:
         sample=prefix + '_GEN-QCD-run2_chi.root'
-      print sample
+      print "output file", sample
+      insignalsample=sample.replace(prefix,input_prefix)
+      print "input signal file", insignalsample
   
-      out=TFile(sample,'UPDATE')
+      insignalfile=TFile(insignalsample,'READ')
+      closefiles=[insignalfile]
+      out=TFile(sample,'RECREATE')
       closefiles=[out]
       
       # LO QCD file
-      sample2=prefix + '_GEN-QCD-run2_chi.root'
+      sample2=input_prefix + '_GEN-QCD-run2_chi.root'
       print sample2
       in2=TFile(sample2,'READ')
 
       # Madgraph QCD file
-      sampleMadgraph=prefix + '_alp_QCD_fa50000-run2_chi.root'
+      sampleMadgraph=input_prefix + '_alp_QCD_fa50000-run2_chi.root'
       print sampleMadgraph
       inMadgraph=TFile(sampleMadgraph,'READ')
 
@@ -729,26 +734,26 @@ if __name__ == '__main__':
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
       if use_UL:
-        insample="datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
+        insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
       else:
-        insample="datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
+        insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
       print insample
       infile=TFile(insample,'READ')
-      insample16postVFP="datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
+      insample16postVFP="datacards/datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
       print insample16postVFP
       infile16postVFP=TFile(insample16postVFP,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
       if use_UL:
-        insample17="datacard_shapelimit13TeV_run2_UL17_L1prefire_chi.root"
+        insample17="datacards/datacard_shapelimit13TeV_run2_UL17_L1prefire_chi.root"
       else:
-        insample17="datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
+        insample17="datacards/datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
       print insample17
       infile17=TFile(insample17,'READ')
       #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
       if use_UL:
-        insample18="datacard_shapelimit13TeV_run2_UL18_HEM_chi.root"
+        insample18="datacards/datacard_shapelimit13TeV_run2_UL18_HEM_chi.root"
       else:
-        insample18="datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
+        insample18="datacards/datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
       print insample18
       infile18=TFile(insample18,'READ')
 
@@ -940,8 +945,8 @@ if __name__ == '__main__':
         out.cd()
         if not injectSignal:
          histname='data_obs#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-         for k in range(0,10):
-             out.Delete(histname+";"+str(k))
+         #for k in range(0,10):
+         #    out.Delete(histname+";"+str(k))
          data.Write(histname)
 
         # NLO
@@ -998,8 +1003,8 @@ if __name__ == '__main__':
         else:
           qcd=in2.Get(histname)
         out.cd()
-        for k in range(0,10):
-            out.Delete(histname.replace("_backup","")+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(histname.replace("_backup","")+";"+str(k))
         qcd.Write(histname.replace("_backup",""))
         qcd=qcd.Rebin(len(chi_binnings[j])-1,histname,chi_binnings[j])
         qcd.Scale(1e10*1e9) #mb -> pb and factor 1e-10 for backup
@@ -1086,9 +1091,9 @@ if __name__ == '__main__':
           ci.Add(nloqcd)
         elif "DM" in samples[i][0] or "tripleG" in samples[i][0]:
           if only6000:
-            cibackup=out.Get(histname.replace("6000_13000","6000_7000"))
+            cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
           else:
-            cibackup=out.Get(histname)
+            cibackup=insignalfile.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1099,9 +1104,9 @@ if __name__ == '__main__':
           ci.Add(nloqcd)
         elif "alp" in samples[i][0]:
           if only6000:
-            cibackup=out.Get(histname.replace("6000_13000","6000_7000"))
+            cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
           else:
-            cibackup=out.Get(histname)
+            cibackup=insignalfile.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
           print "ALP:",ci.Integral(), "QCDMG:",qcdMadgraph.Integral(), "QCDPY:",qcd.Integral(), "QCDNLO:",nloqcdbackup.Integral()
@@ -1113,21 +1118,22 @@ if __name__ == '__main__':
           ci.Add(nloqcd)
         elif "QBH" in samples[i][0]:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-            if j<3:
+            if j<5:
                 ci=nloqcd.Clone(histname)
             else:
                 if samples[i][0].split("_")[2]=='6':
                     histnamein='QCDADD'+samples[i][0].split("_")[2]+samples[i][0].split("_")[0]+samples[i][0].split("_")[1]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
                 else:
                     histnamein='QCD'+samples[i][0].split("_")[2]+samples[i][0].split("_")[0]+samples[i][0].split("_")[1]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
-                cibackup=out.Get(histnamein)
+                print histnamein
+                cibackup=insignalfile.Get(histnamein.replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")) # FIX compute QBH for highest mass bins
                 ci=cibackup.Clone(histname)
                 ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
                 ci.Scale(samples[i][1][0][1]/1000000)
                 ci.Scale(1./nloqcdbackup.Integral())
                 ci.Add(nloqcd)
         elif "wide" in samples[i][0]:
-          cibackup=out.Get(histname)
+          cibackup=insignalfile.Get(histname)
           try:
               histname=cibackup.GetName().replace("_backup","")
           except:
@@ -1143,7 +1149,7 @@ if __name__ == '__main__':
             histnamealt=samples[i][0].replace("Anti","")+'#chi'+str((4800,5400)).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
           else:
             histnamealt=histname
-          cibackup=out.Get(histnamealt).Clone(histname)
+          cibackup=insignalfile.Get(histnamealt).Clone(histname)
           histname=cibackup.GetName().replace("_backup","")
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1177,9 +1183,9 @@ if __name__ == '__main__':
           ci.Add(nloqcd)
         else:
           if only6000:
-            cibackup=out.Get(histname.replace("6000_13000","6000_7000"))
+            cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
           else:  
-            cibackup=out.Get(histname)
+            cibackup=insignalfile.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1212,8 +1218,10 @@ if __name__ == '__main__':
         for b in range(ci.GetXaxis().GetNbins()):
             ci.SetBinError(b+1,0)
         out.cd()
-        for k in range(0,10):
-            out.Delete(histname+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(histname+";"+str(k))
+        #cibackup.Write()
+        ci.Clone(histname+"_nosmear").Write(histname+"_nosmear")
         ci.Write(histname)
 
         # ALT (=NLO QCD)
@@ -1235,8 +1243,9 @@ if __name__ == '__main__':
         alt.SetLineColor(colors[col])
         alt.SetTitle("")
         alt.GetYaxis().SetTitle("dN/d#chi")
-        for k in range(0,10):
-            out.Delete(histname+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(histname+";"+str(k))
+        alt.Clone(histname+"_nosmear").Write(histname+"_nosmear")
         alt.Write(histname)
         col+=1
         
@@ -1244,8 +1253,8 @@ if __name__ == '__main__':
          data.Add(ci,1)
          data.Add(alt,-1)
          histname='data_obs#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-         for k in range(0,10):
-             out.Delete(histname+";"+str(k))
+         #for k in range(0,10):
+         #    out.Delete(histname+";"+str(k))
          data.Write(histname)
 
         # model, JERtail, sim uncertainty
@@ -1286,9 +1295,9 @@ if __name__ == '__main__':
                cimodeldown[unc].SetLineColor(colors[col])
                cimodeldown[unc].SetLineStyle(3)
                out.cd()
-               for k in range(0,10):
-                   out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
-                   out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
+               #for k in range(0,10):
+               #    out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
+               #    out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
                cimodelup[unc].Write()
                cimodeldown[unc].Write()
 
@@ -1308,9 +1317,9 @@ if __name__ == '__main__':
                modeldown[unc].SetLineColor(colors[col])
                modeldown[unc].SetLineStyle(3)
                out.cd()
-               for k in range(0,10):
-                   out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
-                   out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
+               #for k in range(0,10):
+               #    out.Delete(histname+"_"+unc+modeln+"Up"+";"+str(k))
+               #    out.Delete(histname+"_"+unc+modeln+"Down"+";"+str(k))
                modelup[unc].Write()
                modeldown[unc].Write()
                if modeln=="": col+=1
@@ -1339,9 +1348,9 @@ if __name__ == '__main__':
           cijesdown.SetLineColor(colors[col])
           cijesdown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-              out.Delete(histname+"_jes"+jesname+"Up"+";"+str(k))
-              out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(histname+"_jes"+jesname+"Up"+";"+str(k))
+          #    out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
           cijesup.Write()
           cijesdown.Write()
 
@@ -1360,9 +1369,9 @@ if __name__ == '__main__':
           jesdown.SetLineColor(colors[col])
           jesdown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-              out.Delete(histname+"_jes"+jesname+"Up"+";"+str(k))
-              out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(histname+"_jes"+jesname+"Up"+";"+str(k))
+          #    out.Delete(histname+"_jes"+jesname+"Down"+";"+str(k))
           jesup.Write()
           jesdown.Write()
           if jesname=="": col+=1
@@ -1391,9 +1400,9 @@ if __name__ == '__main__':
           cijerdown.SetLineColor(colors[col])
           cijerdown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-              out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
-              out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
+          #    out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
           cijerup.Write()
           cijerdown.Write()
 
@@ -1412,9 +1421,9 @@ if __name__ == '__main__':
           jerdown.SetLineColor(colors[col])
           jerdown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-              out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
-              out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(histname+"_jer"+jername+"Up"+";"+str(k))
+          #    out.Delete(histname+"_jer"+jername+"Down"+";"+str(k))
           jerup.Write()
           jerdown.Write()
           if jername=="": col+=1
@@ -1434,9 +1443,9 @@ if __name__ == '__main__':
         ciprefiredown.SetLineColor(colors[col])
         ciprefiredown.SetLineStyle(3)
         out.cd()
-        for k in range(0,10):
-            out.Delete(histname+"_prefireUp"+";"+str(k))
-            out.Delete(histname+"_prefireDown"+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(histname+"_prefireUp"+";"+str(k))
+        #    out.Delete(histname+"_prefireDown"+";"+str(k))
         ciprefireup.Write()
         ciprefiredown.Write()
 
@@ -1453,9 +1462,9 @@ if __name__ == '__main__':
         prefiredown.SetLineColor(colors[col])
         prefiredown.SetLineStyle(3)
         out.cd()
-        for k in range(0,10):
-            out.Delete(histname+"_prefireUp"+";"+str(k))
-            out.Delete(histname+"_prefireDown"+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(histname+"_prefireUp"+";"+str(k))
+        #    out.Delete(histname+"_prefireDown"+";"+str(k))
         prefireup.Write()
         prefiredown.Write()
         col+=1
@@ -1509,9 +1518,9 @@ if __name__ == '__main__':
         pdfdown.SetLineColor(colors[col])
         pdfdown.SetLineStyle(3)
         out.cd()
-        for k in range(0,10):
-            out.Delete(alt.GetName()+"_pdfUp"+";"+str(k))
-            out.Delete(alt.GetName()+"_pdfDown"+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(alt.GetName()+"_pdfUp"+";"+str(k))
+        #    out.Delete(alt.GetName()+"_pdfDown"+";"+str(k))
         pdfup.Write()
         pdfdown.Write()
 
@@ -1573,9 +1582,9 @@ if __name__ == '__main__':
         cipdfdown.SetLineColor(colors[col])
         cipdfdown.SetLineStyle(3)
         out.cd()
-        for k in range(0,10):
-          out.Delete(ci.GetName()+"_pdfUp"+";"+str(k))
-          out.Delete(ci.GetName()+"_pdfDown"+";"+str(k))
+        #for k in range(0,10):
+        #  out.Delete(ci.GetName()+"_pdfUp"+";"+str(k))
+        #  out.Delete(ci.GetName()+"_pdfDown"+";"+str(k))
         cipdfup.Write()
         cipdfdown.Write()
         col+=1
@@ -1644,9 +1653,9 @@ if __name__ == '__main__':
           scaledown.SetLineColor(colors[col])
           scaledown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-              out.Delete(alt.GetName()+"_scale"+scaleVariation+"Up"+";"+str(k))
-              out.Delete(alt.GetName()+"_scale"+scaleVariation+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(alt.GetName()+"_scale"+scaleVariation+"Up"+";"+str(k))
+          #    out.Delete(alt.GetName()+"_scale"+scaleVariation+"Down"+";"+str(k))
           scaleup.Write()
           scaledown.Write()
           
@@ -1713,9 +1722,9 @@ if __name__ == '__main__':
           ciscaledown.SetLineColor(colors[col])
           ciscaledown.SetLineStyle(3)
           out.cd()
-          for k in range(0,10):
-            out.Delete(ci.GetName()+"_scale"+scaleVariation+"Up"+";"+str(k))
-            out.Delete(ci.GetName()+"_scale"+scaleVariation+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #  out.Delete(ci.GetName()+"_scale"+scaleVariation+"Up"+";"+str(k))
+          #  out.Delete(ci.GetName()+"_scale"+scaleVariation+"Down"+";"+str(k))
           ciscaleup.Write()
           ciscaledown.Write()
           if scaleVariation=="": col+=1
@@ -1767,9 +1776,9 @@ if __name__ == '__main__':
             citheorystatup[unc].SetBinContent(chibin+1,ciclone.GetBinContent(chibin+1)+theorystatvalue)
             citheorystatdown[unc].SetBinContent(chibin+1,ciclone.GetBinContent(chibin+1)-theorystatvalue)
           out.cd()
-          for k in range(0,10):
-              out.Delete(cihistname+"_"+unc+"Up"+";"+str(k))
-              out.Delete(cihistname+"_"+unc+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(cihistname+"_"+unc+"Up"+";"+str(k))
+          #    out.Delete(cihistname+"_"+unc+"Down"+";"+str(k))
           citheorystatup[unc].Write()
           citheorystatdown[unc].Write()
 
@@ -1781,17 +1790,17 @@ if __name__ == '__main__':
              theorystatup[unc].SetBinContent(chibin+1,clone.GetBinContent(chibin+1)+theorystatvalue)
              theorystatdown[unc].SetBinContent(chibin+1,clone.GetBinContent(chibin+1)-theorystatvalue)
           out.cd()
-          for k in range(0,10):
-              out.Delete(histname+"_"+unc+"Up"+";"+str(k))
-              out.Delete(histname+"_"+unc+"Down"+";"+str(k))
+          #for k in range(0,10):
+          #    out.Delete(histname+"_"+unc+"Up"+";"+str(k))
+          #    out.Delete(histname+"_"+unc+"Down"+";"+str(k))
           theorystatup[unc].Write()
           theorystatdown[unc].Write()
         out.cd()
-        for k in range(0,10):
-            out.Delete(cihistname+"_"+"statUp"+";"+str(k))
-            out.Delete(cihistname+"_"+"statDown"+";"+str(k))
-            out.Delete(histname+"_"+"statUp"+";"+str(k))
-            out.Delete(histname+"_"+"statDown"+";"+str(k))
+        #for k in range(0,10):
+        #    out.Delete(cihistname+"_"+"statUp"+";"+str(k))
+        #    out.Delete(cihistname+"_"+"statDown"+";"+str(k))
+        #    out.Delete(histname+"_"+"statUp"+";"+str(k))
+        #    out.Delete(histname+"_"+"statDown"+";"+str(k))
         citheorystatup[""].Write()
         citheorystatdown[""].Write()
         theorystatup[""].Write()
@@ -2031,8 +2040,8 @@ if __name__ == '__main__':
             #print althists[j].GetBinContent(1),althistsclones[j].GetBinContent(1)
           out.cd()
           for hist in althists:
-            for k in range(0,10):
-              out.Delete(hist.GetName()+";"+str(k))
+            #for k in range(0,10):
+            #  out.Delete(hist.GetName()+";"+str(k))
             hist.Write()
           for j in range(len(massbins)):
             canvas.cd(j+2)#j-2
@@ -2071,7 +2080,7 @@ if __name__ == '__main__':
             for sys in syss:
               for shift in ["Up","Down"]:
                 histname=althists[j].GetName()+"_"+sys+shift
-                print histname
+                #print histname
                 sysHist=out.Get(histname)#.Clone()
                 #print sysHist
                 #print dir(sysHist)
@@ -2082,8 +2091,8 @@ if __name__ == '__main__':
                 if sysHist.Integral()>0:
                   sysHist.Scale(sysNorm/althistsclones[j].Integral()*althists[j].Integral()/sysHist.Integral())
                 #sysHist.Scale(dataevents[j]/sysHist.Integral())
-                for k in range(0,10):
-                  out.Delete(sysHist.GetName()+";"+str(k))
+                #for k in range(0,10):
+                #  out.Delete(sysHist.GetName()+";"+str(k))
                 sysHist.Write()
                 syshists[sys+shift]=sysHist
                 canvas.cd(j+2)#j-2

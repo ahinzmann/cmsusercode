@@ -49,11 +49,8 @@ plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
 
-add_systematics_13TeV_run2_loop.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, alp, tripleG and DM signal
+add_systematics_13TeV_run2_loop.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, QBH, alp, tripleG and DM signal
 plot_chi_uncertainties_13TeV_run2.py # plot summary of all systematic uncertainties
-
-add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
-submit_add_systematics_qbh.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for a QBH signal
 
 plot_chi_combined_data_13TeV_dm_run2.py # DM comparison plots
 plot_chi_combined_theory_13TeV_run2.py # final result plot
