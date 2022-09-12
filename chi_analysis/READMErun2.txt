@@ -64,6 +64,6 @@ plot_limit_shape_13TeV_dm_run2.py # compute CLS limit for each DM model
 plot_limit_summary.py #  summary of limits on various models (still 8 TeV version)
 
 summarize_pvalues_13TeV_run2.py # make table of p-values of the data in each mass bin
-calculate_goodness_13TeV.py # calculate goodness of fit measure of the data in each mass bin
-summarize_goodness_13TeV.py # make table of goodness of fit measure
+calculate_goodness_13TeV_run2.py # calculate goodness of fit measure of the data in each mass bin
+summarize_goodness_13TeV_run2.py # make table of goodness of fit measure
 calculate_bestfit.py # make table of bestfit JER (still 8 TeV version)

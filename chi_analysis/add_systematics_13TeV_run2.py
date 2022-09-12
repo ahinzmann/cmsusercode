@@ -52,9 +52,9 @@ def smoothChi(h1):
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)/h1.GetBinWidth(b+1))
         h1.SetBinError(b+1,h1.GetBinError(b+1)/h1.GetBinWidth(b+1))
-    fit=TF1(h1.GetName()+"smooth","pol3",3,16)
+    fit=TF1(h1.GetName()+"smooth","pol2",4,16)
     h1.Fit(fit,"RNQ")
-    for chi_bin in range(2,h1.GetXaxis().GetNbins()):
+    for chi_bin in range(h1.FindBin(4),h1.GetXaxis().GetNbins()):
       h1.SetBinContent(chi_bin+1,fit.Eval(h1.GetBinCenter(chi_bin+1)))
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)*h1.GetBinWidth(b+1))
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     injectSignal=False
     only6000=False # mass binning
     useNNLO=True # choice for QCD
-    useM2=True # choice of mu-scale for QCD
+    useM2=False # choice of mu-scale for QCD
     use_UL=True
     
     if use_UL:
@@ -87,7 +87,8 @@ if __name__ == '__main__':
       muScale="pt12"
       muAltScale="m2"
 
-    prefixs=["versions/run2ULNNLONov21/datacard_shapelimit13TeV"]
+    #prefixs=["versions/run2ULNNLONov21/datacard_shapelimit13TeV"]
+    prefixs=["versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"]
     input_prefix="versions/2016NLO/datacard_shapelimit13TeV"
  
     # negligible jes sources removed
@@ -965,7 +966,8 @@ if __name__ == '__main__':
             nloqcd=hnlo
         #for b in range(nloqcd.GetXaxis().GetNbins()):
         #  nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)/nloqcd.GetBinWidth(b+1))
-        #nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
+        if not useUnfoldedData:
+          nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
         nloqcdbackup=nloqcd.Clone(nloqcd.GetName()+"_backup")
         print "theory integral (pb):", nloqcdbackup.Integral()
 
@@ -1620,7 +1622,7 @@ if __name__ == '__main__':
            if scaleVariation=="":
              hnloScaledown = TH1F(nlofilesys.Get(histname))
            elif scaleVariation=="Alt":
-             hnloScaleup = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuR":
              hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuF":
@@ -2075,7 +2077,7 @@ if __name__ == '__main__':
           for mn in range(len(massbins)):
             for cn in range(len(chi_binnings[mn])-1):
               syss+=["stat"+str(mn)+"_"+str(cn)]
-              skipInSum=["stat"+str(mn)+"_"+str(cn)]
+              skipInSum+=["stat"+str(mn)+"_"+str(cn)]
           for j in range(len(massbins)):
             for sys in syss:
               for shift in ["Up","Down"]:

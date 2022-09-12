@@ -27,9 +27,9 @@ def smoothChi(h1):
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)/h1.GetBinWidth(b+1))
         h1.SetBinError(b+1,h1.GetBinError(b+1)/h1.GetBinWidth(b+1))
-    fit=TF1(h1.GetName()+"smooth","pol3",3,16)
+    fit=TF1(h1.GetName()+"smooth","pol2",4,16)
     h1.Fit(fit,"RNQ")
-    for chi_bin in range(2,h1.GetXaxis().GetNbins()):
+    for chi_bin in range(h1.FindBin(4),h1.GetXaxis().GetNbins()):
       h1.SetBinContent(chi_bin+1,fit.Eval(h1.GetBinCenter(chi_bin+1)))
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)*h1.GetBinWidth(b+1))
@@ -73,7 +73,7 @@ def setupAsymErrors(g):
 if __name__=="__main__":
 
   useNNLO=True # choice for QCD
-  useM2=True # choice of mu-scale for QCD
+  useM2=False # choice of mu-scale for QCD
   
   if useNNLO:
     pdfset="ct14nnlo"
@@ -191,7 +191,7 @@ if __name__=="__main__":
     c.Divide(1,1)
     new_hists=[]
     if True:
-        fdir='versions/run2ULNNLONov21/'
+        fdir='versions/run2ULNNLO_pt12/'
             
         if unfoldedData:  
             if useNNLO:
@@ -214,7 +214,7 @@ if __name__=="__main__":
                 hNloQcd.Add(hnlo)
              else:
                 hNloQcd=hnlo
-            hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
+            #hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
             hNloQcd.SetLineColor(5)
             hNloQcd.SetLineStyle(3)
             hNloQcd.SetLineWidth(2)
@@ -302,7 +302,7 @@ if __name__=="__main__":
                  hNloQcdAlt.Add(hnlo)
               else:
                  hNloQcdAlt=hnlo
-             hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
+             #hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdAlt.SetLineColor(4)
              hNloQcdAlt.SetLineStyle(2)
              hNloQcdAlt.SetLineWidth(2)
@@ -482,24 +482,24 @@ if __name__=="__main__":
             uncertainties+=[[up,down,central]]
         h2new=h14.Clone("down"+str(massbins[massbin]))
         h3new=h14.Clone("up"+str(massbins[massbin]))
-	chi2=0
+        chi2=0
         for b in range(h14.GetXaxis().GetNbins()):
             if b==0:# or b==h14G.GetXaxis().GetNbins()-1:
                 print massbins[massbin],b,"stat",h14G.GetErrorYlow(b)/h14G.GetY()[b],h14G.GetErrorYhigh(b)/h14G.GetY()[b]
-	    exp_sumdown=0
-	    exp_sumup=0
+            exp_sumdown=0
+            exp_sumup=0
             theory_sumdown=0
             theory_sumup=0
             for up,down,central in uncertainties:
-	        if b==0:# or b==h14G.GetXaxis().GetNbins()-1:
+                if b==0:# or b==h14G.GetXaxis().GetNbins()-1:
                     print massbins[massbin],b,uncertaintynames[uncertainties.index([up,down,central])],abs(up.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1),abs(down.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1)
                 addup=pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
-		adddown=pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
+                adddown=pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
                 if uncertaintynames[uncertainties.index([up,down,central])] in ["jes","jer","JERtail","prefire","model","sim"]:
-		    exp_sumup+=addup
+                    exp_sumup+=addup
                     exp_sumdown+=adddown
-		else:
-		    theory_sumup+=addup
+                else:
+                    theory_sumup+=addup
                     theory_sumdown+=adddown
             exp_sumdown=sqrt(exp_sumdown)
             exp_sumup=sqrt(exp_sumup)
@@ -508,7 +508,8 @@ if __name__=="__main__":
 
             if h14G.GetY()[b]>0:
 	      chi2+=pow(hNloQcdbackup.GetBinContent(b+1)-h14G.GetY()[b],2) / \
-	           (pow(max(exp_sumdown,exp_sumup)*h14G.GetY()[b],2)+pow(max(theory_sumdown,theory_sumup)*h14G.GetY()[b],2)+pow(max(h14G.GetErrorYlow(b),h14G.GetErrorYhigh(b)),2))
+	           (pow(max(exp_sumdown,exp_sumup)*hNloQcdbackup.GetBinContent(b+1),2)+pow(max(theory_sumdown,theory_sumup)*hNloQcdbackup.GetBinContent(b+1),2)+pow(max(h14G.GetErrorYlow(b),h14G.GetErrorYhigh(b)),2))
+              print chi2
 
             h14Gsys.SetPointEXlow(b,0)
             h14Gsys.SetPointEXhigh(b,0)
@@ -525,8 +526,8 @@ if __name__=="__main__":
             h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-theory_sumdown*hNloQcdbackup.GetBinContent(b+1))
             h3new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)+theory_sumup*hNloQcdbackup.GetBinContent(b+1))
 	    print "{0:.1f} TO {1:.1f}; {2:.4f} +{3:.4f},-{4:.4f} (DSYS=+{5:.4f},-{6:.4f})".format(h2new.GetXaxis().GetBinLowEdge(b+1),h2new.GetXaxis().GetBinUpEdge(b+1),h14G.GetY()[b],sqrt(pow(stat_up,2)),sqrt(pow(stat_down,2)),sqrt(pow(exp_sumup*h14G.GetY()[b],2)),sqrt(pow(exp_sumdown*h14G.GetY()[b],2)))
-        print "chi2/ndof",chi2/h14G.GetXaxis().GetNbins()
-	new_hists+=[h2new]
+        print "chi2/ndof",chi2/hNloQcdbackup.GetXaxis().GetNbins()
+        new_hists+=[h2new]
         new_hists+=[h3new]
         h2new.SetLineStyle(1)
         h3new.SetLineStyle(1)

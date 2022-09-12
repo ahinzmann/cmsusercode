@@ -6,7 +6,7 @@ import array
 
 only6000=False
 
-massbinssets1=[[(6000,7000),(7000,13000)],
+massbinssets1=[#[(6000,7000),(7000,13000)],
 	      [(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
 	      [(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
 	      ]
@@ -18,9 +18,9 @@ massbinssets2=[[(7000,13000)],
 	      [(3600,4200)],
 	      [(3000,3600)],
 	      [(2400,3000)],
-	      [(1900,2400)],
-	      [(1500,1900)],
-	      [(1200,1500)],
+	      #[(1900,2400)],
+	      #[(1500,1900)],
+	      #[(1200,1500)],
 	      ]
 if only6000:
   massbinssets1=[[(4800,5400),(5400,6000),(6000,13000)],
@@ -33,15 +33,24 @@ if only6000:
 	      [(3600,4200)],
 	      [(3000,3600)],
 	      [(2400,3000)],
-	      [(1900,2400)],
-	      [(1500,1900)],
-	      [(1200,1500)],
+	      #[(1900,2400)],
+	      #[(1500,1900)],
+	      #[(1200,1500)],
 	      ]
 
 for signal,signalMass,massbinsset in [("CIplusLL","12000",massbinssets2),
                                    ("AntiCIplusLL","12000",massbinssets2),
 				   ("cs_ct14nlo_","13000",massbinssets1), #nnlo
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2250_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2500_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3500_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4500_run2_v6","",[""]),
 				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_5000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_6000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_7000_run2_v6","",[""]),
 				   ]:
   for massbins in massbinsset:
     limits={}
