@@ -28,9 +28,9 @@ models+=[3]
 #models+=[60,61,62,63,64,65,66,67,68,69]
 #models+=[70,71,72,73,74,75,76,77]
 #models+=[78,79,80,81,82,83,84,85]
-models+=[30,31,32,33,34,35,36,37,38,39,40]
-models+=[41,42,43]
-models+=[45,46,47,48,49,50,51,52,53,54,55]
+#models+=[30,31,32,33,34,35,36,37,38,39,40]
+#models+=[41,42,43]
+#models+=[45,46,47,48,49,50,51,52,53,54,55]
 #models+=[47]
 #models=[88,89]
 #models=[60,61]
@@ -57,6 +57,9 @@ isCB=False
 isInjection=False
 
 DMpvalue=False
+
+runs="3" # "2" or "3" or "23"
+run=runs[-1]
 
 signalName={}
 signalExtraName={}
@@ -89,7 +92,7 @@ asym="a" #"a" for asymptotic CLS
 # The POI for LHC-style CLS is not clear, since CI models have no freedom  in signal strength or cross section.
 # The LEP-style and TEV-style CLS do not fit the POI.
 
-version="_v9" #version number controls how many massbin to use for DM
+version="_v6b" #version number controls how many massbin to use for DM
 
 if len(sys.argv)>1:
    models=[int(sys.argv[1])]
@@ -110,7 +113,7 @@ for model in models:
     signalMasses=[9000,10000,11000,12000,13000,14000,16000,18000]
  if model==3:
     signal="ADD"
-    signalMasses=[9000,10000,11000,12000,13000,14000,15000,16000,17000]
+    signalMasses=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
     #massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)] #signal MC statistics not enough in bins <4800
     if only6000:
@@ -470,7 +473,7 @@ for model in models:
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
- prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+ prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
 
  if model>=30 and model<60:
     name="pvalue_"+testStat+asym+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")    
@@ -479,8 +482,9 @@ for model in models:
     signalExtra=signalExtraName[model]
     #if float(signalExtraName[model].split("_")[2])<=2:
     #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+    signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
     #signalMasses=[4000,4500,5000,6000,7000]
-    signalMasses=[7000]
+    #signalMasses=[7000]
     includeSignalTheoryUncertainties=True # Assign QCD-only scale uncertainty to QCD+DM
     
     if isGen:
@@ -515,89 +519,92 @@ for model in models:
     signalWithMass=signal+str(signalMass)+signalExtra
     print signalWithMass
     if signalWithMass=="CIplusLL8000":
-    	fname=prefix + '_GENnp-0-run2_chi.root'
+    	fname=prefix + '_GENnp-0-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL9000":
-    	fname=prefix + '_GENnp-1-run2_chi.root'
+    	fname=prefix + '_GENnp-1-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL10000":
-    	fname=prefix + '_GENnp-2-run2_chi.root'
+    	fname=prefix + '_GENnp-2-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL11000":
-    	fname=prefix + '_GENnp-3-run2_chi.root'
+    	fname=prefix + '_GENnp-3-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL12000":
-    	fname=prefix + '_GENnp-4-run2_chi.root'
+    	fname=prefix + '_GENnp-4-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL13000":
-    	fname=prefix + '_GENnp-5-run2_chi.root'
+    	fname=prefix + '_GENnp-5-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL14000":
-    	fname=prefix + '_GENnp-6-run2_chi.root'
+    	fname=prefix + '_GENnp-6-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL16000":
-    	fname=prefix + '_GENnp-7-run2_chi.root'
+    	fname=prefix + '_GENnp-7-run'+run+'_chi.root'
     elif signalWithMass=="CIplusLL18000":
-    	fname=prefix + '_GENnp-8-run2_chi.root'
+    	fname=prefix + '_GENnp-8-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL8000":
-    	fname=prefix + '_GENnp-9-run2_chi.root'
+    	fname=prefix + '_GENnp-9-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL9000":
-    	fname=prefix + '_GENnp-10-run2_chi.root'
+    	fname=prefix + '_GENnp-10-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL10000":
-    	fname=prefix + '_GENnp-11-run2_chi.root'
+    	fname=prefix + '_GENnp-11-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL11000":
-    	fname=prefix + '_GENnp-12-run2_chi.root'
+    	fname=prefix + '_GENnp-12-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL12000":
-    	fname=prefix + '_GENnp-13-run2_chi.root'
+    	fname=prefix + '_GENnp-13-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL13000":
-    	fname=prefix + '_GENnp-14-run2_chi.root'
+    	fname=prefix + '_GENnp-14-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL14000":
-    	fname=prefix + '_GENnp-15-run2_chi.root'
+    	fname=prefix + '_GENnp-15-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL16000":
-    	fname=prefix + '_GENnp-16-run2_chi.root'
+    	fname=prefix + '_GENnp-16-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL18000":
-    	fname=prefix + '_GENnp-17-run2_chi.root'
+    	fname=prefix + '_GENnp-17-run'+run+'_chi.root'
+    elif "ADD" in signalWithMass and run=="3":
+        lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
+        fname=prefix + '_GENnp-'+str(lambdaTes.index(int(signalWithMass.strip("ADD")))+18)+'-run'+run+'_chi.root'
     elif signalWithMass=="ADD6000":
-        fname=prefix + '_GENnp-18-run2_chi.root'
+        fname=prefix + '_GENnp-18-run'+run+'_chi.root'
     elif signalWithMass=="ADD7000":
-        fname=prefix + '_GENnp-19-run2_chi.root'
+        fname=prefix + '_GENnp-19-run'+run+'_chi.root'
     elif signalWithMass=="ADD8000":
-        fname=prefix + '_GENnp-20-run2_chi.root'
+        fname=prefix + '_GENnp-20-run'+run+'_chi.root'
     elif signalWithMass=="ADD9000":
-        fname=prefix + '_GENnp-21-run2_chi.root'
+        fname=prefix + '_GENnp-21-run'+run+'_chi.root'
     elif signalWithMass=="ADD10000":
-        fname=prefix + '_GENnp-22-run2_chi.root'
+        fname=prefix + '_GENnp-22-run'+run+'_chi.root'
     elif signalWithMass=="ADD11000":
-        fname=prefix + '_GENnp-23-run2_chi.root'
+        fname=prefix + '_GENnp-23-run'+run+'_chi.root'
     elif signalWithMass=="ADD12000":
-        fname=prefix + '_GENnp-24-run2_chi.root'
+        fname=prefix + '_GENnp-24-run'+run+'_chi.root'
     elif signalWithMass=="ADD13000":
-        fname=prefix + '_GENnp-25-run2_chi.root'
+        fname=prefix + '_GENnp-25-run'+run+'_chi.root'
     elif signalWithMass=="ADD14000":
-        fname=prefix + '_GENnp-26-run2_chi.root'
+        fname=prefix + '_GENnp-26-run'+run+'_chi.root'
     elif signalWithMass=="ADD15000":
-        fname=prefix + '_GENnp-27-run2_chi.root'
+        fname=prefix + '_GENnp-27-run'+run+'_chi.root'
     elif signalWithMass=="ADD16000":
-        fname=prefix + '_GENnp-28-run2_chi.root'
+        fname=prefix + '_GENnp-28-run'+run+'_chi.root'
     elif signalWithMass=="ADD17000":
-        fname=prefix + '_GENnp-29-run2_chi.root'
+        fname=prefix + '_GENnp-29-run'+run+'_chi.root'
     elif signalWithMass=="ADD18000":
-        fname=prefix + '_GENnp-30-run2_chi.root'
+        fname=prefix + '_GENnp-30-run'+run+'_chi.root'
     elif signalWithMass=="ADD19000":
-        fname=prefix + '_GENnp-31-run2_chi.root'
+        fname=prefix + '_GENnp-31-run'+run+'_chi.root'
     elif signalWithMass=="ADD20000":
-        fname=prefix + '_GENnp-32-run2_chi.root'
+        fname=prefix + '_GENnp-32-run'+run+'_chi.root'
     elif signalWithMass=="ADD21000":
-        fname=prefix + '_GENnp-33-run2_chi.root'
+        fname=prefix + '_GENnp-33-run'+run+'_chi.root'
     elif signalWithMass=="ADD22000":
-        fname=prefix + '_GENnp-34-run2_chi.root'
+        fname=prefix + '_GENnp-34-run'+run+'_chi.root'
     elif signalWithMass=="AntiCIplusLL12000":
-        fname=prefix + '_GENnp-antici-run2_chi.root'
+        fname=prefix + '_GENnp-antici-run'+run+'_chi.root'
     elif signalWithMass=="QBH_"+str(signalMass)+"_6":
-        fname=prefix + "_" + signalWithMass + "-run2_chi.root"
+        fname=prefix + "_" + signalWithMass + "-run"+run+"_chi.root"
     elif signalWithMass=="QBH_"+str(signalMass)+"_RS1":
-        fname=prefix + "_" + signalWithMass + "-run2_chi.root"
+        fname=prefix + "_" + signalWithMass + "-run"+run+"_chi.root"
     elif "cs" in signal:
-        fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+        fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
     elif "alp" in signal or "tripleG" in signal:
       signalWithMass=signal+str(signalMass).replace(".","p")+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
     elif "DM" in signal and version=="_v1":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2000:
@@ -618,13 +625,13 @@ for model in models:
         massbins=[(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v2":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000") # FIX 7000 only available with large DM mass
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000") # FIX 7000 only available with large DM mass
       massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v3":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=1500:
@@ -641,7 +648,7 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v4":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=1500:
@@ -666,7 +673,7 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v5":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2500:
@@ -687,7 +694,7 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)]
     elif "DM" in signal and version=="_v6":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2500:
@@ -706,9 +713,30 @@ for model in models:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
       else:
         massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    elif "DM" in signal and version=="_v6b":
+      signalWithMass=signal+'_'+str(signalMass)+signalExtra
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
+      fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
+      signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
+      if signalMass<=2500:
+        massbins=[(2400,3000)]
+      elif signalMass<=3000:
+        massbins=[(2400,3000),(3000,3600)]
+      elif signalMass<=3500:
+        massbins=[(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200)]
+      elif signalMass<=4500:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+      elif signalMass<=5000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+      elif signalMass<=6000:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+      else:
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v7":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2500:
@@ -729,7 +757,7 @@ for model in models:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v8":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2500:
@@ -750,7 +778,7 @@ for model in models:
         massbins=[(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     elif "DM" in signal and version=="_v9":
       signalWithMass=signal+'_'+str(signalMass)+signalExtra
-      fname=prefix+"_"+str(signalWithMass)+"-run2_chi.root"
+      fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
       fname=fname.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       signalWithMass=signalWithMass.replace("6000_3000","6000_2990").replace("7000_3000","7000_4000").replace("8000_3000","8000_3990").replace("7000_1","7000_4000")
       if signalMass<=2500:
@@ -793,7 +821,7 @@ for model in models:
              statUncertainties+=["stat"+str(massindex)+"_"+str(chibin)]
 
     f=TFile(fname)
-    cfg=open("chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt","w")
+    cfg=open("chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run"+run+".txt","w")
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
@@ -846,39 +874,48 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     text+="\nmodel shape "
     for i in range(len(massbins)):
        text+="1 1 - "
+    if runs=="23": text+="\nnuisance edit rename * * model run"+run+"_model"
     text+="\nJERtail shape "
     for i in range(len(massbins)):
        text+="1 1 - "
+    if runs=="23": text+="\nnuisance edit rename * * JERtail run"+run+"_JERtail"
     if uncorrelatedSimUncertainties:
      for mn in massbins:
       text+="\nsim"+str(mn[0])+" shape "
       for i in range(len(massbins)):
         text+="1 1 - "
+      if runs=="23": text+="\nnuisance edit rename * * sim"+str(mn[0])+" run"+run+"_sim"+str(mn[0])
     if correlatedSimUncertainties:
      text+="\nsim shape "
      for i in range(len(massbins)):
         text+="1 1 - "
+     if runs=="23": text+="\nnuisance edit rename * * sim run"+run+"_sim"
     if jesSources>1:
      for n in range(jesSources):
       text+="\njes"+str(n+1)+" shape "
       for i in range(len(massbins)):
          text+="1 1 - "
+      if runs=="23" and n>1: text+="\nnuisance edit rename * * jes"+str(n+1)+" run"+run+"_jes"+str(n+1) # if n<2 combine would do the replace twice for n>10 and >20
     else:
       text+="\njes shape "
       for i in range(len(massbins)):
          text+="1 1 - "
+      if runs=="23": text+="\nnuisance edit rename * * jes run"+run+"_jes"
     if jerSources>1:
      for n in range(jerSources):
       text+="\njer"+str(n+1)+" shape "
       for i in range(len(massbins)):
          text+="1 1 - "
+      if runs=="23" and n>1: text+="\nnuisance edit rename * * jer"+str(n+1)+" run"+run+"_jer"+str(n+1) # if n<2 combine would do the replace twice for n>10 and >20
     else:
       text+="\njer shape "
       for i in range(len(massbins)):
          text+="1 1 - "
+      if runs=="23": text+="\nnuisance edit rename * * jer run"+run+"_jer"
     text+="\nprefire shape "
     for i in range(len(massbins)):
         text+="1 1 - "
+    if runs=="23": text+="\nnuisance edit rename * * prefire run"+run+"_prefire"
     text+="\npdf shape "
     for i in range(len(massbins)):
       if includeSignalTheoryUncertainties:
@@ -919,7 +956,9 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     cfg.close()
 
     out=system_call("cp "+dire+"HiggsJPC.py ${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/python")
-    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt -P HiggsAnalysis.CombinedLimit.HiggsJPC:twoHypothesisHiggs -o fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
+    if runs=="23":
+      out=system_call("combineCards.py run2=chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt run3=chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run3.txt > chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run23.txt")
+    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".txt -P HiggsAnalysis.CombinedLimit.HiggsJPC:twoHypothesisHiggs -o fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
     
     if testStat=="LEP":
      poi=""
@@ -939,51 +978,51 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     
     if asym:
      if "limit" in name:
-      out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
+      out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
       # -H ProfileLikelihood
-      f = open(name+"_exp_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
+      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(out);f.close()
      else: 
-      out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
-      f = open(name+"_exp_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
+      out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(out);f.close()
 
     elif testStat=="LHC":
      
      for point in [0.1,0.2,0.4,0.6,0.8,1.0,1.3,1.6,2.0,5.0,10.0]:
-       out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --singlePoint "+str(point)+" -s 10000"+str(int(point*100))+" --saveToys --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" -i 2 --clsAcc 0 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
-       f = open(name+"_"+str(signalMass)+str(point)+"_run2"+version+".txt","w");f.write(out);f.close()
+       out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --singlePoint "+str(point)+" -s 10000"+str(int(point*100))+" --saveToys --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" -i 2 --clsAcc 0 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+       f = open(name+"_"+str(signalMass)+str(point)+"_run"+runs+version+".txt","w");f.write(out);f.close()
      system_call("hadd -f grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root higgsCombine"+signal+signalExtra+".HybridNew.mH"+str(signalMass)+".10000*.root")
 
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &> "+name+"_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.5 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.84 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.16 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.975 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
-     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.025 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root &>> "+name+"_exp_"+str(signalMass)+"_run2"+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &> "+name+"_"+str(signalMass)+"_run"+runs+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.5 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &> "+name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.84 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &>> "+name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.16 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &>> "+name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.975 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &>> "+name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt")
+     system_call("combine -M HybridNew --frequentist --grid grid_mX"+str(signalMass)+"_"+signal+signalExtra+".root -m "+str(signalMass) + " -n "+signal+signalExtra+" --expectedFromGrid 0.025 fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root &>> "+name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt")
 
     else:
     
-     out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" --clsAcc 0.1 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
-     f = open(name+"_"+str(signalMass)+"_run2"+version+".txt","w");f.write(out);f.close()
+     out=system_call("combine -m "+str(signalMass)+" -M HybridNew --rule CLs --saveHybridResult --testStat "+method+poi+" --fork 4 -T "+str(ntoys)+" --clsAcc 0.1 -n "+signal+signalExtra+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+     f = open(name+"_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(out);f.close()
     
      out=system_call('root -q -b higgsCombine'+signal+signalExtra+'.HybridNew.mH'+str(signalMass)+'.root "${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/test/plotting/hypoTestResultTree.cxx(\\"qmu_'+signal+str(signalMass)+signalExtra+'_'+testStat+version+'.root\\",'+str(signalMass)+',1,\\"x\\")"')
     
      out=system_call('root -q -b '+dire+'"extractSignificanceStats'+add+'.C(\\"'+signal+str(signalMass)+signalExtra+'_'+testStat+version+'\\")"')
-     f = open(name+'_exp_'+str(signalMass)+'_run2'+version+'.txt',"w");f.write(out);f.close()
+     f = open(name+'_exp_'+str(signalMass)+'_run'+runs+version+'.txt',"w");f.write(out);f.close()
     
     # diagnostics
     diagnostic=True
     if diagnostic:
       out=system_call("mkdir "+name+version)
-      out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run2.root")
+      out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
       out=system_call("python diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
       print out
 
  for signalMass in signalMasses:
     limits[signalMass]=[]
     if testStat!="LEP" and (testStat!="LHC" or asym!=""):
-     tname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
+     tname=name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt"
     else:
-     tname=name+"_"+str(signalMass)+"_run2"+version+".txt"
+     tname=name+"_"+str(signalMass)+"_run"+runs+version+".txt"
     try:
       print "open",tname
       f=file(tname)
@@ -1008,7 +1047,7 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     if len(limits[signalMass])==0:
          limits[signalMass]+=[signalMass,0,0]
     try:
-      tname=name+"_exp_"+str(signalMass)+"_run2"+version+".txt"
+      tname=name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt"
       f=file(tname)
     except:
       print "file not found", tname
@@ -1031,7 +1070,7 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
      limits[signalMass]=[limits[signalMass][0],limits[signalMass][1],limits[signalMass][2],limits[signalMass][5],limits[signalMass][6],limits[signalMass][4],limits[signalMass][7],limits[signalMass][3]]
 
  print limits
- name=name+"_run2"+version+".txt"
+ name=name+"_run"+runs+version+".txt"
  f=file(name,"w")
  f.write(str([limits[signalMass] for signalMass in signalMasses]))
  f.close()

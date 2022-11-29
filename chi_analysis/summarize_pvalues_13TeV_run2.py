@@ -41,23 +41,23 @@ if only6000:
 for signal,signalMass,massbinsset in [("CIplusLL","12000",massbinssets2),
                                    ("AntiCIplusLL","12000",massbinssets2),
 				   ("cs_ct14nlo_","13000",massbinssets1), #nnlo
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2000_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2250_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2500_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3000_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3500_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4000_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4500_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_5000_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_6000_run2_v6","",[""]),
-				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_7000_run2_v6","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2000_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2250_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_2500_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3000_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_3500_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4000_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_4500_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_5000_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_6000_run2_v6b","",[""]),
+				   ("LHCa1108_DMAxial_Dijet_LO_Mphi_exp_7000_run2_v6b","",[""]),
 				   ]:
   for massbins in massbinsset:
     limits={}
     if "DM" in signal:
       name="pvalue"+signal
       if only6000:
-        name=name.replace("v6","v5")
+        name=name.replace("v6b","v5")
     else:
       name="pvalue_LHCa"+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")+"_exp_"+signalMass+"_run2"
     print name

@@ -17,3 +17,6 @@ python plotSignal_13TeV_desy_run2.py 31
 python plotSignal_13TeV_desy_run2.py 32 &
 python plotSignal_13TeV_desy_run2.py 33 &
 python plotSignal_13TeV_desy_run2.py 34
+
+python plotSignal_13TeV_desy_run2.py run3 &
+python plotSignal_13TeV_desy_run2.py 4-run3 &

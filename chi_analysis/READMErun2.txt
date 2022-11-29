@@ -4,16 +4,19 @@ The order of the execution matters in some cases.
 -------- MC production in CMSSW_7_1_X:
 
 submit_ci_samples_13TeV.py # produce GEN samples for LO QCD and LO QCD+CI
-submit_add_samples_13TeV.py # produce GEN samples for LO QCD+ADD
+#submit_add_samples_13TeV.py # produce GEN samples for LO QCD+ADD CUETP8M1 tune
 submit_herwig_samples_13TeV.py # produce GEN samples for QCD
 
-calculate_crosssections_uzh.py # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files, Herwig cross sections have to be taken from LHC.log file by hand.
+#calculate_crosssections_uzh.py # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files, Herwig cross sections have to be taken from LHC.log file by hand.
 xsdj_table.py # extract LO DM cross sections from LHC headers
 
 copy-samples.py # copy GEN samples from PSI to CERN
 copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
 --------- MC production in CMSSW_10_6_19 -------:
+
+submit_add_samples_CP5.py # produce GEN samples for LO QCD and QCD+ADD CP5 tune
+calculate_xsecs_desy.py > xsecs_13p6TeV.txt # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files
 
 source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh
 source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -28,7 +31,7 @@ submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
 
 -------- Data analysis in CMSSW_10_6_X:
 
-plotSignal_13TeV_desy_run2.sh # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
+plotSignal_13TeV_desy_run2_loop.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
 plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 plotSignal_13TeV_desy_alp_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for alp samples
 plotSignal_13TeV_desy_tripleG_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for tripleG samples
@@ -48,6 +51,7 @@ plot_chi_model_plots_13TeV_run2.py # plot smearing vs fullsim comparisons
 plot_chi_trigger_plots_13TeV_run2.py # plot trigger efficiencies
 
 plot_nonpert_13TeV.py # plot non perturbative correction histograms
+plot_dm_pdf_plots_13TeV_run2.py  # compute PDF uncertainties for DM
 
 add_systematics_13TeV_run2_loop.py # call add_systematics_13TeV_run2.py # add systematic shift histograms, NLOQCD and data histograms in the datacards for each CI, ADD, QBH, alp, tripleG and DM signal
 plot_chi_uncertainties_13TeV_run2.py # plot summary of all systematic uncertainties

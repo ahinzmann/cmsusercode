@@ -85,7 +85,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
         for up,down,central in uncertainties:
             addup=fitConstraints[nn]*pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
             adddown=fitConstraints[nn]*pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
-            if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])]:
+            if uncertaintynames[uncertainties.index([up,down,central])] in ["jer","JERtail","prefire","model"] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])]:
                 exp_sumup+=addup
                 exp_sumdown+=adddown
                 #print uncertaintynames[uncertainties.index([up,down,central])]
@@ -138,7 +138,7 @@ if __name__=="__main__":
 
     unfoldedData=False
     isCB=False
-    version="v9"
+    version="v6b"
 
     print "start ROOT"
     #gROOT.Reset()
@@ -162,9 +162,9 @@ if __name__=="__main__":
     gStyle.SetEndErrorSize(5)
 
     if unfoldedData:
-        SaveDir="./fitcheckGENv6/"
+        SaveDir="./fitcheckGENv6b/"
     elif isCB:
-        SaveDir="./fitcheckDETCBv6/"
+        SaveDir="./fitcheckDETCBv6b/"
     else:
         SaveDir="./"
     
@@ -187,7 +187,7 @@ if __name__=="__main__":
     print (counter-1)
     #print signalName,signalExtraName
 
-    prefix="versions/run2NNLOMar25/datacard_shapelimit13TeV"
+    prefix="versions/run2NNLO_pt12/datacard_shapelimit13TeV"
     if unfoldedData:
             prefix+="_unfolded"
 
@@ -212,6 +212,23 @@ if __name__=="__main__":
             	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
               else:
             	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+            if version=="v6b":
+              if signalMass<=2500:
+            	  massbins=[(2400,3000)]
+              elif signalMass<=3000:
+            	  massbins=[(2400,3000),(3000,3600)]
+              elif signalMass<=3500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+              elif signalMass<=5000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+              elif signalMass<=6000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+              else:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
             elif version=="v9":
   	      if signalMass<=2500:
   	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
@@ -233,14 +250,32 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["pdf","scaleAlt"] # "scale"
+            uncertaintynames=["pdf","scale","JERtail","model","jer","prefire"] # "scale"
             #uncertaintynames.append("model")
             for m in massbins:
-                uncertaintynames.append("model"+str(m[0]))
-            for i in range(1,23):
+                uncertaintynames.append("sim"+str(m[0]))
+            for i in range(1,28):
                 uncertaintynames.append("jes"+str(i))
-            for i in range(1,6):
-                uncertaintynames.append("jer"+str(i))
+            chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,3,6,9,12,16),
+              ]
+            chi_binnings=[]
+            for mass_bin in chi_bins:
+                chi_binnings+=[array.array('d')]
+                for chi_bin in mass_bin:
+                    chi_binnings[-1].append(chi_bin)
+            for mn in range(len(massbins)):
+              for cn in range(len(chi_binnings[mn])-1):
+                uncertaintynames.append("stat"+str(mn)+"_"+str(cn))
         
             for massbin in range(len(massbins)):
             

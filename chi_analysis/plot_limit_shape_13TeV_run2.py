@@ -36,6 +36,7 @@ if __name__=="__main__":
  
  testStat="LHC"
  asym="a" #asymptotic CLS
+ runs="3" # "2" or "3" or "23"
 
  for model in models:
 
@@ -81,7 +82,7 @@ if __name__=="__main__":
 
     print signal,model
 
-    f=file("limits"+testStat+asym+str(model)+"_"+signal+"_run2.txt")
+    f=file("limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt")
     limits=eval(f.readline())
     #print limits
 
@@ -221,6 +222,6 @@ if __name__=="__main__":
       print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
       print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, 0, 0" % ((exp1m)/1000.,(exp1p)/1000.)
     
-    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.pdf')
+    canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run'+runs+'.pdf')
     #canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
     

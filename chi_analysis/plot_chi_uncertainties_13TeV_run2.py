@@ -186,9 +186,9 @@ if __name__=="__main__":
     gStyle.SetEndErrorSize(5)
 
     if unfoldedData:
-        SaveDir="./fitcheckGENv6/"
+        SaveDir="./fitcheckGENv6b/"
     elif isCB:
-        SaveDir="./fitcheckDETCBv6/"
+        SaveDir="./fitcheckDETCBv6b/"
     else:
         SaveDir="./"
     
@@ -211,7 +211,7 @@ if __name__=="__main__":
     print (counter-1)
     #print signalName,signalExtraName
 
-    prefix="versions/run2ULNNLONov21/datacard_shapelimit13TeV"
+    prefix="versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
     if unfoldedData:
             prefix+="_unfolded"
 
@@ -236,6 +236,23 @@ if __name__=="__main__":
             	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
               else:
             	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+            elif version=="v6b":
+              if signalMass<=2500:
+            	  massbins=[(2400,3000)]
+              elif signalMass<=3000:
+            	  massbins=[(2400,3000),(3000,3600)]
+              elif signalMass<=3500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4500:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+              elif signalMass<=5000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+              elif signalMass<=6000:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+              else:
+            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
             elif version=="v9":
   	      if signalMass<=2500:
   	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
