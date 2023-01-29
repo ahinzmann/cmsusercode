@@ -4,6 +4,7 @@ from ROOT import *
 
 #gROOT.Reset()
 gROOT.SetStyle("Plain")
+gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
@@ -64,8 +65,8 @@ if __name__ == '__main__':
    prefix="datacard_shapelimit13TeV_run2_"
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
-   use_UL=False
-   compare_EOYvsUL=True
+   use_UL=True
+   compare_EOYvsUL=False
    compare_EOYvsUL_MC=False
    if use_UL:
      version="_UL"+version
@@ -83,36 +84,38 @@ if __name__ == '__main__':
     data3=[("UL18", 1, "Data (UL 2018)")
          ]
    elif compare_EOYvsUL_MC:
-    data=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./44805214, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
-       ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./48404535, ""),
-       ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/46063160, ""),
-       ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/37259115, ""),
-       ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13511726, ""),
-       ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/6059830, ""),
-       ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/3812684, ""),
-       ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./41210455, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
-       ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./47426214, ""),
-       ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/49068426, ""),
-       ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/38188739, ""),
-       ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/10707004, ""),
-       ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/7591790, ""),
-       ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/3620418, ""),
+    UL16preFactor=19.52/36.33 # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+    UL16postFactor=16.81/36.33 # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
+    data=[("UL16preVFP_QCDmadgraph-HT200to300",UL16preFactor*1710000./17969592, "MG+Py QCD (UL16)"),
+       ("UL16preVFP_QCDmadgraph-HT300to500",UL16preFactor*347500./13586390, ""),
+       ("UL16preVFP_QCDmadgraph-HT500to700",UL16preFactor*30363.051/55497082, ""),
+       ("UL16preVFP_QCDmadgraph-HT700to1000",UL16preFactor*6428.869/15242034, ""),
+       ("UL16preVFP_QCDmadgraph-HT1000to1500",UL16preFactor*1122.659/13559959, ""),
+       ("UL16preVFP_QCDmadgraph-HT1500to2000",UL16preFactor*108.163/9661950, ""),
+       ("UL16preVFP_QCDmadgraph-HT2000toInf",UL16preFactor*22.008/4827641, ""),
+       ("UL16postVFP_QCDmadgraph-HT200to300",UL16postFactor*1710000./42723038, "MG+Py QCD (UL16)"),
+       ("UL16postVFP_QCDmadgraph-HT300to500",UL16postFactor*347500./45502889, ""),
+       ("UL16postVFP_QCDmadgraph-HT500to700",UL16postFactor*30363.051/15066884, ""),
+       ("UL16postVFP_QCDmadgraph-HT700to1000",UL16postFactor*6428.869/13714842, ""),
+       ("UL16postVFP_QCDmadgraph-HT1000to1500",UL16postFactor*1122.659/12416669, ""),
+       ("UL16postVFP_QCDmadgraph-HT1500to2000",UL16postFactor*108.163/9244228, ""),
+       ("UL16postVFP_QCDmadgraph-HT2000toInf",UL16postFactor*22.008/4843949, ""),
        ]
-    data2=[("UL17_QCDmadgraph-HT200to300",1710000./57721120, "MG+Py QCD (UL17)"),
-       ("UL17_QCDmadgraph-HT300to500",347500./57191140, ""),
-       ("UL17_QCDmadgraph-HT500to700",30363.051/9188310, ""),
-       ("UL17_QCDmadgraph-HT700to1000",6428.869/45812757, ""),
-       ("UL17_QCDmadgraph-HT1000to1500",1122.659/15346629, ""),
-       ("UL17_QCDmadgraph-HT1500to2000",108.163/10598209, ""),
-       ("UL17_QCDmadgraph-HT2000toInf",22.008/5416717, ""),
+    data2=[("UL17_QCDmadgraph-HT200to300",1710000./42316128, "MG+Py QCD (UL17)"),
+       ("UL17_QCDmadgraph-HT300to500",347500./42914024, ""),
+       ("UL17_QCDmadgraph-HT500to700",30363.051/35745565, ""),
+       ("UL17_QCDmadgraph-HT700to1000",6428.869/33646855, ""),
+       ("UL17_QCDmadgraph-HT1000to1500",1122.659/10136610, ""),
+       ("UL17_QCDmadgraph-HT1500to2000",108.163/7528926, ""),
+       ("UL17_QCDmadgraph-HT2000toInf",22.008/4089387, ""),
        ]
-    data3=[("UL18_QCDmadgraph-HT200to300",1710000./22826901, "MG+Py QCD (UL18)"),
-       ("UL18_QCDmadgraph-HT300to500",347500./54463611, ""),
-       ("UL18_QCDmadgraph-HT500to700",30363.051/58487165, ""),
-       ("UL18_QCDmadgraph-HT700to1000",6428.869/47703400, ""),
-       ("UL18_QCDmadgraph-HT1000to1500",1122.659/15675643, ""),
-       ("UL18_QCDmadgraph-HT1500to2000",108.163/10612885, ""),
-       ("UL18_QCDmadgraph-HT2000toInf",22.008/4504262, ""),
+    data3=[("UL18_QCDmadgraph-HT200to300",1710000./56298746, "MG+Py QCD (UL18)"),
+       ("UL18_QCDmadgraph-HT300to500",347500./60991701, ""),
+       ("UL18_QCDmadgraph-HT500to700",30363.051/48640047, ""),
+       ("UL18_QCDmadgraph-HT700to1000",6428.869/47925782, ""),
+       ("UL18_QCDmadgraph-HT1000to1500",1122.659/14244456, ""),
+       ("UL18_QCDmadgraph-HT1500to2000",108.163/10751607, ""),
+       ("UL18_QCDmadgraph-HT2000toInf",22.008/5278880, ""),
        ]
    else:
     data=[("2016", 1, "Data (2016)")
@@ -129,36 +132,36 @@ if __name__ == '__main__':
     mc3=[("2018", 1, "Data (EOY 2018)")
          ]
    elif use_UL and not compare_EOYvsUL_MC:
-    mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./44805214, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
-       ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./48404535, ""),
-       ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/46063160, ""),
-       ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/37259115, ""),
-       ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13511726, ""),
-       ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/6059830, ""),
-       ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/3812684, ""),
-       ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./41210455, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
-       ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./47426214, ""),
-       ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/49068426, ""),
-       ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/38188739, ""),
-       ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/10707004, ""),
-       ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/7591790, ""),
-       ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/3620418, ""),
+    mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+       ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
+       ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/55497082, ""),
+       ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/15242034, ""),
+       ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13559959, ""),
+       ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/9661950, ""),
+       ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/4827641, ""),
+       ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./42723038, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
+       ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./45502889, ""),
+       ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/15066884, ""),
+       ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/13714842, ""),
+       ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/12416669, ""),
+       ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/9244228, ""),
+       ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/4843949, ""),
        ]
-    mc2=[("UL17_QCDmadgraph-HT200to300",1710000./57721120, "MG+Py QCD (UL17)"),
-       ("UL17_QCDmadgraph-HT300to500",347500./57191140, ""),
-       ("UL17_QCDmadgraph-HT500to700",30363.051/9188310, ""),
-       ("UL17_QCDmadgraph-HT700to1000",6428.869/45812757, ""),
-       ("UL17_QCDmadgraph-HT1000to1500",1122.659/15346629, ""),
-       ("UL17_QCDmadgraph-HT1500to2000",108.163/10598209, ""),
-       ("UL17_QCDmadgraph-HT2000toInf",22.008/5416717, ""),
+    mc2=[("UL17_QCDmadgraph-HT200to300",1710000./42316128, "MG+Py QCD (UL17)"),
+       ("UL17_QCDmadgraph-HT300to500",347500./42914024, ""),
+       ("UL17_QCDmadgraph-HT500to700",30363.051/35745565, ""),
+       ("UL17_QCDmadgraph-HT700to1000",6428.869/33646855, ""),
+       ("UL17_QCDmadgraph-HT1000to1500",1122.659/10136610, ""),
+       ("UL17_QCDmadgraph-HT1500to2000",108.163/7528926, ""),
+       ("UL17_QCDmadgraph-HT2000toInf",22.008/4089387, ""),
        ]
-    mc3=[("UL18_QCDmadgraph-HT200to300",1710000./22826901, "MG+Py QCD (UL18)"),
-       ("UL18_QCDmadgraph-HT300to500",347500./54463611, ""),
-       ("UL18_QCDmadgraph-HT500to700",30363.051/58487165, ""),
-       ("UL18_QCDmadgraph-HT700to1000",6428.869/47703400, ""),
-       ("UL18_QCDmadgraph-HT1000to1500",1122.659/15675643, ""),
-       ("UL18_QCDmadgraph-HT1500to2000",108.163/10612885, ""),
-       ("UL18_QCDmadgraph-HT2000toInf",22.008/4504262, ""),
+    mc3=[("UL18_QCDmadgraph-HT200to300",1710000./56298746, "MG+Py QCD (UL18)"),
+       ("UL18_QCDmadgraph-HT300to500",347500./60991701, ""),
+       ("UL18_QCDmadgraph-HT500to700",30363.051/48640047, ""),
+       ("UL18_QCDmadgraph-HT700to1000",6428.869/47925782, ""),
+       ("UL18_QCDmadgraph-HT1000to1500",1122.659/14244456, ""),
+       ("UL18_QCDmadgraph-HT1500to2000",108.163/10751607, ""),
+       ("UL18_QCDmadgraph-HT2000toInf",22.008/5278880, ""),
        ]
    else:
     mc=[("2016_QCDmadgraph-HT200to300",1712000./56709875, "MG+Py QCD (EOY16)"),
@@ -190,6 +193,7 @@ if __name__ == '__main__':
    f_data3=[]
    for name,xsec,l in data:
       f_data+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
+      print prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root"
    for name,xsec,l in data2:
       f_data2+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
    for name,xsec,l in data3:
@@ -206,6 +210,11 @@ if __name__ == '__main__':
    for name,xsec,l in mc3:
       f_mc3+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix18)+"_chi.root")]
 
+   if compare_EOYvsUL_MC:
+     minmass=1900
+   else:
+     minmass=2400
+  
    for var in ["mass"]:
      canvas = TCanvas("","",0,0,200,300)
      canvas.Divide(1,3,0,0,0)
@@ -233,11 +242,11 @@ if __name__ == '__main__':
      hist.Scale(data[0][1])
      for i in range(1,len(data)):
          hist.Add(f_data[i].Get(prefix+data[i][0].split("-")[0]+var),data[i][1])
-     normfactor=hist.Integral(hist.FindBin(2400),hist.FindBin(9000))
+     normfactor=hist.Integral(hist.FindBin(minmass),hist.FindBin(9000))
      if compare_EOYvsUL:
        normfactor=lumi[0]*1000.
      if compare_EOYvsUL_MC:
-       normfactor=1./38.6 #?
+       normfactor=1.
      hist.Scale(1./normfactor)
      hist.SetLineColor(1)
      hist.SetMarkerStyle(24)
@@ -249,8 +258,11 @@ if __name__ == '__main__':
        hist.GetYaxis().SetTitle("Cross section [pb]")
      else:
        hist.GetYaxis().SetTitle("Normalized distribution")
-     hist.GetXaxis().SetRangeUser(2400,9000)
-     hist.GetYaxis().SetRangeUser(0.5/normfactor,hist.GetMaximum()*1.5)
+     hist.GetXaxis().SetRangeUser(minmass,9000)
+     if compare_EOYvsUL_MC:
+       hist.GetYaxis().SetRangeUser(0.5/1e6,hist.GetMaximum()*1.5)
+     else:
+       hist.GetYaxis().SetRangeUser(0.5/normfactor,hist.GetMaximum()*1.5)
      hist.GetXaxis().SetTitleOffset(1.1)
      hist.GetYaxis().SetTitleOffset(1.1)
      hist.GetXaxis().SetLabelSize(0.05)
@@ -265,7 +277,7 @@ if __name__ == '__main__':
      hist2.Scale(data2[0][1])
      for i in range(1,len(data2)):
     	 hist2.Add(f_data2[i].Get(prefix+data2[i][0].split("-")[0]+var),data2[i][1])
-     normfactor2=hist2.Integral(hist2.FindBin(2400),hist2.FindBin(9000))
+     normfactor2=hist2.Integral(hist2.FindBin(minmass),hist2.FindBin(9000))
      if compare_EOYvsUL:
        normfactor2=lumi[1]*1000.
      if compare_EOYvsUL_MC:
@@ -283,7 +295,7 @@ if __name__ == '__main__':
      hist3.Scale(data3[0][1])
      for i in range(1,len(data3)):
     	 hist3.Add(f_data3[i].Get(prefix+data3[i][0].split("-")[0]+var),data3[i][1])
-     normfactor3=hist3.Integral(hist3.FindBin(2400),hist3.FindBin(9000))
+     normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
      if compare_EOYvsUL:
        normfactor3=lumi[2]*1000.
      if compare_EOYvsUL_MC:
@@ -306,14 +318,14 @@ if __name__ == '__main__':
      elif compare_EOYvsUL_MC:
        hist_mc.Scale(1.)
      else:
-       hist_mc.Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc.Integral(hist_mc.FindBin(2400),hist_mc.GetNbinsX()))
+       hist_mc.Scale(hist.Integral(hist.FindBin(minmass),hist.GetNbinsX())/hist_mc.Integral(hist_mc.FindBin(minmass),hist_mc.GetNbinsX()))
      hist_mc.SetLineColor(1)
      hist_mc.SetStats(False)
      hist_mc.Draw("histsame")
      legend.AddEntry(hist_mc,mc[0][2],"l")
 
      hist_mc2=f_mc2[0].Get(prefix+mc2[0][0].split("-")[0]+var)
-     hist.Scale(mc2[0][1])
+     hist_mc2.Scale(mc2[0][1])
      for i in range(1,len(mc2)):
     	 hist_mc2.Add(f_mc2[i].Get(prefix+mc2[0][0].split("-")[0]+var),mc2[i][1])
      if compare_EOYvsUL:
@@ -321,7 +333,7 @@ if __name__ == '__main__':
      elif compare_EOYvsUL_MC:
        hist_mc2.Scale(1.)
      else:
-       hist_mc2.Scale(hist2.Integral(hist2.FindBin(2400),hist2.GetNbinsX())/hist_mc2.Integral(hist_mc2.FindBin(2400),hist_mc2.GetNbinsX()))
+       hist_mc2.Scale(hist2.Integral(hist2.FindBin(minmass),hist2.GetNbinsX())/hist_mc2.Integral(hist_mc2.FindBin(minmass),hist_mc2.GetNbinsX()))
      hist_mc2.SetLineColor(2)
      hist_mc2.SetStats(False)
      hist_mc2.Draw("histsame")
@@ -336,7 +348,7 @@ if __name__ == '__main__':
      elif compare_EOYvsUL_MC:
        hist_mc3.Scale(1.)
      else:
-       hist_mc3.Scale(hist3.Integral(hist3.FindBin(2400),hist3.GetNbinsX())/hist_mc3.Integral(hist_mc3.FindBin(2400),hist_mc3.GetNbinsX()))
+       hist_mc3.Scale(hist3.Integral(hist3.FindBin(minmass),hist3.GetNbinsX())/hist_mc3.Integral(hist_mc3.FindBin(minmass),hist_mc3.GetNbinsX()))
      hist_mc3.SetLineColor(4)
      hist_mc3.SetStats(False)
      hist_mc3.Draw("histsame")

@@ -59,7 +59,7 @@ if __name__ == '__main__':
    
    prefix="datacard_shapelimit13TeV_run2_"
    postfix="_run2"
-   use_UL=False
+   use_UL=True
    if use_UL:
      postfix="_UL_run2"
    
@@ -86,34 +86,34 @@ if __name__ == '__main__':
      if scenario=="model":
        mclegend[1]="Madgraph+Pythia"
        if use_UL:
-         mc[1]=[("UL16preVFP_QCDmadgraph-HT200to300",1710000./44805214*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT300to500",347500./48404535*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT500to700",30363.051/46063160*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT700to1000",6428.869/37259115*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT1000to1500",1122.659/13511726*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT1500to2000",108.163/6059830*lumifactor["2016preVFP"]),
-           ("UL16preVFP_QCDmadgraph-HT2000toInf",22.008/3812684*lumifactor["2016preVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT200to300",1710000./41210455*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT300to500",347500./47426214*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT500to700",30363.051/49068426*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT700to1000",6428.869/38188739*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT1000to1500",1122.659/10707004*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT1500to2000",108.163/7591790*lumifactor["2016postVFP"]),
-           ("UL16postVFP_QCDmadgraph-HT2000toInf",22.008/3620418*lumifactor["2016postVFP"]),
-           ("UL17_QCDmadgraph-HT200to300",1710000./57721120*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT300to500",347500./57191140*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT500to700",30363.051/9188310*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT700to1000",6428.869/45812757*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT1000to1500",1122.659/15346629*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT1500to2000",108.163/10598209*lumifactor["2017"]),
-           ("UL17_QCDmadgraph-HT2000toInf",22.008/5416717*lumifactor["2017"]),
-           ("UL18_QCDmadgraph-HT200to300",1710000./22826901*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT300to500",347500./54463611*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT500to700",30363.051/58487165*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT700to1000",6428.869/47703400*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT1000to1500",1122.659/15675643*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT1500to2000",108.163/10612885*lumifactor["2018"]),
-           ("UL18_QCDmadgraph-HT2000toInf",22.008/4504262*lumifactor["2018"]),
+         mc[1]=[("UL16preVFP_QCDmadgraph-HT200to300",1710000./17969592*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT300to500",347500./13586390*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT500to700",30363.051/55497082*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT700to1000",6428.869/15242034*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT1000to1500",1122.659/13559959*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT1500to2000",108.163/9661950*lumifactor["2016preVFP"]),
+           ("UL16preVFP_QCDmadgraph-HT2000toInf",22.008/4827641*lumifactor["2016preVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT200to300",1710000./42723038*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT300to500",347500./45502889*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT500to700",30363.051/15066884*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT700to1000",6428.869/13714842*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT1000to1500",1122.659/12416669*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT1500to2000",108.163/9244228*lumifactor["2016postVFP"]),
+           ("UL16postVFP_QCDmadgraph-HT2000toInf",22.008/4843949*lumifactor["2016postVFP"]),
+           ("UL17_QCDmadgraph-HT200to300",1710000./42316128*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT300to500",347500./42914024*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT500to700",30363.051/35745565*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT700to1000",6428.869/33646855*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT1000to1500",1122.659/10136610*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT1500to2000",108.163/7528926*lumifactor["2017"]),
+           ("UL17_QCDmadgraph-HT2000toInf",22.008/4089387*lumifactor["2017"]),
+           ("UL18_QCDmadgraph-HT200to300",1710000./56298746*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT300to500",347500./60991701*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT500to700",30363.051/48640047*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT700to1000",6428.869/47925782*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT1000to1500",1122.659/14244456*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT1500to2000",108.163/10751607*lumifactor["2018"]),
+           ("UL18_QCDmadgraph-HT2000toInf",22.008/5278880*lumifactor["2018"]),
            ]
        else:
          mc[1]=[("2016_QCDmadgraph-HT200to300",1712000./56709875*lumifactor["2016"]),
