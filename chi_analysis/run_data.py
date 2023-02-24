@@ -20,9 +20,13 @@ samples=[#("data2016",0,74,""),
          #("dataUL17",17,61,"-L1prefire"),
 	 #("dataUL18",18,97,"-HEM"),
 	 #("qcdUL16preVFP",19,105,""),
-         ("qcdUL16postVFP",20,101,""),
+         ("qcdUL16postVFP",20,102,""),
          #("qcdUL17",21,115,""),
 	 #("qcdUL18",22,159,""),
+	 #("qcdUL16preVFP",19,105,"-GEN"),
+         ("qcdUL16postVFP",20,102,"-GEN"),
+         #("qcdUL17",21,115,"-GEN"),
+	 #("qcdUL18",22,159,"-GEN"),
 	 ]
 
 count=0

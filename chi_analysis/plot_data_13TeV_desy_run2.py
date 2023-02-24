@@ -139,6 +139,9 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          jet2=TLorentzVector()
          jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
          jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
+         if genLevel:
+           jet1.SetPtEtaPhiM(event.genJetAK4_pt1,event.genJetAK4_eta1,event.genJetAK4_phi1,event.genJetAK4_mass1)
+           jet2.SetPtEtaPhiM(event.genJetAK4_pt2,event.genJetAK4_eta2,event.genJetAK4_phi2,event.genJetAK4_mass2)
          if jet2.Pt()>jet1.Pt():
            jetTmp=jet1
            jet1=jet2
@@ -215,6 +218,7 @@ if __name__ == '__main__':
     wait=False
     vetoHEM=False
     correctPrefire=False
+    genLevel=False
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -263,10 +267,10 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_UL16postVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16postVFPoct"),
             ("datacard_shapelimit13TeV_run2_UL17","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL17oct"),
             ("datacard_shapelimit13TeV_run2_UL18","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18oct"),
-            ("datacard_shapelimit13TeV_run2_UL16preVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16preVFPjan2023"),
-            ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPjan2023"),
-            ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17jan2023"),
-            ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18jan2023"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16preVFPfeb2023"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPfeb2023"),
+            ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17feb2023"),
+            ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18feb2023"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -658,6 +662,8 @@ if __name__ == '__main__':
         vetoHEM=True
       if "L1prefire" in sys.argv[3]:
         correctPrefire=True
+      if "GEN" in sys.argv[3]:
+        genLevel=True
 
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -673,6 +679,8 @@ if __name__ == '__main__':
         postfix+="-HEM"
       if correctPrefire:
         postfix+="-L1prefire"
+      if genLevel:
+        postfix+="-GEN"
 
       out=TFile(prefix+postfix + '_chi.root','RECREATE')
       for j in range(len(massbins)):

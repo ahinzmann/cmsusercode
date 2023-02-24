@@ -65,15 +65,18 @@ if __name__ == '__main__':
    prefix="datacard_shapelimit13TeV_run2_"
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
-   use_UL=True
+   use_UL=False
    compare_EOYvsUL=False
    compare_EOYvsUL_MC=False
+   compare_RECOvsGEN=True
    if use_UL:
      version="_UL"+version
    if compare_EOYvsUL:
      version="_EOYvsUL"+version
    if compare_EOYvsUL_MC:
      version="_EOYvsUL_MC"+version
+   if compare_RECOvsGEN:
+     version="_RECOvsGEN"+version
 
    if compare_EOYvsUL or use_UL:
     data=[("UL16preVFP", 1, "Data (UL 2016)"),
@@ -83,7 +86,7 @@ if __name__ == '__main__':
          ]
     data3=[("UL18", 1, "Data (UL 2018)")
          ]
-   elif compare_EOYvsUL_MC:
+   elif compare_EOYvsUL_MC or compare_RECOvsGEN:
     UL16preFactor=19.52/36.33 # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
     UL16postFactor=16.81/36.33 # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
     data=[("UL16preVFP_QCDmadgraph-HT200to300",UL16preFactor*1710000./17969592, "MG+Py QCD (UL16)"),
@@ -131,7 +134,7 @@ if __name__ == '__main__':
          ]
     mc3=[("2018", 1, "Data (EOY 2018)")
          ]
-   elif use_UL and not compare_EOYvsUL_MC:
+   elif use_UL and not compare_EOYvsUL_MC or compare_RECOvsGEN:
     mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
        ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
        ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/55497082, ""),
@@ -203,12 +206,12 @@ if __name__ == '__main__':
    f_mc2=[]
    f_mc3=[]
    for name,xsec,l in mc:
-      f_mc+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
+      f_mc+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
       print prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root"
    for name,xsec,l in mc2:
-      f_mc2+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
+      f_mc2+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
    for name,xsec,l in mc3:
-      f_mc3+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix18)+"_chi.root")]
+      f_mc3+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix18)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
 
    if compare_EOYvsUL_MC:
      minmass=1900
@@ -245,7 +248,7 @@ if __name__ == '__main__':
      normfactor=hist.Integral(hist.FindBin(minmass),hist.FindBin(9000))
      if compare_EOYvsUL:
        normfactor=lumi[0]*1000.
-     if compare_EOYvsUL_MC:
+     if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor=1.
      hist.Scale(1./normfactor)
      hist.SetLineColor(1)
@@ -254,12 +257,12 @@ if __name__ == '__main__':
      hist.SetMarkerSize(0.2)
      hist.SetTitle("")
      hist.GetXaxis().SetLabelColor(0)
-     if compare_EOYvsUL or compare_EOYvsUL_MC:
+     if compare_EOYvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist.GetYaxis().SetTitle("Cross section [pb]")
      else:
        hist.GetYaxis().SetTitle("Normalized distribution")
      hist.GetXaxis().SetRangeUser(minmass,9000)
-     if compare_EOYvsUL_MC:
+     if compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist.GetYaxis().SetRangeUser(0.5/1e6,hist.GetMaximum()*1.5)
      else:
        hist.GetYaxis().SetRangeUser(0.5/normfactor,hist.GetMaximum()*1.5)
@@ -271,7 +274,7 @@ if __name__ == '__main__':
      hist.GetYaxis().SetTitleSize(0.06)
      hist.SetStats(False)
      hist.Draw("pe")
-     legend.AddEntry(hist,data[0][2],"lpe")
+     legend.AddEntry(hist,data[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
      hist2=f_data2[0].Get(prefix+data2[0][0].split("-")[0]+var)
      hist2.Scale(data2[0][1])
@@ -280,7 +283,7 @@ if __name__ == '__main__':
      normfactor2=hist2.Integral(hist2.FindBin(minmass),hist2.FindBin(9000))
      if compare_EOYvsUL:
        normfactor2=lumi[1]*1000.
-     if compare_EOYvsUL_MC:
+     if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor2=1.
      hist2.Scale(1./normfactor2)
      hist2.SetLineColor(2)
@@ -289,7 +292,7 @@ if __name__ == '__main__':
      hist2.SetMarkerSize(0.2)
      hist2.SetStats(False)
      hist2.Draw("pesame")
-     legend.AddEntry(hist2,data2[0][2],"lpe")
+     legend.AddEntry(hist2,data2[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
      
      hist3=f_data3[0].Get(prefix+data3[0][0].split("-")[0]+var)
      hist3.Scale(data3[0][1])
@@ -298,7 +301,7 @@ if __name__ == '__main__':
      normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
      if compare_EOYvsUL:
        normfactor3=lumi[2]*1000.
-     if compare_EOYvsUL_MC:
+     if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor3=1.
      hist3.Scale(1./normfactor3)
      hist3.SetLineColor(4)
@@ -307,7 +310,7 @@ if __name__ == '__main__':
      hist3.SetMarkerSize(0.2)
      hist3.SetStats(False)
      hist3.Draw("pesame")
-     legend.AddEntry(hist3,data3[0][2],"lpe")
+     legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
      
      hist_mc=f_mc[0].Get(prefix+mc[0][0].split("-")[0]+var)
      hist_mc.Scale(mc[0][1])
@@ -315,14 +318,14 @@ if __name__ == '__main__':
          hist_mc.Add(f_mc[i].Get(prefix+mc[i][0].split("-")[0]+var),mc[i][1])
      if compare_EOYvsUL:
        hist_mc.Scale(1./normfactor)
-     elif compare_EOYvsUL_MC:
+     elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc.Scale(1.)
      else:
        hist_mc.Scale(hist.Integral(hist.FindBin(minmass),hist.GetNbinsX())/hist_mc.Integral(hist_mc.FindBin(minmass),hist_mc.GetNbinsX()))
      hist_mc.SetLineColor(1)
      hist_mc.SetStats(False)
      hist_mc.Draw("histsame")
-     legend.AddEntry(hist_mc,mc[0][2],"l")
+     legend.AddEntry(hist_mc,mc[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
      hist_mc2=f_mc2[0].Get(prefix+mc2[0][0].split("-")[0]+var)
      hist_mc2.Scale(mc2[0][1])
@@ -330,14 +333,14 @@ if __name__ == '__main__':
     	 hist_mc2.Add(f_mc2[i].Get(prefix+mc2[0][0].split("-")[0]+var),mc2[i][1])
      if compare_EOYvsUL:
        hist_mc2.Scale(1./normfactor2)
-     elif compare_EOYvsUL_MC:
+     elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc2.Scale(1.)
      else:
        hist_mc2.Scale(hist2.Integral(hist2.FindBin(minmass),hist2.GetNbinsX())/hist_mc2.Integral(hist_mc2.FindBin(minmass),hist_mc2.GetNbinsX()))
      hist_mc2.SetLineColor(2)
      hist_mc2.SetStats(False)
      hist_mc2.Draw("histsame")
-     legend.AddEntry(hist_mc2,mc2[0][2],"l")
+     legend.AddEntry(hist_mc2,mc2[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
      hist_mc3=f_mc3[0].Get(prefix+mc3[0][0].split("-")[0]+var)
      hist_mc3.Scale(mc3[0][1])
@@ -345,14 +348,14 @@ if __name__ == '__main__':
     	 hist_mc3.Add(f_mc3[i].Get(prefix+mc3[0][0].split("-")[0]+var),mc3[i][1])
      if compare_EOYvsUL:
        hist_mc3.Scale(1./normfactor3)
-     elif compare_EOYvsUL_MC:
+     elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc3.Scale(1.)
      else:
        hist_mc3.Scale(hist3.Integral(hist3.FindBin(minmass),hist3.GetNbinsX())/hist_mc3.Integral(hist_mc3.FindBin(minmass),hist_mc3.GetNbinsX()))
      hist_mc3.SetLineColor(4)
      hist_mc3.SetStats(False)
      hist_mc3.Draw("histsame")
-     legend.AddEntry(hist_mc3,mc3[0][2],"l")
+     legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
      hist.Draw("pesame")
      hist2.Draw("pesame")
@@ -370,13 +373,13 @@ if __name__ == '__main__':
        if hist.GetBinContent(b+1)>0:
     	 ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ratio.SetTitle("")
-     ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else "Sim / Data")
+     ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))
      ratio.GetYaxis().SetTitleSize(0.18)
      ratio.GetYaxis().SetTitleOffset(0.3)
      ratio.SetMarkerSize(0.1)
      ratio.GetYaxis().SetLabelSize(0.2)
      ratio.GetYaxis().SetRangeUser(0,2)
-     if compare_EOYvsUL or compare_EOYvsUL_MC:
+     if compare_EOYvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
       ratio.GetYaxis().SetRangeUser(0.8,1.2)
      ratio.GetXaxis().SetNdivisions(506)
      ratio.GetYaxis().SetNdivisions(503)
@@ -412,7 +415,7 @@ if __name__ == '__main__':
        if hist.GetBinContent(b+1)>0:
     	 ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ddratio.SetTitle("")
-     if compare_EOYvsUL_MC:
+     if compare_EOYvsUL_MC or compare_RECOvsGEN:
        ddratio.GetYaxis().SetTitle("Sim / 2016 Sim")
      else:
        ddratio.GetYaxis().SetTitle("Data / 2016 Data")
@@ -512,7 +515,7 @@ if __name__ == '__main__':
         hist.GetYaxis().SetTitleSize(0.06)
         hist.SetStats(False)
         hist.Draw("pe")
-        legend.AddEntry(hist,data[0][2],"lpe")
+        legend.AddEntry(hist,data[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
         name=prefix+data2[0][0].split("-")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
@@ -540,7 +543,7 @@ if __name__ == '__main__':
 	hist2.SetTitle("")
         hist2.SetStats(False)
         hist2.Draw("pesame")
-        legend.AddEntry(hist2,data2[0][2],"lpe")
+        legend.AddEntry(hist2,data2[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
         name=prefix+data3[0][0].split("-")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
@@ -568,7 +571,7 @@ if __name__ == '__main__':
 	hist3.SetTitle("")
         hist3.SetStats(False)
         hist3.Draw("pesame")
-        legend.AddEntry(hist3,data3[0][2],"lpe")
+        legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
         name=prefix+mc[0][0].split("-")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
@@ -589,7 +592,7 @@ if __name__ == '__main__':
       	hist_mc.SetLineColor(1)
         hist_mc.SetStats(False)
         hist_mc.Draw("histsame")
-        legend.AddEntry(hist_mc,mc[0][2],"l")
+        legend.AddEntry(hist_mc,mc[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
         name=prefix+mc2[0][0].split("-")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
@@ -610,7 +613,7 @@ if __name__ == '__main__':
       	hist_mc2.SetLineColor(2)
         hist_mc2.SetStats(False)
         hist_mc2.Draw("histsame")
-        legend.AddEntry(hist_mc2,mc2[0][2],"l")
+        legend.AddEntry(hist_mc2,mc2[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
         name=prefix+mc3[0][0].split("-")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
 	if var=="#chi": name+="_rebin1"
@@ -631,7 +634,7 @@ if __name__ == '__main__':
       	hist_mc3.SetLineColor(4)
         hist_mc3.SetStats(False)
         hist_mc3.Draw("histsame")
-        legend.AddEntry(hist_mc3,mc3[0][2],"l")
+        legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
         hist.Draw("lesame")
         hist2.Draw("lesame")
@@ -649,7 +652,7 @@ if __name__ == '__main__':
      	  if hist.GetBinContent(b+1)>0:
      	    ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      	ratio.SetTitle("")
-     	ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else "Sim / Data")
+     	ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))
      	ratio.GetYaxis().SetTitleSize(0.18)
      	ratio.GetYaxis().SetTitleOffset(0.3)
      	ratio.SetMarkerSize(0.1)
@@ -700,7 +703,7 @@ if __name__ == '__main__':
      	  if hist.GetBinContent(b+1)>0:
      	    ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      	ddratio.SetTitle("")
-     	if compare_EOYvsUL_MC:
+     	if compare_EOYvsUL_MC or compare_RECOvsGEN:
           ddratio.GetYaxis().SetTitle("Sim / 2016 Sim")
         else:
           ddratio.GetYaxis().SetTitle("Data / 2016 Data")
