@@ -70,7 +70,7 @@ if __name__ == '__main__':
     useNNLO=True # choice for QCD
     useM2=False # choice of mu-scale for QCD
     use_UL=True
-    run="3" # "2" for Run2 or "3" for 13.6 TeV procetion
+    run="2" # "2" for Run2 or "3" for 13.6 TeV projection
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -211,6 +211,10 @@ if __name__ == '__main__':
        massbins=massbins[1:]
        mass_bins_nlo_list=mass_bins_nlo_list[1:]
        chi_bins=chi_bins[1:]
+    mass_binning=array.array('d')
+    for mass_bin in massbins:
+        mass_binning.append(mass_bin[0])
+    mass_binning.append(13000)
     chi_binnings=[]
     for mass_bin in chi_bins:
         chi_binnings+=[array.array('d')]
@@ -648,6 +652,9 @@ if __name__ == '__main__':
       canvas.Divide(4,3)
       plots=[]
       legends=[]
+      
+      datahist2d_chiBins2=TH2F("dijet_mass2_chi2","M_{jj} vs #chi -- DATA",len(mass_binning)-1, mass_binning, len(chi_binnings[0])-1, chi_binnings[0])
+      datahist2d_chiBins3=TH2F("dijet_mass2_chi3","M_{jj} vs #chi -- DATA",len(mass_binning)-1, mass_binning, len(chi_binnings[-1])-1, chi_binnings[-1])
 
       for j in range(len(massbins)):
         col=1
@@ -755,23 +762,35 @@ if __name__ == '__main__':
           print histname2
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
+          for b in range(data.GetXaxis().GetNbins()):
+            datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
+            datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           if use_UL:
             histname16postVFP="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print histname16postVFP
             data16postVFP = TH1F(infile16postVFP.Get(histname16postVFP))
+            for b in range(data.GetXaxis().GetNbins()):
+              datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data16postVFP.GetBinContent(b+1))
+              datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data16postVFP.GetBinContent(b+1))
             data16postVFP=data16postVFP.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
             data.Add(data16postVFP)
           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000")
           histname17="datacard_shapelimit13TeV_run2_"+years[-2]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname17
           data17 = TH1F(infile17.Get(histname17))
+          for b in range(data.GetXaxis().GetNbins()):
+            datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data17.GetBinContent(b+1))
+            datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data17.GetBinContent(b+1))
           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           data.Add(data17)
           #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
           histname18="datacard_shapelimit13TeV_run2_"+years[-1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print histname18
           data18 = TH1F(infile18.Get(histname18))
+          for b in range(data.GetXaxis().GetNbins()):
+            datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data18.GetBinContent(b+1))
+            datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data18.GetBinContent(b+1))
           data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           data.Add(data18)
         if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
@@ -1033,17 +1052,17 @@ if __name__ == '__main__':
         # model, JERtail, sim uncertainty
         uncertainties=["model","JERtail","sim"]
         slopes={}
-        slopes[1200]=[0.002,0.01*0.5,0.020] # FIX compute
-        slopes[1500]=[0.002,0.01*0.5,0.020] # FIX compute
-        slopes[1900]=[0.002,0.006*0.5,0.009]
-        slopes[2400]=[0.002,0.007*0.5,0.004]
-        slopes[3000]=[0.002,0.010*0.5,0.004]
-        slopes[3600]=[0.002,0.014*0.5,0.008]
-        slopes[4200]=[0.001,0.017*0.5,0.010]
-        slopes[4800]=[0.004,0.005*0.5,0.015]
-        slopes[5400]=[0.005,0.045*0.5,0.015]
-        slopes[6000]=[0.03,0.072*0.5,0.058]
-        slopes[7000]=[0.03,0.105*0.5,0.051]
+        slopes[1200]=[0.002,0.01*0.5,0.010] # FIX compute
+        slopes[1500]=[0.002,0.01*0.5,0.010] # FIX compute
+        slopes[1900]=[0.002,0.006*0.5,0.005] # Updated 27.June 2023 from v4
+        slopes[2400]=[0.002,0.007*0.5,0.005]
+        slopes[3000]=[0.002,0.010*0.5,0.011]
+        slopes[3600]=[0.002,0.014*0.5,0.007]
+        slopes[4200]=[0.001,0.017*0.5,0.006]
+        slopes[4800]=[0.004,0.005*0.5,0.010]
+        slopes[5400]=[0.005,0.045*0.5,0.005]
+        slopes[6000]=[0.03,0.072*0.5,0.005]
+        slopes[7000]=[0.03,0.105*0.5,0.004]
         modelup={}
         modeldown={}
         cimodelup={}
@@ -1742,6 +1761,10 @@ if __name__ == '__main__':
 
       canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run'+run+'.pdf')
       #canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2.eps')
+
+      out.cd()
+      datahist2d_chiBins2.Write()
+      datahist2d_chiBins3.Write()
 
       #out.Close()
       #out=TFile(sample,'UPDATE')
