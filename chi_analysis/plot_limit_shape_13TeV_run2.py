@@ -1,30 +1,31 @@
 from ROOT import *
 import ROOT
-from math import log10
+from math import log10,sqrt
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
-gROOT.SetStyle("Plain")
+gROOT.SetBatch(True)
+gROOT.ForceStyle()
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
-gStyle.SetTitleOffset(1.2,"Y")
-gStyle.SetPadLeftMargin(0.18)
-gStyle.SetPadBottomMargin(0.15)
-gStyle.SetPadTopMargin(0.03)
-gStyle.SetPadRightMargin(0.05)
+gStyle.SetTitleOffset(0.9,"XY")
+gStyle.SetPadLeftMargin(0.12)
+gStyle.SetPadBottomMargin(0.12)
+gStyle.SetPadTopMargin(0.075)
+gStyle.SetPadRightMargin(0.12)
 gStyle.SetMarkerSize(1.5)
 gStyle.SetHistLineWidth(1)
 gStyle.SetStatFontSize(0.020)
-gStyle.SetTitleSize(0.06, "XYZ")
-gStyle.SetLabelSize(0.05, "XYZ")
-gStyle.SetNdivisions(505, "XYZ")
+gStyle.SetNdivisions(513, "Y")
+gStyle.SetNdivisions(510, "X")
 gStyle.SetLegendBorderSize(0)
 
 if __name__=="__main__":
 
- models=[3]
- #models+=[10,11]
- #models+=[60,61,62,63,64,65,66,67,68,69]
+ models=[3] #ADD
+ #models+=[10] #QBH ADD6
+ #models+=[11] #QBH RS1
+ #models+=[60,61,62,63,64,65,66,67,68,69] #CI
  #models+=[70,71,72,73,74,75,76,77]
  #models+=[78,79,80,81,82,83,84,85,86,87]
  #models+=[30,31,32,33,34,35,36,37,38]
@@ -32,11 +33,15 @@ if __name__=="__main__":
  #models=[88,89]
  #models=[60,61]
  #models=[10,11]
+ models+=[90,91,92,93,94] #alp
+ models+=[95,96,97,98,99] #tripleG
  #models=[90,91]
- 
+
  testStat="LHC"
  asym="a" #asymptotic CLS
- runs="3" # "2" or "3" or "23"
+ runs="2" # "2" or "3" or "23"
+
+ limit_list={}
 
  for model in models:
 
@@ -75,9 +80,9 @@ if __name__=="__main__":
        signal="cs_ct14nlo_"
     if model>=70 and model<90:
        signal="cs_ct14nlo_"
-    if model==90:
+    if model>=90 and model<95:
        signal="alp_QCD_fa"
-    if model==91:
+    if model>=95 and model<100:
        signal="tripleG_QCD_CG"
 
     print signal,model
@@ -107,8 +112,10 @@ if __name__=="__main__":
     g_exp=TGraph(0)
     g_exp1m=TGraph(0)
     g_exp1p=TGraph(0)
+    g_exp2m=TGraph(0)
+    g_exp2p=TGraph(0)
     for mass,limit,error,exp,exp1m,exp1p,exp2m,exp2p in limits:
-      if "tripleG" in signal: mass=100./mass
+      if "tripleG" in signal: mass=1000./sqrt(mass)
       if limit==0: limit=1e-5
       if not testStat=="LHC":
        if exp>=1: exp=1e-5
@@ -124,6 +131,10 @@ if __name__=="__main__":
         g_exp1m.SetPoint(g_exp1m.GetN(),mass,log10(exp1m))
       if exp1p>0:
         g_exp1p.SetPoint(g_exp1p.GetN(),mass,log10(exp1p))
+      if exp2m>0:
+        g_exp2m.SetPoint(g_exp2m.GetN(),mass,log10(exp2m))
+      if exp2p>0:
+        g_exp2p.SetPoint(g_exp2p.GetN(),mass,log10(exp2p))
     g.SetMarkerStyle(24)
     g.SetMarkerSize(0.5)
     g.SetLineColor(1)
@@ -144,6 +155,16 @@ if __name__=="__main__":
     g_exp1p.SetLineColor(3)
     g_exp1p.SetLineWidth(3)
     mg.Add(g_exp1p)
+    g_exp2m.SetMarkerStyle(24)
+    g_exp2m.SetMarkerSize(0.5)
+    g_exp2m.SetLineColor(5)
+    g_exp2m.SetLineWidth(3)
+    mg.Add(g_exp2m)
+    g_exp2p.SetMarkerStyle(24)
+    g_exp2p.SetMarkerSize(0.5)
+    g_exp2p.SetLineColor(5)
+    g_exp2p.SetLineWidth(3)
+    mg.Add(g_exp2p)
     
     mg.Draw("apl")
     mg.SetTitle("")
@@ -176,6 +197,8 @@ if __name__=="__main__":
     exp=0
     exp1m=0
     exp1p=0
+    exp2m=0
+    exp2p=0
     for i in range(max_x):
         mass=i*(max_x-limits[0][0])/max_x+limits[0][0]
         if mass<min_x or mass>max_x: continue
@@ -187,7 +210,10 @@ if __name__=="__main__":
 	    exp1m=mass
 	if exp1p==0 and g_exp1p.Eval(mass,0)>log10(cut):
 	    exp1p=mass
-
+	if exp2m==0 and g_exp2m.Eval(mass,0)>log10(cut):
+	    exp2m=mass
+	if exp2p==0 and g_exp2p.Eval(mass,0)>log10(cut):
+	    exp2p=mass
     err=0
     if exp1m>0: err=exp-exp1m
     if exp1p>0 and exp1p-exp>exp-exp1m: err=exp1p-exp
@@ -212,16 +238,162 @@ if __name__=="__main__":
     l2c.SetLineStyle(2)
     l2c.Draw("same")
     
-    if "tripleG" in signal:
-      err=0
-      if exp1m>0: err=100./exp-100./exp1m
-      if exp1p>0 and 100./exp1p-100./exp>100./exp-100./exp1m: err=100./exp1p-100./exp
-      print "limit: %.4f" % (100./limit), "& %.4f" % (100./exp), "$\pm$ %.4f" % (-err)
-      print "limit: %.4f," % (100./limit), "%.4f," % (100./exp), "%.4f, %.4f, 0, 0" % ((100./(max(1e-5,exp1m)),(100./max(1e-5,exp1p))))
-    else:
-      print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
-      print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, 0, 0" % ((exp1m)/1000.,(exp1p)/1000.)
+    #if "tripleG" in signal:
+    #  err=0
+    #  if exp1m>0: err=100./exp-100./exp1m
+    #  if exp1p>0 and 100./exp1p-100./exp>100./exp-100./exp1m: err=100./exp1p-100./exp
+    #  print "limit: %.4f" % (100./max(1e-5,limit)), "& %.4f" % (100./max(1e-5,exp)), "$\pm$ %.4f" % (-err)
+    #  print "limit: %.4f," % (100./max(1e-5,limit)), "%.4f," % (100./max(1e-5,exp)), "%.4f, %.4f, 0, 0" % ((100./max(1e-5,exp1m),(100./max(1e-5,exp1p))))
+    #else:
+    print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
+    print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, %.2f, %.2f" % ((exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
+    limit_list[model]=(limit/1000.,(exp/1000.),(exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
     
     canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run'+runs+'.pdf')
     #canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
     
+    
+    
+    
+    
+ for coupling in ["alp","tripleG"]:
+
+    canvas = TCanvas("","",0,0,1800,1550)
+    #canvas.GetPad(0).SetLogy()
+    mg=TMultiGraph()
+
+    points=[]
+    if coupling=="alp":
+      ymin=0
+      ymax=3
+      min_x=2.9
+      max_x=7
+      points=[(3.0,90),(3.6,91),(4.2,92),(4.8,93),(5.4,94),(6.0,94),(7.0,94)]
+    if coupling=="tripleG":
+      ymin=0
+      ymax=1.8
+      min_x=2.7
+      max_x=14
+      points=[(3.0,95),(3.6,96),(4.2,97),(4.8,98),(5.4,99),(6.0,99),(7.0,99),(8.0,99),(9.0,99),(10.0,99),(12.0,99),(14.0,99),(16.0,99),(18.0,99),(20.0,99)]
+    g0=TGraph(0)
+    g0.SetPoint(0,min_x,0)
+    g0.SetPoint(1,max_x,0)
+    mg.Add(g0)
+    
+    g=TGraph(0)
+    g_exp=TGraph(0)
+    g_band=TGraphAsymmErrors(0)
+    g_band_2sigma=TGraphAsymmErrors(0)
+    g_val=TGraph(0)
+    g_val.SetPoint(0,3,0)
+    g_val.SetPoint(1,3,10)
+    
+    for mass,model in points:
+        obs=limit_list[model][0]
+        exp=limit_list[model][1]
+        exp1m=limit_list[model][2]
+        exp1p=limit_list[model][3]
+        exp2m=limit_list[model][4]
+        exp2p=limit_list[model][5]
+        if coupling=="alp":
+          g.SetPoint(g.GetN(),mass,mass/obs)
+          g_exp.SetPoint(g_exp.GetN(),mass,mass/exp)
+          g_band.SetPoint(g_band.GetN(),mass,mass/exp)
+          g_band_2sigma.SetPoint(g_band_2sigma.GetN(),mass,mass/exp)
+          g_band.SetPointError(g_band.GetN()-1,0,0,mass/exp-min(mass/exp1p,mass/exp1m),max(mass/exp1p,mass/exp1m)-mass/exp)
+          g_band_2sigma.SetPointError(g_band_2sigma.GetN()-1,0,0,mass/exp-min(mass/exp2p,mass/exp2m),max(mass/exp2p,mass/exp2m)-mass/exp)
+        if coupling=="tripleG":
+          g.SetPoint(g.GetN(),mass,pow(mass/obs,2))
+          g_exp.SetPoint(g_exp.GetN(),mass,pow(mass/exp,2))
+          g_band.SetPoint(g_band.GetN(),mass,pow(mass/exp,2))
+          g_band_2sigma.SetPoint(g_band_2sigma.GetN(),mass,pow(mass/exp,2))
+          g_band.SetPointError(g_band.GetN()-1,0,0,pow(mass/exp,2)-min(pow(mass/exp1p,2),pow(mass/exp1m,2)),max(pow(mass/exp1p,2),pow(mass/exp1m,2))-pow(mass/exp,2))
+          g_band_2sigma.SetPointError(g_band_2sigma.GetN()-1,0,0,pow(mass/exp,2)-min(pow(mass/exp2p,2),pow(mass/exp2m,2)),max(pow(mass/exp2p,2),pow(mass/exp2m,2))-pow(mass/exp,2))
+    g_band_2sigma.SetFillStyle(1001)
+    g_band_2sigma.SetFillColor(kOrange)
+    g_band_2sigma.SetLineColor(1)
+    g_band_2sigma.SetLineStyle(1)
+    g_band_2sigma.SetLineWidth(0)
+    mg.Add(g_band_2sigma,"3")
+    g_band.SetFillStyle(1001)
+    g_band.SetFillColor(kGreen-3)
+    g_band.SetLineColor(1)
+    g_band.SetLineStyle(1)
+    g_band.SetLineWidth(0)
+    mg.Add(g_band,"3")
+    g_exp.SetLineColor(1)
+    g_exp.SetLineWidth(3)
+    g_exp.SetLineStyle(kDashed)
+    mg.Add(g_exp,"l")
+    g.SetMarkerStyle(24)
+    g.SetMarkerSize(0)
+    g.SetLineColor(1)
+    g.SetLineWidth(3)
+    mg.Add(g,"pl")
+    g_val.SetLineColor(2)
+    g_val.SetLineWidth(303)
+    g_val.SetFillColor(2)
+    g_val.SetFillStyle(3004)
+    mg.Add(g_val,"l3")
+    
+    mg.Draw("apl")
+    mg.SetTitle("")
+    if coupling=="alp":
+      mg.GetXaxis().SetTitle("f_{a} [TeV]")
+      mg.GetYaxis().SetTitle("c_{g}")
+    if coupling=="tripleG":
+      mg.GetXaxis().SetTitle("#Lambda [TeV]")
+      mg.GetYaxis().SetTitle("C_{G}")
+    mg.GetYaxis().SetRangeUser(ymin,ymax)
+    mg.GetYaxis().SetLabelSize(0.04)
+    mg.GetYaxis().SetTitleSize(0.05)
+    mg.GetYaxis().SetTitleOffset(0.95)
+    mg.GetXaxis().SetLimits(min_x,max_x)
+    #mg.GetXaxis().SetRangeUser(min_x_new,max_x_new)
+    mg.GetYaxis().SetNdivisions(510)
+    mg.GetXaxis().SetNdivisions(510)
+    mg.GetXaxis().SetLabelSize(0.04)
+    mg.GetXaxis().SetLabelOffset(0.015)
+    mg.GetXaxis().SetTitleSize(0.05)
+    mg.GetXaxis().SetTitleOffset(1.1)
+   
+    if coupling=="alp":
+      lt=TLatex(4.5,2.6,"#splitline{#bf{ALP linear EFT}}{#bf{m_{a} = 1 MeV}}")
+    if coupling=="tripleG":
+      lt=TLatex(10,0.09,"#splitline{#bf{SMEFT}}{}")
+    lt.SetTextSize(0.04)
+    lt.SetTextFont(42)
+    lt.Draw("same")
+
+    #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
+    if coupling=="alp":
+      l=TLegend(0.5,0.25,0.8,0.54,"95% CL upper limits")
+    if coupling=="tripleG":
+      l=TLegend(0.2,0.61,0.5,0.90,"95% CL upper limits")
+    l.SetFillColor(0)
+    l.SetTextFont(42)
+    l.SetFillStyle(0)
+    l.SetTextSize(0.04)
+    l.SetShadowColor(0)
+    l.AddEntry(g,"Observed","LP")
+    l.AddEntry(g_exp,"Expected","LP")
+    l.AddEntry(g_band,"Expected #pm 1 s.d.","F")
+    l.AddEntry(g_band_2sigma,"Expected #pm 2 s.d.","F")
+    l.AddEntry(g_val,"Validity limit of EFT","LF")
+    l.Draw()
+
+    # CMS
+    leg2=TLatex(min_x,ymax+0.03,"#bf{CMS} #it{Preliminary}")
+    #cmsPos=min_x+220/1000.
+    #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
+    leg2.SetTextFont(42)
+    leg2.SetTextSize(0.05)
+    # lumi
+    lumiPos=max_x*(0.8 if coupling=="alp" else 0.7)
+    leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
+    leg3.SetTextFont(42)
+    leg3.SetTextSize(0.045)
+    leg2.Draw("same")
+    leg3.Draw("same")
+    
+    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.pdf')

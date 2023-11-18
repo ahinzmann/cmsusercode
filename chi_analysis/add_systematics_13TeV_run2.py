@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     if run=="2":
       if useM2:
-        prefixs=["versions/run2ULNNLONov21/datacard_shapelimit13TeV"]
+        prefixs=["versions/run2ULNNLO_m2/datacard_shapelimit13TeV"]
       else:
         prefixs=["versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"]
     elif run=="3":
@@ -704,8 +704,8 @@ if __name__ == '__main__':
             nloqcd=hnlo
         #for b in range(nloqcd.GetXaxis().GetNbins()):
         #  nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)/nloqcd.GetBinWidth(b+1))
-        if not useUnfoldedData:
-          nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
+        #if not useUnfoldedData:
+        nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
         nloqcdbackup=nloqcd.Clone(nloqcd.GetName()+"_backup")
         if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
            nloqcdbackup.Scale(factor13p6)
@@ -903,6 +903,7 @@ if __name__ == '__main__':
           ci=cibackup.Clone(histname)
           print "ALP:",ci.Integral(), "QCDMG:",qcdMadgraph.Integral(), "QCDPY:",qcd.Integral(), "QCDNLO:",nloqcdbackup.Integral()
           ci.Add(qcdMadgraph,-1)
+          ci=smooth(ci,"pol3") # SMOOTH ALP PREDICTION (FIX ME)
           ci.Scale(nloqcdbackup.Integral()/qcdMadgraph.Integral()) # CORRECT FOR MISSING FACTOR LO->NNLO k-factor of ~10 in Madgraph QCD cross sections
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1./nloqcdbackup.Integral())

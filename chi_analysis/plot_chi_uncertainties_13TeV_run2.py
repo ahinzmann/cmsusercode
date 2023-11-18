@@ -441,7 +441,7 @@ if __name__=="__main__":
                 canvas=TCanvas("post-fit", "post-fit", 0, 0, 300, 350)
                 canvas.cd()
 
-   	        if massbins[massbin][0]>=7000:
+   	        if massbins[massbin][0]>=6000:
    	   	    hNloQcd.SetMinimum(0.8)
    	   	    hNloQcd.SetMaximum(1.2)
    	        elif massbins[massbin][0]>=4800:

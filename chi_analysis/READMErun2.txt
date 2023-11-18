@@ -16,6 +16,7 @@ copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 --------- MC production in CMSSW_10_6_19 -------:
 
 submit_add_samples_CP5.py # produce GEN samples for LO QCD and QCD+ADD CP5 tune
+submit_ci_samples_CP5.py # produce GEN samples for LO QCD+CI CP5 tune
 calculate_xsecs_desy.py > xsecs_13p6TeV.txt # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files
 
 source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh

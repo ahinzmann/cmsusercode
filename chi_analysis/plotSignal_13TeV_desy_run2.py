@@ -301,7 +301,16 @@ if __name__ == '__main__':
 		       ("herwigpp_qcdNonPert_m4300_13000___Nov28",3.507e-09),
 		       ]),
 	    ]
-    samples=[("QCDCIplusLL8000",[("pythia8_ci_m1500_1900_8000_1_0_0_13TeV_Nov14",1),
+    if run=="3":
+       minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       maxMasses=[1900,2400,2800,3300,3800,4300,5200,6000,13600] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       ciLambdas=[8000,10000,12000,14000,18000,20000,20000,20000,20000]
+       couplings=[(1,0,0),] # (-1,0,0)
+       samples=[]
+       for ciLambda in ciLambdas:
+         samples+=[("QCDCIplusLL"+str(ciLambda),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(ciLambda)+"_1_0_0_13p6TeV_Nov2022",1) for minMass in minMasses])]
+    else:
+      samples=[("QCDCIplusLL8000",[("pythia8_ci_m1500_1900_8000_1_0_0_13TeV_Nov14",1),
 		       ("pythia8_ci_m1900_2400_8000_1_0_0_13TeV_Nov14",1),
 		       ("pythia8_ci_m2400_2800_8000_1_0_0_13TeV_Nov14",1),
 		       ("pythia8_ci_m2800_3300_8000_1_0_0_13TeV_Nov14",1),
@@ -611,6 +620,11 @@ if __name__ == '__main__':
              ]
              
     if "np" in prefix:
+       print "pick", int(prefix.split("-")[1])
+       index=0
+       for sample in samples:
+         print index,sample
+         index+=1
        samples=[samples[int(prefix.split("-")[1])]]
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]

@@ -22,19 +22,21 @@ if only6000:
   massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)] # did not calculate CI for lower mass bins yet
 
 models=[]
-models+=[3]
-#models+=[11]
-#models+=[10,11]
-#models+=[60,61,62,63,64,65,66,67,68,69]
-#models+=[70,71,72,73,74,75,76,77]
-#models+=[78,79,80,81,82,83,84,85]
+#models+=[3] #ADD
+#models+=[10] #QBH ADD6
+#models+=[11] #QBH RS1
+#models+=[60,61,62,63,64,65,66,67,68,69] #CI
+#models+=[70,71,72,73,74,75,76,77] 
+#models+=[78,79,80,81,82,83,84,85] 
 #models+=[30,31,32,33,34,35,36,37,38,39,40]
 #models+=[41,42,43]
 #models+=[45,46,47,48,49,50,51,52,53,54,55]
 #models+=[47]
-#models=[88,89]
-#models=[60,61]
-#models=[90,91]
+#models+=[88,89]
+#models+=[60,61]
+#models+=[90,91,92,93,94] #alp
+models+=[95,96,97,98,99] #tripleG
+#>100 steered by loop script #DM
 
 VectorDM=False
 AxialDM=True
@@ -58,7 +60,7 @@ isInjection=False
 
 DMpvalue=False
 
-runs="3" # "2" or "3" or "23"
+runs="2" # "2" or "3" or "23"
 run=runs[-1]
 
 signalName={}
@@ -100,7 +102,7 @@ if len(sys.argv)>1:
 for model in models:
 
  signalExtra=""
- includeSignalTheoryUncertainties=False
+ includeSignalTheoryUncertainties=True # Always yes, such that background scale affects both s+b and b
 
  if model<100:
     version=""
@@ -466,11 +468,43 @@ for model in models:
  if model==90:
     signal="alp_QCD_fa"
     signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
-    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    massbins=[(2400,3000)]
  if model==91:
+    signal="alp_QCD_fa"
+    signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
+    massbins=[(2400,3000),(3000,3600)]
+ if model==92:
+    signal="alp_QCD_fa"
+    signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
+    massbins=[(2400,3000),(3000,3600),(3600,4200)]
+ if model==93:
+    signal="alp_QCD_fa"
+    signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+ if model==94:
+    signal="alp_QCD_fa"
+    signalMasses=[1000,1500,2000,2500,3000,3500,4000,4500,4500,5000]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400)]
+ if model==95:
     signal="tripleG_QCD_CG"
     signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
-    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    massbins=[(2400,3000)]
+ if model==96:
+    signal="tripleG_QCD_CG"
+    signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(2400,3000),(3000,3600)]
+ if model==97:
+    signal="tripleG_QCD_CG"
+    signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(2400,3000),(3000,3600),(3600,4200)]
+ if model==98:
+    signal="tripleG_QCD_CG"
+    signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+ if model==99:
+    signal="tripleG_QCD_CG"
+    signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
@@ -948,7 +982,7 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
     for su in statUncertainties:
       text+="\n"+su+" shape "
       for i in range(len(massbins)):
-         text+="- 1 - "
+         text+="1 1 - "
     cfg.writelines(text+"""
 -----------
 """)

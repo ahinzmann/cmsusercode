@@ -2,7 +2,7 @@ import os
 
 count=0
 
-for n in range(477):
+for n in range(480):
     name="add_systematics_"+str(n)
     with open(name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
@@ -23,7 +23,7 @@ output            = """+name+""".o
 error             = """+name+""".e
 log               = """+name+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
-+RequestRuntime   = 20000
++RequestRuntime   = 2000
 #RequestMemory     = 10G
 JobBatchName      = add_systematics
 #RequestDisk       = 10G
@@ -33,6 +33,7 @@ arguments         = " """+name+""".sh"
 queue 1
 """)
     string="condor_submit "+name+".submit"
+    #string="source "+name+".sh"
     if count%5!=4:
       string+=" &"
     print string

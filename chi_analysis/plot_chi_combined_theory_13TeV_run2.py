@@ -214,7 +214,7 @@ if __name__=="__main__":
                 hNloQcd.Add(hnlo)
              else:
                 hNloQcd=hnlo
-            #hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
+            hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
             hNloQcd.SetLineColor(5)
             hNloQcd.SetLineStyle(3)
             hNloQcd.SetLineWidth(2)
@@ -302,7 +302,7 @@ if __name__=="__main__":
                  hNloQcdAlt.Add(hnlo)
               else:
                  hNloQcdAlt=hnlo
-             #hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
+             hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdAlt.SetLineColor(4)
              hNloQcdAlt.SetLineStyle(2)
              hNloQcdAlt.SetLineWidth(2)
@@ -781,7 +781,10 @@ if __name__=="__main__":
             h0.GetYaxis().SetRangeUser(0.045,0.12)
             
         h0.GetXaxis().SetTitle("#chi_{dijet}")
-        h0.GetYaxis().SetTitle("1/#sigma_{dijet} d#sigma_{dijet}/d#chi_{dijet}")
+        if unfoldedData:
+          h0.GetYaxis().SetTitle("1/#sigma_{dijet} d#sigma_{dijet}/d#chi_{dijet}")
+        else:
+          h0.GetYaxis().SetTitle("1/N_{dijet} dN_{dijet}/d#chi_{dijet}")
         h0.GetYaxis().SetTitleOffset(1.4)
         h0.GetXaxis().SetTitleOffset(0.8)
         h0.GetYaxis().SetTitleSize(0.05)
