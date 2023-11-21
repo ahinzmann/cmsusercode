@@ -265,10 +265,10 @@ if __name__=="__main__":
     points=[]
     if coupling=="alp":
       ymin=0
-      ymax=3
+      ymax=4
       min_x=2.9
-      max_x=7
-      points=[(3.0,90),(3.6,91),(4.2,92),(4.8,93),(5.4,94),(6.0,94),(7.0,94)]
+      max_x=10
+      points=[(3.0,90),(3.6,91),(4.2,92),(4.8,93),(5.4,94),(6.0,94),(7.0,94),(8.0,94),(9.0,94),(10.0,94),(12.0,94),(14.0,94),(16.0,94),(18.0,94),(20.0,94)]
     if coupling=="tripleG":
       ymin=0
       ymax=1.8
@@ -358,7 +358,7 @@ if __name__=="__main__":
     mg.GetXaxis().SetTitleOffset(1.1)
    
     if coupling=="alp":
-      lt=TLatex(4.5,2.6,"#splitline{#bf{ALP linear EFT}}{#bf{m_{a} = 1 MeV}}")
+      lt=TLatex(4.5,3.6,"#splitline{#bf{ALP linear EFT}}{#bf{m_{a} = 1 MeV}}")
     if coupling=="tripleG":
       lt=TLatex(10,0.09,"#splitline{#bf{SMEFT}}{}")
     lt.SetTextSize(0.04)
@@ -389,7 +389,7 @@ if __name__=="__main__":
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.05)
     # lumi
-    lumiPos=max_x*(0.8 if coupling=="alp" else 0.7)
+    lumiPos=max_x*(0.75 if coupling=="alp" else 0.7)
     leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)

@@ -1114,8 +1114,8 @@ if __name__=="__main__":
         #l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
         #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
     if signals:
-        l2.AddEntry(halp,"f_{a} = 2.5 TeV","l")
-        l2.AddEntry(htripleG,"C_{G}/#Lambda^{2} = 0.010 TeV","l")
+        l2.AddEntry(halp,"f_{a} / c_{g} = 2.5 TeV","l")
+        l2.AddEntry(htripleG,"#Lambda / #sqrt{C_{G}} = 10 TeV","l")
     l2.SetFillStyle(0)
     l2.Draw("same")
 
