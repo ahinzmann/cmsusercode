@@ -71,12 +71,12 @@ def createPlots(sample,prefix,weightname,massbins):
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/"+folder]
 	    #break
       elif "Nov2022" in sample:
-        #folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/13p6TeV/")
-        folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/")
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/")
+        #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/")
 	for folder in folders:
 	  if sample in folder and ".root" in folder:
-            #files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/13p6TeV/"+folder]
-	    files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/"+folder]
+	    #files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
 	    #break
       else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")

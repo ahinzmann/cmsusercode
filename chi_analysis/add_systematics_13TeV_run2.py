@@ -890,6 +890,7 @@ if __name__ == '__main__':
             cibackup=insignalfile.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
+          ci=smooth(ci,"pol3") # SMOOTH DM PREDICTION (FIX ME)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1./nloqcdbackup.Integral())
           print histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1)
@@ -1791,12 +1792,19 @@ if __name__ == '__main__':
         for pre,post in histogram_names:
           althists=[]
           althistsclones=[]
+          histsunfold={}
           for j in range(len(massbins)):
             histname=pre+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+post
             print histname
             althists+=[out.Get(histname)]
             althistsclones+=[althists[-1].Clone(althists[-1].GetName()+"original")]
             althists[-1].Scale(0)
+          if samples[i][0]=="QCD": # for unfolding
+            for j in range(len(massbins)):
+              for j1 in range(len(massbins)):
+                for b1 in range(althists[j1].GetNbinsX()):
+                  unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
+                  histsunfold[str(j)+unfoldbin]=althists[j].Clone(althists[j].GetName()+unfoldbin)
           countgen=0
           for j1 in range(len(massbins)):
             for b1 in range(althists[j1].GetNbinsX()):
@@ -1829,17 +1837,33 @@ if __name__ == '__main__':
                         response+=matrix1[j2m+bin2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
                   #response=((b1==b2) and (j1==j2))
                   althists[j2].Fill(althists[j2].GetBinCenter(b2+1),althistsclones[j1].GetBinContent(b1+1)*response)
+                  if samples[i][0]=="QCD": # for unfolding
+                    unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
+                    histsunfold[str(j2)+unfoldbin].Fill(althists[j2].GetBinCenter(b2+1),max(0,althistsclones[j1].GetBinContent(b1+1)*response))
           for j in range(len(massbins)):
             print dataevents[j],althistsclones[j].Integral(),althists[j].Integral()
             althists[j].Scale(dataevents[j]/althists[j].Integral())
             for b in range(althists[j].GetXaxis().GetNbins()):
               althists[j].SetBinError(b+1,0)
+            if samples[i][0]=="QCD": # for unfolding
+              for j1 in range(len(massbins)):
+                for b1 in range(althists[j1].GetNbinsX()):
+                   unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
+                   histsunfold[str(j)+unfoldbin].Scale(dataevents[j]/althists[j].Integral())
+                   for b in range(althists[j].GetXaxis().GetNbins()):
+                     histsunfold[str(j)+unfoldbin].SetBinError(b+1,0)
             #print althists[j].GetBinContent(1),althistsclones[j].GetBinContent(1)
           out.cd()
           for hist in althists:
             #for k in range(0,10):
             #  out.Delete(hist.GetName()+";"+str(k))
             hist.Write()
+          if samples[i][0]=="QCD": # for unfolding
+            for j in range(len(massbins)):
+              for j1 in range(len(massbins)):
+                for b1 in range(althists[j1].GetNbinsX()):
+                  unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
+                  histsunfold[str(j)+unfoldbin].Write()
           for j in range(len(massbins)):
             canvas.cd(j+2)#j-2
             alt=cloneNormalize(althists[j])

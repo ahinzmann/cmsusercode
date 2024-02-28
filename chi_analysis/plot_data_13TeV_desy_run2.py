@@ -109,13 +109,15 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
      try:
        fil=TFile.Open(f)
        
-       events=fil.Get("tree")
+       if "NANOAOD" in f:
+         events=fil.Get("Events")
+       else:
+         events=fil.Get("tree")
        nevents=events.GetEntries()
      except:
        print "error opening", f
        continue
      print f,nevents
-     #if event_count>1000: break ###
      trigger_indices_len=0
      for event in events:
 	 #if not int(event.EVENT_event)==971086788: continue
@@ -124,7 +126,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	 #if event_count>1000: break
          if event_count%10000==1:
 	   print "event",event_count
-	 if len(event.HLT_isFired)!=trigger_indices_len:
+	 if not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
 	   trigger_indices={}
 	   trigger_indices_len=len(event.HLT_isFired)
 	   print "read trigger names", event_count
@@ -135,10 +137,16 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	       for trig in triggers[t]:
 	         if a.startswith(trig):
 	           trigger_indices[t]+=[a]
-	 jet1=TLorentzVector()
+	 if "NANOAOD" in f:
+	   trigger_indices=triggers
+         jet1=TLorentzVector()
          jet2=TLorentzVector()
-         jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
-         jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
+         if "NANOAOD" in f:
+           jet1.SetPtEtaPhiM(event.jetAK4_pt1_nom,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1*event.jetAK4_pt1_nom/event.jetAK4_pt1)
+           jet2.SetPtEtaPhiM(event.jetAK4_pt2_nom,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2*event.jetAK4_pt2_nom/event.jetAK4_pt2)
+         else:
+           jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
+           jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
          if genLevel:
            jet1.SetPtEtaPhiM(event.genJetAK4_pt1,event.genJetAK4_eta1,event.genJetAK4_phi1,event.genJetAK4_mass1)
            jet2.SetPtEtaPhiM(event.genJetAK4_pt2,event.genJetAK4_eta2,event.genJetAK4_phi2,event.genJetAK4_mass2)
@@ -156,15 +164,22 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
 	    if abs(jet2.Eta())>2:
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
+         if "NANOAOD" in f:
+            if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
-	 if mjj>6000: print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
+	 if mjj>6000:
+           if "NANOAOD" in f:
+             print "found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
+           else:
+             print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
          if jet1.Pt()>13000: continue
          irec=0
 	 for massbin in massbins:
-	    passedHLT=len(triggers[massbins.index(massbin)])==0
-	    for i in trigger_indices[massbins.index(massbin)]:
-	      if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+            passedHLT=len(triggers[massbins.index(massbin)])==0
+            for i in trigger_indices[massbins.index(massbin)]:
+              if ("NANOAOD" in f and getattr(event,i)) or \
+                 (not "NANOAOD" in f and  event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
 	        passedHLT=True
 		break
 	    if passedHLT and mjj>=massbin[0] and mjj<massbin[1]:
@@ -176,16 +191,21 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
                plots[irec+5*len(massbins)].Fill(jet2.Rapidity(),weight)
                plots[irec+6*len(massbins)].Fill(jet1.Phi(),weight)
                plots[irec+7*len(massbins)].Fill(jet2.Phi(),weight)
-               plots[irec+8*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
+               if "NANOAOD" in f:
+                 plots[irec+8*len(massbins)].Fill(event.PuppiMET_pt/event.PuppiMET_sumEt,weight)
+               else:
+                 plots[irec+8*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
                plots[irec+9*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
                plots[irec+10*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
 	    irec+=1
          irec=11*len(massbins)
 	 plots[irec].Fill(mjj,weight)
 	 irec+=1
-	 if not trigger_indices.has_key(len(massbins)): continue # for MC
+	 if ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
+            (not "NANOAOD" in f and not trigger_indices.has_key(len(massbins))): continue # for MC
          for i in trigger_indices[len(massbins)]:
-          if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+          if ("NANOAOD" in f and getattr(event,i)) or \
+             (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
             for c in range(len(chi_bins[0])-1):
               if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
                 plots[irec].Fill(mjj,weight)
@@ -195,7 +215,8 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
             for t in range(len(triggers)-len(massbins)-1):
               passHLT=False
 	      for i in trigger_indices[len(massbins)+1+t]:
-                if event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]:
+                if ("NANOAOD" in f and getattr(event,i)) or \
+                   (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
                   passHLT=True
                   break
               if passHLT:  
@@ -271,6 +292,12 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPfeb2023"),
             ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17feb2023"),
             ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18feb2023"),
+            ("datacard_shapelimit13TeV_run2_2022","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2022"),
+            ("datacard_shapelimit13TeV_run2_2023","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2023"),
+            ("datacard_shapelimit13TeV_run2_2022_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2022"),
+            ("datacard_shapelimit13TeV_run2_2022_QCDmadgraphEE","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2022EE"),
+            ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
+            ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -639,6 +666,88 @@ if __name__ == '__main__':
           [],
           [],
          ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2022
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2023
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+	  [[], # QCD 2022
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], # QCD 2022
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
 
           ]
 
@@ -649,11 +758,11 @@ if __name__ == '__main__':
 
     if len(sys.argv)>2:
       folders=os.listdir(samples[0][2])
-      folders=[f for f in folders if "dijetChi" in f]
+      folders=[f for f in folders if ".root" in f] #dijetChi
       print len(folders)
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
-        if "HT" in s: name=s+"_"+name; break
+        if "HT-" in s: name=s.replace("-","")+"_"+name; break
       samples=[(samples[0][0],"-"+name,samples[0][2].replace("/pnfs/","dcap://dcache-cms-dcap.desy.de//pnfs/")+"/"+folders[int(sys.argv[2])])]
       print samples
  

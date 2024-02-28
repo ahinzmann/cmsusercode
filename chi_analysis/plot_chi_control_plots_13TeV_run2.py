@@ -63,14 +63,18 @@ if __name__ == '__main__':
             chi_binnings[-1].append(chi_bin)
    
    prefix="datacard_shapelimit13TeV_run2_"
+   version=""
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
    use_UL=False
+   use_Run3=True
    compare_EOYvsUL=False
    compare_EOYvsUL_MC=False
-   compare_RECOvsGEN=True
+   compare_RECOvsGEN=False
    if use_UL:
      version="_UL"+version
+   if use_Run3:
+     version="_Run3"+version
    if compare_EOYvsUL:
      version="_EOYvsUL"+version
    if compare_EOYvsUL_MC:
@@ -86,6 +90,21 @@ if __name__ == '__main__':
          ]
     data3=[("UL18", 1, "Data (UL 2018)")
          ]
+   if use_Run3:
+    data=[("2022", 1, "Data (2022)")
+         ]
+    data2=[("2023", 1, "Data (2023)")
+         ]
+    data3=[("UL16preVFP", 1, "Data (UL16-18)"),
+          ("UL16postVFP", 1, ""),
+          ("UL17", 1, ""),
+          ("UL18", 1, "")
+         ]
+    #data3=[("UL16preVFP", 1, "Data (UL 2016)"),
+    #      ("UL16postVFP", 1, "")
+    #     ]
+    #data3=[("UL17", 1, "Data (UL 2017)")
+    #     ]
    elif compare_EOYvsUL_MC or compare_RECOvsGEN:
     UL16preFactor=19.52/36.33 # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
     UL16postFactor=16.81/36.33 # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
@@ -134,6 +153,93 @@ if __name__ == '__main__':
          ]
     mc3=[("2018", 1, "Data (EOY 2018)")
          ]
+   elif use_Run3:
+    mc=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
+       ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
+       ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
+       ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
+       ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
+       ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
+       ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
+       ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
+       ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
+       ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
+       ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
+       ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
+       ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
+       ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
+       ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
+       ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
+       ]
+    mc2=[("2023_QCDmadgraph-HT200to400",17.060/27.207*1.877e+06/37041533, "MG+Py QCD (2023)"),
+       ("2023_QCDmadgraph-HT400to600",17.060/27.207*9.521e+04/36680240, ""),
+       ("2023_QCDmadgraph-HT600to800",17.060/27.207*1.345e+04/34513335, ""),
+       ("2023_QCDmadgraph-HT800to1000",17.060/27.207*3.106e+03/37794527, ""),
+       ("2023_QCDmadgraph-HT1000to1200",17.060/27.207*8.938e+02/32193981, ""),
+       ("2023_QCDmadgraph-HT1200to1500",17.060/27.207*3.808e+02/40348927, ""),
+       ("2023_QCDmadgraph-HT1500to2000",17.060/27.207*1.157e+02/39490287, ""),
+       ("2023_QCDmadgraph-HT2000",17.060/27.207*2.621e+01/42353820, ""),
+       ("2023_QCDmadgraphBPix-HT200to400",9.525/27.207*2.030e+06/17128041, ""),
+       ("2023_QCDmadgraphBPix-HT400to600",9.525/27.207*9.459e+04/20454226, ""),
+       ("2023_QCDmadgraphBPix-HT600to800",9.525/27.207*1.417e+04/19700360, ""),
+       ("2023_QCDmadgraphBPix-HT800to1000",9.525/27.207*3.013e+03/17683808, ""),
+       ("2023_QCDmadgraphBPix-HT1000to1200",9.525/27.207*9.183e+02/18270279, ""),
+       ("2023_QCDmadgraphBPix-HT1200to1500",9.525/27.207*3.929e+02/18878616, ""),
+       ("2023_QCDmadgraphBPix-HT1500to2000",9.525/27.207*1.340e+02/17117867, ""),
+       ("2023_QCDmadgraphBPix-HT2000",9.525/27.207*2.676e+01/20420289, ""),
+       ]
+    mc3=[("UL16preVFP_QCDmadgraph-HT200to300",36.31/137.62*19.52/36.33*1710000./17969592, "MG+Py QCD (UL16-18)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+       ("UL16preVFP_QCDmadgraph-HT300to500",36.31/137.62*19.52/36.33*347500./13586390, ""),
+       ("UL16preVFP_QCDmadgraph-HT500to700",36.31/137.62*19.52/36.33*30363.051/55497082, ""),
+       ("UL16preVFP_QCDmadgraph-HT700to1000",36.31/137.62*19.52/36.33*6428.869/15242034, ""),
+       ("UL16preVFP_QCDmadgraph-HT1000to1500",36.31/137.62*19.52/36.33*1122.659/13559959, ""),
+       ("UL16preVFP_QCDmadgraph-HT1500to2000",36.31/137.62*19.52/36.33*108.163/9661950, ""),
+       ("UL16preVFP_QCDmadgraph-HT2000toInf",36.31/137.62*19.52/36.33*22.008/4827641, ""),
+       ("UL16postVFP_QCDmadgraph-HT200to300",36.31/137.62*16.81/36.33*1710000./42723038, ""), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
+       ("UL16postVFP_QCDmadgraph-HT300to500",36.31/137.62*16.81/36.33*347500./45502889, ""),
+       ("UL16postVFP_QCDmadgraph-HT500to700",36.31/137.62*16.81/36.33*30363.051/15066884, ""),
+       ("UL16postVFP_QCDmadgraph-HT700to1000",36.31/137.62*16.81/36.33*6428.869/13714842, ""),
+       ("UL16postVFP_QCDmadgraph-HT1000to1500",36.31/137.62*16.81/36.33*1122.659/12416669, ""),
+       ("UL16postVFP_QCDmadgraph-HT1500to2000",36.31/137.62*16.81/36.33*108.163/9244228, ""),
+       ("UL16postVFP_QCDmadgraph-HT2000toInf",36.31/137.62*16.81/36.33*22.008/4843949, ""),
+       ("UL17_QCDmadgraph-HT200to300",41.48/137.62*1710000./42316128, ""),
+       ("UL17_QCDmadgraph-HT300to500",41.48/137.62*347500./42914024, ""),
+       ("UL17_QCDmadgraph-HT500to700",41.48/137.62*30363.051/35745565, ""),
+       ("UL17_QCDmadgraph-HT700to1000",41.48/137.62*6428.869/33646855, ""),
+       ("UL17_QCDmadgraph-HT1000to1500",41.48/137.62*1122.659/10136610, ""),
+       ("UL17_QCDmadgraph-HT1500to2000",41.48/137.62*108.163/7528926, ""),
+       ("UL17_QCDmadgraph-HT2000toInf",41.48/137.62*22.008/4089387, ""),
+       ("UL18_QCDmadgraph-HT200to300",59.83/137.62*1710000./56298746, ""),
+       ("UL18_QCDmadgraph-HT300to500",59.83/137.62*347500./60991701, ""),
+       ("UL18_QCDmadgraph-HT500to700",59.83/137.62*30363.051/48640047, ""),
+       ("UL18_QCDmadgraph-HT700to1000",59.83/137.62*6428.869/47925782, ""),
+       ("UL18_QCDmadgraph-HT1000to1500",59.83/137.62*1122.659/14244456, ""),
+       ("UL18_QCDmadgraph-HT1500to2000",59.83/137.62*108.163/10751607, ""),
+       ("UL18_QCDmadgraph-HT2000toInf",59.83/137.62*22.008/5278880, ""),
+       ]
+    #mc3=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+    #   ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
+    #   ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/55497082, ""),
+    #   ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/15242034, ""),
+    #   ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13559959, ""),
+    #   ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/9661950, ""),
+    #   ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/4827641, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./42723038, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
+    #   ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./45502889, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/15066884, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/13714842, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/12416669, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/9244228, ""),
+    #   ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/4843949, ""),
+    #   ]
+    #mc3=[("UL17_QCDmadgraph-HT200to300",1710000./42316128, "MG+Py QCD (UL17)"),
+    #   ("UL17_QCDmadgraph-HT300to500",347500./42914024, ""),
+    #   ("UL17_QCDmadgraph-HT500to700",30363.051/35745565, ""),
+    #   ("UL17_QCDmadgraph-HT700to1000",6428.869/33646855, ""),
+    #   ("UL17_QCDmadgraph-HT1000to1500",1122.659/10136610, ""),
+    #   ("UL17_QCDmadgraph-HT1500to2000",108.163/7528926, ""),
+    #   ("UL17_QCDmadgraph-HT2000toInf",22.008/4089387, ""),
+    #   ]
    elif use_UL and not compare_EOYvsUL_MC or compare_RECOvsGEN:
     mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
        ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
@@ -195,23 +301,48 @@ if __name__ == '__main__':
    f_data2=[]
    f_data3=[]
    for name,xsec,l in data:
-      f_data+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
-      print prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root"
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_data+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
    for name,xsec,l in data2:
-      f_data2+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root")]
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_data2+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
    for name,xsec,l in data3:
-      f_data3+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix18)+"_chi.root")]
-   lumi=[36.33,41.53,59.74]
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_data3+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
+   if use_Run3:
+     lumi=[137.62,35.18,27.20]
+   else:
+     lumi=[36.33,41.53,59.74]
    f_mc=[]
    f_mc2=[]
    f_mc3=[]
    for name,xsec,l in mc:
-      f_mc+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
-      print prefix+name+("" if "QCD" in name else postfix1617)+"_chi.root"
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_mc+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
    for name,xsec,l in mc2:
-      f_mc2+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix1617)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_mc2+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
    for name,xsec,l in mc3:
-      f_mc3+=[TFile.Open(prefix+name+("" if "QCD" in name else postfix18)+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
+      elif "UL18" in name and not "QCD" in name: postfix=postfix18
+      else: postfix=""
+      f_mc3+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      print prefix+name+postfix+"_chi.root"
 
    if compare_EOYvsUL_MC:
      minmass=1900
@@ -330,7 +461,8 @@ if __name__ == '__main__':
      hist_mc2=f_mc2[0].Get(prefix+mc2[0][0].split("-")[0]+var)
      hist_mc2.Scale(mc2[0][1])
      for i in range(1,len(mc2)):
-    	 hist_mc2.Add(f_mc2[i].Get(prefix+mc2[0][0].split("-")[0]+var),mc2[i][1])
+         #print f_mc2[i],prefix+mc2[0][0].split("-")[0]+var, i,mc2[i][1]
+    	 hist_mc2.Add(f_mc2[i].Get(prefix+mc2[i][0].split("-")[0]+var),mc2[i][1])
      if compare_EOYvsUL:
        hist_mc2.Scale(1./normfactor2)
      elif compare_EOYvsUL_MC or compare_RECOvsGEN:
@@ -345,7 +477,7 @@ if __name__ == '__main__':
      hist_mc3=f_mc3[0].Get(prefix+mc3[0][0].split("-")[0]+var)
      hist_mc3.Scale(mc3[0][1])
      for i in range(1,len(mc3)):
-    	 hist_mc3.Add(f_mc3[i].Get(prefix+mc3[0][0].split("-")[0]+var),mc3[i][1])
+    	 hist_mc3.Add(f_mc3[i].Get(prefix+mc3[i][0].split("-")[0]+var),mc3[i][1])
      if compare_EOYvsUL:
        hist_mc3.Scale(1./normfactor3)
      elif compare_EOYvsUL_MC or compare_RECOvsGEN:
@@ -416,9 +548,9 @@ if __name__ == '__main__':
     	 ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ddratio.SetTitle("")
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
-       ddratio.GetYaxis().SetTitle("Sim / 2016 Sim")
+       ddratio.GetYaxis().SetTitle("Sim / "+data[0][0]+" Sim")
      else:
-       ddratio.GetYaxis().SetTitle("Data / 2016 Data")
+       ddratio.GetYaxis().SetTitle("Data / "+data[0][0]+" Data")
    
      ddratio.GetYaxis().SetTitleSize(0.11)
      ddratio.GetYaxis().SetTitleOffset(0.5)
@@ -704,9 +836,9 @@ if __name__ == '__main__':
      	    ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      	ddratio.SetTitle("")
      	if compare_EOYvsUL_MC or compare_RECOvsGEN:
-          ddratio.GetYaxis().SetTitle("Sim / 2016 Sim")
+          ddratio.GetYaxis().SetTitle("Sim / "+data[0][0]+" Sim")
         else:
-          ddratio.GetYaxis().SetTitle("Data / 2016 Data")
+          ddratio.GetYaxis().SetTitle("Data / "+data[0][0]+" Data")
      	ddratio.GetYaxis().SetTitleSize(0.11)
      	ddratio.GetYaxis().SetTitleOffset(0.5)
      	ddratio.SetMarkerSize(0.1)

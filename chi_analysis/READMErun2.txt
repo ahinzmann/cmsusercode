@@ -16,6 +16,7 @@ copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 --------- MC production in CMSSW_10_6_19 -------:
 
 submit_add_samples_CP5.py # produce GEN samples for LO QCD and QCD+ADD CP5 tune
+submit_add_samples_CUETP8M1.py # produce GEN samples for LO QCD and QCD+ADD CUETP8M1 tune
 submit_ci_samples_CP5.py # produce GEN samples for LO QCD+CI CP5 tune
 calculate_xsecs_desy.py > xsecs_13p6TeV.txt # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files
 
@@ -72,3 +73,6 @@ summarize_pvalues_13TeV_run2.py # make table of p-values of the data in each mas
 calculate_goodness_13TeV_run2.py # calculate goodness of fit measure of the data in each mass bin
 summarize_goodness_13TeV_run2.py # make table of goodness of fit measure
 calculate_bestfit.py # make table of bestfit JER (still 8 TeV version)
+
+python unfold_13TeV_run2.py # run unfolding with combine
+python plot_unfolded_distribution_13TeV_run2.py # plot unfolded data distribution

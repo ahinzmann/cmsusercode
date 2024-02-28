@@ -89,7 +89,8 @@ if __name__=="__main__":
   unfoldedData=False
   oldMeasurements=False
   oldTheory=False
-  signals=True
+  signalsBSM=False
+  signalsDM=True
   compareScales=False
 
   massbins=[(1200,1500),
@@ -683,8 +684,8 @@ if __name__=="__main__":
           hdma=f7a.Get(histname)
           setUpDMHists(hdma,kMagenta,7,2)
 
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_1000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
-          histname='DMAxial_Dijet_LO_Mphi_1000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          histname='DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f7b = TFile.Open(filename)
           new_hists+=[f7b]
@@ -701,8 +702,8 @@ if __name__=="__main__":
           hdmc=f7c.Get(histname)
           setUpDMHists(hdmc,kOrange+7,1,2)
 
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_1500_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
-          histname='DMAxial_Dijet_LO_Mphi_1500_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          histname='DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f7d = TFile.Open(filename)
           new_hists+=[f7d]
@@ -914,53 +915,59 @@ if __name__=="__main__":
             #hcif.Draw("histsame")
             #hcig.Draw("histsame")
             #hcih.Draw("histsame")
-        if massbin>5 and signals:
+        if massbin>5 and signalsBSM:
             hgrw.Draw("histsame")
 #        if massbin>6: #FIX
 #            hqbh.Draw("histsame") #FIX
-        if massbin == 3 and False:
+        if massbin == 3 and signalsDM:
             hdm.Draw("histsame")
             hdma.Draw("histsame")
-            #hdmb.Draw("histsame")
+            hdmb.Draw("histsame")
             hdmc.Draw("histsame")
             #hdmd.Draw("histsame")
-        if massbin == 4 and False:
+        if massbin == 4 and signalsDM:
             #hdm.Draw("histsame")
             hdma.Draw("histsame")
-            #hdmb.Draw("histsame")
+            hdmb.Draw("histsame")
             hdmc.Draw("histsame")
-            #hdmd.Draw("histsame")
-        if massbin == 5 and False:
+            hdmd.Draw("histsame")
+        if massbin == 5 and signalsDM:
+            #hdm.Draw("histsame")
+            #hdma.Draw("histsame")
+            hdmb.Draw("histsame")
+            hdmc.Draw("histsame")
+            hdmd.Draw("histsame")
+        if massbin == 6 and signalsDM:
             #hdm.Draw("histsame")
             #hdma.Draw("histsame")
             #hdmb.Draw("histsame")
             hdmc.Draw("histsame")
-            #hdmd.Draw("histsame")
-        if massbin == 6 and False:
+            hdmd.Draw("histsame")
+        if massbin == 7 and signalsDM:
             #hdm.Draw("histsame")
             #hdma.Draw("histsame")
             #hdmb.Draw("histsame")
             hdmc.Draw("histsame")
-            #hdmd.Draw("histsame")
-        if massbin == 7 and False:
+            hdmd.Draw("histsame")
+        if massbin == 8 and signalsDM:
             #hdm.Draw("histsame")
             #hdma.Draw("histsame")
             #hdmb.Draw("histsame")
             hdmc.Draw("histsame")
-            #hdmd.Draw("histsame")
-        if massbin == 8 and False:
+            hdmd.Draw("histsame")
+        if massbin == 9 and signalsDM:
             #hdm.Draw("histsame")
             #hdma.Draw("histsame")
             #hdmb.Draw("histsame")
-            hdmc.Draw("histsame")
-            #hdmd.Draw("histsame")
-        #if massbin == 9:
+            #hdmc.Draw("histsame")
+            hdmd.Draw("histsame")
+        #if massbin == 10 and signalsDM:
             #hdm.Draw("histsame")
             #hdma.Draw("histsame")
             #hdmb.Draw("histsame")
             #hdmc.Draw("histsame")
             #hdmd.Draw("histsame")
-        if signals:
+        if signalsBSM:
             halp.Draw("histsame")
             htripleG.Draw("histsame")
         #h14G.Draw("pzesame")
@@ -1067,53 +1074,59 @@ if __name__=="__main__":
         #l2.AddEntry(hcif,"#Lambda_{AA}^{#font[122]{-}} (CI) = 14 TeV","l")
         #l2.AddEntry(hcig,"#Lambda_{V-A} (CI) = 14 TeV","l")
         #l2.AddEntry(hcih,"#Lambda_{V-A}^{#font[122]{-}} (CI) = 14 TeV","l")
-    if massbin > 5 and signals:
+    if massbin > 5 and signalsBSM:
         l2.AddEntry(hgrw,"#Lambda_{T} (GRW) = 12 TeV","l")
 #    if massbin > 6: #FIX
 #        l2.AddEntry(hqbh,"M_{QBH} (n_{ED} = 6 ADD) = 8 TeV","l") #FIX
-    if massbin == 3 and False:
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 1 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 1.5 TeV","l")
-        l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2 TeV","l")
-        l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-    if massbin == 4 and False:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 5 and False:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 6 and False:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 7 and False:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if massbin == 8 and False:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    #if massbin == 9:
-        #l2.AddEntry(hdm,"M_{Med} (DM g_{q} = 1.0) = 2.0 TeV","l")
-        #l2.AddEntry(hdma,"M_{Med} (DM g_{q} = 1.0) = 3.0 TeV","l")
-        #l2.AddEntry(hdmb,"M_{Med} (DM g_{q} = 1.0) = 4.0 TeV","l")
-        #l2.AddEntry(hdmc,"M_{Med} (DM g_{q} = 1.0) = 5.0 TeV","l")
-        #l2.AddEntry(hdmd,"M_{Med} (DM g_{q} = 1.0) = 6.0 TeV","l")
-    if signals:
+    if massbin == 3 and signalsDM:
+        l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 4 and signalsDM:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 5 and signalsDM:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 6 and signalsDM:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 7 and signalsDM:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 8 and signalsDM:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if massbin == 9:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    #if massbin == 10:
+        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
+        #l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
+    if signalsBSM:
         l2.AddEntry(halp,"f_{a} / c_{g} = 2.5 TeV","l")
         l2.AddEntry(htripleG,"#Lambda / #sqrt{C_{G}} = 10 TeV","l")
     l2.SetFillStyle(0)
@@ -1152,5 +1165,7 @@ if __name__=="__main__":
       postfix+="_compare"
     if compareScales:
       postfix+="_scales"
+    if signalsDM:
+      postfix+="_dm"
     c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")
