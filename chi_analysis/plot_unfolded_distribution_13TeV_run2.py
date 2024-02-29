@@ -171,7 +171,7 @@ if __name__ == '__main__':
       h1genpostfit.Draw("hesame")
       
       # PLOTS
-      legend1.AddEntry(h2,"Raw data","le")
+      legend1.AddEntry(h2,"Reco data","le")
       legend1.AddEntry(h1,"Smeared-Prefit","le")
       #legend1.AddEntry(h3,"Smeared-Prefit","le")
       legend1.AddEntry(h1postfit,"Smeared-Postfit","le")
@@ -183,4 +183,5 @@ if __name__ == '__main__':
       legend1.Draw("same")
 
     canvas.SaveAs(prefix + "_unfolded.pdf")
-    canvas.SaveAs(prefix + "_unfolded.eps")
+    #canvas.SaveAs(prefix + "_unfolded.eps")
+    canvas.SaveAs(prefix + "_unfolded.root")

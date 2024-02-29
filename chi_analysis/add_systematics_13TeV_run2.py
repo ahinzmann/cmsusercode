@@ -1898,7 +1898,9 @@ if __name__ == '__main__':
               syss+=["stat"+str(mn)+"_"+str(cn)]
               skipInSum+=["stat"+str(mn)+"_"+str(cn)]
           for j in range(len(massbins)):
+            print massbins[j]
             for sys in syss:
+              #print sys
               for shift in ["Up","Down"]:
                 histname=althists[j].GetName()+"_"+sys+shift
                 #print histname
@@ -1906,6 +1908,19 @@ if __name__ == '__main__':
                 #print sysHist
                 #print dir(sysHist)
                 sysNorm=sysHist.Integral()
+
+                if samples[i][0]=="QCD": # for unfolding
+                  for j1 in range(len(massbins)):
+                    for b1 in range(althists[j1].GetNbinsX()):
+                      unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
+                      sysHistunfoldbin=histsunfold[str(j)+unfoldbin].Clone(histname+unfoldbin)
+                      for b in range(sysHist.GetNbinsX()):
+                        if althistsclones[j].GetBinContent(b+1)>0:
+                          sysHistunfoldbin.SetBinContent(b+1,sysHist.GetBinContent(b+1)/althistsclones[j].GetBinContent(b+1)*histsunfold[str(j)+unfoldbin].GetBinContent(b+1))
+                      if sysHistunfoldbin.Integral()>0:
+                        sysHistunfoldbin.Scale(sysNorm/althistsclones[j].Integral()*histsunfold[str(j)+unfoldbin].Integral()/sysHistunfoldbin.Integral())
+                      sysHistunfoldbin.Write()
+
                 for b in range(sysHist.GetNbinsX()):
                   if althistsclones[j].GetBinContent(b+1)*althists[j].GetBinContent(b+1)>0:
                     sysHist.SetBinContent(b+1,sysHist.GetBinContent(b+1)/althistsclones[j].GetBinContent(b+1)*althists[j].GetBinContent(b+1))
@@ -1921,6 +1936,7 @@ if __name__ == '__main__':
                 if (samples[i][0]!="QCD" or "ALT" in pre) and not sys in skipInSum:
                  alt.Draw("hesame")
                 plots+=[alt]
+
             dataplot[j].Draw("pe0zsame")
             legend=legend1.Clone()
 	    legend.SetHeader((str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
