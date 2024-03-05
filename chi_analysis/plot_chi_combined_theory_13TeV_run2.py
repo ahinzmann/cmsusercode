@@ -73,7 +73,7 @@ def setupAsymErrors(g):
 if __name__=="__main__":
 
   useNNLO=True # choice for QCD
-  useM2=False # choice of mu-scale for QCD
+  useM2=True # choice of mu-scale for QCD
   
   if useNNLO:
     pdfset="ct14nnlo"
@@ -86,12 +86,12 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
-  oldTheory=False
+  oldTheory=True
   signalsBSM=False
-  signalsDM=True
-  compareScales=False
+  signalsDM=False
+  compareScales=True
 
   massbins=[(1200,1500),
   	      (1500,1900),
@@ -258,7 +258,7 @@ if __name__=="__main__":
           	 hNloQcdOld.Add(hnlo)
               else:
           	 hNloQcdOld=hnlo
-             hNloQcdOld.SetLineColor(4)
+             hNloQcdOld.SetLineColor(2)
              hNloQcdOld.SetLineStyle(2)
              hNloQcdOld.SetLineWidth(2)
     
@@ -403,8 +403,10 @@ if __name__=="__main__":
         if unfoldedData:
             #filename="datacards/Unfolded_chiNtuple_dataReReco_v3_Coarse_PFHT900_fromCB_AK4SF_pythia8_Pt_170toInf_MatrixInvert.root"
             #histname="dijet_mass_"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000").replace("6000_7000","5400_6000").replace("7000_13000","6000_13000")+"_chi_unfolded"
-            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
-            histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
+            #filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
+            #histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
+            filename='datacards/datacard_shapelimit13TeV_unfolded_run2.root'
+            histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit" # TODO UNFOLD
 	else:
             filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             histname="data_obs#chi"+massbintext+"_rebin1"
@@ -418,21 +420,21 @@ if __name__=="__main__":
         #  for b in range(h14.GetXaxis().GetNbins()):
         #    h14.SetBinContent(b+1,h14.GetBinContent(b+1)*h14.GetBinWidth(b+1))
         #    h14.SetBinError(b+1,h14.GetBinError(b+1)*h14.GetBinWidth(b+1))
-	origh14=h14.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebinorig",chi_binnings[massbin])
+	#origh14=h14.Rebin(len(chi_binnings[massbin])-1,h14.GetName()+"rebinorig",chi_binnings[massbin])
 	h14=rebin2(h14,len(chi_binnings[massbin])-1,chi_binnings[massbin])
-	if unfoldedData:
-	  hQCDraw=fData.Get("QCD_ALT#chi"+massbintext+"_rebin1_nosmear") # TEMPORARY BIN-BY-BIN UNFOLDING
-	  hQCDsmear=fData.Get("QCD_ALT#chi"+massbintext+"_rebin1")
-	  hQCDraw=hQCDraw.Rebin(len(chi_binnings[massbin])-1,hQCDraw.GetName()+"rebin",chi_binnings[massbin])
-	  hQCDsmear=hQCDsmear.Rebin(len(chi_binnings[massbin])-1,hQCDsmear.GetName()+"rebin",chi_binnings[massbin])
-          for b in range(h14.GetXaxis().GetNbins()):
-            print hQCDsmear.GetBinContent(b+1)/hQCDraw.GetBinContent(b+1)
-            h14.SetBinContent(b+1,h14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-            h14.SetBinError(b+1,h14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-            origh14.SetBinContent(b+1,origh14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-            origh14.SetBinError(b+1,origh14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
-          h14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
-          origh14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
+	#if unfoldedData:
+	#  hQCDraw=fData.Get("QCD_ALT#chi"+massbintext+"_rebin1_nosmear") # TEMPORARY BIN-BY-BIN UNFOLDING
+	#  hQCDsmear=fData.Get("QCD_ALT#chi"+massbintext+"_rebin1")
+	#  hQCDraw=hQCDraw.Rebin(len(chi_binnings[massbin])-1,hQCDraw.GetName()+"rebin",chi_binnings[massbin])
+	#  hQCDsmear=hQCDsmear.Rebin(len(chi_binnings[massbin])-1,hQCDsmear.GetName()+"rebin",chi_binnings[massbin])
+        #  for b in range(h14.GetXaxis().GetNbins()):
+        #    print hQCDsmear.GetBinContent(b+1)/hQCDraw.GetBinContent(b+1)
+        #    h14.SetBinContent(b+1,h14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
+        #    h14.SetBinError(b+1,h14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
+        #    origh14.SetBinContent(b+1,origh14.GetBinContent(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
+        #    origh14.SetBinError(b+1,origh14.GetBinError(b+1)/hQCDsmear.GetBinContent(b+1)*hQCDraw.GetBinContent(b+1))
+        #  h14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
+        #  origh14.Scale(hQCDsmear.Integral()/hQCDraw.Integral())
       
 	h14G=TGraphAsymmErrors(h14.Clone(histname+"G"))
 	new_hists+=[h14G]
@@ -441,7 +443,11 @@ if __name__=="__main__":
 	nevents=0
 	for b in range(h14G.GetN()):
 	    if unfoldedData:
-	      N=origh14.GetBinContent(b+1)
+	      #N=origh14.GetBinContent(b+1)
+	      if h14.GetBinContent(b+1)>0:
+	         N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
+              else:
+		 N=0
 	    else:
 	      if h14.GetBinContent(b+1)>0:
 	         N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
@@ -1064,7 +1070,7 @@ if __name__=="__main__":
     else:
       l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
     if oldTheory:
-      l2.AddEntry(hNloQcdOld,"NLO QCD + EW","fl")
+      l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>)","fl")
 #    if massbin>=5: #FIX
 #        l2.AddEntry(hci,"#Lambda_{LL}^{#font[122]{+}} (CI) = 14 TeV","l") #FIX
 #        l2.AddEntry(hcib,"#Lambda_{LL}^{#font[122]{-}} (CI) = 14 TeV","l") #FIX
@@ -1114,13 +1120,13 @@ if __name__=="__main__":
         #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
         l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
         l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
-    if massbin == 9:
+    if massbin == 9 and signalsDM:
         #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
         #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
         #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")
         #l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 1.0)","l")
         l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 1.0)","l")
-    #if massbin == 10:
+    #if massbin == 10 and signalsDM:
         #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 1.0)","l")
         #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 1.0)","l")
         #l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 1.0)","l")

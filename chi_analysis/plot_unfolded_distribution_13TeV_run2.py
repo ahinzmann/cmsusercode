@@ -33,8 +33,17 @@ def rebin(h1,nbins,binning):
 
 if __name__ == '__main__':
 
+    trivialClosure=False
+    withUncertainties=False
+    onlyMC=True
+    onlyData=False
     run="2"
     prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
+
+    name="unfold"
+    if withUncertainties: name+="_withUncertainties"
+    if trivialClosure: name+="_trivialClosure"
+    print name
 
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     all_mass_bins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -64,12 +73,17 @@ if __name__ == '__main__':
     legends=[]
     new_hists=[]
 
-    filename="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit.root"
+    filename="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
     print filename
     fitfile = TFile.Open(filename)
     fittree=fitfile.Get("fit_mdf")
     fitParameters=[]
     fitConstraints=[]
+
+    fout=TFile.Open("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+"_run"+run+".root","RECREATE")
+
+    if onlyMC: name+="_MC"
+    if onlyData: name+="_data"
 
     for i in range(len(massbins)):
       filename=prefix+"_GEN-QCD-run2_chi.root"
@@ -77,7 +91,7 @@ if __name__ == '__main__':
       f = TFile.Open(filename)
       new_hists+=[f]
       canvas.cd(i+1)
-      legend1=TLegend(0.2,0.6,0.9,0.95,(str(massbins[i][0])+"<m_{jj}<"+str(massbins[i][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
+      legend1=TLegend(0.3,0.6,0.9,0.95,(str(massbins[i][0])+"<m_{jj}<"+str(massbins[i][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
       legends+=[legend1]
 
       histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmear"
@@ -91,9 +105,9 @@ if __name__ == '__main__':
       for j in range(len(massbins)):
         for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
           histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+"_"
-          name="r_Bin_"+str(j+mass_bin_offset)+"_"+str(chibin)
-          fitParameter=fittree.floatParsFinal().find(name).getVal()
-          fitConstraint=fittree.floatParsFinal().find(name).getError()
+          binname="r_Bin_"+str(j+mass_bin_offset)+"_"+str(chibin)
+          fitParameter=fittree.floatParsFinal().find(binname).getVal()
+          fitConstraint=fittree.floatParsFinal().find(binname).getError()
           print histname,fitParameter,fitConstraint
 
           if i==j:
@@ -116,6 +130,9 @@ if __name__ == '__main__':
             h1addpostfit.SetBinError(chibin+1,h1addpostfit.GetBinContent(chibin+1)*fitConstraint/fitParameter)
             h1postfit.Add(h1addpostfit)
 
+      fout.cd()
+      h1genpostfit.Write()
+
       histname='data_obs#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
       print histname
       h2=f.Get(histname)
@@ -126,62 +143,88 @@ if __name__ == '__main__':
       h3=f.Get(histname)
       plots+=[h3]
             
-      h1.Scale(h3.Integral()/h1.Integral())
-      h1postfit.Scale(h3.Integral()/h1postfit.Integral())
-      h1gen.Scale(h3.Integral()/h1gen.Integral())
-      h1genpostfit.Scale(h3.Integral()/h1genpostfit.Integral())
-      h2.Scale(h3.Integral()/h2.Integral())
+      h1.Scale(1./h1.Integral())
+      h1postfit.Scale(1./h1postfit.Integral())
+      h1gen.Scale(1./h1gen.Integral())
+      h1genpostfit.Scale(1./h1genpostfit.Integral())
+      h2.Scale(1./h2.Integral())
 
       for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)/h1.GetBinWidth(b+1))
-        h1.SetBinError(b+1,h1.GetBinError(b+1)/h1.GetBinWidth(b+1))
+        h1.SetBinError(b+1,0)
         h1postfit.SetBinContent(b+1,h1postfit.GetBinContent(b+1)/h1postfit.GetBinWidth(b+1))
-        h1postfit.SetBinError(b+1,h1postfit.GetBinError(b+1)/h1postfit.GetBinWidth(b+1))
+        h1postfit.SetBinError(b+1,0)
         h1gen.SetBinContent(b+1,h1gen.GetBinContent(b+1)/h1gen.GetBinWidth(b+1))
-        h1gen.SetBinError(b+1,h1gen.GetBinError(b+1)/h1gen.GetBinWidth(b+1))
+        h1gen.SetBinError(b+1,0)
         h1genpostfit.SetBinContent(b+1,h1genpostfit.GetBinContent(b+1)/h1genpostfit.GetBinWidth(b+1))
         h1genpostfit.SetBinError(b+1,h1genpostfit.GetBinError(b+1)/h1genpostfit.GetBinWidth(b+1))
         h2.SetBinContent(b+1,h2.GetBinContent(b+1)/h2.GetBinWidth(b+1))
         h2.SetBinError(b+1,h2.GetBinError(b+1)/h2.GetBinWidth(b+1))
         h3.SetBinContent(b+1,h3.GetBinContent(b+1)/h3.GetBinWidth(b+1))
-        h3.SetBinError(b+1,h3.GetBinError(b+1)/h3.GetBinWidth(b+1))
+        h3.SetBinError(b+1,0)
 
-      h2.SetLineColor(1)
-      h2.SetTitle("")
-      h2.Draw("he")
-      h2.GetYaxis().SetRangeUser(0,h2.GetMaximum()*1.5)
-
-      h1.SetLineColor(2)
-      h1.SetTitle("")
-      h1.Draw("hesame")
-      
-      h3.SetLineColor(6)
-      h3.SetLineStyle(3)
-      #h3.Draw("hesame")
-
-      h1postfit.SetLineColor(2)
-      h1postfit.SetLineStyle(2)
-      h1postfit.Draw("hesame")
       
       h1gen.SetLineColor(4)
-      h1gen.Draw("hesame")
+      if not onlyData:
+        h1gen.Draw("he")
+
+      if not trivialClosure and not onlyMC:
+        h2.SetLineColor(4)
+        h2.SetTitle("")
+        if onlyData:
+          h2.Draw("he")
+          h1gen=h2
+        else:
+          h2.Draw("hesame")
+
+      if i>=7:
+          h1gen.GetYaxis().SetRangeUser(0.00,0.25)
+      elif i>=6:
+          h1gen.GetYaxis().SetRangeUser(0.02,0.22)
+      elif i>=4:
+          h1gen.GetYaxis().SetRangeUser(0.045,0.12)
+      else:
+          h1gen.GetYaxis().SetRangeUser(0.045,0.12)
       
-      h1genpostfit.SetLineColor(4)
-      h1genpostfit.SetLineStyle(2)
-      h1genpostfit.Draw("hesame")
+      if not onlyMC:
+        h1genpostfit.SetLineColor(1)
+        h1genpostfit.SetLineStyle(2)
+        h1genpostfit.SetLineWidth(2)
+        h1genpostfit.Draw("hesame")
+      
+      if not trivialClosure and not onlyData:
+        h1.SetLineColor(2)
+        h1.SetTitle("")
+        h1.Draw("hesame")
+      
+        h3.SetLineColor(6)
+        h3.SetLineStyle(3)
+        #h3.Draw("hesame")
+
+      if not onlyMC:
+        h1postfit.SetLineColor(2)
+        h1postfit.SetLineStyle(2)
+        h1postfit.Draw("hesame")
       
       # PLOTS
-      legend1.AddEntry(h2,"Reco data","le")
-      legend1.AddEntry(h1,"Smeared-Prefit","le")
-      #legend1.AddEntry(h3,"Smeared-Prefit","le")
-      legend1.AddEntry(h1postfit,"Smeared-Postfit","le")
-      legend1.AddEntry(h1gen,"Gen","le")
-      legend1.AddEntry(h1genpostfit,"Unfolded data","le")
+      if not onlyData:
+        legend1.AddEntry(h1gen,"Gen","l")
+      if not trivialClosure and not onlyMC:
+        legend1.AddEntry(h2,"Reco data","le")
+      if trivialClosure:
+        legend1.AddEntry(h1genpostfit,"Unfolded Smeared","le")
+      elif not onlyMC:
+        legend1.AddEntry(h1genpostfit,"Unfolded data","le")
+      if not trivialClosure and not onlyData:
+        legend1.AddEntry(h1,"Smeared-Prefit","l")
+        #legend1.AddEntry(h3,"Smeared-Prefit","l")
+      if not onlyMC:
+        legend1.AddEntry(h1postfit,"Smeared-Postfit","l")
 
       legend1.SetTextSize(0.04)
       legend1.SetFillStyle(0)
       legend1.Draw("same")
 
-    canvas.SaveAs(prefix + "_unfolded.pdf")
+    canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")
     #canvas.SaveAs(prefix + "_unfolded.eps")
-    canvas.SaveAs(prefix + "_unfolded.root")
+    fout.Close()

@@ -18,8 +18,9 @@ uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
 theoryStatUncertainties=True
-withUncertainties=True
 
+trivialClosure=False
+withUncertainties=True
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
 
@@ -27,6 +28,8 @@ dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_a
 prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
 
 name="unfold"
+if withUncertainties: name+="_withUncertainties"
+if trivialClosure: name+="_trivialClosure"
 print name
 statUncertainties=[]
 if theoryStatUncertainties:
@@ -51,9 +54,9 @@ for massbin in massbins:
 
 fname=prefix+"_GEN-QCD-run2_chi.root"
 
-if False:
+if True:
     f=TFile(fname)
-    cfg=open("chi_datacard13TeVunfold_run"+run+".txt","w")
+    cfg=open("chi_datacard13TeV"+name+"_run"+run+".txt","w")
     nbins=0
     for j in range(len(massbins)):
       for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
@@ -66,9 +69,13 @@ kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncor
 -----------
 """)
     for i in range(len(massbins)):
+      if trivialClosure:
+        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+""")
+      else:
         cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
 """)
-        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
+      cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
 """)
     cfg.writelines("""
 -----------
@@ -165,14 +172,15 @@ kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncor
 
 if True:
     if runs=="23":
-      out=system_call("combineCards.py run2=chi_datacard13TeVunfold_run2.txt run3=chi_datacard13TeVunfold_run3.txt > chi_datacard13TeVunfold_run23.txt")
+      out=system_call("combineCards.py run2=chi_datacard13TeV"+name+"_run2.txt run3=chi_datacard13TeV"+name+"_run3.txt > chi_datacard13TeV"+name+"_run23.txt")
     pois_map=""
     for j in range(len(massbins)):
       for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
         pois_map+=" --PO map='.*"+"bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+".*:r_Bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+"[1,-1,10]'"
     print "running combine"
-    out=system_call("text2workspace.py -m 125 chi_datacard13TeVunfold_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o unfold_run"+runs+".root")
+    out=system_call("text2workspace.py -m 125 chi_datacard13TeV"+name+"_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o "+name+"_run"+runs+".root")
     print out
-    out=system_call("combine -m 125 -M MultiDimFit unfold_run"+runs+".root --saveFitResult")
+    out=system_call("combine -m 125 -M MultiDimFit "+name+"_run"+runs+".root --saveFitResult")
     print out
-    
+    out=system_call("mv multidimfit.root multidimfit_"+name+"_run"+runs+".root")
+    print out
