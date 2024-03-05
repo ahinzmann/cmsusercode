@@ -34,8 +34,8 @@ def rebin(h1,nbins,binning):
 if __name__ == '__main__':
 
     trivialClosure=False
-    withUncertainties=False
-    onlyMC=True
+    withUncertainties=True
+    onlyMC=False
     onlyData=False
     run="2"
     prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
