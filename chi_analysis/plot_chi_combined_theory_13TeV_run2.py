@@ -72,8 +72,8 @@ def setupAsymErrors(g):
 
 if __name__=="__main__":
 
-  useNNLO=True # choice for QCD
-  useM2=True # choice of mu-scale for QCD
+  useNNLO=False # choice for QCD
+  useM2=False # choice of mu-scale for QCD
   
   if useNNLO:
     pdfset="ct14nnlo"
@@ -86,12 +86,12 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=True
+  unfoldedData=False
   oldMeasurements=False
-  oldTheory=True
-  signalsBSM=False
+  oldTheory=False
+  signalsBSM=True
   signalsDM=False
-  compareScales=True
+  compareScales=False
 
   massbins=[(1200,1500),
   	      (1500,1900),
@@ -192,7 +192,7 @@ if __name__=="__main__":
     c.Divide(1,1)
     new_hists=[]
     if True:
-        fdir='versions/run2ULNNLO_pt12/'
+        fdir='versions/run2UL'+('NNLO' if useNNLO else 'NLO')+'_'+muScale+'/'
             
         if unfoldedData:  
             if useNNLO:
@@ -258,6 +258,7 @@ if __name__=="__main__":
           	 hNloQcdOld.Add(hnlo)
               else:
           	 hNloQcdOld=hnlo
+             hNloQcdOld=smoothChi(hNloQcdOld) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdOld.SetLineColor(2)
              hNloQcdOld.SetLineStyle(2)
              hNloQcdOld.SetLineWidth(2)
@@ -405,7 +406,7 @@ if __name__=="__main__":
             #histname="dijet_mass_"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000").replace("6000_7000","5400_6000").replace("7000_13000","6000_13000")+"_chi_unfolded"
             #filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             #histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
-            filename='datacards/datacard_shapelimit13TeV_unfolded_run2.root'
+            filename='datacards/datacard_shapelimit13TeV_unfold_withUncertainties_run2.root'
             histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit" # TODO UNFOLD
 	else:
             filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
@@ -474,7 +475,8 @@ if __name__=="__main__":
         print filename
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
-        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf","stat"] # "scaleAlt"
+        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf"] # "scaleAlt"
+        if useNNLO: uncertaintynames+=["stat"]
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"
@@ -545,8 +547,8 @@ if __name__=="__main__":
         
         if massbin>=0:
          if True: #FIX
-	  filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_LL+-run2_chi.root"
-          histname='cs_ct14nnlo_14000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+	  filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_LL+-run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -559,8 +561,8 @@ if __name__=="__main__":
 	  for b in range(hci.GetNbinsX()):
 	       hci.SetBinContent(b+1,hci.GetBinContent(b+1)/hci.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_LL--run2_chi.root"
-          histname='cs_ct14nnlo_14000_LL-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_LL--run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_LL-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -573,8 +575,8 @@ if __name__=="__main__":
 	  for b in range(hcib.GetNbinsX()):
 	       hcib.SetBinContent(b+1,hcib.GetBinContent(b+1)/hcib.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_VV+-run2_chi.root"
-          histname='cs_ct14nnlo_14000_VV+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_VV+-run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_VV+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -587,8 +589,8 @@ if __name__=="__main__":
 	  for b in range(hcic.GetNbinsX()):
 	       hcic.SetBinContent(b+1,hcic.GetBinContent(b+1)/hcic.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_VV--run2_chi.root"
-          histname='cs_ct14nnlo_14000_VV-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_VV--run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_VV-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -601,8 +603,8 @@ if __name__=="__main__":
 	  for b in range(hcid.GetNbinsX()):
 	       hcid.SetBinContent(b+1,hcid.GetBinContent(b+1)/hcid.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_AA+-run2_chi.root"
-          histname='cs_ct14nnlo_14000_AA+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_AA+-run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_AA+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -615,8 +617,8 @@ if __name__=="__main__":
 	  for b in range(hcie.GetNbinsX()):
 	       hcie.SetBinContent(b+1,hcie.GetBinContent(b+1)/hcie.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_AA--run2_chi.root"
-          histname='cs_ct14nnlo_14000_AA-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_AA--run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_AA-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -629,8 +631,8 @@ if __name__=="__main__":
 	  for b in range(hcif.GetNbinsX()):
 	       hcif.SetBinContent(b+1,hcif.GetBinContent(b+1)/hcif.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_V-A+-run2_chi.root"
-          histname='cs_ct14nnlo_14000_V-A+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_V-A+-run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_V-A+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -643,8 +645,8 @@ if __name__=="__main__":
 	  for b in range(hcig.GetNbinsX()):
 	       hcig.SetBinContent(b+1,hcig.GetBinContent(b+1)/hcig.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_ct14nnlo_14000_V-A--run2_chi.root"
-          histname='cs_ct14nnlo_14000_V-A-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          filename=fdir+"datacard_shapelimit13TeV_cs_ct14"+("n" if useNNLO else "")+"nlo_14000_V-A--run2_chi.root"
+          histname='cs_ct14'+("n" if useNNLO else "")+'nlo_14000_V-A-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print filename
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -1068,7 +1070,10 @@ if __name__=="__main__":
       l2.AddEntry(h3newnew,"NNLO QCD + EW (#mu=m_{jj})","fl")
       l2.AddEntry(hNloQcdAlt,"NNLO QCD + EW (#mu=<p_{T}>)","fl")
     else:
-      l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
+      if useNNLO:
+        l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
+      else:
+        l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
     if oldTheory:
       l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>)","fl")
 #    if massbin>=5: #FIX

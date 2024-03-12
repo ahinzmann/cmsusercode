@@ -15,28 +15,27 @@ jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to 
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
+scaleUncertainties=False
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=True
+theoryStatUncertainties=False
 
 trivialClosure=False
+crossClosure=False
 withUncertainties=True
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
 
 dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
-prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
+prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
 
 name="unfold"
 if withUncertainties: name+="_withUncertainties"
 if trivialClosure: name+="_trivialClosure"
+if crossClosure: name+="_crossClosure"
 print name
 statUncertainties=[]
-if theoryStatUncertainties:
-  chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
-           (1,2,3,4,5,6,7,8,9,10,12,14,16),
-           (1,2,3,4,5,6,7,8,9,10,12,14,16),
-           (1,2,3,4,5,6,7,8,9,10,12,14,16),
+chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
            (1,2,3,4,5,6,7,8,9,10,12,14,16),
            (1,2,3,4,5,6,7,8,9,10,12,14,16),
            (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -47,9 +46,10 @@ if theoryStatUncertainties:
           ]
 all_mass_bins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 mass_bin_offset=len(all_mass_bins)-len(massbins)
-for massbin in massbins:
+if theoryStatUncertainties:
+  for massbin in massbins:
      massindex=all_mass_bins.index(massbin)
-     for chibin in range(len(chi_bins[massindex])-1):
+     for chibin in range(len(chi_bins[massindex-mass_bin_offset])-1):
          statUncertainties+=["stat"+str(massindex)+"_"+str(chibin)]
 
 fname=prefix+"_GEN-QCD-run2_chi.root"
@@ -59,23 +59,30 @@ if True:
     cfg=open("chi_datacard13TeV"+name+"_run"+run+".txt","w")
     nbins=0
     for j in range(len(massbins)):
-      for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
+      for chibin in range(len(chi_bins[j])-1):
         nbins+=1
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels (reco mass bins)
 jmax """+str(nbins-1)+""" number of samples (gen bins)
-kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
+kmax """+str(withUncertainties*(4+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
     for i in range(len(massbins)):
-      if trivialClosure:
-        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+      if trivialClosure: # use LO QCD instead of data and NNLO QCD
+        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
+""")
+      elif crossClosure: # use NNLO QCD as data
+        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
 """)
       else:
         cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
 """)
-      cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
+        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
 """)
     cfg.writelines("""
 -----------
@@ -85,8 +92,12 @@ kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncor
        text+="recomass"+str(i)+" "
     text+="\nobservation "
     for i in range(len(massbins)):
-       hData=f.Get("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
-       print "data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
+       if trivialClosure or crossClosure:
+         hData=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
+         print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
+       else:
+         hData=f.Get("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
+         print "data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
        text+=str(hData.Integral())+" "
     cfg.writelines(text+"""
 -----------
@@ -94,25 +105,29 @@ kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncor
     text="bin "
     for i in range(len(massbins)):
      for j in range(len(massbins)):
-         text+=("recomass"+str(i)+" ")*(len(chi_bins[j+mass_bin_offset])-1)
+         text+=("recomass"+str(i)+" ")*(len(chi_bins[j])-1)
     text+="\nprocess "
     for i in range(len(massbins)):
      for j in range(len(massbins)):
-       for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
-        text+="bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+" "
+       for chibin in range(len(chi_bins[j])-1):
+        text+="bin_"+str(j)+"_"+str(chibin)+" "
     text+="\nprocess "
     for i in range(len(massbins)):
      n=0
      for j in range(len(massbins)):
-        text+=(str(n)+" ")*(len(chi_bins[j+mass_bin_offset])-1)
+        text+=(str(n)+" ")*(len(chi_bins[j])-1)
         n-=1
     text+="\nrate "
     ones=""
     for i in range(len(massbins)):
      for j in range(len(massbins)):
-       for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
-        hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+"_")
-        print "QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+"_",hQCD.Integral()
+       for chibin in range(len(chi_bins[j])-1):
+        if trivialClosure:
+          hQCD=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
+          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+        else:
+          hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
+          print "QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
         text+=str(hQCD.Integral())+" "
         if hQCD.Integral()>0:
           ones+="1 "
@@ -159,7 +174,7 @@ kmax """+str(withUncertainties*(5+correlatedSimUncertainties+len(massbins)*uncor
       else:
         if alternateScaleUncertainty:
           text+="\nscaleAlt shape "+ones
-        else:
+        elif scaleUncertainties:
           text+="\nscale shape "+ones
       print "adding stat uncertainties"
       for su in statUncertainties:
@@ -175,8 +190,8 @@ if True:
       out=system_call("combineCards.py run2=chi_datacard13TeV"+name+"_run2.txt run3=chi_datacard13TeV"+name+"_run3.txt > chi_datacard13TeV"+name+"_run23.txt")
     pois_map=""
     for j in range(len(massbins)):
-      for chibin in range(len(chi_bins[j+mass_bin_offset])-1):
-        pois_map+=" --PO map='.*"+"bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+".*:r_Bin_"+str(j+mass_bin_offset)+"_"+str(chibin)+"[1,-1,10]'"
+      for chibin in range(len(chi_bins[j])-1):
+        pois_map+=" --PO map='.*"+"bin_"+str(j)+"_"+str(chibin)+".*:r_Bin_"+str(j)+"_"+str(chibin)+"[1,-1,10]'"
     print "running combine"
     out=system_call("text2workspace.py -m 125 chi_datacard13TeV"+name+"_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o "+name+"_run"+runs+".root")
     print out

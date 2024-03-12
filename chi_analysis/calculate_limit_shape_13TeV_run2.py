@@ -22,21 +22,21 @@ if only6000:
   massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)] # did not calculate CI for lower mass bins yet
 
 models=[]
-#models+=[3] #ADD
+models+=[3] #ADD
 #models+=[10] #QBH ADD6
 #models+=[11] #QBH RS1
 #models+=[60,61,62,63,64,65,66,67,68,69] #CI
 #models+=[70,71,72,73,74,75,76,77] 
 #models+=[78,79,80,81,82,83,84,85] 
-models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues
-models+=[41,42,43] #pvalues
-models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues
+models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues (CI-LO)
+models+=[41,42,43] #pvalues (CI-NLO)
+models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues (Anti-CI-LO)
 #models+=[47]
 #models+=[88,89]
 #models+=[60,61]
-#models+=[90,91,92,93,94] #alp
-#models+=[95,96,97,98,99] #tripleG
-#>100 steered by loop script #DM
+models+=[90,91,92,93,94] #alp
+models+=[95,96,97,98,99] #tripleG
+#>100 steered by loop script #DM, can be run with DMpvalue=True/False
 
 VectorDM=False
 AxialDM=True
@@ -50,7 +50,11 @@ correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=True
+theoryStatUncertainties=False
+useNNLO=False # choice for QCD
+useM2=False # choice of mu-scale for QCD
+runs="2" # "2" or "3" or "23"
+run=runs[-1]
 
 isGen=False
 
@@ -59,9 +63,6 @@ isCB=False
 isInjection=False
 
 DMpvalue=True
-
-runs="2" # "2" or "3" or "23"
-run=runs[-1]
 
 signalName={}
 signalExtraName={}
@@ -507,7 +508,17 @@ for model in models:
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400)]
 
  dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
- prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
+ if run=="2":
+   if useM2:
+     prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
+   elif useNNLO:
+     prefix=dire+"versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+   else:
+     prefix=dire+"versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
+ elif run=="3":
+   prefix=dire+"versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"
+ else:
+   whatprefix
 
  if model>=30 and model<60:
     name="pvalue_"+testStat+asym+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")    

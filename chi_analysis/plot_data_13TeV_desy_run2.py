@@ -158,7 +158,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
 	 weight=1.0
-	 if vetoHEM and (event.EVENT_run>=319077) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+	 if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
 	 if prefiremap:
             if abs(jet1.Eta())>2:
 	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
@@ -178,7 +178,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	 for massbin in massbins:
             passedHLT=len(triggers[massbins.index(massbin)])==0
             for i in trigger_indices[massbins.index(massbin)]:
-              if ("NANOAOD" in f and getattr(event,i)) or \
+              if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
                  (not "NANOAOD" in f and  event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
 	        passedHLT=True
 		break
@@ -204,7 +204,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	 if ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
             (not "NANOAOD" in f and not trigger_indices.has_key(len(massbins))): continue # for MC
          for i in trigger_indices[len(massbins)]:
-          if ("NANOAOD" in f and getattr(event,i)) or \
+          if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
              (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
             for c in range(len(chi_bins[0])-1):
               if chi>=chi_bins[0][c] and chi<chi_bins[0][c+1]:
@@ -215,7 +215,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
             for t in range(len(triggers)-len(massbins)-1):
               passHLT=False
 	      for i in trigger_indices[len(massbins)+1+t]:
-                if ("NANOAOD" in f and getattr(event,i)) or \
+                if ("NANOAOD" in f and  hasattr(event,i) and getattr(event,i)) or \
                    (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
                   passHLT=True
                   break
@@ -298,6 +298,10 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2022_QCDmadgraphEE","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2022EE"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
+            ("datacard_shapelimit13TeV_run2_NUL16preVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16preVFP-12Feb2024"),
+            ("datacard_shapelimit13TeV_run2_NUL16postVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16postVFP-12Feb2024"),
+            ("datacard_shapelimit13TeV_run2_NUL17","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL17-12Feb2024"),
+            ("datacard_shapelimit13TeV_run2_NUL18","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18-12Feb2024"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -747,6 +751,67 @@ if __name__ == '__main__':
           [],
           [],
           [],
+         ],
+
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT475"],
+	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
 
           ]

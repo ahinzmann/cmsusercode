@@ -67,8 +67,9 @@ if __name__ == '__main__':
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
    use_UL=False
-   use_Run3=True
+   use_Run3=False
    compare_EOYvsUL=False
+   compare_NULvsUL=True
    compare_EOYvsUL_MC=False
    compare_RECOvsGEN=False
    if use_UL:
@@ -77,12 +78,14 @@ if __name__ == '__main__':
      version="_Run3"+version
    if compare_EOYvsUL:
      version="_EOYvsUL"+version
+   if compare_NULvsUL:
+     version="_NULvsUL"+version
    if compare_EOYvsUL_MC:
      version="_EOYvsUL_MC"+version
    if compare_RECOvsGEN:
      version="_RECOvsGEN"+version
 
-   if compare_EOYvsUL or use_UL:
+   if compare_EOYvsUL or use_UL or compare_NULvsUL:
     data=[("UL16preVFP", 1, "Data (UL 2016)"),
           ("UL16postVFP", 1, "")
          ]
@@ -90,7 +93,7 @@ if __name__ == '__main__':
          ]
     data3=[("UL18", 1, "Data (UL 2018)")
          ]
-   if use_Run3:
+   elif use_Run3:
     data=[("2022", 1, "Data (2022)")
          ]
     data2=[("2023", 1, "Data (2023)")
@@ -152,6 +155,14 @@ if __name__ == '__main__':
     mc2=[("2017", 1, "Data (EOY 2017)")
          ]
     mc3=[("2018", 1, "Data (EOY 2018)")
+         ]
+   if compare_NULvsUL:
+    mc=[("NUL16preVFP", 1, "Data (NUL 2016)"),
+          ("NUL16postVFP", 1, "")
+         ]
+    mc2=[("NUL17", 1, "Data (NUL 2017)")
+         ]
+    mc3=[("NUL18", 1, "Data (NUL 2018)")
          ]
    elif use_Run3:
     mc=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
@@ -377,7 +388,7 @@ if __name__ == '__main__':
      for i in range(1,len(data)):
          hist.Add(f_data[i].Get(prefix+data[i][0].split("-")[0]+var),data[i][1])
      normfactor=hist.Integral(hist.FindBin(minmass),hist.FindBin(9000))
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        normfactor=lumi[0]*1000.
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor=1.
@@ -388,7 +399,7 @@ if __name__ == '__main__':
      hist.SetMarkerSize(0.2)
      hist.SetTitle("")
      hist.GetXaxis().SetLabelColor(0)
-     if compare_EOYvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
+     if compare_EOYvsUL or compare_NULvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist.GetYaxis().SetTitle("Cross section [pb]")
      else:
        hist.GetYaxis().SetTitle("Normalized distribution")
@@ -412,7 +423,7 @@ if __name__ == '__main__':
      for i in range(1,len(data2)):
     	 hist2.Add(f_data2[i].Get(prefix+data2[i][0].split("-")[0]+var),data2[i][1])
      normfactor2=hist2.Integral(hist2.FindBin(minmass),hist2.FindBin(9000))
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        normfactor2=lumi[1]*1000.
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor2=1.
@@ -430,7 +441,7 @@ if __name__ == '__main__':
      for i in range(1,len(data3)):
     	 hist3.Add(f_data3[i].Get(prefix+data3[i][0].split("-")[0]+var),data3[i][1])
      normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        normfactor3=lumi[2]*1000.
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
        normfactor3=1.
@@ -447,7 +458,7 @@ if __name__ == '__main__':
      hist_mc.Scale(mc[0][1])
      for i in range(1,len(mc)):
          hist_mc.Add(f_mc[i].Get(prefix+mc[i][0].split("-")[0]+var),mc[i][1])
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        hist_mc.Scale(1./normfactor)
      elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc.Scale(1.)
@@ -463,7 +474,7 @@ if __name__ == '__main__':
      for i in range(1,len(mc2)):
          #print f_mc2[i],prefix+mc2[0][0].split("-")[0]+var, i,mc2[i][1]
     	 hist_mc2.Add(f_mc2[i].Get(prefix+mc2[i][0].split("-")[0]+var),mc2[i][1])
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        hist_mc2.Scale(1./normfactor2)
      elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc2.Scale(1.)
@@ -478,7 +489,7 @@ if __name__ == '__main__':
      hist_mc3.Scale(mc3[0][1])
      for i in range(1,len(mc3)):
     	 hist_mc3.Add(f_mc3[i].Get(prefix+mc3[i][0].split("-")[0]+var),mc3[i][1])
-     if compare_EOYvsUL:
+     if compare_EOYvsUL or compare_NULvsUL:
        hist_mc3.Scale(1./normfactor3)
      elif compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist_mc3.Scale(1.)
@@ -505,13 +516,13 @@ if __name__ == '__main__':
        if hist.GetBinContent(b+1)>0:
     	 ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ratio.SetTitle("")
-     ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))
+     ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))
      ratio.GetYaxis().SetTitleSize(0.18)
      ratio.GetYaxis().SetTitleOffset(0.3)
      ratio.SetMarkerSize(0.1)
      ratio.GetYaxis().SetLabelSize(0.2)
      ratio.GetYaxis().SetRangeUser(0,2)
-     if compare_EOYvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
+     if compare_EOYvsUL or compare_NULvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
       ratio.GetYaxis().SetRangeUser(0.8,1.2)
      ratio.GetXaxis().SetNdivisions(506)
      ratio.GetYaxis().SetNdivisions(503)
@@ -784,7 +795,7 @@ if __name__ == '__main__':
      	  if hist.GetBinContent(b+1)>0:
      	    ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      	ratio.SetTitle("")
-     	ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))
+     	ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))
      	ratio.GetYaxis().SetTitleSize(0.18)
      	ratio.GetYaxis().SetTitleOffset(0.3)
      	ratio.SetMarkerSize(0.1)
@@ -794,7 +805,7 @@ if __name__ == '__main__':
 	  ratio.GetYaxis().SetRangeUser(0.5,1.5)
 	if var=="#chi" and mass<=5:
 	  ratio.GetYaxis().SetRangeUser(0.8,1.2)
-	if compare_EOYvsUL:
+	if compare_EOYvsUL or compare_NULvsUL:
          if var in ["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#phi_{1}","#phi_{2}"] and mass<=7:
 	  ratio.GetYaxis().SetRangeUser(0.5,1.5)
 	 if var=="#chi" and mass<=5:

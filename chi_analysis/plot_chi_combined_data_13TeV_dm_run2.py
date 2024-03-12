@@ -39,6 +39,7 @@ def getFitResults(fitFile, treename):
     fitParameters=[]
     fitConstraints=[]
     for name in uncertaintynames:
+        print name, tree.floatParsFinal().find(name).getVal()
         fitParameters.append(tree.floatParsFinal().find(name).getVal())
         fitConstraints.append(tree.floatParsFinal().find(name).getError())
     return fitParameters, fitConstraints
@@ -136,6 +137,11 @@ def shiftWRTmu(uncertainties,mu,hDm,hbPrefit,hsPrefit):
 
 if __name__=="__main__":
 
+    useNNLO=False # choice for QCD
+    useM2=False # choice of mu-scale for QCD
+    runs="2" # "2" or "3" or "23"
+    run=runs[-1]
+  
     unfoldedData=False
     isCB=False
     version="v6b"
@@ -187,7 +193,17 @@ if __name__=="__main__":
     print (counter-1)
     #print signalName,signalExtraName
 
-    prefix="versions/run2NNLO_pt12/datacard_shapelimit13TeV"
+    if run=="2":
+      if useM2:
+        prefix="versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
+      elif useNNLO:
+        prefix="versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+      else:
+        prefix="versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
+    elif run=="3":
+      prefix="versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"
+    else:
+      whatprefix
     if unfoldedData:
             prefix+="_unfolded"
 
@@ -250,7 +266,7 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["pdf","scale","JERtail","model","jer","prefire"] # "scale"
+            uncertaintynames=["pdf","scale","JERtail","model","jer","prefire"] # "scaleAlt", "sim"
             #uncertaintynames.append("model")
             for m in massbins:
                 uncertaintynames.append("sim"+str(m[0]))
@@ -273,9 +289,11 @@ if __name__=="__main__":
                 chi_binnings+=[array.array('d')]
                 for chi_bin in mass_bin:
                     chi_binnings[-1].append(chi_bin)
-            for mn in range(len(massbins)):
-              for cn in range(len(chi_binnings[mn])-1):
-                uncertaintynames.append("stat"+str(mn)+"_"+str(cn))
+            if useNNLO:
+              for massbin in massbins:
+                massindex=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)].index(massbin)
+                for chibin in range(len(chi_bins[massindex])-1):
+                  uncertaintynames.append("stat"+str(massindex)+"_"+str(chibin))
         
             for massbin in range(len(massbins)):
             

@@ -33,6 +33,10 @@ samples=[#("data2016",0,74,""),
 	 ("qcd2022EE",26,8,""),
 	 ("qcd2023",27,8,""),
 	 ("qcd2023BPix",28,8,""),
+	 ("dataNUL16preVFP",29,6,"-L1prefire"),
+         ("dataNUL16postVFP",30,3,"-L1prefire"),
+         ("dataNUL17",31,5,"-L1prefire"),
+	 ("dataNUL18",32,4,"-HEM"),
 	 ]
 
 count=0

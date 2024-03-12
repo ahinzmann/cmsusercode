@@ -24,9 +24,9 @@ gStyle.SetLegendBorderSize(0)
 if __name__ == '__main__':
 
     trivialClosure=False
-    withUncertainties=False
+    withUncertainties=True
     run="2"
-    prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_pt12/datacard_shapelimit13TeV"
+    prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"

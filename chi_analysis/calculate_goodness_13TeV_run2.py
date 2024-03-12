@@ -24,10 +24,24 @@ correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=True
+theoryStatUncertainties=False
+useNNLO=False # choice for QCD
+useM2=False # choice of mu-scale for QCD
+runs="2" # "2" or "3" or "23"
+run=runs[-1]
 
 dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
-prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+if run=="2":
+  if useM2:
+    prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
+  elif useNNLO:
+    prefix=dire+"versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+  else:
+    prefix=dire+"versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
+elif run=="3":
+  prefix=dire+"versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"
+else:
+  whatprefix
 
 for massbins in massbinssets:
     limits={}
