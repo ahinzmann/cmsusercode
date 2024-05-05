@@ -689,7 +689,7 @@ if __name__ == '__main__':
 	  for i in range(len(plots[-1])):
             plots[-1][i].Add(ps[i])
 
-    out=TFile(prefix + '_chi.root','RECREATE')
+    out=TFile("data/"+prefix + '_chi.root','RECREATE')
     for j in range(len(massbins)):
       for i in range(len(samples)):
         #if plots[i][j].Integral()>0:
@@ -746,7 +746,7 @@ if __name__ == '__main__':
       legend1.SetFillStyle(0)
       legend1.Draw("same")
 
-    canvas.SaveAs(prefix + '_chi.pdf')
+    canvas.SaveAs("plots/"+prefix + '_chi.pdf')
     #canvas.SaveAs(prefix + '_chi.eps')
     #if wait:
     #    os.system("ghostview "+prefix + '_chi.eps')

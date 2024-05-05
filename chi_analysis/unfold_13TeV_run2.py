@@ -15,13 +15,15 @@ jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to 
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
-scaleUncertainties=False
+scaleUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=False
+theoryStatUncertainties=True
 
 trivialClosure=False
-crossClosure=False
+crossClosureNNLO=False
+crossClosureHerwig=False
+crossClosureMadgraph=False
 withUncertainties=True
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
@@ -32,7 +34,9 @@ prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi
 name="unfold"
 if withUncertainties: name+="_withUncertainties"
 if trivialClosure: name+="_trivialClosure"
-if crossClosure: name+="_crossClosure"
+if crossClosureNNLO: name+="_crossClosureNNLO"
+if crossClosureHerwig: name+="_crossClosureHerwig"
+if crossClosureMadgraph: name+="_crossClosureMadgraph"
 print name
 statUncertainties=[]
 chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -56,6 +60,8 @@ fname=prefix+"_GEN-QCD-run2_chi.root"
 
 if True:
     f=TFile(fname)
+    fh=TFile(fname.replace("shapelimit13TeV","shapelimit13TeVherwigpp"))
+    fm=TFile(fname.replace("shapelimit13TeV","shapelimit13TeVmadgraphMLM"))
     cfg=open("chi_datacard13TeV"+name+"_run"+run+".txt","w")
     nbins=0
     for j in range(len(massbins)):
@@ -64,20 +70,30 @@ if True:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels (reco mass bins)
 jmax """+str(nbins-1)+""" number of samples (gen bins)
-kmax """+str(withUncertainties*(4+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
+kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
     for i in range(len(massbins)):
-      if trivialClosure: # use LO QCD instead of data and NNLO QCD
+      if trivialClosure: # use Pythia as data and Pythia as background
         cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
 """)
         cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
 """)
-      elif crossClosure: # use NNLO QCD as data
+      elif crossClosureNNLO: # use Pythia as data and NNLO as background
         cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
 """)
         cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
+""")
+      elif crossClosureHerwig: # use Pythia as data and Herwig-smeared Pythia as background
+        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname.replace("shapelimit13TeV","shapelimit13TeVherwigpp")+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
+""")
+      elif crossClosureMadgraph: # use Pythia as data and Madgraph-smeared Pythia as background
+        cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes * recomass"""+str(i)+""" """+fname.replace("shapelimit13TeV","shapelimit13TeVmadgraphMLM")+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$PROCESS_"+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"_$SYSTEMATIC"+"""_$PROCESS_
 """)
       else:
         cfg.writelines("""shapes data_obs recomass"""+str(i)+""" """+fname+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1"""+"""_$SYSTEMATIC
@@ -92,7 +108,7 @@ kmax """+str(withUncertainties*(4+correlatedSimUncertainties+len(massbins)*uncor
        text+="recomass"+str(i)+" "
     text+="\nobservation "
     for i in range(len(massbins)):
-       if trivialClosure or crossClosure:
+       if trivialClosure or crossClosureNNLO or crossClosureHerwig or crossClosureMadgraph:
          hData=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
        else:
@@ -125,6 +141,12 @@ kmax """+str(withUncertainties*(4+correlatedSimUncertainties+len(massbins)*uncor
         if trivialClosure:
           hQCD=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
           print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+        elif crossClosureHerwig:
+          hQCD=fh.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
+          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+        elif crossClosureMadgraph:
+          hQCD=fm.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
+          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
         else:
           hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
           print "QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
@@ -140,15 +162,21 @@ kmax """+str(withUncertainties*(4+correlatedSimUncertainties+len(massbins)*uncor
 
     if withUncertainties:
       print "adding uncertainties"
-      text+="\nmodel shape "+ones
-      if runs=="23": text+="\nnuisance edit rename * * model run"+run+"_model"
-      text+="\nJERtail shape "+ones
-      if runs=="23": text+="\nnuisance edit rename * * JERtail run"+run+"_JERtail"
       if uncorrelatedSimUncertainties:
+       for mn in massbins:
+        text+="\nmodel"+str(mn[0])+" shape "+ones
+        if runs=="23": text+="\nnuisance edit rename * * model"+str(mn[0])+" run"+run+"_model"+str(mn[0])
+       for mn in massbins:
+        text+="\nJERtail"+str(mn[0])+" shape "+ones
+        if runs=="23": text+="\nnuisance edit rename * * JERtail"+str(mn[0])+" run"+run+"_JERtail"+str(mn[0])
        for mn in massbins:
         text+="\nsim"+str(mn[0])+" shape "+ones
         if runs=="23": text+="\nnuisance edit rename * * sim"+str(mn[0])+" run"+run+"_sim"+str(mn[0])
       if correlatedSimUncertainties:
+       text+="\nmodel shape "+ones
+       if runs=="23": text+="\nnuisance edit rename * * model run"+run+"_model"
+       text+="\nJERtail shape "+ones
+       if runs=="23": text+="\nnuisance edit rename * * JERtail run"+run+"_JERtail"
        text+="\nsim shape "+ones
        if runs=="23": text+="\nnuisance edit rename * * sim run"+run+"_sim"
       if jesSources>1:
@@ -195,7 +223,9 @@ if True:
     print "running combine"
     out=system_call("text2workspace.py -m 125 chi_datacard13TeV"+name+"_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o "+name+"_run"+runs+".root")
     print out
-    out=system_call("combine -m 125 -M MultiDimFit "+name+"_run"+runs+".root --saveFitResult")
+    out=system_call("mkdir "+name+"_run"+runs)
     print out
-    out=system_call("mv multidimfit.root multidimfit_"+name+"_run"+runs+".root")
+    out=system_call("cd "+name+"_run"+runs+";combine -m 125 -M MultiDimFit ../"+name+"_run"+runs+".root --saveFitResult")
+    print out
+    out=system_call("mv "+name+"_run"+runs+"/multidimfit.root multidimfit_"+name+"_run"+runs+".root")
     print out

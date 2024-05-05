@@ -91,7 +91,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
             if constrain:
 	     addup*=fitConstraints[nn]
              adddown*=fitConstraints[nn]
-            if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])] or "JERtail" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])] or "prefire" in uncertaintynames[uncertainties.index([up,down,central])]:
+            if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])] or "JERtail" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])] or "prefire" in uncertaintynames[uncertainties.index([up,down,central])] or "trigger" in uncertaintynames[uncertainties.index([up,down,central])]:
 		exp_sumup+=addup
                 exp_sumdown+=adddown
                 #print uncertaintynames[uncertainties.index([up,down,central])]
@@ -274,7 +274,7 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf","stat"] # "scaleAlt"
+            uncertaintynames=["jes","jer","JERtail","prefire","trigger","model","sim","scale","pdf","stat"] # "scaleAlt"
             #for m in massbins:
             #    uncertaintynames.append("sim"+str(m[0]))
             #for i in range(1,23):

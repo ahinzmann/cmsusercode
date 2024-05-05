@@ -24,9 +24,11 @@ correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=False
-useNNLO=False # choice for QCD
-useM2=False # choice of mu-scale for QCD
+uncorrelatedScaleUncertainties=False
+scaleUncertainty=True
+theoryStatUncertainties=True
+useNNLO=True # choice for QCD
+useM2=True # choice of mu-scale for QCD
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
 
@@ -72,7 +74,7 @@ for massbins in massbinssets:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 1 number of backgrounds
-kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
+kmax """+str(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -113,21 +115,20 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
 -----------
 """)
     text=""
-    text+="\nmodel shape "
+    ones=""
     for i in range(len(massbins)):
-       text+="1 1 "
-    text+="\nJERtail shape "
-    for i in range(len(massbins)):
-       text+="1 1 "
+      ones+="1 1 - "
     if uncorrelatedSimUncertainties:
      for mn in massbins:
-      text+="\nsim"+str(mn[0])+" shape "
-      for i in range(len(massbins)):
-        text+="1 1 "
+      text+="\nmodel"+str(mn[0])+" shape "+ones
+     for mn in massbins:
+      text+="\nJERtail"+str(mn[0])+" shape "+ones
+     for mn in massbins:
+      text+="\nsim"+str(mn[0])+" shape "+ones
     if correlatedSimUncertainties:
-     text+="\nsim shape "
-     for i in range(len(massbins)):
-        text+="1 1 "
+     text+="\nmodel shape "+ones
+     text+="\nJERtail shape "+ones
+     text+="\nsim shape "+ones
     if jesSources>1:
      for n in range(jesSources):
       text+="\njes"+str(n+1)+" shape "
@@ -159,10 +160,15 @@ kmax """+str(5+correlatedSimUncertainties+len(massbins)*uncorrelatedSimUncertain
       text+="\nscaleMuF shape "
       for i in range(len(massbins)):
          text+="1 1 "
+    elif uncorrelatedScaleUncertainties:
+     for mn in massbins:
+      text+="\nscale"+str(mn[0])+" shape "
+      for i in range(len(massbins)):
+         text+="1 1 "
     else:
       if alternateScaleUncertainty:
         text+="\nscaleAlt shape "
-      else:
+      elif scaleUncertainty:
         text+="\nscale shape "
       for i in range(len(massbins)):
          text+="1 1 "

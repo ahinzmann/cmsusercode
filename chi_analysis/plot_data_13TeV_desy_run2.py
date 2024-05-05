@@ -158,6 +158,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
 	 weight=1.0
+         #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
 	 if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
 	 if prefiremap:
             if abs(jet1.Eta())>2:

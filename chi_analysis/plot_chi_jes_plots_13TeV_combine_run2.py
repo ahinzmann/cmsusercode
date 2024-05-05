@@ -2,6 +2,7 @@ import os, sys
 import array
 from ROOT import * 
 from math import *
+gROOT.SetBatch(True)
 
 #gROOT.Reset()
 gROOT.SetStyle("Plain")
@@ -25,8 +26,13 @@ if __name__ == '__main__':
    var="chi"
    label="#chi"
    use_UL=True
+   only2016=False
    
-   if use_UL:
+   if only2016 and use_UL:
+     years=["UL16preVFP","UL16postVFP"]
+   elif only2016:
+     years=["2016"]
+   elif use_UL:
      years=["UL16preVFP","UL16postVFP","UL17","UL18"]
    else:
      years=["2016","2017","2018"]
@@ -39,6 +45,12 @@ if __name__ == '__main__':
    lumifactor["UL16postVFP"]=16.81/137.6
    lumifactor["UL17"]=41.48/137.6
    lumifactor["UL18"]=59.83/137.6
+   
+   if only2016:
+     lumifactor["2016"]=1.0
+     lumifactor["UL16preVFP"]=19.52/36.33
+     lumifactor["UL16postVFP"]=16.81/36.33
+      
 
    samples=[("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
      	    ("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),
@@ -126,8 +138,8 @@ if __name__ == '__main__':
 	scalexsec={}
 	for year in years:
 	 for b in ["1","2","3","4","5","6","7"]:
-	  print "datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root"
-          f_refmc[year+b]=TFile.Open("datacard_shapelimit13TeV_"+prefix+"_JES_"+str(year)+"_"+b+"_chi.root")
+	  print "datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root"
+          f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
 	  h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
 	  scalexsec[b]=samples[int(b)-1][1]
 	  files+=[f_refmc[year+b]]
@@ -141,7 +153,7 @@ if __name__ == '__main__':
          histyear[year]=histyear[year].Rebin(len(chi_binnings[mass])-1,histyear[year].GetName()+"_rebin1",chi_binnings[mass])
         hist=histyear[years[0]].Clone(histyear[years[0]].GetName()+"combine")
 	hists+=[hist]
-	hist.Scale(lumifactor[years[0]])
+        hist.Scale(lumifactor[years[0]])
         for y in years[1:]:
           hist.Add(histyear[y],lumifactor[y])
         canvas.cd(max(1,mass+1))
@@ -180,10 +192,11 @@ if __name__ == '__main__':
                hist2b.SetBinError(chi_bin+1,sum_in_quadrature_up[mass][chi_bin]/10.)
               hist2b.SetLineColor(colors[i+1])
     	      hists+=[hist2b]
-	      fit=TF1(hist2b.GetName()+"smooth","pol2" if "mad" in prefix or len(chi_binnings[mass])<10 else "pol3",1,16)
+	      fit=TF1(hist2b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
 	      hist2b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
-	        hist2b.SetBinContent(chi_bin+1,fit.Eval(hist2b.GetBinCenter(chi_bin+1)))
+               if fit.Integral(1.,16.)>0:
+	        hist2b.SetBinContent(chi_bin+1,fit.Eval(hist2b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
               hist2b.Draw("histsame")
               legend.AddEntry(hist2b,"JEC Total sum in quadrature","l")
 
@@ -196,10 +209,11 @@ if __name__ == '__main__':
                hist3b.SetBinError(chi_bin+1,sum_in_quadrature_down[mass][chi_bin]/10.)
               hist3b.SetLineColor(colors[i+1])
     	      hists+=[hist3b]
-	      fit=TF1(hist3b.GetName()+"smooth","pol2" if "mad" in prefix or len(chi_binnings[mass])<10 else "pol3",1,16)
+	      fit=TF1(hist3b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
 	      hist3b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
-	        hist3b.SetBinContent(chi_bin+1,fit.Eval(hist3b.GetBinCenter(chi_bin+1)))
+               if fit.Integral(1.,16.)>0:
+	        hist3b.SetBinContent(chi_bin+1,fit.Eval(hist3b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
               hist3b.Draw("histsame")
 
             else:
@@ -221,7 +235,7 @@ if __name__ == '__main__':
 	     if sourceset[i][1]=="":
 	      hist2=histyear2[years[0]].Clone(histyear2[years[0]].GetName()+"combine")
   	      hists+=[hist2]
-	      hist2.Scale(lumifactor[years[0]])
+              hist2.Scale(lumifactor[years[0]])
               for y in years[1:]:
 	        hist2.Add(histyear2[y],lumifactor[y])
 	      if hist2.Integral()>0:
@@ -234,17 +248,18 @@ if __name__ == '__main__':
                 hist2.Scale(histyear[sourceset[i][1]].Integral()/hist2.Integral())
  	      hist2.Divide(hist2,histyear[sourceset[i][1]])
  	      hist2.Add(hist,-1)
-	      hist2.Scale(lumifactor[sourceset[i][1]])
+              hist2.Scale(lumifactor[sourceset[i][1]])
  	      hist2.Add(hist,1)
              hist2.SetLineWidth(1)
              hist2.SetLineColor(colors[i])
              hist2.SetLineStyle(2)
 	     hist2.SetTitle("")
              hist2.SetStats(False)
-	     fit=TF1(hist2.GetName()+"smooth","pol2" if "mad" in prefix or len(chi_binnings[mass])<10 else "pol3",1,16)
+	     fit=TF1(hist2.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
 	     hist2.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
-	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
+              if fit.Integral(1.,16.)>0:
+	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
              hist2.Draw("histsame")
 	     legend.AddEntry(hist2,"JEC "+sourceset[i][0]+" "+sourceset[i][1],"l")
              for chi_bin in range(len(chi_binnings[mass])):
@@ -270,7 +285,7 @@ if __name__ == '__main__':
              if sourceset[i][1]=="":
 	      hist3=histyear3[years[0]].Clone(histyear3[years[0]].GetName()+"combine")
   	      hists+=[hist3]
-	      hist3.Scale(lumifactor[years[0]])
+              hist3.Scale(lumifactor[years[0]])
               for y in years[1:]:
 	        hist3.Add(histyear3[y],lumifactor[y])
 	      if hist3.Integral()>0:
@@ -283,17 +298,18 @@ if __name__ == '__main__':
                 hist3.Scale(histyear[sourceset[i][1]].Integral()/hist3.Integral())
  	      hist3.Divide(hist3,histyear[sourceset[i][1]])
  	      hist3.Add(hist,-1)
-	      hist3.Scale(lumifactor[sourceset[i][1]])
+              hist3.Scale(lumifactor[sourceset[i][1]])
  	      hist3.Add(hist,1)
              hist3.SetLineWidth(1)
              hist3.SetLineColor(colors[i])
              hist3.SetLineStyle(3)
 	     hist3.SetTitle("")
              hist3.SetStats(False)
-	     fit=TF1(hist3.GetName()+"smooth","pol2" if "mad" in prefix or len(chi_binnings[mass])<10 else "pol3",1,16)
+	     fit=TF1(hist3.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
 	     hist3.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
-	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))
+              if fit.Integral(1.,16.)>0:
+	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
 	     hist3.Draw("histsame")
              for chi_bin in range(len(chi_binnings[mass])):
 	       if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:
@@ -305,5 +321,5 @@ if __name__ == '__main__':
         legend.SetFillStyle(0)
         legend.Draw("same")
 
-      canvas.SaveAs("chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+"_run2.root")
-      canvas.SaveAs("chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+"_run2.pdf")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2.root")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2.pdf")

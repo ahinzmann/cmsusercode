@@ -431,7 +431,7 @@ if __name__=="__main__":
     g_q.SetMarkerSize(0)
     g_q.SetLineColor(1)
     g_q.SetLineWidth(3)
-    mg.Add(g_q,"pl")
+    #mg.Add(g_q,"pl")
 
     g_q.SetName("gq_obs")
     g_q_exp.SetName("gq_exp")
@@ -521,7 +521,7 @@ if __name__=="__main__":
     l.SetFillStyle(0)
     l.SetTextSize(0.04)
     l.SetShadowColor(0)
-    l.AddEntry(g_q,"Observed","LP")
+    #l.AddEntry(g_q,"Observed","LP")
     l.AddEntry(g_q_exp,"Expected","LP")
     l.AddEntry(g_q_band,"Expected #pm 1 s.d.","F")
     l.AddEntry(g_q_band_2sigma,"Expected #pm 2 s.d.","F")

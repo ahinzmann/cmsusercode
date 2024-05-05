@@ -74,6 +74,7 @@ calculate_goodness_13TeV_run2.py # calculate goodness of fit measure of the data
 summarize_goodness_13TeV_run2.py # make table of goodness of fit measure
 calculate_bestfit.py # make table of bestfit JER (still 8 TeV version)
 
-python unfold_13TeV_run2.py # run unfolding with combine
-python plot_unfolded_distribution_13TeV_run2.py # plot unfolded data distribution
-python plot_correlation_matrix_13TeV_run2.py #  plot correlation matrix
+unfold_13TeV_run2.py # run unfolding with combine
+plot_unfolded_distribution_13TeV_run2.py # plot unfolded data distribution
+plot_correlation_matrix_13TeV_run2.py #  plot correlation matrix
+plot_response_matrix_13TeV_run2.py # plot response matrix

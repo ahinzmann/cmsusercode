@@ -50,9 +50,9 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
     nevents=0
     for b in range(hdataG.GetN()):
         if unfoldedData:
-            N=h14.GetBinContent(b+1)
+            N=hdata.GetBinContent(b+1)
         else:
-            N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
+            N=1./pow(hdata.GetBinError(b+1)/hdata.GetBinContent(b+1),2)
         print N
         nevents+=N
         L=0
@@ -86,7 +86,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
         for up,down,central in uncertainties:
             addup=fitConstraints[nn]*pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
             adddown=fitConstraints[nn]*pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
-            if uncertaintynames[uncertainties.index([up,down,central])] in ["jer","JERtail","prefire","model"] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])]:
+            if uncertaintynames[uncertainties.index([up,down,central])] in ["jer","prefire"] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])] or "JERtail" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])]:
                 exp_sumup+=addup
                 exp_sumdown+=adddown
                 #print uncertaintynames[uncertainties.index([up,down,central])]
@@ -137,8 +137,8 @@ def shiftWRTmu(uncertainties,mu,hDm,hbPrefit,hsPrefit):
 
 if __name__=="__main__":
 
-    useNNLO=False # choice for QCD
-    useM2=False # choice of mu-scale for QCD
+    useNNLO=True # choice for QCD
+    useM2=True # choice of mu-scale for QCD
     runs="2" # "2" or "3" or "23"
     run=runs[-1]
   
@@ -178,7 +178,7 @@ if __name__=="__main__":
         os.mkdir(SaveDir)
 
     signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[7000]
+    signalMasses=[2000,7000]
 
     gas=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
 
@@ -209,7 +209,7 @@ if __name__=="__main__":
 
     new_hists=[]
     #for j in [1102,1103,1104,1105,1106,1107,1108]:
-    for j in [1108]:
+    for j in [1106,1108]:
         for signalMass in signalMasses:
 	    if version=="v6":
               if signalMass<=2500:
@@ -266,10 +266,16 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["pdf","scale","JERtail","model","jer","prefire"] # "scaleAlt", "sim"
-            #uncertaintynames.append("model")
+            uncertaintynames=["pdf","jer","prefire","scale"] # "scale","scaleAlt", "sim"
+            #uncertaintynames.append("JERtail","model","model")
+            for m in massbins:
+                uncertaintynames.append("model"+str(m[0]))
+            for m in massbins:
+                uncertaintynames.append("JERtail"+str(m[0]))
             for m in massbins:
                 uncertaintynames.append("sim"+str(m[0]))
+            #for m in massbins:
+            #    uncertaintynames.append("scale"+str(m[0]))
             for i in range(1,28):
                 uncertaintynames.append("jes"+str(i))
             chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -289,7 +295,7 @@ if __name__=="__main__":
                 chi_binnings+=[array.array('d')]
                 for chi_bin in mass_bin:
                     chi_binnings[-1].append(chi_bin)
-            if useNNLO:
+            if False or useNNLO:
               for massbin in massbins:
                 massindex=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)].index(massbin)
                 for chibin in range(len(chi_bins[massindex])-1):

@@ -78,10 +78,11 @@ def createPlots(sample,prefix,xsec,massbins,year):
 	    if ".root" in line:
 	        files+=[line.strip()]
     elif "HT" in sample:
-        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"oct/")
+        print "/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/"
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/")
 	for folder in folders:
 	  if sample in folder:
-            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"oct/"+folder]
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/"+folder]
     else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
 	for folder in folders:
@@ -206,14 +207,15 @@ if __name__ == '__main__':
 	   i+=1
     print "sets",len(sets)
     wait=False
-    name="QCD"
+    #name="QCD"
+    name="QCDmadgraph"
     #name="QCDCIplusLL10000"
     bin=1 #1-6
     year="UL16preVFP"
     if len(sys.argv)>1:
        name,bin,year = sets[int(sys.argv[1])]
     #if year!=2018: print "SKIPPING 2016 and 2017 !!!!!"; STOP
-    prefix="datacard_shapelimit13TeV_"+name+"_JES_"+str(year)+"_"+str(bin)
+    prefix="data/datacard_shapelimit13TeV_"+name+"_JESfeb2023_"+str(year)+"_"+str(bin)
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -401,118 +403,118 @@ if __name__ == '__main__':
 
     if str(year)=="UL16preVFP":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./44805214),
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./17969592),
   	  		 ]),
   	      ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./48404535),
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./13586390),
   	  		 ]),
   	      ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/46063160),
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/55497082),
   	  		 ]),
   	      ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/37259115),
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/15242034),
   	  		 ]),
   	      ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/13511726),
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/13559959),
   	  		 ]),
   	      ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/6059830),
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9661950),
   	  		 ]),
   	      ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/3812684),
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4827641),
   	  		 ]),
   	      ]
     if str(year)=="UL16postVFP":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./41210455),
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42723038),
   	  		 ]),
   	      ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./47426214),
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./45502889),
   	  		 ]),
   	      ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/49068426),
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/15066884),
   	  		 ]),
   	      ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/38188739),
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/13714842),
   	  		 ]),
   	      ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/10707004),
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/12416669),
   	  		 ]),
   	      ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/7591790),
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9244228),
   	  		 ]),
   	      ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/3620418),
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4843949),
   	  		 ]),
   	      ]
     if str(year)=="UL17":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./57721120),
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42316128),
   	  		 ]),
   	      ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./57191140),
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./42914024),
   	  		 ]),
   	      ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/9188310),
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/35745565),
   	  		 ]),
   	      ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/45812757),
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/33646855),
   	  		 ]),
   	      ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/15346629),
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/10136610),
   	  		 ]),
   	      ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/10598209),
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/7528926),
   	  		 ]),
   	      ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/5416717),
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4089387),
   	  		 ]),
   	      ]
     if str(year)=="UL18":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X_v1",1710000./22826901),
+    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./56298746),
   	  		 ]),
   	      ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X_v1",347500./54463611),
+    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./60991701),
   	  		 ]),
   	      ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X_v1",30363.051/58487165),
+    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/48640047),
   	  		 ]),
   	      ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X_v1",6428.869/47703400),
+    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/47925782),
   	  		 ]),
   	      ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X_v1",1122.659/15675643),
+    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/14244456),
   	  		 ]),
   	      ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X_v1",108.163/10612885),
+    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/10751607),
   	  		 ]),
   	      ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X_v1",22.008/4504262),
+    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/5278880),
   	  		 ]),
   	      ]
 

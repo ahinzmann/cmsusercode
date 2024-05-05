@@ -452,5 +452,5 @@ if __name__ == '__main__':
   	  canvas.cd(1)
   	  hist.GetYaxis().SetTitleOffset(1.2)
 
-  	  canvas.SaveAs("chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".root")
-  	  canvas.SaveAs("chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".pdf")
+  	  canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".root")
+  	  canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".pdf")

@@ -23,15 +23,8 @@ gStyle.SetLegendBorderSize(0)
 
 if __name__ == '__main__':
 
-    trivialClosure=False
-    withUncertainties=False
     run="2"
     prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
-
-    name="unfold"
-    if withUncertainties: name+="_withUncertainties"
-    if trivialClosure: name+="_trivialClosure"
-    print name
 
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     all_mass_bins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -57,20 +50,44 @@ if __name__ == '__main__':
 
     canvas = TCanvas("","",0,0,600,600)
     canvas.SetRightMargin(0.15)
-    gStyle.SetPalette(1)
+    gStyle.SetPalette(kLightTemperature)
     plots=[]
     legends=[]
     new_hists=[]
 
-    filename="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
-    print filename
-    fitfile = TFile.Open(filename)
-    fittree=fitfile.Get("fit_mdf")
-    fitParameters=[]
-    fitConstraints=[]
-    
-    name+="_correlationMatrix"
+    name="response"
 
-    correlationMatrix=fittree.correlationMatrix()
-    correlationMatrix.Draw("colz")
+    filename=prefix+"_GEN-QCD-run2_chi.root"
+    print filename
+    f = TFile.Open(filename)
+
+    binsj=0
+    for j in range(len(massbins)):
+      for chibinj in range(len(chi_bins[j])-1):
+        binsj+=1
+
+    response=TH2F("response","response",binsj, 0, binsj-1, binsj, 0, binsj-1)
+    
+    binsj=0
+    for j in range(len(massbins)):
+      for chibinj in range(len(chi_bins[j])-1):
+        responsesum=0
+        for i in range(len(massbins)):
+         for chibini in range(len(chi_bins[i])-1):
+          hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibinj)+"_")
+          responsesum+=hQCD.GetBinContent(chibini+1)
+        binsi=0
+        for i in range(len(massbins)):
+         for chibini in range(len(chi_bins[i])-1):
+          hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibinj)+"_")
+          if responsesum>0:
+            response.SetBinContent(binsj+1,binsi+1,hQCD.GetBinContent(chibini+1)/responsesum)
+          binsi+=1
+        binsj+=1
+   
+    response.GetZaxis().SetRangeUser(0,1)
+    response.GetXaxis().SetTitle("Gen bin")
+    response.GetYaxis().SetTitle("Reco bin")
+    response.Draw("colz")
+
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")

@@ -4,6 +4,7 @@ from ROOT import *
 
 #gROOT.Reset()
 gROOT.SetStyle("Plain")
+gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
@@ -27,6 +28,7 @@ if __name__ == '__main__':
   colors=[1,2,4,6,7,8,9,11,40,41,42,43,44,45,46,47,48,49]
   styles=[1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10,]
 
+  dire="data/"
   prefix="datacard_shapelimit13TeV_run2_"
   postfix="_run2"
 
@@ -166,12 +168,12 @@ if __name__ == '__main__':
           ]
 
   for sample in samples:
-   f=TFile.Open(prefix+sample+"_chi.root")
+   f=TFile.Open(dire+prefix+sample+"_chi.root")
    for t in range(13,len(triggers[samples.index(sample)])):
     print sample,t
     name="or".join(triggers[samples.index(sample)][t])
     print name
-    canvas = TCanvas("","",0,0,200,200)
+    canvas = TCanvas("trigger","trigger",0,0,200,200)
     legend=TLegend(0.65,0.2,0.9,0.8,"")
     hists=[]
     i=0
@@ -260,5 +262,5 @@ if __name__ == '__main__':
     legend.SetFillStyle(0)
     legend.Draw("same")
 
-    canvas.SaveAs("chi_trigger_plots_"+sample+name+postfix+".root")
-    canvas.SaveAs("chi_trigger_plots_"+sample+name+postfix+".pdf")
+    canvas.SaveAs("plots/chi_trigger_plots_"+sample+name+postfix+".root")
+    canvas.SaveAs("plots/chi_trigger_plots_"+sample+name+postfix+".pdf")

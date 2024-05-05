@@ -63,15 +63,17 @@ if __name__ == '__main__':
             chi_binnings[-1].append(chi_bin)
    
    prefix="datacard_shapelimit13TeV_run2_"
+   dire="data/"
    version=""
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
-   use_UL=False
+   use_UL=True
    use_Run3=False
    compare_EOYvsUL=False
-   compare_NULvsUL=True
+   compare_NULvsUL=False
    compare_EOYvsUL_MC=False
    compare_RECOvsGEN=False
+   compare_years=True
    if use_UL:
      version="_UL"+version
    if use_Run3:
@@ -80,12 +82,14 @@ if __name__ == '__main__':
      version="_EOYvsUL"+version
    if compare_NULvsUL:
      version="_NULvsUL"+version
+   if compare_years:
+     version="_years"+version
    if compare_EOYvsUL_MC:
      version="_EOYvsUL_MC"+version
    if compare_RECOvsGEN:
      version="_RECOvsGEN"+version
 
-   if compare_EOYvsUL or use_UL or compare_NULvsUL:
+   if compare_EOYvsUL or use_UL or compare_NULvsUL or compare_years:
     data=[("UL16preVFP", 1, "Data (UL 2016)"),
           ("UL16postVFP", 1, "")
          ]
@@ -164,6 +168,19 @@ if __name__ == '__main__':
          ]
     mc3=[("NUL18", 1, "Data (NUL 2018)")
          ]
+   elif compare_years:
+    mc=[("UL16preVFP", 1, "Data (Run2)"),
+        ("UL16postVFP", 1, ""),
+        ("UL17", 1, ""),
+        ("UL18", 1, "")]
+    mc2=[("UL16preVFP", 1, "Data (Run2)"),
+        ("UL16postVFP", 1, ""),
+        ("UL17", 1, ""),
+        ("UL18", 1, "")]
+    mc3=[("UL16preVFP", 1, "Data (Run2)"),
+        ("UL16postVFP", 1, ""),
+        ("UL17", 1, ""),
+        ("UL18", 1, "")]
    elif use_Run3:
     mc=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
        ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
@@ -315,19 +332,19 @@ if __name__ == '__main__':
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_data+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      f_data+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
    for name,xsec,l in data2:
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_data2+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      f_data2+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
    for name,xsec,l in data3:
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_data3+=[TFile.Open(prefix+name+postfix+"_chi.root")]
+      f_data3+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
    if use_Run3:
      lumi=[137.62,35.18,27.20]
@@ -340,19 +357,19 @@ if __name__ == '__main__':
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_mc+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      f_mc+=[TFile.Open(dire+prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
    for name,xsec,l in mc2:
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_mc2+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      f_mc2+=[TFile.Open(dire+prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
    for name,xsec,l in mc3:
       if ("UL16" in name or "UL17" in name) and not "QCD" in name: postfix=postfix1617
       elif "UL18" in name and not "QCD" in name: postfix=postfix18
       else: postfix=""
-      f_mc3+=[TFile.Open(prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
+      f_mc3+=[TFile.Open(dire+prefix+name+postfix+("-GEN" if compare_RECOvsGEN else "")+"_chi.root")]
       print prefix+name+postfix+"_chi.root"
 
    if compare_EOYvsUL_MC:
@@ -416,6 +433,7 @@ if __name__ == '__main__':
      hist.GetYaxis().SetTitleSize(0.06)
      hist.SetStats(False)
      hist.Draw("pe")
+     hist.GetXaxis().SetRangeUser(minmass,9000)
      legend.AddEntry(hist,data[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
      hist2=f_data2[0].Get(prefix+data2[0][0].split("-")[0]+var)
@@ -460,7 +478,7 @@ if __name__ == '__main__':
          hist_mc.Add(f_mc[i].Get(prefix+mc[i][0].split("-")[0]+var),mc[i][1])
      if compare_EOYvsUL or compare_NULvsUL:
        hist_mc.Scale(1./normfactor)
-     elif compare_EOYvsUL_MC or compare_RECOvsGEN:
+     elif compare_EOYvsUL_MC or compare_RECOvsGEN or compare_years:
        hist_mc.Scale(1.)
      else:
        hist_mc.Scale(hist.Integral(hist.FindBin(minmass),hist.GetNbinsX())/hist_mc.Integral(hist_mc.FindBin(minmass),hist_mc.GetNbinsX()))
@@ -516,13 +534,13 @@ if __name__ == '__main__':
        if hist.GetBinContent(b+1)>0:
     	 ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ratio.SetTitle("")
-     ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))
+     ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))))
      ratio.GetYaxis().SetTitleSize(0.18)
      ratio.GetYaxis().SetTitleOffset(0.3)
      ratio.SetMarkerSize(0.1)
      ratio.GetYaxis().SetLabelSize(0.2)
      ratio.GetYaxis().SetRangeUser(0,2)
-     if compare_EOYvsUL or compare_NULvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN:
+     if compare_EOYvsUL or compare_NULvsUL or compare_EOYvsUL_MC or compare_RECOvsGEN or compare_years:
       ratio.GetYaxis().SetRangeUser(0.8,1.2)
      ratio.GetXaxis().SetNdivisions(506)
      ratio.GetYaxis().SetNdivisions(503)
@@ -593,8 +611,8 @@ if __name__ == '__main__':
      canvas.cd(1)
      hist.GetYaxis().SetTitleOffset(1.2)
      
-     canvas.SaveAs("chi_control_plots_mass"+version+".root")
-     canvas.SaveAs("chi_control_plots_mass"+version+".pdf")
+     canvas.SaveAs("plots/chi_control_plots_mass"+version+".root")
+     canvas.SaveAs("plots/chi_control_plots_mass"+version+".pdf")
 
    for var in variables:
     log=(var=="p_{T1}" or var=="p_{T2}" or var=="METsumET" or var=="#Delta#phi")
@@ -795,7 +813,7 @@ if __name__ == '__main__':
      	  if hist.GetBinContent(b+1)>0:
      	    ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      	ratio.SetTitle("")
-     	ratio.GetYaxis().SetTitle("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))
+     	ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))))
      	ratio.GetYaxis().SetTitleSize(0.18)
      	ratio.GetYaxis().SetTitleOffset(0.3)
      	ratio.SetMarkerSize(0.1)
@@ -805,7 +823,7 @@ if __name__ == '__main__':
 	  ratio.GetYaxis().SetRangeUser(0.5,1.5)
 	if var=="#chi" and mass<=5:
 	  ratio.GetYaxis().SetRangeUser(0.8,1.2)
-	if compare_EOYvsUL or compare_NULvsUL:
+	if compare_EOYvsUL or compare_NULvsUL or compare_years:
          if var in ["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","#phi_{1}","#phi_{2}"] and mass<=7:
 	  ratio.GetYaxis().SetRangeUser(0.5,1.5)
 	 if var=="#chi" and mass<=5:
@@ -886,5 +904,5 @@ if __name__ == '__main__':
         canvas.cd(1)
         hist.GetYaxis().SetTitleOffset(1.2)
 
-        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".root")
-        canvas.SaveAs("chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".pdf")
+        canvas.SaveAs("plots/chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".root")
+        canvas.SaveAs("plots/chi_control_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+version+".pdf")

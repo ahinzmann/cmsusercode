@@ -27,9 +27,9 @@ def smoothChi(h1):
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)/h1.GetBinWidth(b+1))
         h1.SetBinError(b+1,h1.GetBinError(b+1)/h1.GetBinWidth(b+1))
-    fit=TF1(h1.GetName()+"smooth","pol2",4,16)
+    fit=TF1(h1.GetName()+"smooth","pol2",3.5,16)
     h1.Fit(fit,"RNQ")
-    for chi_bin in range(h1.FindBin(4),h1.GetXaxis().GetNbins()):
+    for chi_bin in range(h1.FindBin(4.5),h1.GetXaxis().GetNbins()):
       h1.SetBinContent(chi_bin+1,fit.Eval(h1.GetBinCenter(chi_bin+1)))
     for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)*h1.GetBinWidth(b+1))
@@ -72,8 +72,8 @@ def setupAsymErrors(g):
 
 if __name__=="__main__":
 
-  useNNLO=False # choice for QCD
-  useM2=False # choice of mu-scale for QCD
+  useNNLO=True # choice for QCD
+  useM2=True # choice of mu-scale for QCD
   
   if useNNLO:
     pdfset="ct14nnlo"
@@ -407,7 +407,7 @@ if __name__=="__main__":
             #filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             #histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
             filename='datacards/datacard_shapelimit13TeV_unfold_withUncertainties_run2.root'
-            histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit" # TODO UNFOLD
+            histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit"
 	else:
             filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             histname="data_obs#chi"+massbintext+"_rebin1"
@@ -416,7 +416,7 @@ if __name__=="__main__":
         new_hists+=[fData]
         print histname
         h14=fData.Get(histname)
-	
+        
 	#if not unfoldedData:
         #  for b in range(h14.GetXaxis().GetNbins()):
         #    h14.SetBinContent(b+1,h14.GetBinContent(b+1)*h14.GetBinWidth(b+1))
@@ -443,16 +443,9 @@ if __name__=="__main__":
 	alpha=1.-0.6827
 	nevents=0
 	for b in range(h14G.GetN()):
-	    if unfoldedData:
-	      #N=origh14.GetBinContent(b+1)
-	      if h14.GetBinContent(b+1)>0:
+	    if h14.GetBinContent(b+1)>0:
 	         N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
-              else:
-		 N=0
-	    else:
-	      if h14.GetBinContent(b+1)>0:
-	         N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
-              else:
+            else:
 		 N=0
 	    #print N
 	    nevents+=N
@@ -460,10 +453,10 @@ if __name__=="__main__":
 	    if N>0:
 	        L=ROOT.Math.gamma_quantile(alpha/2.,N,1.)
             U=ROOT.Math.gamma_quantile_c(alpha/2.,N+1,1.)
-	    if N>0:
+	    if N>0 and not unfoldedData:
               h14G.SetPointEYlow(b,(N-L)/N*h14.GetBinContent(b+1))
               h14G.SetPointEYhigh(b,(U-N)/N*h14.GetBinContent(b+1))
-            #print N, sqrt(N)/N, origh14.GetBinError(b+1)/origh14.GetBinContent(b+1), h14.GetBinError(b+1)/h14.GetBinContent(b+1), (N-L)/N, (U-N)/N
+            #print N, sqrt(N)/N, h14.GetBinError(b+1)/h14.GetBinContent(b+1), (N-L)/N, (U-N)/N
         print "data events:", nevents
 	
 	h14Gsys=h14G.Clone(histname+"sys")
@@ -494,7 +487,7 @@ if __name__=="__main__":
         chi2=0
         for b in range(h14.GetXaxis().GetNbins()):
             if b==0:# or b==h14G.GetXaxis().GetNbins()-1:
-                print massbins[massbin],b,"stat",h14G.GetErrorYlow(b)/h14G.GetY()[b],h14G.GetErrorYhigh(b)/h14G.GetY()[b]
+                print massbins[massbin],b,("total" if unfoldedData else "stat"),h14G.GetErrorYlow(b)/h14G.GetY()[b],h14G.GetErrorYhigh(b)/h14G.GetY()[b]
             exp_sumdown=0
             exp_sumup=0
             theory_sumdown=0
@@ -522,14 +515,22 @@ if __name__=="__main__":
 
             h14Gsys.SetPointEXlow(b,0)
             h14Gsys.SetPointEXhigh(b,0)
-            h14Gsys.SetPointEYlow(b,exp_sumdown*h14G.GetY()[b])
-            h14Gsys.SetPointEYhigh(b,exp_sumup*h14G.GetY()[b])
             h14Gsysstat.SetPointEXlow(b,0)
             h14Gsysstat.SetPointEXhigh(b,0)
-            h14Gsysstat.SetPointEYlow(b,sqrt(pow(exp_sumdown*h14G.GetY()[b],2)+pow(h14G.GetErrorYlow(b),2)))
-            h14Gsysstat.SetPointEYhigh(b,sqrt(pow(exp_sumup*h14G.GetY()[b],2)+pow(h14G.GetErrorYhigh(b),2)))
-	    stat_up=h14G.GetErrorYhigh(b)
-            stat_down=h14G.GetErrorYlow(b)
+            if unfoldedData: # unfolded distribution already has total error
+              h14Gsys.SetPointEYlow(b,max(exp_sumdown*h14G.GetY()[b],h14G.GetErrorYlow(b)))
+              h14Gsys.SetPointEYhigh(b,max(exp_sumup*h14G.GetY()[b],h14G.GetErrorYhigh(b)))
+              h14Gsysstat.SetPointEYlow(b,h14G.GetErrorYlow(b))
+              h14Gsysstat.SetPointEYhigh(b,h14G.GetErrorYhigh(b))
+	      stat_up=sqrt(max(0,pow(h14G.GetErrorYhigh(b),2)-pow(exp_sumup*h14G.GetY()[b],2)))
+              stat_down=sqrt(max(0,pow(h14G.GetErrorYlow(b),2)-pow(exp_sumdown*h14G.GetY()[b],2)))
+            else:
+              h14Gsys.SetPointEYlow(b,exp_sumdown*h14G.GetY()[b])
+              h14Gsys.SetPointEYhigh(b,exp_sumup*h14G.GetY()[b])
+              h14Gsysstat.SetPointEYlow(b,sqrt(pow(exp_sumdown*h14G.GetY()[b],2)+pow(h14G.GetErrorYlow(b),2)))
+              h14Gsysstat.SetPointEYhigh(b,sqrt(pow(exp_sumup*h14G.GetY()[b],2)+pow(h14G.GetErrorYhigh(b),2)))
+	      stat_up=h14G.GetErrorYhigh(b)
+              stat_down=h14G.GetErrorYlow(b)
             h14G.SetPointEYlow(b,0)
             h14G.SetPointEYhigh(b,0)
             h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-theory_sumdown*hNloQcdbackup.GetBinContent(b+1))
@@ -781,9 +782,9 @@ if __name__=="__main__":
 #            h0.GetYaxis().SetRangeUser(0.055,0.105)
 
         if massbin>7:
-            h0.GetYaxis().SetRangeUser(0.02,0.22)
+            h0.GetYaxis().SetRangeUser(0.0,0.25)
         elif massbin>6:
-            h0.GetYaxis().SetRangeUser(0.02,0.22)
+            h0.GetYaxis().SetRangeUser(0.0,0.25)
         elif massbin>4:
             h0.GetYaxis().SetRangeUser(0.045,0.12)
         else:
@@ -858,7 +859,9 @@ if __name__=="__main__":
 #        else:
 #            h0Div.GetYaxis().SetRangeUser(0.8,1.2)
 
-        if massbin>8:
+        if massbin>9:
+            h0Div.GetYaxis().SetRangeUser(0.,3.)
+        elif massbin>8:
             h0Div.GetYaxis().SetRangeUser(0.,2.)
         elif massbin>6:
             h0Div.GetYaxis().SetRangeUser(0.7,1.3)
@@ -886,7 +889,8 @@ if __name__=="__main__":
 	  hData2Div.Draw("pzesame")
         h0Div.Draw("histsame")
         #h14GDiv.Draw("pzesame")
-        h14GsysDiv.Draw("||same")
+        if not unfoldedData:
+          h14GsysDiv.Draw("||same")
         h14GsysstatDiv.Draw("zesame")
         h0Div.Draw("axissame")
         h14GDiv.SetMarkerSize(0.8)
@@ -979,7 +983,8 @@ if __name__=="__main__":
             halp.Draw("histsame")
             htripleG.Draw("histsame")
         #h14G.Draw("pzesame")
-        h14Gsys.Draw("||same")
+        if not unfoldedData:
+          h14Gsys.Draw("||same")
         h14Gsysstat.Draw("zesame")
         h14G.SetMarkerSize(0.8)
         h14G.Draw("pzesame")
