@@ -15,10 +15,10 @@ jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to 
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
-scaleUncertainties=True
+scaleUncertainties=False
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
-theoryStatUncertainties=True
+theoryStatUncertainties=False
 
 trivialClosure=False
 crossClosureNNLO=False
@@ -70,7 +70,7 @@ if True:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels (reco mass bins)
 jmax """+str(nbins-1)+""" number of samples (gen bins)
-kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
+kmax """+str(withUncertainties*(1+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -183,19 +183,21 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
        for n in range(jesSources):
         text+="\njes"+str(n+1)+" shape "+ones
         if runs=="23" and n>1: text+="\nnuisance edit rename * * jes"+str(n+1)+" run"+run+"_jes"+str(n+1) # if n<2 combine would do the replace twice for n>10 and >20
-      else:
+      elif jesSources==1:
         text+="\njes shape "+ones
         if runs=="23": text+="\nnuisance edit rename * * jes run"+run+"_jes"
       if jerSources>1:
        for n in range(jerSources):
         text+="\njer"+str(n+1)+" shape "+ones
         if runs=="23" and n>1: text+="\nnuisance edit rename * * jer"+str(n+1)+" run"+run+"_jer"+str(n+1) # if n<2 combine would do the replace twice for n>10 and >20
-      else:
+      elif jerSources==1:
         text+="\njer shape "+ones
         if runs=="23": text+="\nnuisance edit rename * * jer run"+run+"_jer"
       text+="\nprefire shape "+ones
       if runs=="23": text+="\nnuisance edit rename * * prefire run"+run+"_prefire"
-      text+="\npdf shape "+ones
+      #text+="\ntrigger shape "+ones
+      #if runs=="23": text+="\nnuisance edit rename * * trigger run"+run+"_trigger"
+      #text+="\npdf shape "+ones
       if separateScaleUncertainties:
         text+="\nscaleMuR shape "+ones
         text+="\nscaleMuF shape "+ones
@@ -219,7 +221,7 @@ if True:
     pois_map=""
     for j in range(len(massbins)):
       for chibin in range(len(chi_bins[j])-1):
-        pois_map+=" --PO map='.*"+"bin_"+str(j)+"_"+str(chibin)+".*:r_Bin_"+str(j)+"_"+str(chibin)+"[1,-1,10]'"
+        pois_map+=" --PO map='.*"+"bin_"+str(j)+"_"+str(chibin)+".*:r_Bin_"+str(j)+"_"+(str(chibin) if chibin>9 else "0"+str(chibin))+"[1,0,3]'"
     print "running combine"
     out=system_call("text2workspace.py -m 125 chi_datacard13TeV"+name+"_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o "+name+"_run"+runs+".root")
     print out

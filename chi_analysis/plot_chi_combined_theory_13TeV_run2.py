@@ -86,10 +86,10 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
-  oldMeasurements=False
+  unfoldedData=True
+  oldMeasurements=True
   oldTheory=False
-  signalsBSM=True
+  signalsBSM=False
   signalsDM=False
   compareScales=False
 
@@ -408,6 +408,7 @@ if __name__=="__main__":
             #histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
             filename='datacards/datacard_shapelimit13TeV_unfold_withUncertainties_run2.root'
             histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit"
+            filenamestat='datacards/datacard_shapelimit13TeV_unfold_run2.root'
 	else:
             filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             histname="data_obs#chi"+massbintext+"_rebin1"
@@ -416,6 +417,12 @@ if __name__=="__main__":
         new_hists+=[fData]
         print histname
         h14=fData.Get(histname)
+        if unfoldedData:
+          print filenamestat
+          fDataStat = TFile.Open(filenamestat)
+          new_hists+=[fDataStat]
+          h14stat=fData.Get(histname)
+          h14stat=rebin2(h14stat,len(chi_binnings[massbin])-1,chi_binnings[massbin])
         
 	#if not unfoldedData:
         #  for b in range(h14.GetXaxis().GetNbins()):
@@ -518,8 +525,8 @@ if __name__=="__main__":
             h14Gsysstat.SetPointEXlow(b,0)
             h14Gsysstat.SetPointEXhigh(b,0)
             if unfoldedData: # unfolded distribution already has total error
-              h14Gsys.SetPointEYlow(b,max(exp_sumdown*h14G.GetY()[b],h14G.GetErrorYlow(b)))
-              h14Gsys.SetPointEYhigh(b,max(exp_sumup*h14G.GetY()[b],h14G.GetErrorYhigh(b)))
+              h14Gsys.SetPointEYlow(b,h14stat.GetBinError(b+1))
+              h14Gsys.SetPointEYhigh(b,h14stat.GetBinError(b+1))
               h14Gsysstat.SetPointEYlow(b,h14G.GetErrorYlow(b))
               h14Gsysstat.SetPointEYhigh(b,h14G.GetErrorYhigh(b))
 	      stat_up=sqrt(max(0,pow(h14G.GetErrorYhigh(b),2)-pow(exp_sumup*h14G.GetY()[b],2)))
@@ -889,8 +896,7 @@ if __name__=="__main__":
 	  hData2Div.Draw("pzesame")
         h0Div.Draw("histsame")
         #h14GDiv.Draw("pzesame")
-        if not unfoldedData:
-          h14GsysDiv.Draw("||same")
+        h14GsysDiv.Draw("||same")
         h14GsysstatDiv.Draw("zesame")
         h0Div.Draw("axissame")
         h14GDiv.SetMarkerSize(0.8)
@@ -983,8 +989,7 @@ if __name__=="__main__":
             halp.Draw("histsame")
             htripleG.Draw("histsame")
         #h14G.Draw("pzesame")
-        if not unfoldedData:
-          h14Gsys.Draw("||same")
+        h14Gsys.Draw("||same")
         h14Gsysstat.Draw("zesame")
         h14G.SetMarkerSize(0.8)
         h14G.Draw("pzesame")

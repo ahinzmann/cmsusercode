@@ -1,6 +1,7 @@
 import os, sys
 from ROOT import * 
 import array
+from math import *
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
@@ -24,7 +25,7 @@ gStyle.SetLegendBorderSize(0)
 if __name__ == '__main__':
 
     trivialClosure=False
-    withUncertainties=False
+    withUncertainties=True
     run="2"
     prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
 
@@ -57,7 +58,6 @@ if __name__ == '__main__':
 
     canvas = TCanvas("","",0,0,600,600)
     canvas.SetRightMargin(0.15)
-    gStyle.SetPalette(1)
     plots=[]
     legends=[]
     new_hists=[]
@@ -71,6 +71,30 @@ if __name__ == '__main__':
     
     name+="_correlationMatrix"
 
-    correlationMatrix=fittree.correlationMatrix()
-    correlationMatrix.Draw("colz")
+    pois=fittree.floatParsFinal().Clone()
+    pois.removeAll()
+    fitted_pars=fittree.floatParsFinal()
+    print "All pars", len(fitted_pars)
+    num=0
+    for par in range(len(fitted_pars)):
+      #print num, fitted_pars[par].GetName()
+      if "r_Bin_0" in fitted_pars[par].GetName(): # skip first mass bin
+        continue
+      if "r_Bin" in fitted_pars[par].GetName():
+        pois.add(fitted_pars[par])
+        num+=1
+    print "POIs", len(pois)
+    reducedCovarianceMatrix=fittree.reducedCovarianceMatrix(pois)
+    correlationMatrix=reducedCovarianceMatrix.Clone()
+    for i in range(len(pois)):
+      for j in range(len(pois)):
+        if i!=j:
+          correlationMatrix[i][j]/=sqrt(correlationMatrix(i,i)*correlationMatrix(j,j))
+    for i in range(len(pois)):
+      correlationMatrix[i][i]=1.
+    gStyle.SetNumberContours(200)
+    gStyle.SetPalette(104)
+    h=TH2D(correlationMatrix)
+    h.Draw("colz2")
+    h.GetZaxis().SetRangeUser(-1,1)
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")

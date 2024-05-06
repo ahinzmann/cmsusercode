@@ -40,7 +40,8 @@ if __name__ == '__main__':
     modelUncertainty=False # Herwig vs Madgraph vs Pythia smearing
     onlyMC=False # before/after smearing
     onlyData=True # before/after unfolding
-    withUncertainties=False
+    withUncertainties=True
+    compareNoUncertainty=True
     noNorm=False
     run="2"
     prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
@@ -83,6 +84,12 @@ if __name__ == '__main__':
     fitParameters=[]
     fitConstraints=[]
 
+    if compareNoUncertainty:
+      filenamed=("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name.replace("_withUncertainties","")+"_run"+run+".root")
+      print filenamed
+      fd = TFile.Open(filenamed)
+      new_hists+=[fd]
+    
     fout=TFile.Open("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+"_run"+run+".root","RECREATE")
 
     if onlyMC: name+="_MC"
@@ -142,7 +149,7 @@ if __name__ == '__main__':
             histname='QCD#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j)+"_"+str(chibin)+"_"
           else:
             histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j)+"_"+str(chibin)+"_"
-          binname="r_Bin_"+str(j)+"_"+str(chibin)
+          binname="r_Bin_"+str(j)+"_"+(str(chibin) if chibin>9 else "0"+str(chibin))
           fitParameter=fittree.floatParsFinal().find(binname).getVal()
           fitConstraint=fittree.floatParsFinal().find(binname).getError()
           print histname,fitParameter,fitConstraint
@@ -193,6 +200,12 @@ if __name__ == '__main__':
       print histname
       h4=fm.Get(histname)
       plots+=[h4]
+
+      if compareNoUncertainty:
+        histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmearpostfit"
+        print histname
+        h5=fd.Get(histname)
+        plots+=[h5]
       
       if not noNorm:      
         h1.Scale(1./h1.Integral())
@@ -202,6 +215,8 @@ if __name__ == '__main__':
         h2.Scale(1./h2.Integral())
         h3.Scale(1./h3.Integral())
         h4.Scale(1./h4.Integral())
+        if compareNoUncertainty:
+          h5.Scale(1./h5.Integral())
       yscale=max(h1gen.Integral(),h1genpostfit.Integral())
 
       for b in range(h1.GetXaxis().GetNbins()):
@@ -219,6 +234,9 @@ if __name__ == '__main__':
         h3.SetBinError(b+1,h3.GetBinError(b+1)/h3.GetBinWidth(b+1))
         h4.SetBinContent(b+1,h4.GetBinContent(b+1)/h4.GetBinWidth(b+1))
         h4.SetBinError(b+1,h4.GetBinError(b+1)/h4.GetBinWidth(b+1))
+        if compareNoUncertainty:
+          h5.SetBinContent(b+1,h5.GetBinContent(b+1)/h5.GetBinWidth(b+1))
+          h5.SetBinError(b+1,h5.GetBinError(b+1)/h5.GetBinWidth(b+1))
 
       if modelUncertainty:
         h3.Divide(h3,h1)
@@ -253,10 +271,20 @@ if __name__ == '__main__':
         h1gen.GetYaxis().SetTitle("1/#sigma d#sigma/d#chi")
       h1gen.GetXaxis().SetTitle("#chi")
      
-      if not onlyMC and not modelUncertainty:
+      if not onlyMC and not modelUncertainty and not compareNoUncertainty:
         h1genpostfit.SetLineColor(1)
         h1genpostfit.SetLineStyle(2)
         h1genpostfit.SetLineWidth(2)
+        h1genpostfit.Draw("hesame")
+      
+      if compareNoUncertainty:
+        h5.SetLineColor(1)
+        h5.SetLineStyle(2)
+        h2.SetLineWidth(2)
+        h5.SetTitle("")
+        h5.Draw("he1same")
+        h1genpostfit.SetLineColor(2)
+        h1genpostfit.SetLineStyle(1)
         h1genpostfit.Draw("hesame")
       
       if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyData and not modelUncertainty:
@@ -315,7 +343,7 @@ if __name__ == '__main__':
       elif not modelUncertainty and not onlyData:
         legend1.AddEntry(h1gen,"NNLO particle-level","le")
       if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not modelUncertainty:
-        legend1.AddEntry(h2,"Reco data","le")
+        legend1.AddEntry(h2,"Reco data (stat)","le")
       if crossClosureHerwig:
         legend1.AddEntry(h1genpostfit,"Unfolded (Herwig response)","le") # Pythia templates
       if crossClosureMadgraph:
@@ -324,6 +352,9 @@ if __name__ == '__main__':
         legend1.AddEntry(h1genpostfit,"Unfolded (Pythia response)","le") # Pythia templates
       elif crossClosureNNLO:
         legend1.AddEntry(h1genpostfit,"Unfolded (Pythia response)","le") # NNLO templates
+      elif onlyData and withUncertainties:
+        legend1.AddEntry(h5,"Unfolded data (stat)","le")
+        legend1.AddEntry(h1genpostfit,"Unfolded data (stat+sys)","le")
       elif not onlyMC and not modelUncertainty:
         legend1.AddEntry(h1genpostfit,"Unfolded data","le")
       if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyData:
