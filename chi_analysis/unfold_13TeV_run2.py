@@ -11,7 +11,7 @@ def system_call(command):
 
 massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
-jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to all
+jesSources=23 # 1 corresponds to the single overall variation, 27 UL (23EOY) to all
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
@@ -70,7 +70,7 @@ if True:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels (reco mass bins)
 jmax """+str(nbins-1)+""" number of samples (gen bins)
-kmax """+str(withUncertainties*(1+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
+kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -118,24 +118,14 @@ kmax """+str(withUncertainties*(1+3*correlatedSimUncertainties+3*len(massbins)*u
     cfg.writelines(text+"""
 -----------
 """)
-    text="bin "
-    for i in range(len(massbins)):
-     for j in range(len(massbins)):
-         text+=("recomass"+str(i)+" ")*(len(chi_bins[j])-1)
-    text+="\nprocess "
-    for i in range(len(massbins)):
-     for j in range(len(massbins)):
-       for chibin in range(len(chi_bins[j])-1):
-        text+="bin_"+str(j)+"_"+str(chibin)+" "
-    text+="\nprocess "
+    bintext="bin "
+    process1text="\nprocess "
+    process2text="\nprocess "
+    ratetext="\nrate "
+    ones=""
+    skip={}
     for i in range(len(massbins)):
      n=0
-     for j in range(len(massbins)):
-        text+=(str(n)+" ")*(len(chi_bins[j])-1)
-        n-=1
-    text+="\nrate "
-    ones=""
-    for i in range(len(massbins)):
      for j in range(len(massbins)):
        for chibin in range(len(chi_bins[j])-1):
         if trivialClosure:
@@ -150,11 +140,16 @@ kmax """+str(withUncertainties*(1+3*correlatedSimUncertainties+3*len(massbins)*u
         else:
           hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
           print "QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
-        text+=str(hQCD.Integral())+" "
         if hQCD.Integral()>0:
           ones+="1 "
         else:
           ones+="0 "
+        bintext+=("recomass"+str(i)+" ")
+        process1text+="bin_"+str(j)+"_"+str(chibin)+" "
+        process2text+=(str(n)+" ")
+        ratetext+=str(hQCD.Integral())+" "
+       n-=1
+    text=bintext+process1text+process2text+ratetext
     cfg.writelines(text+"""
 -----------
 """)
@@ -195,8 +190,8 @@ kmax """+str(withUncertainties*(1+3*correlatedSimUncertainties+3*len(massbins)*u
         if runs=="23": text+="\nnuisance edit rename * * jer run"+run+"_jer"
       text+="\nprefire shape "+ones
       if runs=="23": text+="\nnuisance edit rename * * prefire run"+run+"_prefire"
-      #text+="\ntrigger shape "+ones
-      #if runs=="23": text+="\nnuisance edit rename * * trigger run"+run+"_trigger"
+      text+="\ntrigger shape "+ones
+      if runs=="23": text+="\nnuisance edit rename * * trigger run"+run+"_trigger"
       #text+="\npdf shape "+ones
       if separateScaleUncertainties:
         text+="\nscaleMuR shape "+ones

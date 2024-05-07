@@ -1962,6 +1962,7 @@ if __name__ == '__main__':
                         response+=responses.Get(response_name+str(bin1)).GetBinContent(b2+1)
                   else:
                     response=responses.Get(response_name+str(b1)).GetBinContent(b2+1)
+                  if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
                   response_integrals[str(j1)+"_"+str(b1)]+=response
 
           if samples[i][0]=="QCD": # for unfolding
@@ -2014,8 +2015,8 @@ if __name__ == '__main__':
                         response+=responses.Get(response_name+str(bin1)).GetBinContent(b2+1)
                   else:
                     response=responses.Get(response_name+str(b1)).GetBinContent(b2+1)
+                  if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
                   response/=response_integrals[str(j1)+"_"+str(b1)]
-                  #if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
                   #print "gen",j1,b1,"reco",j2,b2,"old-response",response,"new-response",response_name,response
                   althists[j2].Fill(althists[j2].GetBinCenter(b2+1),althistsclones[j1].GetBinContent(b1+1)*response)
                   if samples[i][0]=="QCD": # for unfolding

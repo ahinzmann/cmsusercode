@@ -87,11 +87,11 @@ if __name__=="__main__":
     muAltScale="m2"
 
   unfoldedData=True
-  oldMeasurements=True
-  oldTheory=False
+  oldMeasurements=False
+  oldTheory=True
   signalsBSM=False
   signalsDM=False
-  compareScales=False
+  compareScales=True
 
   massbins=[(1200,1500),
   	      (1500,1900),
@@ -421,7 +421,7 @@ if __name__=="__main__":
           print filenamestat
           fDataStat = TFile.Open(filenamestat)
           new_hists+=[fDataStat]
-          h14stat=fData.Get(histname)
+          h14stat=fDataStat.Get(histname)
           h14stat=rebin2(h14stat,len(chi_binnings[massbin])-1,chi_binnings[massbin])
         
 	#if not unfoldedData:
@@ -525,12 +525,12 @@ if __name__=="__main__":
             h14Gsysstat.SetPointEXlow(b,0)
             h14Gsysstat.SetPointEXhigh(b,0)
             if unfoldedData: # unfolded distribution already has total error
-              h14Gsys.SetPointEYlow(b,h14stat.GetBinError(b+1))
-              h14Gsys.SetPointEYhigh(b,h14stat.GetBinError(b+1))
+              h14Gsys.SetPointEYlow(b,sqrt(max(0,pow(h14G.GetErrorYlow(b),2)-pow(h14stat.GetBinError(b+1),2))))
+              h14Gsys.SetPointEYhigh(b,sqrt(max(0,pow(h14G.GetErrorYhigh(b),2)-pow(h14stat.GetBinError(b+1),2))))
               h14Gsysstat.SetPointEYlow(b,h14G.GetErrorYlow(b))
               h14Gsysstat.SetPointEYhigh(b,h14G.GetErrorYhigh(b))
-	      stat_up=sqrt(max(0,pow(h14G.GetErrorYhigh(b),2)-pow(exp_sumup*h14G.GetY()[b],2)))
-              stat_down=sqrt(max(0,pow(h14G.GetErrorYlow(b),2)-pow(exp_sumdown*h14G.GetY()[b],2)))
+	      stat_up=h14stat.GetBinError(b+1)
+              stat_down=h14stat.GetBinError(b+1)
             else:
               h14Gsys.SetPointEYlow(b,exp_sumdown*h14G.GetY()[b])
               h14Gsys.SetPointEYhigh(b,exp_sumup*h14G.GetY()[b])

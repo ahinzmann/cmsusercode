@@ -112,12 +112,14 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
    
-   for prefix in ["QCD","QCDCIplusLL10000","QCDmadgraph"]:
+   for prefix in ["QCD","QCDCIplusLL10000","QCDmadgraph","data"]:
      sum_in_quadrature_up=[]
      sum_in_quadrature_down=[]
      for mass in range(len(massbins)):
        sum_in_quadrature_up+=[len(chi_binnings[mass])*[0]]
        sum_in_quadrature_down+=[len(chi_binnings[mass])*[0]]
+     
+     bins=(["1"] if prefix=="data" else ["1","2","3","4","5","6","7"])
 
      for sourceset in sourcesets:
       canvas = TCanvas("jes","jes",0,0,800,600)
@@ -137,9 +139,9 @@ if __name__ == '__main__':
 	histyear={}
 	scalexsec={}
 	for year in years:
-	 for b in ["1","2","3","4","5","6","7"]:
-	  print "datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root"
-          f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
+	 for b in bins:
+	  print "datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root"
+          f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
 	  h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
 	  scalexsec[b]=samples[int(b)-1][1]
 	  files+=[f_refmc[year+b]]
@@ -221,7 +223,7 @@ if __name__ == '__main__':
 	     updown="Up"
 	     histyear2={}
 	     for year in years:
-	      for b in ["1","2","3","4","5","6","7"]:
+	      for b in bins:
 	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
 	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
 	       if b=="1":
@@ -271,7 +273,7 @@ if __name__ == '__main__':
 	     updown="Down"
 	     histyear3={}
 	     for year in years:
-	      for b in ["1","2","3","4","5","6","7"]:
+	      for b in bins:
 	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
 	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
 	       if b=="1":

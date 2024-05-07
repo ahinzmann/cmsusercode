@@ -10,6 +10,7 @@ gSystem.Load("libFWCoreFWLite.so");
 FWLiteEnabler.enable();
 
 gROOT.SetStyle("Plain")
+gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
@@ -83,6 +84,11 @@ def createPlots(sample,prefix,xsec,massbins,year):
 	for folder in folders:
 	  if sample in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/"+folder]
+    elif "UL" in sample:
+        print "/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/"
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/")
+	for folder in folders:
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/"+folder]
     else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
 	for folder in folders:
@@ -90,6 +96,8 @@ def createPlots(sample,prefix,xsec,massbins,year):
             files+=["/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/"+folder+"/GEN.root"]
 	    #break
 
+    print files
+    
     prunedgenjets_handle=Handle("std::vector<reco::GenJet>")
     prunedgenjets_label="ak4GenJets"
 
@@ -135,7 +143,11 @@ def createPlots(sample,prefix,xsec,massbins,year):
 
        jet1=TLorentzVector()
        jet2=TLorentzVector()
-       if "HT" in sample:
+       if "NANOAOD" in f:
+         if event.jetAK4_pt2_nom<30: continue
+         jet1.SetPtEtaPhiM(event.jetAK4_pt1_nom,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1*event.jetAK4_pt1_nom/event.jetAK4_pt1)
+         jet2.SetPtEtaPhiM(event.jetAK4_pt2_nom,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2*event.jetAK4_pt2_nom/event.jetAK4_pt2)
+       elif "HT" in sample:
          if event.jetAK4_pt2<30: continue
          jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
          jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
@@ -149,6 +161,8 @@ def createPlots(sample,prefix,xsec,massbins,year):
        mjj=(jet1+jet2).M()
        chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))
        yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
+       if "NANOAOD" in f:
+         if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
        for scale in scales:
          try:
 	  if mjj>1000 and chi<16. and yboost<1.11 and scale!=1:
@@ -187,9 +201,10 @@ def createPlots(sample,prefix,xsec,massbins,year):
     #  #events.Project(prefix+'y_{boost}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),yboost,'('+chi+'<16)*('+mass+'>='+str(massbin[0])+')*('+mass+'<='+str(massbin[1])+')')
     if "HT" in sample:
       event_count/=nevents
-    for plot in plots:
-      if event_count>0:
-        plot.Scale(xsec/event_count)
+    if not "UL" in sample:
+      for plot in plots:
+        if event_count>0:
+          plot.Scale(xsec/event_count)
     return plots
 
 if __name__ == '__main__':
@@ -205,11 +220,15 @@ if __name__ == '__main__':
 	   print i,name,bin,year
 	   sets+=[(name,bin,year)]
 	   i+=1
+    for year in years:
+      print "data",1,year
+      sets+=[("data",1,year)]
     print "sets",len(sets)
     wait=False
     #name="QCD"
-    name="QCDmadgraph"
+    #name="QCDmadgraph"
     #name="QCDCIplusLL10000"
+    name="data"
     bin=1 #1-6
     year="UL16preVFP"
     if len(sys.argv)>1:
@@ -515,6 +534,23 @@ if __name__ == '__main__':
   	      ]
       if bin==7 and name=="QCDmadgraph": 
     	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/5278880),
+  	  		 ]),
+  	      ]
+
+    if str(year)=="UL16preVFP" and name=="data": 
+    	samples=[("data",[("UL16preVFP",1),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL16postVFP" and name=="data": 
+    	samples=[("data",[("UL16postVFP",1),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL17" and name=="data": 
+    	samples=[("data",[("UL17",1),
+  	  		 ]),
+  	      ]
+    if str(year)=="UL18" and name=="data": 
+    	samples=[("data",[("UL18",1),
   	  		 ]),
   	      ]
 
