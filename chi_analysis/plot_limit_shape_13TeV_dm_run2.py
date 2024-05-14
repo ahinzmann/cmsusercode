@@ -58,8 +58,9 @@ if __name__=="__main__":
   #mdms=["1","3000"]
   mdms=["1"]
   #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-  signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+  #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
   #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
+  signalMasses=[4000,4500,5000,6000,7000]
  
   for mdm in mdms:
     for g in gs:
@@ -506,7 +507,7 @@ if __name__=="__main__":
     
     if style=="DMAxial":
       #lt=TLatex(signalMasses[0]+100,1.27,"#splitline{Vector/Axial-Vector Mediator}{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}")
-      lt=TLatex(3600/1000.,0.14,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
+      lt=TLatex((signalMasses[0]+100)/1000.,0.14,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
       #lt=TLatex(signalMasses[0]+100,1.31,"m_{DM} = "+mdm+" GeV, g_{DM} = 1.0")
     else:
       lt=TLatex((signalMasses[0]+100)/1000.,1.26,"#splitline{#bf{Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
@@ -535,7 +536,8 @@ if __name__=="__main__":
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.06)
     # lumi
-    lumiPos=max_x_new-1700/1000.
+    #lumiPos=max_x_new-1700/1000.
+    lumiPos=max_x_new-1000/1000.
     leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)

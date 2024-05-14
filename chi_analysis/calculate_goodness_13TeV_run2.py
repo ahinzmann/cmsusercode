@@ -12,6 +12,7 @@ massbinssets=[[(7000,13000)],
 	      [(2400,3000)],
 	      [(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
 	      [(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
+	      [(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)],
 	      ]
 
 signal="QCD"
@@ -20,7 +21,6 @@ signalMass=""
 
 jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to all
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
-correlatedSimUncertainties=False
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
 alternateScaleUncertainty=False
@@ -74,7 +74,7 @@ for massbins in massbinssets:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 1 number of backgrounds
-kmax """+str(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
+kmax """+str(2+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -118,17 +118,16 @@ kmax """+str(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncer
     ones=""
     for i in range(len(massbins)):
       ones+="1 1 - "
+    text+="\nmodel shape "+ones
+    text+="\nJERtail shape "+ones
+    text+="\nsim shape "+ones
     if uncorrelatedSimUncertainties:
-     for mn in massbins:
+     for mn in massbins[1:]:
       text+="\nmodel"+str(mn[0])+" shape "+ones
-     for mn in massbins:
+     for mn in massbins[1:]:
       text+="\nJERtail"+str(mn[0])+" shape "+ones
-     for mn in massbins:
+     for mn in massbins[1:]:
       text+="\nsim"+str(mn[0])+" shape "+ones
-    if correlatedSimUncertainties:
-     text+="\nmodel shape "+ones
-     text+="\nJERtail shape "+ones
-     text+="\nsim shape "+ones
     if jesSources>1:
      for n in range(jesSources):
       text+="\njes"+str(n+1)+" shape "

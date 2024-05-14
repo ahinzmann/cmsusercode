@@ -39,9 +39,14 @@ def getFitResults(fitFile, treename):
     fitParameters=[]
     fitConstraints=[]
     for name in uncertaintynames:
-        print name, tree.floatParsFinal().find(name).getVal()
+      if tree.floatParsFinal().find(name):
+        print name, tree.floatParsFinal().find(name).getVal(), tree.floatParsFinal().find(name).getError()
         fitParameters.append(tree.floatParsFinal().find(name).getVal())
         fitConstraints.append(tree.floatParsFinal().find(name).getError())
+      else:
+        print name, "not found"
+        fitParameters.append(0)
+        fitConstraints.append(1)
     return fitParameters, fitConstraints
 
 def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
@@ -98,16 +103,18 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
         theory_sumup=sqrt(theory_sumup)
         exp_sumdown=sqrt(exp_sumdown)
         exp_sumup=sqrt(exp_sumup)
+        total_sumup=sqrt(pow(theory_sumup,2)+pow(exp_sumup,2))
+        total_sumdown=sqrt(pow(theory_sumdown,2)+pow(exp_sumdown,2))
 
         hdataGsysstat.SetPointEXlow(b,0)
         hdataGsysstat.SetPointEXhigh(b,0)
         hdataGsysstat.SetPointEYlow(b,sqrt(pow(exp_sumdown*hdataG.GetY()[b],2)+pow(hdataG.GetErrorYlow(b),2)))
         hdataGsysstat.SetPointEYhigh(b,sqrt(pow(exp_sumup*hdataG.GetY()[b],2)+pow(hdataG.GetErrorYhigh(b),2)))
         
-        h2new.SetBinContent(b+1,histbackup.GetBinContent(b+1)-theory_sumdown*histbackup.GetBinContent(b+1))
-        h3new.SetBinContent(b+1,histbackup.GetBinContent(b+1)+theory_sumup*histbackup.GetBinContent(b+1))
+        h2new.SetBinContent(b+1,histbackup.GetBinContent(b+1)-total_sumdown*histbackup.GetBinContent(b+1))
+        h3new.SetBinContent(b+1,histbackup.GetBinContent(b+1)+total_sumup*histbackup.GetBinContent(b+1))
         
-    return h2new,h3new,hdataGsysstat
+    return h2new,h3new,hdataG,hdataGsysstat
 
 def getUncertainties(fsys,basename,pname,masstext):
     uncertainties=[]
@@ -142,6 +149,7 @@ if __name__=="__main__":
     runs="2" # "2" or "3" or "23"
     run=runs[-1]
   
+    controlRegionCheck=True
     unfoldedData=False
     isCB=False
     version="v6b"
@@ -178,7 +186,9 @@ if __name__=="__main__":
         os.mkdir(SaveDir)
 
     signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[2000,7000]
+    signalMasses=[7000]
+    if controlRegionCheck:
+      signalMasses=[2000]
 
     gas=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
 
@@ -266,8 +276,13 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
+            if controlRegionCheck:
+              massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+
             uncertaintynames=["pdf","jer","prefire","scale"] # "scale","scaleAlt", "sim"
-            #uncertaintynames.append("JERtail","model","model")
+            uncertaintynames.append("model")
+            uncertaintynames.append("JERtail")
+            uncertaintynames.append("sim")
             for m in massbins:
                 uncertaintynames.append("model"+str(m[0]))
             for m in massbins:
@@ -392,7 +407,7 @@ if __name__=="__main__":
                 
                 bfitParameters,bfitConstraints=getFitResults(fitFile, 'fit_b')
 
-                h2bnew,h3bnew,h14Gsysstat=applyFitResults(bfitParameters,bfitConstraints,uncertainties,hNloQcd,h14)
+                h2bnew,h3bnew,h14Gstat,h14Gsysstat=applyFitResults(bfitParameters,bfitConstraints,uncertainties,hNloQcd,h14)
 
                 # DM plot
                 basename=histnameprefix+"#chi"+masstext+"_rebin1"
@@ -433,7 +448,7 @@ if __name__=="__main__":
                 
                 sfitParameters,sfitConstraints=getFitResults(fitFile, 'fit_s')
 
-                h2snew,h3snew,h14Gsysstat_sb=applyFitResults(sfitParameters,sfitConstraints,uncertainties,hDm,h14)
+                h2snew,h3snew,h14stat_sb,h14Gsysstat_sb=applyFitResults(sfitParameters,sfitConstraints,uncertainties,hDm,h14)
         
                 # Plotting
                 h2bnew.SetLineStyle(1)
@@ -468,11 +483,13 @@ if __name__=="__main__":
                 h3bnew.Draw("histsame")
                 h2bnew.Draw("histsame")
                 h14.Draw("zesame")
-                h14Gsysstat.Draw("zesame")
+                h14Gstat.Draw("zesame")
+                #h14Gsysstat.Draw("zesame")
                 hNloQcd.Draw("histsame")
                 hbPrefit.Draw("histsame")
-                hDm.Draw("histsame")
-                hsPrefit.Draw("histsame")
+                if not controlRegionCheck:
+                  hDm.Draw("histsame")
+                  hsPrefit.Draw("histsame")
                 hNloQcd.Draw("axissame")
 
                 l1=TLegend(0.19,0.6,0.45,0.95,masstext.replace("_","<m_{jj}<"))
@@ -483,7 +500,8 @@ if __name__=="__main__":
                 l3=TLegend(0.19,0.8,0.45,0.95,"M_{Med}="+str(signalMass)+", g_{q}="+GA[j].replace("p","."))
                 l3.SetFillStyle(0)
                 l3.SetTextSize(0.035)
-                l3.Draw("same")
+                if not controlRegionCheck:
+                  l3.Draw("same")
                 
                 if unfoldedData:
                     l2=TLegend(0.45,0.6,0.95,0.93,"Particle-Level")
@@ -493,11 +511,12 @@ if __name__=="__main__":
                     l2=TLegend(0.45,0.6,0.95,0.93,"Detector-Level")
                 
                 l2.SetTextSize(0.035)
-                l2.AddEntry(h14,"Data","ple")
-                l2.AddEntry(h3newnew,"Background post-fit","fl")
-                l2.AddEntry(hbPrefit,"Background pre-fit","l")
-                l2.AddEntry(hDm,"Background+Signal post-fit","fl")
-                l2.AddEntry(hsPrefit,"Background+Signal pre-fit","l")
+                l2.AddEntry(h14,"Data #pm stat","ple")
+                l2.AddEntry(h3newnew,"QCD post-fit #pm sys","fl")
+                l2.AddEntry(hbPrefit,"QCD pre-fit","l")
+                if not controlRegionCheck:
+                  l2.AddEntry(hDm,"QCD+Signal post-fit","fl")
+                  l2.AddEntry(hsPrefit,"QCD+Signal pre-fit","l")
                 l2.SetFillStyle(0)
                 l2.Draw("same")
         
@@ -511,6 +530,6 @@ if __name__=="__main__":
 
                 print "systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1)
         
-                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+histnameprefix+"_"+masstext+"_run2.pdf")
+                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else histnameprefix)+"_"+masstext+"_run2.pdf")
 
                 #sys.exit()
