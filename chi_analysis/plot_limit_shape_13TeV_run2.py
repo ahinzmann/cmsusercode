@@ -23,9 +23,9 @@ gStyle.SetLegendBorderSize(0)
 if __name__=="__main__":
 
  models=[3] #ADD
- #models+=[10] #QBH ADD6
- #models+=[11] #QBH RS1
- #models+=[60,61,62,63,64,65,66,67,68,69] #CI
+ models+=[10] #QBH ADD6
+ models+=[11] #QBH RS1
+ models+=[60,61,62,63,64,65,66,67,68,69] #CI
  #models+=[70,71,72,73,74,75,76,77]
  #models+=[78,79,80,81,82,83,84,85,86,87]
  #models+=[30,31,32,33,34,35,36,37,38]
@@ -77,7 +77,7 @@ if __name__=="__main__":
     if model>=40 and model<50:
        signal="AntiCIplusLL"
     if model>=60 and model<70:
-       signal="cs_ct14nlo_"
+       signal="cs_ct14nnlo_"
     if model>=70 and model<90:
        signal="cs_ct14nlo_"
     if model>=90 and model<95:
@@ -87,6 +87,7 @@ if __name__=="__main__":
 
     print signal,model
 
+    print "limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt"
     f=file("limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt")
     limits=eval(f.readline())
     #print limits

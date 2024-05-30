@@ -846,6 +846,17 @@ for model in models:
     if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal:
         signalWithMass="QCD"+signalWithMass
 
+    # Use all lower mass bins in fit with bg-only hypothesis where no signal is present
+    signalmassbins=massbins[:]
+    if "limit" in name or model==44:
+      for massbin in allmassbins:
+        if not massbin in massbins:
+          massbins.insert(allmassbins.index(massbin),massbin)
+        else:
+          break
+    print "massbins", massbins
+    print "signalmassbins", signalmassbins
+    
     statUncertainties=[]
     if theoryStatUncertainties:
       chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -865,17 +876,6 @@ for model in models:
          for chibin in range(len(chi_bins[massindex])-1):
              statUncertainties+=["stat"+str(massindex)+"_"+str(chibin)]
 
-    # Use all lower mass bins in fit with bg-only hypothesis where no signal is present
-    signalmassbins=massbins[:]
-    if "limit" in name or model==44:
-      for massbin in allmassbins:
-        if not massbin in massbins:
-          massbins.insert(allmassbins.index(massbin),massbin)
-        else:
-          break
-    print "massbins", massbins
-    print "signalmassbins", signalmassbins
-    
     def system_call(command):
        print command
        p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -898,11 +898,19 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
     for i in range(len(massbins)):
         if injectSignal:
           cfg.writelines("""shapes data_obs bin"""+str(i)+""" """+prefix+dataWithSignal+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
+""")   
+        else:
+          cfg.writelines("""shapes data_obs bin"""+str(i)+""" """+fname+""" data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 data_obs#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
 """)
         if not massbins[i] in signalmassbins:
           cfg.writelines("""shapes """+signalWithMass+""" bin"""+str(i)+""" """+fname+""" """+signalWithMass+"""_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 """+signalWithMass+"""_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
 """)
-        cfg.writelines("""shapes * bin"""+str(i)+""" """+fname+""" $PROCESS#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 $PROCESS#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
+        else:
+          cfg.writelines("""shapes """+signalWithMass+""" bin"""+str(i)+""" """+fname+""" """+signalWithMass+"""#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 """+signalWithMass+"""#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes """+signalWithMass+"""_ALT bin"""+str(i)+""" """+fname+""" """+signalWithMass+"""_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 """+signalWithMass+"""_ALT#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
+""")
+        cfg.writelines("""shapes QCD bin"""+str(i)+""" """+fname+""" QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1 QCD#chi"""+str(massbins[i][0])+"""_"""+str(massbins[i][1])+"""_rebin1_$SYSTEMATIC
 """)
     cfg.writelines("""
 -----------

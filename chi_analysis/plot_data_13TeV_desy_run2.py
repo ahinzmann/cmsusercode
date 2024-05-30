@@ -2,6 +2,7 @@ import os, sys
 from ROOT import * 
 import array
 import math
+from operator import xor
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
@@ -303,6 +304,9 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_NUL16postVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16postVFP-12Feb2024"),
             ("datacard_shapelimit13TeV_run2_NUL17","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL17-12Feb2024"),
             ("datacard_shapelimit13TeV_run2_NUL18","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18-12Feb2024"),
+            ("datacard_shapelimit13TeV_run2_2023-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2023"),
+            ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
+            ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -815,6 +819,47 @@ if __name__ == '__main__':
 	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
 
+	  [["HLT_PFHT510","HLT_PFJet260"], #2023
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+	  ["HLT_PFHT510"],
+	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+	  [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+	  [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
           ]
 
     if len(sys.argv)>1:
@@ -824,14 +869,13 @@ if __name__ == '__main__':
 
     if len(sys.argv)>2:
       folders=os.listdir(samples[0][2])
-      folders=[f for f in folders if ".root" in f] #dijetChi
+      folders=[f for f in folders if ".root" in f and xor(not "28May2024" in samples[0][0],"28May2024" in f)] #dijetChi
       print len(folders)
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
         if "HT-" in s: name=s.replace("-","")+"_"+name; break
       samples=[(samples[0][0],"-"+name,samples[0][2].replace("/pnfs/","dcap://dcache-cms-dcap.desy.de//pnfs/")+"/"+folders[int(sys.argv[2])])]
-      print samples
- 
+
     if len(sys.argv)>3:
       if "HEM" in sys.argv[3]:
         vetoHEM=True
@@ -857,7 +901,7 @@ if __name__ == '__main__':
       if genLevel:
         postfix+="-GEN"
 
-      out=TFile(prefix+postfix + '_chi.root','RECREATE')
+      out=TFile("data/"+prefix+postfix + '_chi.root','RECREATE')
       for j in range(len(massbins)):
   	for i in range(1):
   	  plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
@@ -908,7 +952,7 @@ if __name__ == '__main__':
   	legend1.SetFillStyle(0)
   	legend1.Draw("same")
 
-      canvas.SaveAs(prefix+postfix + '_chi.pdf')
+      canvas.SaveAs("data/"+prefix+postfix + '_chi.pdf')
       #canvas.SaveAs(prefix+postfix + '_chi.eps')
       #if wait:
       #  os.system("ghostview "+prefix + '_chi.eps')
