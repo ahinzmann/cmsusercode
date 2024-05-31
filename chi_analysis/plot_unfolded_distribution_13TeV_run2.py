@@ -39,7 +39,7 @@ if __name__ == '__main__':
     crossClosureMadgraph=False # Madgraph vs Pythia response
     modelUncertainty=False # Herwig vs Madgraph vs Pythia smearing
     onlyMC=False # before/after smearing
-    onlyData=True # before/after unfolding
+    onlyData=False # before/after unfolding
     withUncertainties=True
     compareNoUncertainty=True
     noNorm=False
@@ -111,6 +111,9 @@ if __name__ == '__main__':
     print filenamem
     fm = TFile.Open(filenamem)
     new_hists+=[fm]
+
+    chi2detector=0
+    chi2unfolded=0
     
     for i in range(len(massbins)):
       canvas.cd(i+1)
@@ -368,6 +371,12 @@ if __name__ == '__main__':
       legend1.SetTextSize(0.04)
       legend1.SetFillStyle(0)
       legend1.Draw("same")
+      
+      for b in range(h2.GetXaxis().GetNbins()):
+        chi2detector+=pow((h2.GetBinContent(b+1)-h1.GetBinContent(b+1))/h2.GetBinError(b+1),2)
+        chi2unfolded+=pow((h5.GetBinContent(b+1)-h1gen.GetBinContent(b+1))/h5.GetBinError(b+1),2)
+      
+    print "detector-level chi2", chi2detector, "unfolded chi2", chi2unfolded   
 
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")
     fout.Close()

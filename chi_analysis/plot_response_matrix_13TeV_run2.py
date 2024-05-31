@@ -56,6 +56,7 @@ if __name__ == '__main__':
     new_hists=[]
 
     name="response"
+    normed=True
 
     filename=prefix+"_GEN-QCD-run2_chi.root"
     print filename
@@ -63,25 +64,26 @@ if __name__ == '__main__':
 
     binsj=0
     for j in range(len(massbins)):
-      for chibinj in range(len(chi_bins[j])-1):
+      for chibinj in range(len(chi_bins[j+mass_bin_offset])-1):
         binsj+=1
 
     response=TH2F("response","response",binsj, 0, binsj-1, binsj, 0, binsj-1)
     
     binsj=0
     for j in range(len(massbins)):
-      for chibinj in range(len(chi_bins[j])-1):
+      for chibinj in range(len(chi_bins[j+mass_bin_offset])-1):
         responsesum=0
         for i in range(len(massbins)):
-         for chibini in range(len(chi_bins[i])-1):
+         for chibini in range(len(chi_bins[i+mass_bin_offset])-1):
           hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibinj)+"_")
           responsesum+=hQCD.GetBinContent(chibini+1)
         binsi=0
         for i in range(len(massbins)):
-         for chibini in range(len(chi_bins[i])-1):
+         for chibini in range(len(chi_bins[i+mass_bin_offset])-1):
           hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibinj)+"_")
           if responsesum>0:
-            response.SetBinContent(binsj+1,binsi+1,hQCD.GetBinContent(chibini+1)/responsesum)
+           if abs(i-j)<1 and abs(chibini-chibinj)<1:
+            response.SetBinContent(binsj+1,binsi+1,hQCD.GetBinContent(chibini+1)/(responsesum if normed else 1.0))
           binsi+=1
         binsj+=1
    
@@ -91,3 +93,15 @@ if __name__ == '__main__':
     response.Draw("colz")
 
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")
+
+    m=TMatrixD(response.GetXaxis().GetNbins(), response.GetYaxis().GetNbins())
+    for x in range(response.GetXaxis().GetNbins()):
+      for y in range(response.GetYaxis().GetNbins()):
+        m[x,y]=response.GetBinContent(x+1,y+1)
+    m.Print()
+    
+    from ROOT import TDecompSVD
+    svd=TDecompSVD(m)
+    #svd.GetMatrix().Print()
+    print [s for s in svd.GetSig()]
+    print "condition", max(svd.GetSig())/max(0,min(svd.GetSig()))
