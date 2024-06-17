@@ -59,6 +59,34 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         print "found",len(allmulist),"elements"
       return allmulist
 
+    def getqcdmup(self,points):
+      muplist=[]
+      for m in range(len(massbins)):
+        filemup=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_"+points+"-norm_"+mscale.replace("m2","m12")+".log"
+	print "load",filemup
+        muxsecscentral=[]
+        muxsecsdown=[]
+        muxsecsup=[]
+        with open(filemup) as f:
+            for line in f:
+                if "#" in line: continue
+                if line.split()==[]: continue
+                x=float(line.split()[1])/(massbins[m][1]-massbins[m][0])/(self.bins[int(line.split()[0])]-self.bins[int(line.split()[0])-1])
+                xsec=[massbins[m][0],massbins[m][1],self.bins[int(line.split()[0])-1],self.bins[int(line.split()[0])],x]
+                muxsecscentral.append(xsec)
+                x=float(line.split()[1])*(1.+float(line.split()[2]))/(massbins[m][1]-massbins[m][0])/(self.bins[int(line.split()[0])]-self.bins[int(line.split()[0])-1])
+                xsec=[massbins[m][0],massbins[m][1],self.bins[int(line.split()[0])-1],self.bins[int(line.split()[0])],x]
+                muxsecsdown.append(xsec)
+                x=float(line.split()[1])*(1.+float(line.split()[3]))/(massbins[m][1]-massbins[m][0])/(self.bins[int(line.split()[0])]-self.bins[int(line.split()[0])-1])
+                xsec=[massbins[m][0],massbins[m][1],self.bins[int(line.split()[0])-1],self.bins[int(line.split()[0])],x]
+                muxsecsup.append(xsec)
+            muplist.append([[points,"central"],muxsecscentral])
+            muplist.append([[points,"down"],muxsecsdown])
+            muplist.append([[points,"up"],muxsecsup])
+        print "found",len(muplist),"elements"
+        print muplist[0]
+      return muplist
+
     def getqcdallmem(self):
       allmemlist=[]
       for m in range(len(massbins)):
@@ -225,7 +253,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
     def listFill(self,mylist,uncerttype):
         myfile=TFile(self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj_chi_norm_v25_"+PDF+"_cppread_"+uncerttype+"_"+mscale+".root","RECREATE")
         for list in mylist:
-            if uncerttype=="mu":
+            if uncerttype=="mu" or uncerttype=="mu6" or uncerttype=="mu30":
                 mur=str(list[0][0])
                 muf=str(list[0][1])
                 i=0
@@ -271,7 +299,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
             myfile=TFile(self.BaseDir+"/"+self.cixsecDir+"/"+key+"_"+uncerttype+".root","RECREATE")
 	    histos=[]
             for list in mydict[key]:
-                if uncerttype=="mu":
+                if uncerttype=="mu" or uncerttype=="mu6" or uncerttype=="mu30":
                     mur=str(list[0][0])
                     muf=str(list[0][1])
                     i=0
@@ -318,18 +346,24 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
             
 if __name__ == "__main__":
     myVariations=getVariations()
-    
+
     qcdallmu=myVariations.getqcdallmu()
     myVariations.listFill(qcdallmu,"mu")
     
-    qcdallmem=myVariations.getqcdallmem()
-    myVariations.listFill(qcdallmem,"mem")
-
-    qcdstat=myVariations.getqcdstat()
-    myVariations.listFill(qcdstat,"stat")
-
-    ciallmu=myVariations.getciallmu()
-    myVariations.dictFill(ciallmu,"mu")
+    qcdmu6p=myVariations.getqcdmup("6P")
+    myVariations.listFill(qcdmu6p,"mu6")
     
-    ciallmem=myVariations.getciallmem()
-    myVariations.dictFill(ciallmem,"mem")    
+    qcdmu30=myVariations.getqcdmup("30")
+    myVariations.listFill(qcdmu30,"mu30")
+    
+    #qcdallmem=myVariations.getqcdallmem()
+    #myVariations.listFill(qcdallmem,"mem")
+
+    #qcdstat=myVariations.getqcdstat()
+    #myVariations.listFill(qcdstat,"stat")
+
+    #ciallmu=myVariations.getciallmu()
+    #myVariations.dictFill(ciallmu,"mu")
+    
+    #ciallmem=myVariations.getciallmem()
+    #myVariations.dictFill(ciallmem,"mem")    
