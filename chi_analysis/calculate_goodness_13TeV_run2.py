@@ -23,7 +23,7 @@ jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to 
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
-alternateScaleUncertainty=False
+alternateScaleUncertainty=True
 uncorrelatedScaleUncertainties=False
 scaleUncertainty=True
 theoryStatUncertainties=True
@@ -74,7 +74,7 @@ for massbins in massbinssets:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 1 number of backgrounds
-kmax """+str(2+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
+kmax """+str(2+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*alternateScaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -167,9 +167,11 @@ kmax """+str(2+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
     else:
       if alternateScaleUncertainty:
         text+="\nscaleAlt shape "
-      elif scaleUncertainty:
+        for i in range(len(massbins)):
+         text+="1 1 "
+      if scaleUncertainty:
         text+="\nscale shape "
-      for i in range(len(massbins)):
+        for i in range(len(massbins)):
          text+="1 1 "
     for su in statUncertainties:
       text+="\n"+su+" shape "

@@ -25,6 +25,8 @@ if __name__=="__main__":
  models=[3] #ADD
  models+=[10] #QBH ADD6
  models+=[11] #QBH RS1
+ models+=[12] #QBH Blackmax n=6
+ models+=[13] #QBH Blackmax n=6 RECO
  models+=[60,61,62,63,64,65,66,67,68,69] #CI
  #models+=[70,71,72,73,74,75,76,77]
  #models+=[78,79,80,81,82,83,84,85,86,87]
@@ -67,6 +69,10 @@ if __name__=="__main__":
        signal="QBH_"    
     if model==11:
        signal="QBH_"    
+    if model==12:
+       signal="QBH_MD"
+    if model==13:
+       signal="QBH_MD"
 
     if model>=18 and model<20:
        signal="cs_ct14nlo_"

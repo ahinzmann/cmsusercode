@@ -279,7 +279,7 @@ if __name__=="__main__":
             if controlRegionCheck:
               massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
-            uncertaintynames=["pdf","jer","prefire","scale"] # "scale","scaleAlt", "sim"
+            uncertaintynames=["pdf","jer","prefire","scale","scaleAlt"] # "scale", "sim"
             uncertaintynames.append("model")
             uncertaintynames.append("JERtail")
             uncertaintynames.append("sim")

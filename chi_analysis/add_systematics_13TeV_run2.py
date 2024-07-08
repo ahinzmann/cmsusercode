@@ -76,7 +76,7 @@ if __name__ == '__main__':
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
     use_UL=True
-    responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown"
+    responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
     
     if use_UL:
@@ -358,11 +358,18 @@ if __name__ == '__main__':
     for weight in ["CG0p1","CG0p05","CG0p04","CG0p03","CG0p025","CG0p02","CG0p015","CG0p01","CG0p0075","CG0p005","CG0p0025","CG0p0"]:
          samples6+=[("tripleG_QCD_"+weight,[("tripleG_QCD_"+weight,0)]),]
 
+    samples7=[]
+    xsecs_qbh={'QBH_MD4000_MBH5000_n4': 1.42769, 'QBH_MD4000_MBH5000_n6': 3.15044, 'QBH_MD4000_MBH5000_n2': 0.316956, 'QBH_MD2000_MBH3000_n2': 57.4928, 'QBH_MD2000_MBH3000_n4': 232.017, 'QBH_MD2000_MBH3000_n6': 496.996, 'QBH_MD6000_MBH7000_n2': 0.00238888, 'QBH_MD6000_MBH7000_n4': 0.0112931, 'QBH_MD6000_MBH7000_n6': 0.0253378, 'QBH_MD7000_MBH8000_n2': 0.000175315, 'QBH_MD7000_MBH8000_n6': 0.00189162, 'QBH_MD7000_MBH8000_n4': 0.000834913, 'QBH_MD8000_MBH9000_n4': 4.61159e-05, 'QBH_MD8000_MBH9000_n6': 0.000104591, 'QBH_MD8000_MBH9000_n2': 9.4628e-06, 'QBH_MD3000_MBH4000_n2': 3.74809, 'QBH_MD3000_MBH4000_n6': 35.319, 'QBH_MD3000_MBH4000_n4': 16.1407, 'QBH_MD5000_MBH6000_n2': 0.0283503, 'QBH_MD5000_MBH6000_n6': 0.287511, 'QBH_MD5000_MBH6000_n4': 0.129882, 'QBH_MD9000_MBH10000_n4': 1.23232e-06, 'QBH_MD9000_MBH10000_n6': 2.79188e-06, 'QBH_MD9000_MBH10000_n2': 2.53752e-07}
+    for md in [2000,3000,4000,5000,6000,7000,8000,9000]:
+      for n in [2,4,6]:
+        samples7+=[("QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n),[("UL18_QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n),xsecs_qbh["QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n)])])]
+
     # all samples
-    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6
+    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
     # for alp+tripleG
     #samples=samples5
     #samples=samples6
+    samples=samples7
     # for postfit plots
     #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
@@ -381,6 +388,7 @@ if __name__ == '__main__':
     dataplot={}
     qcdnorm={}
     qcd13TeVnorm={}
+    nloqcdnormraw={}
     nloqcdnorm={}
     cinorm={}
     for prefix in prefixs: 
@@ -463,6 +471,8 @@ if __name__ == '__main__':
         sample=prefix + '_GENnp-antici-run'+run+'_chi.root'
       elif samples[i][0]=="QCD":
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
+      elif "QBH" in samples[i][0]:
+        sample=prefix + "_run2_UL18_" + samples[i][0] + '-GEN_chi.root'
       elif "alp" in samples[i][0] or "tripleG" in samples[i][0] or "DM" in samples[i][0] or "ll" in samples[i][0] or "cs" in samples[i][0] or "wide" in samples[i][0] or "QBH" in samples[i][0]:
         sample=prefix + "_" + samples[i][0] + '-run'+run+'_chi.root'
       #if "ADD" in samples[i][0]:
@@ -483,7 +493,14 @@ if __name__ == '__main__':
       insignalfile=TFile(insignalsample,'READ')
       closefiles=[insignalfile]
       out=TFile(sample,'RECREATE')
-      closefiles=[out]
+      closefiles+=[out]
+
+      # RECO sample
+      if responsePostfix=="RECO":
+        recosample=insignalsample.replace("-GEN","")
+        print "open reco file", recosample
+        freco=TFile(recosample,'READ')
+        closefiles+=[freco]
       
       # LO QCD file
       sample2='datacards/datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
@@ -785,6 +802,7 @@ if __name__ == '__main__':
             #print "EWK", correction
             if not "EWK" in samples[i][0]:
                nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)*correction)
+        nloqcdnormraw[j]=nloqcdbackup.Integral()
         nloqcdnorm[j]=nloqcdbackup.Integral()
         nloqcdnorm[j]*=(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
         nloqcdnorm[j]*=138000. # SCALE CROSS SECTION BY LUMI
@@ -972,6 +990,16 @@ if __name__ == '__main__':
           ci.Scale(1./nloqcdbackup.Integral())
           print histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1)
           ci.Add(nloqcd)
+        elif "QBH_MD" in samples[i][0]:
+            histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+            histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+            print histnamein
+            cibackup=insignalfile.Get(histnamein)
+            ci=cibackup.Clone(histname)
+            ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
+            ci.Scale(samples[i][1][0][1])
+            ci.Scale(1./nloqcdbackup.Integral())
+            ci.Add(nloqcd)
         elif "QBH" in samples[i][0]:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             if j<5:
@@ -1921,7 +1949,7 @@ if __name__ == '__main__':
           responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_"+responsePostfix+"_March24.root",'READ')
         elif "GS" in responsePostfix:
           responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_March24.root",'READ')
-        elif responsePostfix=="":
+        elif responsePostfix=="" or responsePostfix=="RECO":
           responses=TFile("datacards/Response_pythia8_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
 
         # modify histograms
@@ -2032,6 +2060,18 @@ if __name__ == '__main__':
                    for b in range(althists[j].GetXaxis().GetNbins()):
                      histsunfold[str(j)+unfoldbin].SetBinError(b+1,0)
             histnonorm=althists[j].Clone(althists[j].GetName()+"_nonorm").Write(althists[j].GetName()+"_nonorm")
+
+            if responsePostfix=="RECO" and pre==samples[i][0]+'#chi':
+              print "Using RECO QBH instead of smeared QBH prediction"
+              althists[j]=out.Get(althists[j].GetName().replace(samples[i][0]+'#chi',samples[i][0]+'_ALT#chi')+"_nonorm").Clone(althists[j].GetName())
+              histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+              print histnamein
+              reco=freco.Get(histnamein)
+              reco=reco.Rebin(len(chi_binnings[j])-1,reco.GetName(),chi_binnings[j])
+              reco.Scale(samples[i][1][0][1]*nloqcdnorm[j]/nloqcdnormraw[j])
+              print reco.Integral(), althists[j].Integral()
+              althists[j].Add(reco)
+
             #print althists[j].GetName()+"_nonorm"
             print dataevents[j],althistsclones[j].Integral(),althists[j].Integral()
             althists[j].Scale(dataevents[j]/althists[j].Integral())
@@ -2039,6 +2079,7 @@ if __name__ == '__main__':
             for b in range(althists[j].GetXaxis().GetNbins()):
               althists[j].SetBinError(b+1,0)
             #print althists[j].GetBinContent(1),althistsclones[j].GetBinContent(1)
+              
           for hist in althists:
             hist.Write()
           if samples[i][0]=="QCD": # for unfolding

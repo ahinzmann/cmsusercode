@@ -70,7 +70,7 @@ if True:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels (reco mass bins)
 jmax """+str(nbins-1)+""" number of samples (gen bins)
-kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+len(statUncertainties)))+""" number of nuisance parameters""")
+kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*uncorrelatedSimUncertainties+jesSources+jerSources+1*separateScaleUncertainties+1*scaleUncertainties+1*alternateScaleUncertainty+len(statUncertainties)))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -199,7 +199,7 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
       else:
         if alternateScaleUncertainty:
           text+="\nscaleAlt shape "+ones
-        elif scaleUncertainties:
+        if scaleUncertainties:
           text+="\nscale shape "+ones
       print "adding stat uncertainties"
       for su in statUncertainties:

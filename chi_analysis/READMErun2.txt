@@ -31,6 +31,8 @@ nohup ./gridpack_generation.sh alp_QCD_HT2000toInf ./ # create gridpacks for alp
 nohup ./gridpack_generation.sh alp_QCD_HT4000toInf ./ # create gridpacks for alp
 submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
 
+calculate_xsecs_blackmax.py # calculate cross sections with Blackmax
+
 -------- Data analysis in CMSSW_10_6_X:
 
 plotSignal_13TeV_desy_run2_loop.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
@@ -38,7 +40,7 @@ plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce 
 plotSignal_13TeV_desy_alp_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for alp samples
 plotSignal_13TeV_desy_tripleG_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for tripleG samples
 
-run_data.py run_dataSingleMuon.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD samples
+run_data.py run_dataSingleMuon.sh merge_data.sh # call plot_data_13TeV_desy_run2.py # produce dijet angular histograms for data and fullsim QCD, QBH samples
 
 plotSignal_jes_13TeV_run2_loop.py # calls plotSignal_jes_13TeV_run2.py # produce JES uncertainty histograms from CI and QCD GEN samples
 plot_chi_jes_plots_13TeV_combine_run2.py # plot JES uncertainty histograms

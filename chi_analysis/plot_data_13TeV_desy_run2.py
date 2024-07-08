@@ -38,7 +38,7 @@ def deltaPhi(phi1, phi2):
     deltaphi = 2 * math.pi - abs(deltaphi)
   return deltaphi
 
-def createPlots(sample,prefix,triggers,massbins,chi_bins):
+def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
     files=[]
     print "list files"
     if not ".root" in sample:
@@ -121,6 +121,11 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
      print f,nevents
      trigger_indices_len=0
      for event in events:
+         if postfix!="":
+           #event.GetListOfBranches().Print()
+           #print getattr(event,"GenModel_BlackMax_B1"+postfix)
+           if not getattr(event,"GenModel_BlackMax_B1"+postfix): continue
+           #xsec=event.LHEWeight_originalXWGTUP*1000. # convert to pb
 	 #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
 	 #if event_count>100000 and not "QCD" in prefix: break ###
@@ -170,7 +175,7 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
-	 if mjj>6000:
+	 if mjj>6000 and "data" in sample:
            if "NANOAOD" in f:
              print "found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
            else:
@@ -231,9 +236,10 @@ def createPlots(sample,prefix,triggers,massbins,chi_bins):
 	      else:
 	        irec+=len(chi_bins[0])
             break
-    #for plot in plots:
-    #  if event_count>0:
-    #    plot.Scale(xsec/event_count)
+    if "qbh" in sample:
+      for plot in plots:
+        if event_count>0:
+          plot.Scale(1.0/event_count)
     return plots
 
 if __name__ == '__main__':
@@ -307,6 +313,7 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2023-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2023"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
+            ("datacard_shapelimit13TeV_run2_UL18_QBH","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qbhUL18"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -860,6 +867,20 @@ if __name__ == '__main__':
           [],
           [],
          ],
+	  [[], # QBH
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+
           ]
 
     if len(sys.argv)>1:
@@ -867,7 +888,23 @@ if __name__ == '__main__':
       samples=[samples[samplenum]]
       triggers=[triggers[samplenum]]
 
+    if "QBH" in samples[0][0]:
+     qbhlist=[]
+     for md in [2000,3000,4000,5000,6000,7000,8000,9000]:
+      for n in [2,4,6]:
+       qbhlist+=[(md,md+1000,n)]
+     for md,mbh,n in qbhlist:
+      samples+=[(samples[0][0],"_MD"+str(md)+"_MBH"+str(mbh)+"_n"+str(n),samples[0][2])]
+      triggers+=[triggers[0]]
+     samples.remove(samples[0])
+     triggers.remove(triggers[0])
+
     if len(sys.argv)>2:
+     if "QBH" in samples[0][0]:
+      samplenum=int(sys.argv[2])
+      samples=[samples[samplenum]]
+      triggers=[triggers[samplenum]]
+     else:
       folders=os.listdir(samples[0][2])
       folders=[f for f in folders if ".root" in f and xor(not "28May2024" in samples[0][0],"28May2024" in f)] #dijetChi
       print len(folders)
@@ -889,19 +926,21 @@ if __name__ == '__main__':
         chi_binnings+=[array.array('d')]
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
-        
+       
     print samples
 
-    for prefix,postfix,files in samples:
-      plots=[createPlots(files,prefix,triggers[samples.index((prefix,postfix,files))],massbins,chi_bins)]
+    for prefix,pf,files in samples:
+      postfix=pf
       if vetoHEM:
         postfix+="-HEM"
       if correctPrefire:
         postfix+="-L1prefire"
       if genLevel:
         postfix+="-GEN"
-
       out=TFile("data/"+prefix+postfix + '_chi.root','RECREATE')
+      plots=[createPlots(files,prefix,pf,triggers[samples.index((prefix,pf,files))],massbins,chi_bins)]
+
+      out.cd()
       for j in range(len(massbins)):
   	for i in range(1):
   	  plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])

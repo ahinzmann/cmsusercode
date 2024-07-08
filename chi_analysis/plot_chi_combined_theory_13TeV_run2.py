@@ -86,13 +86,13 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=True
+  unfoldedData=False
   oldMeasurements=False
   compareRun3=False
-  oldTheory=True
+  oldTheory=False
   signalsBSM=False
-  signalsDM=False
-  compareScales=True
+  signalsDM=True
+  compareScales=False
   compareMu30=False
 
   massbins=[(1200,1500),
@@ -554,8 +554,8 @@ if __name__=="__main__":
         print filename
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
-        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf"] # "scaleAlt"
-        if useNNLO and not compareMu30: uncertaintynames+=["stat"]
+        uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf"]
+        if useNNLO and not compareMu30: uncertaintynames+=["stat","scaleAlt"]
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"

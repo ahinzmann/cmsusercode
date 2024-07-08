@@ -12,6 +12,8 @@ models=[]
 models+=[3] #ADD
 #models+=[10] #QBH ADD6
 #models+=[11] #QBH RS1
+models+=[12] #QBH Blackmax n=6
+models+=[13] #QBH Blackmax n=6 RECO
 #models+=[60,61,62,63,64,65,66,67,68,69] #CI
 #models+=[70,71,72,73,74,75,76,77] 
 #models+=[78,79,80,81,82,83,84,85] 
@@ -35,7 +37,7 @@ jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to 
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
-alternateScaleUncertainty=False
+alternateScaleUncertainty=True
 uncorrelatedScaleUncertainties=False
 scaleUncertainty=True
 theoryStatUncertainties=True
@@ -50,7 +52,7 @@ isCB=False
 
 isInjection=False
 
-DMpvalue=False
+DMpvalue=True
 
 signalName={}
 signalExtraName={}
@@ -155,6 +157,18 @@ for model in models:
     #massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     massbins=[(5400,6000),(6000,7000),(7000,13000)]
     signalExtra="_RS1"
+ if model==12:
+    signal="QBH_MD"
+    signalMasses=[6000,7000,8000,9000]
+    massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    #massbins=[(5400,6000),(6000,7000),(7000,13000)]
+    signalExtra="_n6"
+ if model==13:
+    signal="QBH_MD"
+    signalMasses=[6000,7000,8000,9000]
+    massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    #massbins=[(5400,6000),(6000,7000),(7000,13000)]
+    signalExtra="_n6"
 
  if model==18:
     signal="cs_ct14nnlo_"
@@ -560,7 +574,7 @@ for model in models:
 
  limits={}
  for signalMass in signalMasses:
-    signalWithMass=signal+str(signalMass)+signalExtra
+    signalWithMass=(signal+str(signalMass)+signalExtra).replace("MD"+str(signalMass),"MD"+str(signalMass)+"_MBH"+str(signalMass+1000))
     print signalWithMass
 
     if signalWithMass=="CIplusLL8000":
@@ -642,6 +656,10 @@ for model in models:
         fname=prefix + "_" + signalWithMass + "-run"+run+"_chi.root"
     elif signalWithMass=="QBH_"+str(signalMass)+"_RS1":
         fname=prefix + "_" + signalWithMass + "-run"+run+"_chi.root"
+    elif signalWithMass=="QBH_MD"+str(signalMass)+"_MBH"+str(signalMass+1000)+"_n6" and model==13:
+        fname=prefix + "RECO_run2_UL18_" + signalWithMass + "-GEN_chi.root"
+    elif signalWithMass=="QBH_MD"+str(signalMass)+"_MBH"+str(signalMass+1000)+"_n6":
+        fname=prefix + "_run2_UL18_" + signalWithMass + "-GEN_chi.root"
     elif "cs" in signal:
         fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
     elif "alp" in signal or "tripleG" in signal:
@@ -891,7 +909,7 @@ for model in models:
     cfg.writelines("""
 imax """+str(len(massbins))+""" number of channels
 jmax 2 number of backgrounds
-kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
+kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jerSources+1*scaleUncertainty+1*alternateScaleUncertainty+1*separateScaleUncertainties+(len(massbins)-1)*uncorrelatedScaleUncertainties+len(statUncertainties))+""" number of nuisance parameters""")
     cfg.writelines("""
 -----------
 """)
@@ -1030,10 +1048,15 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
       if runs=="23": text+="\nnuisance edit rename * * scale"+str(mn[0])+" run"+run+"_scale"+str(mn[0])
     else:
       if alternateScaleUncertainty:
-        text+="\nscaleAlt shape "
-      elif scaleUncertainty:
-        text+="\nscale shape "
-      for i in range(len(massbins)):
+       text+="\nscaleAlt shape "
+       for i in range(len(massbins)):
+        if includeSignalTheoryUncertainties:
+         text+="1 1 - "
+        else:
+         text+="- 1 - "
+      if scaleUncertainty:
+       text+="\nscale shape "
+       for i in range(len(massbins)):
         if includeSignalTheoryUncertainties:
          text+="1 1 - "
         else:

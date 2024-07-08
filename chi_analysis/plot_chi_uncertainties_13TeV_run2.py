@@ -274,7 +274,7 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            uncertaintynames=["jes","jer","JERtail","prefire","trigger","model","sim","scale","pdf","stat"] # "scaleAlt"
+            uncertaintynames=["jes","jer","JERtail","prefire","trigger","model","sim","scale","scaleAlt","pdf","stat"]
             #for m in massbins:
             #    uncertaintynames.append("sim"+str(m[0]))
             #for i in range(1,23):

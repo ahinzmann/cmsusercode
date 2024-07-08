@@ -77,3 +77,5 @@ gfal-copy /nfs/dust/cms/user/hinzmann/run2023/JetHT_Run2018A-UL2018_MiniAODv2_Na
 gfal-copy /nfs/dust/cms/user/hinzmann/run2023/JetHT_Run2018B-UL2018_MiniAODv2_NanoAODv9-v1_NANOAOD-12Feb2024.root srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18-12Feb2024
 gfal-copy /nfs/dust/cms/user/hinzmann/run2023/JetHT_Run2018C-UL2018_MiniAODv2_NanoAODv9-v1_NANOAOD-12Feb2024.root srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18-12Feb2024
 gfal-copy /nfs/dust/cms/user/hinzmann/run2023/JetHT_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_NANOAOD-12Feb2024.root srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18-12Feb2024
+
+gfal-copy /nfs/dust/cms/user/hinzmann/run2023/BlackHole-BH1-RPScan_TuneCP5_13TeV_blackmax-pythia8_RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2_NANOAODSIM-28May2024.root srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qbhUL18
