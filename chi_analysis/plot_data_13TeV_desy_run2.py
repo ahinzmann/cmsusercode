@@ -1,8 +1,10 @@
 import os, sys
-from ROOT import * 
+from ROOT import gROOT,gStyle,TFile,TH1F,TTree,TCanvas, TLegend,TLorentzVector
 import array
 import math
 from operator import xor
+
+StandAloneROOT=True # crashed when reading  CMSSW files
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
@@ -40,12 +42,12 @@ def deltaPhi(phi1, phi2):
 
 def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
     files=[]
-    print "list files"
+    print("list files")
     if not ".root" in sample:
       folders=os.listdir(sample)
       for f in folders:
        if "pnfs" in sample:
-    	files+=["dcap://dcache-cms-dcap.desy.de/"+sample+"/"+f]
+        files+=["dcap://dcache-cms-dcap.desy.de/"+sample+"/"+f]
        elif "dijetChi" in f:
         files+=[sample+"/"+f]
     else:
@@ -66,9 +68,9 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
     else:
       prefiremap=None  
 
-    print files
+    print(files)
     
-    print triggers
+    print(triggers)
 
     plots=[]
     for massbin in massbins:
@@ -116,35 +118,37 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          events=fil.Get("tree")
        nevents=events.GetEntries()
      except:
-       print "error opening", f
+       print("error opening", f)
        continue
-     print f,nevents
+     print(f,nevents)
      trigger_indices_len=0
+     if StandAloneROOT:
+       events.SetBranchStatus("HLT_isFired",0) # ROOT chashes when reading with newer versions
      for event in events:
-         if postfix!="":
+         if "BH" in postfix:
            #event.GetListOfBranches().Print()
-           #print getattr(event,"GenModel_BlackMax_B1"+postfix)
-           if not getattr(event,"GenModel_BlackMax_B1"+postfix): continue
+           #print hasattr(event,"GenModel_BlackMax_B1"+postfix)
+           if not hasattr(event,"GenModel_BlackMax_B1"+postfix): continue
            #xsec=event.LHEWeight_originalXWGTUP*1000. # convert to pb
-	 #if not int(event.EVENT_event)==971086788: continue
+         #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
-	 #if event_count>100000 and not "QCD" in prefix: break ###
-	 #if event_count>1000: break
+         #if event_count>100000 and not "QCD" in prefix: break ###
+         #if event_count>1000: break
          if event_count%10000==1:
-	   print "event",event_count
-	 if not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
-	   trigger_indices={}
-	   trigger_indices_len=len(event.HLT_isFired)
-	   print "read trigger names", event_count
+           print("event",event_count)
+         if not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
+           trigger_indices={}
+           trigger_indices_len=len(event.HLT_isFired)
+           print("read trigger names", event_count)
            for t in range(len(triggers)):
-	     trigger_indices[t]=[]
+             trigger_indices[t]=[]
            for a,b in event.HLT_isFired:
              for t in range(len(triggers)):
-	       for trig in triggers[t]:
-	         if a.startswith(trig):
-	           trigger_indices[t]+=[a]
-	 if "NANOAOD" in f:
-	   trigger_indices=triggers
+               for trig in triggers[t]:
+                 if a.startswith(trig):
+                   trigger_indices[t]+=[a]
+         if "NANOAOD" in f or StandAloneROOT:
+           trigger_indices=triggers
          jet1=TLorentzVector()
          jet2=TLorentzVector()
          if "NANOAOD" in f:
@@ -163,33 +167,33 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          mjj=(jet1+jet2).M()
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
-	 weight=1.0
+         weight=1.0
          #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
-	 if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
-	 if prefiremap:
+         if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+         if prefiremap:
             if abs(jet1.Eta())>2:
-	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
-	    if abs(jet2.Eta())>2:
-	      weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
+              weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
+            if abs(jet2.Eta())>2:
+              weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
          if "NANOAOD" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
-	 if mjj>6000 and "data" in sample:
+         if mjj>6000 and "data" in sample:
            if "NANOAOD" in f:
-             print "found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
+             print("found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
            else:
-             print "found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi()
+             print("found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
          if jet1.Pt()>13000: continue
          irec=0
-	 for massbin in massbins:
+         for massbin in massbins:
             passedHLT=len(triggers[massbins.index(massbin)])==0
             for i in trigger_indices[massbins.index(massbin)]:
               if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
                  (not "NANOAOD" in f and  event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
-	        passedHLT=True
-		break
-	    if passedHLT and mjj>=massbin[0] and mjj<massbin[1]:
+                passedHLT=True
+                break
+            if passedHLT and mjj>=massbin[0] and mjj<massbin[1]:
                plots[irec].Fill(chi,weight)
                plots[irec+1*len(massbins)].Fill(yboost,weight)
                plots[irec+2*len(massbins)].Fill(jet1.Pt(),weight)
@@ -204,11 +208,11 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                  plots[irec+8*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
                plots[irec+9*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
                plots[irec+10*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
-	    irec+=1
+            irec+=1
          irec=11*len(massbins)
-	 plots[irec].Fill(mjj,weight)
-	 irec+=1
-	 if ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
+         plots[irec].Fill(mjj,weight)
+         irec+=1
+         if StandAloneROOT or ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
             (not "NANOAOD" in f and not trigger_indices.has_key(len(massbins))): continue # for MC
          for i in trigger_indices[len(massbins)]:
           if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
@@ -221,7 +225,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
             irec+=1
             for t in range(len(triggers)-len(massbins)-1):
               passHLT=False
-	      for i in trigger_indices[len(massbins)+1+t]:
+              for i in trigger_indices[len(massbins)+1+t]:
                 if ("NANOAOD" in f and  hasattr(event,i) and getattr(event,i)) or \
                    (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
                   passHLT=True
@@ -233,8 +237,8 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                   irec+=1
                 plots[irec].Fill(mjj,weight)
                 irec+=1
-	      else:
-	        irec+=len(chi_bins[0])
+              else:
+                irec+=len(chi_bins[0])
             break
     if "qbh" in sample:
       for plot in plots:
@@ -247,7 +251,7 @@ if __name__ == '__main__':
     wait=False
     vetoHEM=False
     correctPrefire=False
-    genLevel=False
+    genLevel=True
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -271,9 +275,9 @@ if __name__ == '__main__':
               (4200,4800),
               (4800,5400),
               (5400,6000),
-	      (6000,13000),
-	      (6000,7000),
-	      (7000,13000),
+              (6000,13000),
+              (6000,7000),
+              (7000,13000),
               ]
  
     samples=[#("datacard_shapelimit13TeV_run2_2016old","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
@@ -328,10 +332,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          [["HLT_PFHT510","HLT_PFJet260"], #2017
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -343,10 +347,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          [["HLT_PFHT510","HLT_PFJet260"], #2018
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -358,10 +362,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
-	  [[], #QCD 2016
+          [[], #QCD 2016
           [],
           [],
           [],
@@ -374,7 +378,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD 2017
+          [[], #QCD 2017
           [],
           [],
           [],
@@ -387,7 +391,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD 2018
+          [[], #QCD 2018
           [],
           [],
           [],
@@ -400,7 +404,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD Py 2018
+          [[], #QCD Py 2018
           [],
           [],
           [],
@@ -413,7 +417,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD Hw 2018
+          [[], #QCD Hw 2018
           [],
           [],
           [],
@@ -426,7 +430,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #2016 SingleMuon
+          [[], #2016 SingleMuon
           [],
           [],
           [],
@@ -438,21 +442,21 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_Mu45"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
-	  ["HLT_PFHT900"],
-	  ["HLT_PFHT800"],
-	  ["HLT_PFJet450"],
-	  ["HLT_PFJet500"],
-	  ["HLT_CaloJet500_NoJetID"],
-	  ["HLT_PFHT475"],
+          ["HLT_Mu45"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT900"],
+          ["HLT_PFHT800"],
+          ["HLT_PFJet450"],
+          ["HLT_PFJet500"],
+          ["HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
           ["HLT_PFHT600"],
           ["HLT_PFHT650"],
-	  ["HLT_PFJet260"],
-	  ["HLT_PFJet320"],
-	  ["HLT_PFJet400"],
+          ["HLT_PFJet260"],
+          ["HLT_PFJet320"],
+          ["HLT_PFJet400"],
          ],
-	  [[], #2017 SingleMuon
+          [[], #2017 SingleMuon
           [],
           [],
           [],
@@ -464,24 +468,24 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_Mu50"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
-	  ["HLT_PFHT1050"],
-	  ["HLT_PFJet500"],
-	  ["HLT_PFJet550"],
-	  ["HLT_CaloJet500_NoJetID"],
-	  ["HLT_CaloJet550_NoJetID"],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT590"],
-	  ["HLT_PFHT680"],
-	  ["HLT_PFHT780"],
-	  ["HLT_PFHT890"],
-	  ["HLT_PFJet260"],
-	  ["HLT_PFJet320"],
-	  ["HLT_PFJet400"],
-	  ["HLT_PFJet450"],
+          ["HLT_Mu50"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT1050"],
+          ["HLT_PFJet500"],
+          ["HLT_PFJet550"],
+          ["HLT_CaloJet500_NoJetID"],
+          ["HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT590"],
+          ["HLT_PFHT680"],
+          ["HLT_PFHT780"],
+          ["HLT_PFHT890"],
+          ["HLT_PFJet260"],
+          ["HLT_PFJet320"],
+          ["HLT_PFJet400"],
+          ["HLT_PFJet450"],
          ],
-	  [[], #2018 SingleMuon
+          [[], #2018 SingleMuon
           [],
           [],
           [],
@@ -493,82 +497,22 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_Mu50"],#"HLT_PFHT510",
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
-	  ["HLT_PFHT1050"],
-	  ["HLT_PFJet500"],
-	  ["HLT_PFJet550"],
-	  ["HLT_CaloJet500_NoJetID"],
-	  ["HLT_CaloJet550_NoJetID"],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT590"],
-	  ["HLT_PFHT680"],
-	  ["HLT_PFHT780"],
-	  ["HLT_PFHT890"],
-	  ["HLT_PFJet260"],
-	  ["HLT_PFJet320"],
-	  ["HLT_PFJet400"],
-	  ["HLT_PFJet450"],
-         ],
-          [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
-          ["HLT_PFHT475","HLT_PFJet260"],
-          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
-         ],
-          [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
-          ["HLT_PFHT475","HLT_PFJet260"],
-          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
-         ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2017
-          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
-          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
-          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
-         ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2018
-          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
-          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
-          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_Mu50"],#"HLT_PFHT510",
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT1050"],
+          ["HLT_PFJet500"],
+          ["HLT_PFJet550"],
+          ["HLT_CaloJet500_NoJetID"],
+          ["HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT590"],
+          ["HLT_PFHT680"],
+          ["HLT_PFHT780"],
+          ["HLT_PFHT890"],
+          ["HLT_PFJet260"],
+          ["HLT_PFJet320"],
+          ["HLT_PFJet400"],
+          ["HLT_PFJet450"],
          ],
           [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
           ["HLT_PFHT475","HLT_PFJet260"],
@@ -582,8 +526,8 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
           [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
           ["HLT_PFHT475","HLT_PFJet260"],
@@ -597,10 +541,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          [["HLT_PFHT510","HLT_PFJet260"], #2017
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -612,10 +556,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          [["HLT_PFHT510","HLT_PFJet260"], #2018
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -627,10 +571,70 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
-	  [[], #QCD 2016 preVFP
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+          [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+          [[], #QCD 2016 preVFP
           [],
           [],
           [],
@@ -643,7 +647,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD 2016 postVFP
+          [[], #QCD 2016 postVFP
           [],
           [],
           [],
@@ -656,7 +660,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD 2017
+          [[], #QCD 2017
           [],
           [],
           [],
@@ -669,7 +673,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], #QCD 2018
+          [[], #QCD 2018
           [],
           [],
           [],
@@ -682,7 +686,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2022
+          [["HLT_PFHT510","HLT_PFJet260"], #2022
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -694,10 +698,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2023
+          [["HLT_PFHT510","HLT_PFJet260"], #2023
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -709,23 +713,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
          ],
-	  [[], # QCD 2022
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-         ],
-	  [[], # QCD 2022
+          [[], # QCD 2022
           [],
           [],
           [],
@@ -738,7 +729,7 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], # QCD 2023
+          [[], # QCD 2022
           [],
           [],
           [],
@@ -751,7 +742,20 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], # QCD 2023
+          [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+          [[], # QCD 2023
           [],
           [],
           [],
@@ -777,8 +781,8 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
           [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
           ["HLT_PFHT475","HLT_PFJet260"],
@@ -792,10 +796,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT475"],
-	  ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2017
+          [["HLT_PFHT510","HLT_PFJet260"], #2017
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -807,10 +811,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
-	  [["HLT_PFHT510","HLT_PFJet260"], #2018
+          [["HLT_PFHT510","HLT_PFJet260"], #2018
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -822,11 +826,11 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
          ],
 
-	  [["HLT_PFHT510","HLT_PFJet260"], #2023
+          [["HLT_PFHT510","HLT_PFJet260"], #2023
           ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
           ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
           [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
@@ -838,23 +842,10 @@ if __name__ == '__main__':
           [],
           [],
           [],
-	  ["HLT_PFHT510"],
-	  ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
          ],
-	  [[], # QCD 2023
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-         ],
-	  [[], # QCD 2023
+          [[], # QCD 2023
           [],
           [],
           [],
@@ -867,7 +858,20 @@ if __name__ == '__main__':
           [],
           [],
          ],
-	  [[], # QBH
+          [[], # QCD 2023
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+          [[], # QBH
           [],
           [],
           [],
@@ -907,7 +911,7 @@ if __name__ == '__main__':
      else:
       folders=os.listdir(samples[0][2])
       folders=[f for f in folders if ".root" in f and xor(not "28May2024" in samples[0][0],"28May2024" in f)] #dijetChi
-      print len(folders)
+      print(len(folders))
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
         if "HT-" in s: name=s.replace("-","")+"_"+name; break
@@ -927,7 +931,7 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
        
-    print samples
+    print(samples)
 
     for prefix,pf,files in samples:
       postfix=pf
@@ -942,54 +946,54 @@ if __name__ == '__main__':
 
       out.cd()
       for j in range(len(massbins)):
-  	for i in range(1):
-  	  plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
-  	  if samples[i][0]=="QCD":
-  	     # data
-  	     plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
-  	     # ALT
-  	     clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
-  	     clone.Write()
-  	     # QCD
-  	     plots[i][j].Scale(1e-10)
-  	     plots[i][j].Write()
-  	     # QCD backup
-  	     clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-  	     clonebackup.Write()
-  	  else:
-  	     # signal
-  	     clone=plots[i][j]
-  	     clone.Write()
-  	     # signal backup
-  	     clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-  	     clonebackup.Write()
+        for i in range(1):
+          plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
+          if samples[i][0]=="QCD":
+             # data
+             plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
+             # ALT
+             clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
+             clone.Write()
+             # QCD
+             plots[i][j].Scale(1e-10)
+             plots[i][j].Write()
+             # QCD backup
+             clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+             clonebackup.Write()
+          else:
+             # signal
+             clone=plots[i][j]
+             clone.Write()
+             # signal backup
+             clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+             clonebackup.Write()
       for j in range(len(massbins),len(plots[0])):
-  	for i in range(1):
+        for i in range(1):
           plots[i][j].Write()
   
       for j in range(len(massbins)):
-  	for i in range(1):
-  	  if plots[i][j].Integral()>0:
-  	    plots[i][j].Scale(1./plots[i][j].Integral())
-  	  for b in range(plots[i][j].GetXaxis().GetNbins()):
-  	    plots[i][j].SetBinContent(b+1,plots[i][j].GetBinContent(b+1)/plots[i][j].GetBinWidth(b+1))
-  	    plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
-  	  plots[i][j].GetYaxis().SetRangeUser(0,0.2)
+        for i in range(1):
+          if plots[i][j].Integral()>0:
+            plots[i][j].Scale(1./plots[i][j].Integral())
+          for b in range(plots[i][j].GetXaxis().GetNbins()):
+            plots[i][j].SetBinContent(b+1,plots[i][j].GetBinContent(b+1)/plots[i][j].GetBinWidth(b+1))
+            plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
+          plots[i][j].GetYaxis().SetRangeUser(0,0.2)
 
       canvas = TCanvas("","",0,0,800,600)
       canvas.Divide(4,3)
 
       legends=[]
       for j in range(len(massbins)):
-  	canvas.cd(j+1)
-  	plots[0][j].Draw("he")
-  	print "number of events passed:",plots[0][j].GetEntries()
-  	legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("<13000",""))
-  	legends+=[legend1]
-  	legend1.AddEntry(plots[0][j],samples[0][0],"l")
-  	legend1.SetTextSize(0.04)
-  	legend1.SetFillStyle(0)
-  	legend1.Draw("same")
+        canvas.cd(j+1)
+        plots[0][j].Draw("he")
+        print("number of events passed:",plots[0][j].GetEntries())
+        legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("<13000",""))
+        legends+=[legend1]
+        legend1.AddEntry(plots[0][j],samples[0][0],"l")
+        legend1.SetTextSize(0.04)
+        legend1.SetFillStyle(0)
+        legend1.Draw("same")
 
       canvas.SaveAs("data/"+prefix+postfix + '_chi.pdf')
       #canvas.SaveAs(prefix+postfix + '_chi.eps')

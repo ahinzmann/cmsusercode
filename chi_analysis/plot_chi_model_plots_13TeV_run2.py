@@ -1,9 +1,10 @@
 import os, sys
 import array
-from ROOT import * 
+from ROOT import gROOT,gStyle,TFile,TCanvas,TLegend
 
 #gROOT.Reset()
 gROOT.SetStyle("Plain")
+gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
@@ -60,8 +61,11 @@ if __name__ == '__main__':
    prefix="datacard_shapelimit13TeV_run2_"
    postfix="_run2"
    use_UL=True
+   use_GEN=True
    if use_UL:
      postfix="_UL_run2"
+   if use_GEN:
+     postfix="_UL_run2_GEN"
    
    for scenario in ["model"]:
      if use_UL:
@@ -191,19 +195,23 @@ if __name__ == '__main__':
      	#   ]
      f_data=[]
      for name in data:
-  	f_data+=[TFile.Open(prefix+name+"_chi.root")]
+       print("data/"+prefix+name+"_chi.root")
+       f_data+=[TFile.Open("data/"+prefix+name+"_chi.root")]
      f_mc={}
      for m in range(1,len(mc.keys())+1):
        f_mc[m]=[]
      for m in [1,2,3]:
        for name,xsec in mc[m]:
-  	f_mc[m]+=[TFile.Open(prefix+name+"_chi.root")]
+         if use_GEN: name+="-GEN"
+         print("data/"+prefix+name+"_chi.root")
+         f_mc[m]+=[TFile.Open("data/"+prefix+name+"_chi.root")]
      for m in range(4,len(mc.keys())+1):
        for name,xsec in mc[m]:
-  	f_mc[m]+=[TFile.Open(prefix.replace("_run2","")+name+"_chi.root")]
+         print("data/"+prefix.replace("_run2","")+name+"_chi.root")
+         f_mc[m]+=[TFile.Open("data/"+prefix.replace("_run2","")+name+"_chi.root")]
 
      for var in ["mass"]:
-       canvas = TCanvas("","",0,0,200,300)
+       canvas = TCanvas("cv","cv",0,0,200,300)
        canvas.Divide(1,2,0,0,0)
        canvas.GetPad(1).SetPad(0.0,0.30,1.0,1.0)
        canvas.GetPad(1).SetLeftMargin(0.15)
@@ -222,7 +230,8 @@ if __name__ == '__main__':
 
        hist=f_data[0].Get(prefix+data[0].replace("_L1prefire","").replace("_HEM","")+var)
        for i in range(1,len(data)):
-  	   hist.Add(f_data[i].Get(prefix+data[i].replace("_L1prefire","").replace("_HEM","")+var))
+         print(prefix+data[i].replace("_L1prefire","").replace("_HEM","")+var)
+         hist.Add(f_data[i].Get(prefix+data[i].replace("_L1prefire","").replace("_HEM","")+var))
        hist.SetLineColor(1)
        hist.SetMarkerStyle(24)
        hist.SetMarkerColor(1)
@@ -248,12 +257,12 @@ if __name__ == '__main__':
        hist_mc={}
        for m in [1,2,3]:
          v=prefix+mc[m][0][0].replace("-HT200to300","").replace("-0","")+var
-	 print v
+         print(v)
          hist_mc[m]=f_mc[m][0].Get(v)
          for i in range(1,len(mc[m])):
-   	     v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])+var
-	     print v
-  	     hist_mc[m].Add(f_mc[m][i].Get(v),mc[m][i][1]/mc[m][0][1])
+           v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])+var
+           print(v)
+           hist_mc[m].Add(f_mc[m][i].Get(v),mc[m][i][1]/mc[m][0][1])
          hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
          hist_mc[m].SetLineColor(colors[m])
          hist_mc[m].SetStats(False)
@@ -264,7 +273,7 @@ if __name__ == '__main__':
          v=mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var
          hist_mc[m]=f_mc[m][0].Get(v)
          for i in range(1,len(mc[m])):
-  	   hist_mc[m].Add(f_mc[m][i].Get(mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var),mc[m][i][1]/mc[m][0][1])
+           hist_mc[m].Add(f_mc[m][i].Get(mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var),mc[m][i][1]/mc[m][0][1])
          hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
          hist_mc[m].SetLineColor(colors[m])
          hist_mc[m].SetStats(False)
@@ -282,8 +291,8 @@ if __name__ == '__main__':
        ratio=hist.Clone(hist.GetName()+"ratio")
        ratio.Divide(hist,hist)
        for b in range(hist.GetNbinsX()):
-  	 if hist.GetBinContent(b+1)>0:
-  	   ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+         if hist.GetBinContent(b+1)>0:
+           ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
        ratio.SetTitle("")
        ratio.GetYaxis().SetTitle("Sim / Data")
        ratio.GetYaxis().SetTitleSize(0.11)
@@ -304,8 +313,8 @@ if __name__ == '__main__':
          ratio_mc[m]=hist_mc[m].Clone(hist_mc[m].GetName()+"ratio")
          ratio_mc[m].Divide(hist_mc[m],hist)
          for b in range(hist.GetNbinsX()):
-  	   if hist.GetBinContent(b+1)>0:
-  	     ratio_mc[m].SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+           if hist.GetBinContent(b+1)>0:
+             ratio_mc[m].SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
          ratio_mc[m].Draw("histesame")
        ratio.Draw("axissame")
 
@@ -319,138 +328,138 @@ if __name__ == '__main__':
       log=(var=="p_{T1}" or var=="p_{T2}" or var=="METsumET" or var=="#Delta#phi")
       legends=[]
       for mass in range(len(massbins)):
-  	  print var, str(massbins[mass][0])+"_"+str(massbins[mass][1])
-  	  canvas = TCanvas("","",0,0,200,300)
-  	  canvas.Divide(1,2,0,0,0)
-  	  canvas.GetPad(1).SetPad(0.0,0.30,1.0,1.0)
-  	  canvas.GetPad(1).SetLeftMargin(0.15)
-  	  canvas.GetPad(1).SetRightMargin(0.08)
-  	  canvas.GetPad(1).SetTopMargin(0.08)
-  	  canvas.GetPad(1).SetBottomMargin(0.05)
-  	  canvas.GetPad(2).SetPad(0.0,0.0,1.0,0.3)
-  	  canvas.GetPad(2).SetLeftMargin(0.15)
-  	  canvas.GetPad(2).SetRightMargin(0.08)
-  	  canvas.GetPad(2).SetTopMargin(0.08)
-  	  canvas.GetPad(2).SetBottomMargin(0.45)
-  	  canvas.cd(1)
-  	  canvas.GetPad(1).SetLogy(log)
-  	  legend=TLegend(0.45,0.6,0.95,0.90,(str(massbins[mass][0])+"<m_{jj}<"+str(massbins[mass][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
-  	  legends+=[legend]
+        print(var, str(massbins[mass][0])+"_"+str(massbins[mass][1]))
+        canvas = TCanvas("cv","cv",0,0,200,300)
+        canvas.Divide(1,2,0,0,0)
+        canvas.GetPad(1).SetPad(0.0,0.30,1.0,1.0)
+        canvas.GetPad(1).SetLeftMargin(0.15)
+        canvas.GetPad(1).SetRightMargin(0.08)
+        canvas.GetPad(1).SetTopMargin(0.08)
+        canvas.GetPad(1).SetBottomMargin(0.05)
+        canvas.GetPad(2).SetPad(0.0,0.0,1.0,0.3)
+        canvas.GetPad(2).SetLeftMargin(0.15)
+        canvas.GetPad(2).SetRightMargin(0.08)
+        canvas.GetPad(2).SetTopMargin(0.08)
+        canvas.GetPad(2).SetBottomMargin(0.45)
+        canvas.cd(1)
+        canvas.GetPad(1).SetLogy(log)
+        legend=TLegend(0.45,0.6,0.95,0.90,(str(massbins[mass][0])+"<m_{jj}<"+str(massbins[mass][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
+        legends+=[legend]
       
-  	  name=prefix+data[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-  	  if var=="#chi": name+="_rebin1"
-  	  hist=f_data[0].Get(name.replace("_L1prefire","").replace("_HEM",""))
-  	  for i in range(1,len(data)):
-  	      hist.Add(f_data[i].Get(name.replace("2016",data[i]).replace("UL16preVFP",data[i]).replace("_L1prefire","").replace("_HEM","")))
-  	  if var=="#chi":
-  	      hist=hist.Rebin(len(chi_binnings[mass])-1,hist.GetName()+"_rebin1",chi_binnings[mass])
-  	      for b in range(hist.GetNbinsX()):
-  		 hist.SetBinContent(b+1,hist.GetBinContent(b+1)/hist.GetBinWidth(b+1))
-  		 hist.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinWidth(b+1))
-  	  hist.SetLineColor(1)
-  	  hist.SetMarkerStyle(24)
-  	  hist.SetMarkerSize(0.2)
-  	  miny=0
-  	  if hist.Integral()>0:
-  	      miny=log*0.1/hist.GetMaximum()
-  	      hist.Scale(1./hist.Integral())
-  	  hist.SetTitle("")
-  	  #hist.GetXaxis().SetTitle(label[variables.index(var)])
-  	  hist.GetXaxis().SetLabelColor(0)
-  	  hist.GetYaxis().SetTitle("Normalized distribution")
-  	  hist.GetYaxis().SetRangeUser(miny,hist.GetMaximum()*(1.5+log*10))
-  	  #hist.GetXaxis().SetTitleOffset(1.1)
-  	  hist.GetYaxis().SetTitleOffset(1.1)
-  	  hist.GetXaxis().SetLabelSize(0.05)
-  	  hist.GetYaxis().SetLabelSize(0.05)
-  	  hist.GetXaxis().SetTitleSize(0.06)
-  	  hist.GetYaxis().SetTitleSize(0.06)
-  	  hist.SetStats(False)
-  	  hist.Draw("pe")
-          if use_UL:
-            legend.AddEntry(hist,"Data (UL)","lpe")
-          else:
-            legend.AddEntry(hist,"Data (EOY)","lpe")
+        name=prefix+data[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        if var=="#chi": name+="_rebin1"
+        hist=f_data[0].Get(name.replace("_L1prefire","").replace("_HEM",""))
+        for i in range(1,len(data)):
+          hist.Add(f_data[i].Get(name.replace("2016",data[i]).replace("UL16preVFP",data[i]).replace("_L1prefire","").replace("_HEM","")))
+        if var=="#chi":
+          hist=hist.Rebin(len(chi_binnings[mass])-1,hist.GetName()+"_rebin1",chi_binnings[mass])
+          for b in range(hist.GetNbinsX()):
+            hist.SetBinContent(b+1,hist.GetBinContent(b+1)/hist.GetBinWidth(b+1))
+            hist.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinWidth(b+1))
+        hist.SetLineColor(1)
+        hist.SetMarkerStyle(24)
+        hist.SetMarkerSize(0.2)
+        miny=0
+        if hist.Integral()>0:
+          miny=log*0.1/hist.GetMaximum()
+          hist.Scale(1./hist.Integral())
+        hist.SetTitle("")
+        #hist.GetXaxis().SetTitle(label[variables.index(var)])
+        hist.GetXaxis().SetLabelColor(0)
+        hist.GetYaxis().SetTitle("Normalized distribution")
+        hist.GetYaxis().SetRangeUser(miny,hist.GetMaximum()*(1.5+log*10))
+        #hist.GetXaxis().SetTitleOffset(1.1)
+        hist.GetYaxis().SetTitleOffset(1.1)
+        hist.GetXaxis().SetLabelSize(0.05)
+        hist.GetYaxis().SetLabelSize(0.05)
+        hist.GetXaxis().SetTitleSize(0.06)
+        hist.GetYaxis().SetTitleSize(0.06)
+        hist.SetStats(False)
+        hist.Draw("pe")
+        if use_UL:
+          legend.AddEntry(hist,"Data (UL)","lpe")
+        else:
+          legend.AddEntry(hist,"Data (EOY)","lpe")
 
-  	  print "mass bin",mass,"data integral",hist.Integral()
+        print("mass bin",mass,"data integral",hist.Integral())
 
-          for m in [1,2,3]:
-  	    name=prefix+mc[m][0][0].replace("-HT200to300","").replace("-0","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-  	    if var=="#chi": name+="_rebin1"
-  	    hist_mc[m]=f_mc[m][0].Get(name)
-  	    for i in range(1,len(mc[m])):
-  	   	hist_mc[m].Add(f_mc[m][i].Get(name.replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])),mc[m][i][1]/mc[m][0][1])
-  	    if var=="#chi":
-  	   	hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
-  	   	for b in range(hist_mc[m].GetNbinsX()):
-  	 	   hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
-  	 	   hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
-  	    if hist_mc[m].Integral()>0:
-  	   	hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
-  	    hist_mc[m].SetLineColor(colors[m])
-  	    hist_mc[m].SetStats(False)
-  	    hist_mc[m].Draw("histesame")
-  	    legend.AddEntry(hist_mc[m],mclegend[m],"l")
+        for m in [1,2,3]:
+          name=prefix+mc[m][0][0].replace("-HT200to300","").replace("-0","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+          if var=="#chi": name+="_rebin1"
+          hist_mc[m]=f_mc[m][0].Get(name)
+          for i in range(1,len(mc[m])):
+            hist_mc[m].Add(f_mc[m][i].Get(name.replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])),mc[m][i][1]/mc[m][0][1])
+          if var=="#chi":
+            hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
+            for b in range(hist_mc[m].GetNbinsX()):
+              hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
+              hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
+          if hist_mc[m].Integral()>0:
+            hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
+          hist_mc[m].SetLineColor(colors[m])
+          hist_mc[m].SetStats(False)
+          hist_mc[m].Draw("histesame")
+          legend.AddEntry(hist_mc[m],mclegend[m],"l")
 
           for m in range(4,len(mc.keys())+1):
-  	    name=mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-  	    if var=="#chi": name+="_rebin1"
-  	    hist_mc[m]=f_mc[m][0].Get(name)
-  	    for i in range(1,len(mc[m])):
-  	      hist_mc[m].Add(f_mc[m][i].Get(name),mc[m][i][1]/mc[m][0][1])
-  	    if var=="#chi":
-  	      hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
-  	      for b in range(hist_mc[m].GetNbinsX()):
-  		 hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
-  		 hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
-  	    if hist_mc[m].Integral()>0:
-  	      hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
-  	    hist_mc[m].SetLineColor(colors[m])
-  	    hist_mc[m].SetStats(False)
-  	    hist_mc[m].Draw("histesame")
-  	    legend.AddEntry(hist_mc[m],mclegend[m],"l")
+            name=mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+            if var=="#chi": name+="_rebin1"
+            hist_mc[m]=f_mc[m][0].Get(name)
+            for i in range(1,len(mc[m])):
+              hist_mc[m].Add(f_mc[m][i].Get(name),mc[m][i][1]/mc[m][0][1])
+            if var=="#chi":
+              hist_mc[m]=hist_mc[m].Rebin(len(chi_binnings[mass])-1,hist_mc[m].GetName()+"_rebin1",chi_binnings[mass])
+              for b in range(hist_mc[m].GetNbinsX()):
+                hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
+                hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
+            if hist_mc[m].Integral()>0:
+              hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
+            hist_mc[m].SetLineColor(colors[m])
+            hist_mc[m].SetStats(False)
+            hist_mc[m].Draw("histesame")
+            legend.AddEntry(hist_mc[m],mclegend[m],"l")
 
-  	  hist.Draw("lesame")
-  	  hist.Draw("axissame")
+        hist.Draw("lesame")
+        hist.Draw("axissame")
 
-  	  legend.SetTextSize(0.04)
-  	  legend.SetFillStyle(0)
-  	  legend.Draw("same")
+        legend.SetTextSize(0.04)
+        legend.SetFillStyle(0)
+        legend.Draw("same")
 
-  	  canvas.cd(2)
-  	  ratio=hist.Clone(hist.GetName()+"ratio")
-  	  ratio.Divide(hist,hist)
-  	  for b in range(hist.GetNbinsX()):
-  	    if hist.GetBinContent(b+1)>0:
-  	      ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-  	  ratio.SetTitle("")
-  	  ratio.GetYaxis().SetTitle("Sim / Data")
-  	  ratio.GetYaxis().SetTitleSize(0.11)
-  	  ratio.GetYaxis().SetTitleOffset(0.5)
-  	  ratio.SetMarkerSize(0.1)
-  	  ratio.GetYaxis().SetLabelSize(0.13)
-  	  ratio.GetYaxis().SetRangeUser(0,2)
-  	  if var=="#chi":
-  	    ratio.GetYaxis().SetRangeUser(0.5,1.5)
-  	  ratio.GetXaxis().SetNdivisions(506)
-  	  ratio.GetYaxis().SetNdivisions(503)
-  	  ratio.GetXaxis().SetLabelColor(1)
-  	  ratio.GetXaxis().SetTitle(label[variables.index(var)])
-  	  ratio.GetXaxis().SetTitleSize(0.14)
-  	  ratio.GetXaxis().SetTitleOffset(1.1)
-  	  ratio.GetXaxis().SetLabelSize(0.12)
-  	  ratio.Draw("histe")
-          for m in range(1,len(mc.keys())+1):
-  	    ratio_mc[m]=hist_mc[m].Clone(hist_mc[m].GetName()+"ratio")
-  	    ratio_mc[m].Divide(hist_mc[m],hist)
-  	    for b in range(hist.GetNbinsX()):
-  	      if hist.GetBinContent(b+1)>0:
-  	        ratio_mc[m].SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-  	    ratio_mc[m].Draw("histesame")
-  	  ratio.Draw("axissame")
+        canvas.cd(2)
+        ratio=hist.Clone(hist.GetName()+"ratio")
+        ratio.Divide(hist,hist)
+        for b in range(hist.GetNbinsX()):
+          if hist.GetBinContent(b+1)>0:
+            ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+        ratio.SetTitle("")
+        ratio.GetYaxis().SetTitle("Sim / Data")
+        ratio.GetYaxis().SetTitleSize(0.11)
+        ratio.GetYaxis().SetTitleOffset(0.5)
+        ratio.SetMarkerSize(0.1)
+        ratio.GetYaxis().SetLabelSize(0.13)
+        ratio.GetYaxis().SetRangeUser(0,2)
+        if var=="#chi":
+          ratio.GetYaxis().SetRangeUser(0.5,1.5)
+        ratio.GetXaxis().SetNdivisions(506)
+        ratio.GetYaxis().SetNdivisions(503)
+        ratio.GetXaxis().SetLabelColor(1)
+        ratio.GetXaxis().SetTitle(label[variables.index(var)])
+        ratio.GetXaxis().SetTitleSize(0.14)
+        ratio.GetXaxis().SetTitleOffset(1.1)
+        ratio.GetXaxis().SetLabelSize(0.12)
+        ratio.Draw("histe")
+        for m in range(1,len(mc.keys())+1):
+          ratio_mc[m]=hist_mc[m].Clone(hist_mc[m].GetName()+"ratio")
+          ratio_mc[m].Divide(hist_mc[m],hist)
+          for b in range(hist.GetNbinsX()):
+            if hist.GetBinContent(b+1)>0:
+              ratio_mc[m].SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+          ratio_mc[m].Draw("histesame")
+        ratio.Draw("axissame")
 
-  	  canvas.cd(1)
-  	  hist.GetYaxis().SetTitleOffset(1.2)
+        canvas.cd(1)
+        hist.GetYaxis().SetTitleOffset(1.2)
 
-  	  canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".root")
-  	  canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".pdf")
+        canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".root")
+        canvas.SaveAs("plots/chi_"+scenario+"_plots_"+var.replace("_","").replace("{","").replace("}","").replace("#","").replace("+","p").replace("-","m")+"_"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+postfix+".pdf")

@@ -9,8 +9,10 @@ samples=[#("data2016",0,74,""),
          #("QCD2016",3,7,""),
 	 #("QCD2017",4,7,""),
 	 #("QCD2018",5,7,""),
-	 #("QCDpy2018",6,1,""),
-	 #("QCDhw2018",7,1,""),
+#	 ("QCDpy2018",6,1,""),
+#	 ("QCDhw2018",7,1,""),
+	 ("QCDpy2018",6,1,"-GEN"),
+	 ("QCDhw2018",7,1,"-GEN"),
 	 #("dataUL16preVFP",11,58,""),
          #("dataUL16postVFP",12,38,""),
          #("dataUL17",13,61,""),
@@ -39,8 +41,8 @@ samples=[#("data2016",0,74,""),
 	 #("dataNUL18",32,4,"-HEM"),
 	 #("data2023",33,12,"-28May2024"),
 	 #("qcd2023",34,8,"-28May2024"),
-	 ("qcd2023BPix",35,8,"-28May2024"),
-	 ("qbhUL18",36,24,""),
+	 #("qcd2023BPix",35,8,"-28May2024"),
+	 #("qbhUL18",36,24,""),
 	 ]
 
 count=0
@@ -79,5 +81,5 @@ queue 1
     string="condor_submit "+name+".submit"
     if count%5!=4:
       string+=" &"
-    print string
+    print(string)
     count+=1
