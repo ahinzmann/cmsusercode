@@ -33,14 +33,16 @@ def createPlots(sample,prefix,weightname,massbins):
 	        files+=[line.strip()]
     else:
       if "alp" in prefix:
-        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
-	for folderM in foldersM:
-	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "newsamples2" in folderM: continue
-         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
-	 for folder in folders:
-	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample+"/"+folder]
+        #foldersM=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/")
+        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/alp/")
+	for folder in foldersM:
+	 #if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 if not "newsamples2" in folder: continue
+         #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+	 #for folder in folders:
+	 if sample in folder and ".root" in folder:
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/alp/"+folder]
+            #files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/"+folder]
 	    #break
       elif "qcd" in prefix:
         foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
@@ -53,14 +55,14 @@ def createPlots(sample,prefix,weightname,massbins):
             files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")+"/"+folder]
 	    #break
       elif "tripleG" in prefix:
-        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
-	for folderM in foldersM:
-	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "mg" in folderM: continue
-         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
-  	 for folder in folders:
-	  if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample+"/"+folder]
+        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/tripleG")
+	for folder in foldersM:
+	 #if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 if not "mg" in folder: continue
+         #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+  	 #for folder in folders:
+	 if sample in folder and ".root" in folder:
+            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/tripleG/"+folder]
 	    #break
       elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
@@ -130,7 +132,7 @@ def createPlots(sample,prefix,weightname,massbins):
 	  xsec=weightname
 	  weight=1.
 	 event_count+=1
-	 #if event_count>10000: break
+	 #if event_count>100: break
          if event_count%10000==1: print "event",event_count
 	 sumweights+=weight
          jet1=TLorentzVector()
