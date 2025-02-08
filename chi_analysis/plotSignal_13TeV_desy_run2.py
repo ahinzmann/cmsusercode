@@ -34,35 +34,35 @@ def createPlots(sample,prefix,weightname,massbins):
     else:
       if "alp" in prefix:
         #foldersM=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/")
-        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/alp/")
+        foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular/alp/")
 	for folder in foldersM:
-	 #if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
 	 if not "newsamples2" in folder: continue
-         #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+         #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample)
 	 #for folder in folders:
 	 if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/alp/"+folder]
+            files+=["file:///data/dust/user/hinzmann/dijetangular/alp/"+folder]
             #files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/"+folder]
 	    #break
       elif "qcd" in prefix:
-        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular")
+        foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular")
 	for folderM in foldersM:
-	 if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")): continue
+	 if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")): continue
 	 if not "newsamples1" in folderM: continue
-         folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_",""))
+         folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_",""))
 	 for folder in folders:
 	  if sample.replace("qcd_","") in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")+"/"+folder]
+            files+=["file:///data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")+"/"+folder]
 	    #break
       elif "tripleG" in prefix:
-        foldersM=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/tripleG")
+        foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular/tripleG")
 	for folder in foldersM:
-	 #if not os.path.exists("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+	 #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
 	 if not "mg" in folder: continue
-         #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/"+folderM+"/"+sample)
+         #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample)
   	 #for folder in folders:
 	 if sample in folder and ".root" in folder:
-            files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/tripleG/"+folder]
+            files+=["file:///data/dust/user/hinzmann/dijetangular/tripleG/"+folder]
 	    #break
       elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
@@ -74,11 +74,11 @@ def createPlots(sample,prefix,weightname,massbins):
 	    #break
       elif "Nov2022" in sample:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/")
-        #folders=os.listdir("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/")
+        #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/")
 	for folder in folders:
 	  if sample in folder and ".root" in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/"+folder]
-	    #files+=["file:///nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
+	    #files+=["file:///data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
 	    #break
       else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")

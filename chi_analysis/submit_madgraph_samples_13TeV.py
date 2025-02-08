@@ -9,7 +9,7 @@ parser.add_option('--clean', action='store_true',default=False, dest='clean',hel
 (options, args) = parser.parse_args()
 
 print("preparing scripts and workdirs for submission of GEN sample production...")
-gridpack_path = '/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/'
+gridpack_path = '/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/'
 gridpack_suffix = '_slc7_amd64_gcc700_CMSSW_10_6_19_tarball.tar.xz'
 
 names=[
@@ -27,7 +27,7 @@ names=[
     #'QCD_HT4000toInf',
 ]
 
-workdir='/nfs/dust/cms/user/hinzmann/dijetangular/newsamples23/'
+workdir='/data/dust/user/hinzmann/dijetangular/newsamples23/'
 
 if(options.clean):
     print('deleting workdirs..')

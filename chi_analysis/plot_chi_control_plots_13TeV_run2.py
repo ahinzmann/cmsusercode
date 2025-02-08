@@ -71,8 +71,8 @@ if __name__ == '__main__':
    version=""
    version="_run2"; postfix1617="_L1prefire"; postfix18="_HEM"
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
-   use_UL=True
-   use_Run3=False
+   use_UL=False
+   compare_Run2Run3=True
    compare_EOYvsUL=False
    compare_NULvsUL=False
    compare_EOYvsUL_MC=False
@@ -80,7 +80,7 @@ if __name__ == '__main__':
    compare_years=False
    if use_UL:
      version="_UL"+version
-   if use_Run3:
+   if compare_Run2Run3:
      version="_Run3"+version
    if compare_EOYvsUL:
      version="_EOYvsUL"+version
@@ -101,15 +101,15 @@ if __name__ == '__main__':
          ]
     data3=[("UL18", 1, "Data (UL 2018)")
          ]
-   elif use_Run3:
-    data=[("2023-28May2024", 1, "Data (2023)")
-         ]
-    data2=[("2022", 1, "Data (2022)")
-         ]
-    data3=[("UL16preVFP", 1, "Data (UL16-18)"),
+   elif compare_Run2Run3:
+    data=[("UL16preVFP", 1, "Data (Run2)"),
           ("UL16postVFP", 1, ""),
           ("UL17", 1, ""),
           ("UL18", 1, "")
+         ]
+    data2=[("2023-28May2024", 1, "Data (2023)")
+         ]
+    data3=[("2022", 1, "Data (2022)")
          ]
     #data3=[("UL16preVFP", 1, "Data (UL 2016)"),
     #      ("UL16postVFP", 1, "")
@@ -185,42 +185,8 @@ if __name__ == '__main__':
         ("UL16postVFP", 1, ""),
         ("UL17", 1, ""),
         ("UL18", 1, "")]
-   elif use_Run3:
-    mc=[("2023_QCDmadgraph-28May2024-HT200to400",17.060/27.207*1.877e+06/37041533, "MG+Py QCD (2023)"),
-       ("2023_QCDmadgraph-28May2024-HT400to600",17.060/27.207*9.521e+04/36680240, ""),
-       ("2023_QCDmadgraph-28May2024-HT600to800",17.060/27.207*1.345e+04/34513335, ""),
-       ("2023_QCDmadgraph-28May2024-HT800to1000",17.060/27.207*3.106e+03/37794527, ""),
-       ("2023_QCDmadgraph-28May2024-HT1000to1200",17.060/27.207*8.938e+02/32193981, ""),
-       ("2023_QCDmadgraph-28May2024-HT1200to1500",17.060/27.207*3.808e+02/40348927, ""),
-       ("2023_QCDmadgraph-28May2024-HT1500to2000",17.060/27.207*1.157e+02/39490287, ""),
-       ("2023_QCDmadgraph-28May2024-HT2000",17.060/27.207*2.621e+01/42353820, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT200to400",9.525/27.207*2.030e+06/17128041, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT400to600",9.525/27.207*9.459e+04/20454226, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT600to800",9.525/27.207*1.417e+04/19700360, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT800to1000",9.525/27.207*3.013e+03/17683808, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT1000to1200",9.525/27.207*9.183e+02/18270279, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT1200to1500",9.525/27.207*3.929e+02/18878616, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT1500to2000",9.525/27.207*1.340e+02/17117867, ""),
-       ("2023_QCDmadgraphBPix-28May2024-HT2000",9.525/27.207*2.676e+01/20420289, ""),
-       ]
-    mc2=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
-       ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
-       ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
-       ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
-       ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
-       ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
-       ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
-       ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
-       ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
-       ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
-       ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
-       ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
-       ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
-       ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
-       ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
-       ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
-       ]
-    mc3=[("UL16preVFP_QCDmadgraph-HT200to300",36.31/137.62*19.52/36.33*1710000./17969592, "MG+Py QCD (UL16-18)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
+   elif compare_Run2Run3:
+    mc=[("UL16preVFP_QCDmadgraph-HT200to300",36.31/137.62*19.52/36.33*1710000./17969592, "MG+Py QCD (Run2)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
        ("UL16preVFP_QCDmadgraph-HT300to500",36.31/137.62*19.52/36.33*347500./13586390, ""),
        ("UL16preVFP_QCDmadgraph-HT500to700",36.31/137.62*19.52/36.33*30363.051/55497082, ""),
        ("UL16preVFP_QCDmadgraph-HT700to1000",36.31/137.62*19.52/36.33*6428.869/15242034, ""),
@@ -248,6 +214,40 @@ if __name__ == '__main__':
        ("UL18_QCDmadgraph-HT1000to1500",59.83/137.62*1122.659/14244456, ""),
        ("UL18_QCDmadgraph-HT1500to2000",59.83/137.62*108.163/10751607, ""),
        ("UL18_QCDmadgraph-HT2000toInf",59.83/137.62*22.008/5278880, ""),
+       ]
+    mc2=[("2023_QCDmadgraph-28May2024-HT200to400",17.060/27.207*1.877e+06/37041533, "MG+Py QCD (2023)"),
+       ("2023_QCDmadgraph-28May2024-HT400to600",17.060/27.207*9.521e+04/36680240, ""),
+       ("2023_QCDmadgraph-28May2024-HT600to800",17.060/27.207*1.345e+04/34513335, ""),
+       ("2023_QCDmadgraph-28May2024-HT800to1000",17.060/27.207*3.106e+03/37794527, ""),
+       ("2023_QCDmadgraph-28May2024-HT1000to1200",17.060/27.207*8.938e+02/32193981, ""),
+       ("2023_QCDmadgraph-28May2024-HT1200to1500",17.060/27.207*3.808e+02/40348927, ""),
+       ("2023_QCDmadgraph-28May2024-HT1500to2000",17.060/27.207*1.157e+02/39490287, ""),
+       ("2023_QCDmadgraph-28May2024-HT2000",17.060/27.207*2.621e+01/42353820, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT200to400",9.525/27.207*2.030e+06/17128041, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT400to600",9.525/27.207*9.459e+04/20454226, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT600to800",9.525/27.207*1.417e+04/19700360, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT800to1000",9.525/27.207*3.013e+03/17683808, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT1000to1200",9.525/27.207*9.183e+02/18270279, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT1200to1500",9.525/27.207*3.929e+02/18878616, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT1500to2000",9.525/27.207*1.340e+02/17117867, ""),
+       ("2023_QCDmadgraphBPix-28May2024-HT2000",9.525/27.207*2.676e+01/20420289, ""),
+       ]
+    mc3=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
+       ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
+       ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
+       ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
+       ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
+       ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
+       ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
+       ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
+       ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
+       ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
+       ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
+       ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
+       ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
+       ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
+       ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
+       ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
        ]
     #mc3=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
     #   ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
@@ -350,7 +350,7 @@ if __name__ == '__main__':
       else: postfix=""
       f_data3+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print(prefix+name+postfix+"_chi.root")
-   if use_Run3:
+   if compare_Run2Run3:
      lumi=[137.62,35.18,27.20]
    else:
      lumi=[36.33,41.53,59.74]
@@ -543,9 +543,12 @@ if __name__ == '__main__':
      for b in range(hist.GetNbinsX()):
        if hist.GetBinContent(b+1)>0:
          ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+     if compare_Run2Run3:
+       histbackup=hist
+       hist=hist_mc # use MC as reference for first ratio plot
      ratio.SetTitle("")
-     ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))))
-     ratio.GetYaxis().SetTitleSize(0.18)
+     ratio.GetYaxis().SetTitle("Run / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
+     ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
      ratio.GetYaxis().SetTitleOffset(0.3)
      ratio.SetMarkerSize(0.1)
      ratio.GetYaxis().SetLabelSize(0.2)
@@ -578,6 +581,8 @@ if __name__ == '__main__':
          ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
      ratio_mc3.Draw("histsame")
      ratio.Draw("axissame")
+     if compare_Run2Run3:
+       hist=histbackup
 
      canvas.cd(3)
      ddratio=hist.Clone(hist.GetName()+"ddratio")
@@ -587,15 +592,17 @@ if __name__ == '__main__':
          ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ddratio.SetTitle("")
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
-       ddratio.GetYaxis().SetTitle("Sim / "+data[0][0]+" Sim")
+       ddratio.GetYaxis().SetTitle("Sim / "+data[0][2]+"")
      else:
-       ddratio.GetYaxis().SetTitle("Data / "+data[0][0]+" Data")
+       ddratio.GetYaxis().SetTitle("Data / "+data[0][2]+"")
    
-     ddratio.GetYaxis().SetTitleSize(0.11)
+     ddratio.GetYaxis().SetTitleSize(0.11/(len(ddratio.GetYaxis().GetTitle())/10))
      ddratio.GetYaxis().SetTitleOffset(0.5)
      ddratio.SetMarkerSize(0.1)
      ddratio.GetYaxis().SetLabelSize(0.13)
      ddratio.GetYaxis().SetRangeUser(0.8,1.2)
+     if compare_Run2Run3:
+       ddratio.GetYaxis().SetRangeUser(0,2)
      ddratio.GetXaxis().SetNdivisions(506)
      ddratio.GetYaxis().SetNdivisions(503)
      ddratio.GetXaxis().SetLabelColor(1)
@@ -870,9 +877,12 @@ if __name__ == '__main__':
         for b in range(hist.GetNbinsX()):
           if hist.GetBinContent(b+1)>0:
             ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+        if compare_Run2Run3:
+          histbackup=hist
+          hist=hist_mc # use MC as reference for first ratio plot
         ratio.SetTitle("")
-        ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data"))))
-        ratio.GetYaxis().SetTitleSize(0.18)
+        ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
+        ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
         ratio.GetYaxis().SetTitleOffset(0.3)
         ratio.SetMarkerSize(0.1)
         ratio.GetYaxis().SetLabelSize(0.2)
@@ -914,6 +924,8 @@ if __name__ == '__main__':
             ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
         ratio_mc3.Draw("histsame")
         ratio.Draw("axissame")
+        if compare_Run2Run3:
+          hist=histbackup
 
         canvas.cd(3)
         ddratio=hist.Clone(hist.GetName()+"ddratio")
@@ -923,10 +935,10 @@ if __name__ == '__main__':
             ddratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
         ddratio.SetTitle("")
         if compare_EOYvsUL_MC or compare_RECOvsGEN:
-          ddratio.GetYaxis().SetTitle("Sim / "+data[0][0]+" Sim")
+          ddratio.GetYaxis().SetTitle("Sim / "+data[0][2]+"")
         else:
-          ddratio.GetYaxis().SetTitle("Data / "+data[0][0]+" Data")
-        ddratio.GetYaxis().SetTitleSize(0.11)
+          ddratio.GetYaxis().SetTitle("Data / "+data[0][2]+"")
+        ddratio.GetYaxis().SetTitleSize(0.11/(len(ddratio.GetYaxis().GetTitle())/10))
         ddratio.GetYaxis().SetTitleOffset(0.5)
         ddratio.SetMarkerSize(0.1)
         ddratio.GetYaxis().SetLabelSize(0.13)

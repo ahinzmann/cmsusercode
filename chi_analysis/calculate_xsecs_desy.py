@@ -1,6 +1,6 @@
 import os
-#d="/nfs/dust/cms/user/hinzmann/dijetangular/13p6TeV/"
-d="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
+#d="/data/dust/user/hinzmann/dijetangular/13p6TeV/"
+d="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
 files=os.listdir(d)
 xsecs={}
 

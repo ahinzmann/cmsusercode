@@ -7,7 +7,7 @@ for n in range(480):
     with open("submit/"+name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 cmsenv
 python add_systematics_13TeV_run2.py """+str(n)+"""
 """)
@@ -18,7 +18,7 @@ python add_systematics_13TeV_run2.py """+str(n)+"""
 universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
-initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
+initialdir        = /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
 output            = submit/"""+name+""".o
 error             = submit/"""+name+""".e
 log               = submit/"""+name+""".log

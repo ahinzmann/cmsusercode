@@ -53,7 +53,7 @@ for year,number,ns,postfix in samples:
     with open(name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 cmsenv
 python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
 """)
@@ -64,7 +64,7 @@ python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postf
 universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
-initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
+initialdir        = /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
 output            = """+name+""".o
 error             = """+name+""".e
 log               = """+name+""".log

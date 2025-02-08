@@ -40,11 +40,11 @@ def getFitResults(fitFile, treename):
     fitConstraints=[]
     for name in uncertaintynames:
       if tree.floatParsFinal().find(name):
-        print name, tree.floatParsFinal().find(name).getVal(), tree.floatParsFinal().find(name).getError()
+        print(name, tree.floatParsFinal().find(name).getVal(), tree.floatParsFinal().find(name).getError())
         fitParameters.append(tree.floatParsFinal().find(name).getVal())
         fitConstraints.append(tree.floatParsFinal().find(name).getError())
       else:
-        print name, "not found"
+        print(name, "not found")
         fitParameters.append(0)
         fitConstraints.append(1)
     return fitParameters, fitConstraints
@@ -58,7 +58,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
             N=hdata.GetBinContent(b+1)
         else:
             N=1./pow(hdata.GetBinError(b+1)/hdata.GetBinContent(b+1),2)
-        print N
+        print(N)
         nevents+=N
         L=0
         if N>0:
@@ -66,7 +66,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
         U=ROOT.Math.gamma_quantile_c(alpha/2.,N+1,1.)
         hdataG.SetPointEYlow(b,(N-L)/N*hdata.GetBinContent(b+1))
         hdataG.SetPointEYhigh(b,(U-N)/N*hdata.GetBinContent(b+1))
-    print "data events:", nevents
+    print("data events:", nevents)
 
     hdataGsysstat=hdataG.Clone(hdataG.GetName()+"_sysstat")
     
@@ -74,11 +74,11 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
     for nn in range(len(fitParameters)):
         for b in range(hist.GetXaxis().GetNbins()):
             if fitParameters[nn]>0:
-        	hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
-        	histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
             else:
-        	hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
-        	histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
         	    
     h2new=histbackup.Clone("down"+str(massbins[massbin]))
     h3new=histbackup.Clone("up"+str(massbins[massbin]))
@@ -149,31 +149,44 @@ if __name__=="__main__":
     runs="2" # "2" or "3" or "23"
     run=runs[-1]
   
-    controlRegionCheck=True
+    controlRegionCheck=False
+    backgroundOnlyCheck=True
     unfoldedData=False
     isCB=False
     version="v6b"
 
-    print "start ROOT"
+    print("start ROOT")
     #gROOT.Reset()
-    gROOT.SetStyle("Plain")
     gROOT.SetBatch(True)
+    gROOT.SetStyle("Plain")
     gStyle.SetOptStat(0)
     gStyle.SetOptFit(0)
     gStyle.SetTitleOffset(1.2,"Y")
-    gStyle.SetPadLeftMargin(0.15)
+    gStyle.SetPadLeftMargin(0.18)
     gStyle.SetPadBottomMargin(0.11)
-    gStyle.SetPadTopMargin(0.05)
+    gStyle.SetPadTopMargin(0.055)
     gStyle.SetPadRightMargin(0.05)
-    gStyle.SetMarkerSize(2.5)
+    gStyle.SetMarkerSize(1.5)
     gStyle.SetHistLineWidth(1)
     gStyle.SetStatFontSize(0.020)
     gStyle.SetTitleSize(0.06, "XYZ")
     gStyle.SetLabelSize(0.05, "XYZ")
+    gStyle.SetNdivisions(510, "XYZ")
     gStyle.SetLegendBorderSize(0)
     gStyle.SetPadTickX(1)
     gStyle.SetPadTickY(1)
-    gStyle.SetEndErrorSize(5)
+    gStyle.SetEndErrorSize(8)
+
+    print("load CMS style")
+    gROOT.LoadMacro("CMS_lumi.C");
+    iPeriod = 5;	#// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
+    iPos = 33;
+    #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
+    #// iPos=11 : top-left, left-aligned
+    #// iPos=33 : top-right, right-aligned
+    #// iPos=22 : center, centered
+    #// mode generally : 
+    #//   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
 
     if unfoldedData:
         SaveDir="./fitcheckGENv6b/"
@@ -186,7 +199,8 @@ if __name__=="__main__":
         os.mkdir(SaveDir)
 
     signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[7000]
+    if backgroundOnlyCheck:
+      signalMasses=[7000]
     if controlRegionCheck:
       signalMasses=[2000]
 
@@ -200,7 +214,7 @@ if __name__=="__main__":
             signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_"+ga
             GA[counter]=ga
             counter+=1
-    print (counter-1)
+    print(counter-1)
     #print signalName,signalExtraName
 
     if run=="2":
@@ -221,7 +235,7 @@ if __name__=="__main__":
     #for j in [1102,1103,1104,1105,1106,1107,1108]:
     for j in [1106,1108]:
         for signalMass in signalMasses:
-	    if version=="v6":
+            if version=="v6":
               if signalMass<=2500:
             	  massbins=[(2400,3000)]
               elif signalMass<=3000:
@@ -256,38 +270,38 @@ if __name__=="__main__":
               else:
             	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
             elif version=="v9":
-  	      if signalMass<=2500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
-  	      elif signalMass<=3000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
-  	      elif signalMass<=3500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
-  	      elif signalMass<=4000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
-  	      elif signalMass<=4500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
-  	      elif signalMass<=5000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
-  	      elif signalMass<=6000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
-  	      else:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+              if signalMass<=2500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
+              elif signalMass<=3000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
+              elif signalMass<=3500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+              elif signalMass<=5000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+              elif signalMass<=6000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+              else:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            if controlRegionCheck:
+            if controlRegionCheck or backgroundOnlyCheck:
               massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
-            uncertaintynames=["pdf","jer","prefire","scale","scaleAlt"] # "scale", "sim"
+            uncertaintynames=["pdf","jer","prefire","scale","scaleAlt","trigger"] # "scale", "sim"
             uncertaintynames.append("model")
             uncertaintynames.append("JERtail")
             uncertaintynames.append("sim")
-            for m in massbins:
+            for m in massbins[1:]:
                 uncertaintynames.append("model"+str(m[0]))
-            for m in massbins:
+            for m in massbins[1:]:
                 uncertaintynames.append("JERtail"+str(m[0]))
-            for m in massbins:
+            for m in massbins[1:]:
                 uncertaintynames.append("sim"+str(m[0]))
             #for m in massbins:
             #    uncertaintynames.append("scale"+str(m[0]))
@@ -326,7 +340,7 @@ if __name__=="__main__":
                 #masstext=str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")
                 #if unfoldedData:
                 #    histname="dijet_mass_"+masstext+"_chi_unfolded"
-    	        #else:
+                #else:
                 #    histname="dijet_mass_"+masstext+"_chi"
               
                 #print filename
@@ -353,21 +367,25 @@ if __name__=="__main__":
                 else:
                     fitFile=TFile("limitsDetLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
 
-                print "Fit Parameters from:", fitFile.GetName()
+                print("Fit Parameters from:", fitFile.GetName())
 
                 f=TFile.Open(filename)
                 new_hists+=[f]
 
-		dataname="data_obs#chi"+masstext+"_rebin1"
-                print "Data Hist Name:",dataname
+                dataname="data_obs#chi"+masstext+"_rebin1"
+                print("Data Hist Name:",dataname)
 		
                 h14=f.Get(dataname)
-		divBinWidth(h14)
-                h14.SetLineColor(4)
+                divBinWidth(h14)
+                h14.SetLineColor(1)
+                h14.SetMarkerStyle(20)
+                h14.SetMarkerSize(0.8)
+                h14.SetMarkerColor(1)
+                h14.SetLineWidth(1)
                 new_hists+=[h14]
                 
-		basename=histnameprefix+"_ALT#chi"+masstext+"_rebin1"
-                print "Background Hist Name:",basename
+                basename=histnameprefix+"_ALT#chi"+masstext+"_rebin1"
+                print("Background Hist Name:",basename)
 
                 # NLO OCD plot (with EWK correction)
                 
@@ -377,16 +395,23 @@ if __name__=="__main__":
                 new_hists+=[hNloQcd]
     
                 for b in range(hNloQcd.GetXaxis().GetNbins()):
-    	            hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
+                    hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
     
-                hNloQcd.SetLineColor(1)
-                hNloQcd.SetLineStyle(2)
-                hNloQcd.SetLineWidth(1)
+                hNloQcd.SetLineColor(4)
+                hNloQcd.SetLineStyle(3)
+                hNloQcd.SetLineWidth(2)
             
                 hNloQcd.SetTitle("")
-                hNloQcd.GetXaxis().SetTitle("#chi")
-                hNloQcd.GetXaxis().SetTitleOffset(0.7)
+                hNloQcd.GetXaxis().SetTitle("#chi_{dijet}")
                 hNloQcd.GetYaxis().SetTitle("N")
+                hNloQcd.GetYaxis().SetTitleOffset(1.4)
+                hNloQcd.GetXaxis().SetTitleOffset(0.8)
+                hNloQcd.GetYaxis().SetTitleSize(0.05)
+                hNloQcd.GetYaxis().SetLabelSize(0.04)
+                hNloQcd.GetXaxis().SetTitleSize(0.05)
+                hNloQcd.GetXaxis().SetLabelSize(0.04)
+                hNloQcd.GetXaxis().SetTickLength(0.03)
+                hNloQcd.GetYaxis().SetNdivisions(505)
 
                 # QCD systematics
 
@@ -399,7 +424,7 @@ if __name__=="__main__":
                 divBinWidth(hbPrefit)
                 hbPrefit.SetLineWidth(1)
                 hbPrefit.SetLineColor(1)
-                hbPrefit.SetLineStyle(1)
+                hbPrefit.SetLineStyle(2)
                 new_hists+=[hbPrefit]
 
                 
@@ -411,7 +436,7 @@ if __name__=="__main__":
 
                 # DM plot
                 basename=histnameprefix+"#chi"+masstext+"_rebin1"
-                print "Signal Hist Name:",basename
+                print("Signal Hist Name:",basename)
                 
                 hDm_orig=f.Get(basename)
                 new_hists+=[hDm_orig]
@@ -421,7 +446,7 @@ if __name__=="__main__":
                 for b in range(hDm.GetXaxis().GetNbins()):
     	            hDm.SetBinContent(b+1,hDm.GetBinContent(b+1)/hDm.GetBinWidth(b+1))
     
-                hDm.SetLineColor(2)
+                hDm.SetLineColor(kGreen+3)
                 hDm.SetLineStyle(5)
                 hDm.SetLineWidth(2)
             
@@ -434,9 +459,9 @@ if __name__=="__main__":
 
                 hsPrefit=hDm_orig.Clone("DMprefit"+str(massbins[massbin]))
                 divBinWidth(hsPrefit)
-                hsPrefit.SetLineWidth(2)
+                hsPrefit.SetLineWidth(1)
                 hsPrefit.SetLineColor(2)
-                hsPrefit.SetLineStyle(1)
+                hsPrefit.SetLineStyle(5)
                 new_hists+=[hsPrefit]
 
                 # Shift theory predictions according to fitted signal strength
@@ -452,32 +477,33 @@ if __name__=="__main__":
         
                 # Plotting
                 h2bnew.SetLineStyle(1)
-                h2bnew.SetLineColor(15)
+                h2bnew.SetLineColor(kMagenta)
                 h2bnew.SetFillColor(10)
                 
                 h3bnew.SetLineStyle(1)
-                h3bnew.SetLineColor(15)
-                h3bnew.SetFillColor(15)
+                h3bnew.SetLineColor(kMagenta)
+                h3bnew.SetFillColor(kMagenta)
     
                 h3newnew=h3bnew.Clone()
                 h3newnew.SetLineStyle(2)
-                h3newnew.SetLineColor(1)
-        
+                h3newnew.SetLineColor(4)
+                h3newnew.SetLineWidth(4)
+      
                 new_hists+=[h2bnew]
                 new_hists+=[h3bnew]
         
-                canvas=TCanvas("post-fit", "post-fit", 0, 0, 300, 350)
+                canvas=TCanvas("post-fit", "post-fit", 0, 0, 650, 650)
                 canvas.cd()
 
-   	        if massbins[massbin][0]>=7000:
-   	   	    hNloQcd.SetMinimum(0)
-   	   	    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*3.)
-   	        elif massbins[massbin][0]>=5400:
-   	   	    hNloQcd.SetMinimum(0.02*hNloQcd.Integral()*15/12)
-   	   	    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*15/12)
-   	        else:
-   	   	    hNloQcd.SetMinimum(0.045*hNloQcd.Integral()*15/12)
-   	   	    hNloQcd.SetMaximum(0.12*hNloQcd.Integral()*15/12)
+                if massbins[massbin][0]>=7000:
+                    hNloQcd.SetMinimum(0)
+                    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*3.)
+                elif massbins[massbin][0]>=5400:
+                    hNloQcd.SetMinimum(0.02*hNloQcd.Integral()*15/12)
+                    hNloQcd.SetMaximum(0.22*hNloQcd.Integral()*15/12)
+                else:
+                    hNloQcd.SetMinimum(0.045*hNloQcd.Integral()*15/12)
+                    hNloQcd.SetMaximum(0.12*hNloQcd.Integral()*15/12)
 
                 hNloQcd.Draw("axissame")
                 h3bnew.Draw("histsame")
@@ -487,20 +513,32 @@ if __name__=="__main__":
                 #h14Gsysstat.Draw("zesame")
                 hNloQcd.Draw("histsame")
                 hbPrefit.Draw("histsame")
-                if not controlRegionCheck:
+                if not controlRegionCheck and not backgroundOnlyCheck:
                   hDm.Draw("histsame")
                   hsPrefit.Draw("histsame")
                 hNloQcd.Draw("axissame")
 
-                l1=TLegend(0.19,0.6,0.45,0.95,masstext.replace("_","<m_{jj}<"))
-                l1.SetFillStyle(0)
-                l1.SetTextSize(0.035)
-                l1.Draw("same")
+                ylabel=0.5
+                
+                if "3000" in masstext: title="2.4 < #font[72]{M_{jj}} < 3.0 TeV"
+                if "3600" in masstext: title="3.0 < #font[72]{M_{jj}} < 3.6 TeV"
+                if "4200" in masstext: title="3.6 < #font[72]{M_{jj}} < 4.2 TeV"
+                if "4800" in masstext: title="4.2 < #font[72]{M_{jj}} < 4.8 TeV"
+                if "5400" in masstext: title="4.8 < #font[72]{M_{jj}} < 5.4 TeV"
+                if "6000" in masstext: title="5.4 < #font[72]{M_{jj}} < 6.0 TeV"
+                if "7000" in masstext: title="6.0 < #font[72]{M_{jj}} < 7.0 TeV"
+                if "13000" in masstext: title=" #font[72]{M_{jj}} > 7.0 TeV"
+
+                l=TLegend(0.6,ylabel,1.0,ylabel+0.005,title)
+                l.SetTextSize(0.035)
+                l.SetFillStyle(0)
+                l.Draw("same")
+                new_hists+=[l]
 
                 l3=TLegend(0.19,0.8,0.45,0.95,"M_{Med}="+str(signalMass)+", g_{q}="+GA[j].replace("p","."))
                 l3.SetFillStyle(0)
                 l3.SetTextSize(0.035)
-                if not controlRegionCheck:
+                if not controlRegionCheck and not backgroundOnlyCheck:
                   l3.Draw("same")
                 
                 if unfoldedData:
@@ -510,26 +548,28 @@ if __name__=="__main__":
                 else:
                     l2=TLegend(0.45,0.6,0.95,0.93,"Detector-Level")
                 
-                l2.SetTextSize(0.035)
+                l2.SetTextSize(0.033)
                 l2.AddEntry(h14,"Data #pm stat","ple")
                 l2.AddEntry(h3newnew,"QCD post-fit #pm sys","fl")
                 l2.AddEntry(hbPrefit,"QCD pre-fit","l")
-                if not controlRegionCheck:
+                if not controlRegionCheck and not backgroundOnlyCheck:
                   l2.AddEntry(hDm,"QCD+Signal post-fit","fl")
                   l2.AddEntry(hsPrefit,"QCD+Signal pre-fit","l")
                 l2.SetFillStyle(0)
                 l2.Draw("same")
         
                 h2bnew.SetLineStyle(1)
-                h2bnew.SetLineColor(15)
+                h2bnew.SetLineColor(kMagenta)
                 h2bnew.SetFillColor(10)
                 
                 h3bnew.SetLineStyle(1)
-                h3bnew.SetLineColor(15)
-                h3bnew.SetFillColor(15)
+                h3bnew.SetLineColor(kMagenta)
+                h3bnew.SetFillColor(kMagenta)
 
-                print "systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1)
+                print("systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1))
+
+                CMS_lumi( canvas, iPeriod, iPos );
         
-                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else histnameprefix)+"_"+masstext+"_run2.pdf")
+                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix))+"_"+masstext+"_run2.pdf")
 
                 #sys.exit()

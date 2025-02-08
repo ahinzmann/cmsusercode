@@ -11,7 +11,7 @@ for fa in fas:
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /afs/desy.de/user/h/hinzmann/rivet/CMSSW_10_6_16/src
 cmsenv
-cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 python plotSignal_13TeV_desy_run2.py """+samplename+""" """+str(fas.index(fa))+"""
 """)
     with open(samplename+str(fas.index(fa))+".submit",'w+') as htc_config:
@@ -21,7 +21,7 @@ python plotSignal_13TeV_desy_run2.py """+samplename+""" """+str(fas.index(fa))+"
 universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
-initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
+initialdir        = /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
 output            = """+samplename+"""_"""+fa+""".o
 error             = """+samplename+"""_"""+fa+""".e
 log               = """+samplename+"""_"""+fa+""".log

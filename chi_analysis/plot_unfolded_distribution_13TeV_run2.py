@@ -45,7 +45,7 @@ if __name__ == '__main__':
     compareNoUncertainty=False
     noNorm=False
     run="2"
-    prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     legends=[]
     new_hists=[]
 
-    filename="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
+    filename="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
     print(filename)
     fitfile = TFile.Open(filename)
     fittree=fitfile.Get("fit_mdf")
@@ -86,12 +86,12 @@ if __name__ == '__main__':
     fitConstraints=[]
 
     if compareNoUncertainty:
-      filenamed=("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name.replace("_withUncertainties","")+"_run"+run+".root")
+      filenamed=("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name.replace("_withUncertainties","")+"_run"+run+".root")
       print(filenamed)
       fd = TFile.Open(filenamed)
       new_hists+=[fd]
     
-    fout=TFile.Open("/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+"_run"+run+".root","RECREATE")
+    fout=TFile.Open("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+"_run"+run+".root","RECREATE")
 
     if onlyMC: name+="_MC"
     if onlyData: name+="_data"

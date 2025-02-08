@@ -1,5 +1,5 @@
 import os
-from ROOT import *
+from ROOT import TFile
 import array
 
 massbinssets=[[(7000,13000)],
@@ -19,13 +19,13 @@ signal="QCD"
 signalf="GEN-QCD-run2"
 signalMass=""
 
-dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
-prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLONov21/datacard_shapelimit13TeV"
+dire="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
+prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLONov21/datacard_shapelimit13TeV"
 
 for massbins in massbinssets:
     limits={}
     name=("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")
-    print name
+    print(name)
     f1=open("goodnessfit"+name+".txt")
     observed=0
     for l in f1.readlines():
@@ -59,4 +59,4 @@ for massbins in massbinssets:
        sigma=2.*((observed-expected)/max((expected95up-expected),(expected-expected95down)))
       else:
        sigma=2.*((observed-expected)/(expected95down-expected))
-    print observed, expected, expected68down, expected68up, sigma
+    print(observed, expected, expected68down, expected68up, sigma)

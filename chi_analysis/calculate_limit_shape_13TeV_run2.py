@@ -520,7 +520,7 @@ for model in models:
     signalMasses=[0.0025,0.005,0.0075,0.01,0.015,0.02,0.025,0.03,0.04,0.05,0.1]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400)]
 
- dire="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
+ dire="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  if run=="2":
    if useM2:
      prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"

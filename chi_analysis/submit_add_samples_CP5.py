@@ -203,7 +203,7 @@ process.schedule = cms.Schedule(process.generation_step,process.p,process.endpat
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd ~/rivet/CMSSW_10_6_16/src/SubstructureProfessor/Julian
 cmsenv
-cd /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 cmsRun """+samplename+str(jobnum)+""".py
 #gfal-copy """+samplename+str(jobnum)+""".root "srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/"
 #rm """+samplename+str(jobnum)+""".root
@@ -215,7 +215,7 @@ cmsRun """+samplename+str(jobnum)+""".py
 universe          = vanilla
 notification      = Error
 notify_user       = andreas.hinzmann@desy.de
-initialdir        = /nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
+initialdir        = /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/
 output            = """+samplename+str(jobnum)+""".o
 error             = """+samplename+str(jobnum)+""".e
 log               = """+samplename+str(jobnum)+""".log

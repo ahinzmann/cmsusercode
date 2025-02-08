@@ -27,7 +27,7 @@ if __name__ == '__main__':
     trivialClosure=False
     withUncertainties=True
     run="2"
-    prefix="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     legends=[]
     new_hists=[]
 
-    filename="/nfs/dust/cms/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
+    filename="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
     print filename
     fitfile = TFile.Open(filename)
     fittree=fitfile.Get("fit_mdf")

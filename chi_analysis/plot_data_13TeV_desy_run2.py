@@ -53,8 +53,8 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
     else:
       files=[sample]
     #files=["/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/dijetangular/dijetChi_tree.root"]
-    #files=["/nfs/dust/cms/user/hinzmann/dijetangular/workdir/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1_0_tree.root"]
-    #files=["/nfs/dust/cms/user/hinzmann/dijetangular/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1-0.root"]
+    #files=["/data/dust/user/hinzmann/dijetangular/workdir/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1_0_tree.root"]
+    #files=["/data/dust/user/hinzmann/dijetangular/dijetChiUL16preVFP_RunB_ver2_RunII_106X_v1-0.root"]
     if correctPrefire and "UL16preVFP" in sample:
       prefiremap=prefireUL16preVFP
     elif correctPrefire and "UL16postVFP" in sample:
