@@ -33,7 +33,8 @@ AxialDM=True
 injectSignal=False
 dataWithSignal="_DMAxial_Dijet_LO_Mphi_4000_3000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1_chi_inject.root"
 
-jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to all
+#jesSources=27 # 1 corresponds to the single overall variation, 27 UL (23EOY) to all
+jesSources=30 # 1 corresponds to the single overall variation, 30 UL (decorrelated PileUpPtEC1 across years)
 jerSources=1 # 1 corresponds to the single overall variation, 1 UL (6EOY) to all
 uncorrelatedSimUncertainties=True
 separateScaleUncertainties=False
@@ -553,7 +554,7 @@ for model in models:
         prefix="/uscms_data/d3/jingyu/ChiAnalysis/DMlimits/CMSSW_9_2_4/src/cmsusercode/chi_analysis/crystalBallSmearedAug30/datacard_shapelimit13TeV"
     if isInjection:
         prefix=prefix.replace("/datacard_","Injection0p75/datacard_")
-    print prefix
+    print(prefix)
 
     name="limits"+testStat+asym+str(model)+"_"+signal
      
@@ -570,12 +571,12 @@ for model in models:
         name=name+"Injection0p75"
  else:
     name="limits"+testStat+asym+str(model)+"_"+signal  
- print name
+ print(name)
 
  limits={}
  for signalMass in signalMasses:
     signalWithMass=(signal+str(signalMass)+signalExtra).replace("MD"+str(signalMass),"MD"+str(signalMass)+"_MBH"+str(signalMass+1000))
-    print signalWithMass
+    print(signalWithMass)
 
     if signalWithMass=="CIplusLL8000":
             fname=prefix + '_GENnp-0-run'+run+'_chi.root'
@@ -860,7 +861,7 @@ for model in models:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
       else:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
-    print fname
+    print(fname)
     if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal:
         signalWithMass="QCD"+signalWithMass
 
@@ -872,8 +873,8 @@ for model in models:
           massbins.insert(allmassbins.index(massbin),massbin)
         else:
           break
-    print "massbins", massbins
-    print "signalmassbins", signalmassbins
+    print("massbins", massbins)
+    print("signalmassbins", signalmassbins)
     
     statUncertainties=[]
     if theoryStatUncertainties:
@@ -895,7 +896,7 @@ for model in models:
              statUncertainties+=["stat"+str(massindex)+"_"+str(chibin)]
 
     def system_call(command):
-       print command
+       print(command)
        p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
        return p.stdout.read()
 
@@ -937,7 +938,7 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
     for i in range(len(massbins)):
        text+="bin"+str(i)+" "
     text+="\nobservation "
-    print "data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"
+    print("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
     for i in range(len(massbins)):
        hData=f.Get("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
        text+=str(hData.Integral())+" "
@@ -961,9 +962,9 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
          h=f.Get(signalWithMass+"#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
        else:
          h=hALT
-       print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hQCD.Integral()
-       print signalWithMass+"_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hALT.Integral()
-       print signalWithMass+"#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",h.Integral()
+       print("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hQCD.Integral())
+       print(signalWithMass+"_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hALT.Integral())
+       print(signalWithMass+"#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",h.Integral())
        text+=str(h.Integral())+" "+str(hALT.Integral())+" "+str(hQCD.Integral())+" "
     cfg.writelines(text+"""
 -----------
@@ -1106,12 +1107,13 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
 
     if asym:
      if "limit" in name:
-      out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      #out=system_call("combine -m "+str(signalMass)+" -M Asymptotic -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      out=system_call("combine -m "+str(signalMass)+" -M AsymptoticLimits -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
       # -H ProfileLikelihood
-      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(out);f.close()
+      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(str(out));f.close()
      else: 
       out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
-      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(out);f.close()
+      f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(str(out));f.close()
 
     elif testStat=="LHC":
      if "limit" in name:
@@ -1155,7 +1157,7 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
       out=system_call("mkdir "+name+version)
       out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
       out=system_call("python diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
-      print out
+      print(out)
 
  for signalMass in signalMasses:
     limits[signalMass]=[]
@@ -1164,10 +1166,10 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
     else:
      tname=name+"_"+str(signalMass)+"_run"+runs+version+".txt"
     try:
-      print "open",tname
+      print("open",tname)
       f=file(tname)
     except:
-      print "file not found", tname
+      print("file not found", tname)
       continue
     for line in f.readlines():
         if "Observed Limit" in line and asym:
@@ -1179,18 +1181,18 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
         if "Limit:" in line and "95% CL" in line and testStat=="LHC" and asym=="":
            limits[signalMass]=[signalMass,float(line.strip().split(" ")[3]),0]
         if "Significance:" in line and asym:
-           print "observed signficance (p-value): ",line.strip().split(" ")[-1].strip(")")
+           print("observed signficance (p-value): ",line.strip().split(" ")[-1].strip(")"))
         if "CLb = " in line and testStat=="LEP":
-           print "observed signficance (p-value): ",ROOT.Math.normal_quantile_c((1.-float(line.strip().split(" ")[-3]))/2.,1),"(",(1.-float(line.strip().split(" ")[-3])),")"
+           print("observed signficance (p-value): ",ROOT.Math.normal_quantile_c((1.-float(line.strip().split(" ")[-3]))/2.,1),"(",(1.-float(line.strip().split(" ")[-3])),")")
         if "Observed CLb = " in line and testStat!="LEP":
-           print "observed signficance (p-value): ",ROOT.Math.normal_quantile_c((1.-float(line.strip().split(" ")[-1]))/2.,1),"(",(1.-float(line.strip().split(" ")[-1])),")"
+           print("observed signficance (p-value): ",ROOT.Math.normal_quantile_c((1.-float(line.strip().split(" ")[-1]))/2.,1),"(",(1.-float(line.strip().split(" ")[-1])),")")
     if len(limits[signalMass])==0:
          limits[signalMass]+=[signalMass,0,0]
     try:
       tname=name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt"
       f=file(tname)
     except:
-      print "file not found", tname
+      print("file not found", tname)
       continue
     for line in f.readlines():
         if "Expected" in line and asym:
@@ -1199,7 +1201,7 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
           try:
            limits[signalMass]+=[float(line.strip().split(" ")[-1])]
           except:
-           print "didn't find one point"
+           print("didn't find one point")
         if "Limit:" in line and "95% CL" in line and testStat=="LHC" and asym=="":
            limits[signalMass]+=[float(line.strip().split(" ")[3])]
     for i in range(len(limits[signalMass]),8):
@@ -1209,7 +1211,7 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
    for signalMass in signalMasses:
      limits[signalMass]=[limits[signalMass][0],limits[signalMass][1],limits[signalMass][2],limits[signalMass][5],limits[signalMass][6],limits[signalMass][4],limits[signalMass][7],limits[signalMass][3]]
 
- print limits
+ print(limits)
  name=name+"_run"+runs+version+".txt"
  f=file(name,"w")
  f.write(str([limits[signalMass] for signalMass in signalMasses]))

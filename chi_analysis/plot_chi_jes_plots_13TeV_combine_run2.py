@@ -91,9 +91,10 @@ if __name__ == '__main__':
 		[("PileUpDataMC",""),
 		("PileUpPtRef",""),
 		("PileUpPtBB",""),
-		("PileUpPtEC1",""),],
+		#("PileUpPtEC1",""),],
+		]+[("PileUpPtEC1",y) for y in years],
 		[("Sum","")]]
-   print sourcesets
+   print(sourcesets)
    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -129,199 +130,199 @@ if __name__ == '__main__':
       hists=[]
       files=[]
       for mass in range(len(massbins)):
-	#if mass>=6: b="1"
-	#if mass==5: b="2"
+        #if mass>=6: b="1"
+        #if mass==5: b="2"
         #if mass==4: b="3"
         #if mass==3: b="4"
         #if mass==2: b="6"
         #if mass<=1: b="7"
-	f_refmc={}
-	histyear={}
-	scalexsec={}
-	for year in years:
-	 for b in bins:
-	  print "datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root"
+        f_refmc={}
+        histyear={}
+        scalexsec={}
+        for year in years:
+         for b in bins:
+          print("datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
           f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
-	  h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
-	  scalexsec[b]=samples[int(b)-1][1]
-	  files+=[f_refmc[year+b]]
-	  if b=="1":
+          h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
+          scalexsec[b]=samples[int(b)-1][1]
+          files+=[f_refmc[year+b]]
+          if b=="1":
             histyear[year]=h
-	    histyear[year]=histyear[year].Clone(histyear[year].GetName()+year+"main"+str(sourcesets.index(sourceset)))
+            histyear[year]=histyear[year].Clone(histyear[year].GetName()+year+"main"+str(sourcesets.index(sourceset)))
             histyear[year].Scale(1./scalexsec[b])
           else:
             histyear[year].Add(h,1./scalexsec[b])
          hists+=[histyear[year]]
          histyear[year]=histyear[year].Rebin(len(chi_binnings[mass])-1,histyear[year].GetName()+"_rebin1",chi_binnings[mass])
         hist=histyear[years[0]].Clone(histyear[years[0]].GetName()+"combine")
-	hists+=[hist]
+        hists+=[hist]
         hist.Scale(lumifactor[years[0]])
         for y in years[1:]:
           hist.Add(histyear[y],lumifactor[y])
         canvas.cd(max(1,mass+1))
         canvas.GetPad(max(1,mass+1)).SetLogy(log)
         hist.SetLineWidth(2)
-      	hist.SetLineColor(1)
-	histref=hist.Clone(hist.GetName()+"ref"+str(sourcesets.index(sourceset)))
-	hists+=[histref]
+        hist.SetLineColor(1)
+        histref=hist.Clone(hist.GetName()+"ref"+str(sourcesets.index(sourceset)))
+        hists+=[histref]
         for b in range(hist.GetNbinsX()):
-	    hist.SetBinError(b+1,0)
-	    hist.SetBinContent(b+1,1)
-	hist.GetXaxis().SetTitle(label)
-	hist.GetYaxis().SetTitle("N")
-	hist.GetYaxis().SetRangeUser(0.9,1.15)
+            hist.SetBinError(b+1,0)
+            hist.SetBinContent(b+1,1)
+        hist.GetXaxis().SetTitle(label)
+        hist.GetYaxis().SetTitle("N")
+        hist.GetYaxis().SetRangeUser(0.9,1.15)
         hist.GetXaxis().SetTitleOffset(1.1)
         hist.GetYaxis().SetTitleOffset(1.1)
         hist.GetXaxis().SetLabelSize(0.05)
         hist.GetYaxis().SetLabelSize(0.05)
         hist.GetXaxis().SetTitleSize(0.06)
         hist.GetYaxis().SetTitleSize(0.06)
-	hist.SetTitle("")
-	hist.SetStats(False)
+        hist.SetTitle("")
+        hist.SetStats(False)
         hist.Draw("le")
         legend=TLegend(0.2,0.55,0.95,0.90,(str(massbins[mass][0])+"<m_{jj}<"+str(massbins[mass][1])+" GeV"))
-	legends+=[legend]
+        legends+=[legend]
         legend.AddEntry(hist,"central","l")
 	
-	for i in range(len(sourceset)):
+        for i in range(len(sourceset)):
             if sourceset[i][0]=="Sum":
-	      hist2b=hist.Clone(hist.GetName()+"SumInQuadratureUp")
+              hist2b=hist.Clone(hist.GetName()+"SumInQuadratureUp")
               for chi_bin in range(len(chi_binnings[mass])):
-	       if hist2b.GetBinCenter(chi_bin+1)-8.5>0:
-	        hist2b.SetBinContent(chi_bin+1,1.0+sum_in_quadrature_up[mass][chi_bin])
-	       else:
-	        hist2b.SetBinContent(chi_bin+1,1.0-sum_in_quadrature_up[mass][chi_bin])
+               if hist2b.GetBinCenter(chi_bin+1)-8.5>0:
+                hist2b.SetBinContent(chi_bin+1,1.0+sum_in_quadrature_up[mass][chi_bin])
+               else:
+                hist2b.SetBinContent(chi_bin+1,1.0-sum_in_quadrature_up[mass][chi_bin])
                hist2b.SetBinError(chi_bin+1,sum_in_quadrature_up[mass][chi_bin]/10.)
               hist2b.SetLineColor(colors[i+1])
-    	      hists+=[hist2b]
-	      fit=TF1(hist2b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
-	      hist2b.Fit(fit,"NQ")
+              hists+=[hist2b]
+              fit=TF1(hist2b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
+              hist2b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
                if fit.Integral(1.,16.)>0:
-	        hist2b.SetBinContent(chi_bin+1,fit.Eval(hist2b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+                hist2b.SetBinContent(chi_bin+1,fit.Eval(hist2b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
               hist2b.Draw("histsame")
               legend.AddEntry(hist2b,"JEC Total sum in quadrature","l")
 
-	      hist3b=hist.Clone(hist.GetName()+"SumInQuadratureDown")
+              hist3b=hist.Clone(hist.GetName()+"SumInQuadratureDown")
               for chi_bin in range(len(chi_binnings[mass])):
-	       if hist3b.GetBinCenter(chi_bin+1)-8.5>0:
-	        hist3b.SetBinContent(chi_bin+1,1.0-sum_in_quadrature_down[mass][chi_bin])
-	       else:
-	        hist3b.SetBinContent(chi_bin+1,1.0+sum_in_quadrature_down[mass][chi_bin])
+               if hist3b.GetBinCenter(chi_bin+1)-8.5>0:
+                hist3b.SetBinContent(chi_bin+1,1.0-sum_in_quadrature_down[mass][chi_bin])
+               else:
+                hist3b.SetBinContent(chi_bin+1,1.0+sum_in_quadrature_down[mass][chi_bin])
                hist3b.SetBinError(chi_bin+1,sum_in_quadrature_down[mass][chi_bin]/10.)
               hist3b.SetLineColor(colors[i+1])
-    	      hists+=[hist3b]
-	      fit=TF1(hist3b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
-	      hist3b.Fit(fit,"NQ")
+              hists+=[hist3b]
+              fit=TF1(hist3b.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
+              hist3b.Fit(fit,"NQ")
               for chi_bin in range(len(chi_binnings[mass])):
                if fit.Integral(1.,16.)>0:
-	        hist3b.SetBinContent(chi_bin+1,fit.Eval(hist3b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+                hist3b.SetBinContent(chi_bin+1,fit.Eval(hist3b.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
               hist3b.Draw("histsame")
 
             else:
 
-	     updown="Up"
-	     histyear2={}
-	     for year in years:
-	      for b in bins:
-	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
-	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
-	       if b=="1":
+             updown="Up"
+             histyear2={}
+             for year in years:
+              for b in bins:
+               print(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+               h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+               if b=="1":
                   histyear2[year]=h
-	          histyear2[year]=histyear2[year].Clone(histyear2[year].GetName()+year+"up"+str(sourcesets.index(sourceset)))
-	          histyear2[year].Scale(1./scalexsec[b])
+                  histyear2[year]=histyear2[year].Clone(histyear2[year].GetName()+year+"up"+str(sourcesets.index(sourceset)))
+                  histyear2[year].Scale(1./scalexsec[b])
                else:
                   histyear2[year].Add(h,1./scalexsec[b])
               histyear2[year]=histyear2[year].Rebin(len(chi_binnings[mass])-1,histyear2[year].GetName()+"_rebin1",chi_binnings[mass])
               hists+=[histyear2[year]]
-	     if sourceset[i][1]=="":
-	      hist2=histyear2[years[0]].Clone(histyear2[years[0]].GetName()+"combine")
-  	      hists+=[hist2]
+             if sourceset[i][1]=="":
+              hist2=histyear2[years[0]].Clone(histyear2[years[0]].GetName()+"combine")
+              hists+=[hist2]
               hist2.Scale(lumifactor[years[0]])
               for y in years[1:]:
-	        hist2.Add(histyear2[y],lumifactor[y])
-	      if hist2.Integral()>0:
+                hist2.Add(histyear2[y],lumifactor[y])
+              if hist2.Integral()>0:
                 hist2.Scale(histref.Integral()/hist2.Integral())
               hist2.Divide(hist2,histref)
-	     else:
+             else:
               hist2=histyear2[sourceset[i][1]]
-	      hist2.SetName(hist2.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
-	      if hist2.Integral()>0:
+              hist2.SetName(hist2.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
+              if hist2.Integral()>0:
                 hist2.Scale(histyear[sourceset[i][1]].Integral()/hist2.Integral())
- 	      hist2.Divide(hist2,histyear[sourceset[i][1]])
- 	      hist2.Add(hist,-1)
+              hist2.Divide(hist2,histyear[sourceset[i][1]])
+              hist2.Add(hist,-1)
               hist2.Scale(lumifactor[sourceset[i][1]])
- 	      hist2.Add(hist,1)
+              hist2.Add(hist,1)
              hist2.SetLineWidth(1)
              hist2.SetLineColor(colors[i])
              hist2.SetLineStyle(2)
-	     hist2.SetTitle("")
+             hist2.SetTitle("")
              hist2.SetStats(False)
-	     fit=TF1(hist2.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
-	     hist2.Fit(fit,"NQ")
+             fit=TF1(hist2.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
+             hist2.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
               if fit.Integral(1.,16.)>0:
-	       hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+               hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
              hist2.Draw("histsame")
-	     legend.AddEntry(hist2,"JEC "+sourceset[i][0]+" "+sourceset[i][1],"l")
+             legend.AddEntry(hist2,"JEC "+sourceset[i][0]+" "+sourceset[i][1],"l")
              for chi_bin in range(len(chi_binnings[mass])):
-	       if (hist2.GetBinContent(chi_bin+1)-1.0)*(hist2.GetBinCenter(chi_bin+1)-8.5)>0:
-	        sum_in_quadrature_up[mass][chi_bin]=sqrt(pow(sum_in_quadrature_up[mass][chi_bin],2)+pow(hist2.GetBinContent(chi_bin+1)-1.0,2))
-	       else:
-	        sum_in_quadrature_down[mass][chi_bin]=sqrt(pow(sum_in_quadrature_down[mass][chi_bin],2)+pow(hist2.GetBinContent(chi_bin+1)-1.0,2))
+               if (hist2.GetBinContent(chi_bin+1)-1.0)*(hist2.GetBinCenter(chi_bin+1)-8.5)>0:
+                sum_in_quadrature_up[mass][chi_bin]=sqrt(pow(sum_in_quadrature_up[mass][chi_bin],2)+pow(hist2.GetBinContent(chi_bin+1)-1.0,2))
+               else:
+                sum_in_quadrature_down[mass][chi_bin]=sqrt(pow(sum_in_quadrature_down[mass][chi_bin],2)+pow(hist2.GetBinContent(chi_bin+1)-1.0,2))
 
-	     updown="Down"
-	     histyear3={}
-	     for year in years:
-	      for b in bins:
-	       print prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1"
-	       h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
-	       if b=="1":
+             updown="Down"
+             histyear3={}
+             for year in years:
+              for b in bins:
+               print(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+               h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_"+str(sourceset[i][0])+updown+"_rebin1")
+               if b=="1":
                   histyear3[year]=h
-	          histyear3[year]=histyear3[year].Clone(histyear3[year].GetName()+year+"down"+str(sourcesets.index(sourceset)))
-	          histyear3[year].Scale(1./scalexsec[b])
+                  histyear3[year]=histyear3[year].Clone(histyear3[year].GetName()+year+"down"+str(sourcesets.index(sourceset)))
+                  histyear3[year].Scale(1./scalexsec[b])
                else:
                   histyear3[year].Add(h,1./scalexsec[b])
-	      histyear3[year]=histyear3[year].Rebin(len(chi_binnings[mass])-1,histyear3[year].GetName()+"_rebin1",chi_binnings[mass])
-  	      hists+=[histyear3[year]]
+              histyear3[year]=histyear3[year].Rebin(len(chi_binnings[mass])-1,histyear3[year].GetName()+"_rebin1",chi_binnings[mass])
+              hists+=[histyear3[year]]
              if sourceset[i][1]=="":
-	      hist3=histyear3[years[0]].Clone(histyear3[years[0]].GetName()+"combine")
-  	      hists+=[hist3]
+              hist3=histyear3[years[0]].Clone(histyear3[years[0]].GetName()+"combine")
+              hists+=[hist3]
               hist3.Scale(lumifactor[years[0]])
               for y in years[1:]:
-	        hist3.Add(histyear3[y],lumifactor[y])
-	      if hist3.Integral()>0:
+                hist3.Add(histyear3[y],lumifactor[y])
+              if hist3.Integral()>0:
                 hist3.Scale(histref.Integral()/hist3.Integral())
- 	      hist3.Divide(hist3,histref)
-	     else:
+              hist3.Divide(hist3,histref)
+             else:
               hist3=histyear3[sourceset[i][1]]
-	      hist3.SetName(hist3.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
-	      if hist3.Integral()>0:
+              hist3.SetName(hist3.GetName().replace(sourceset[i][0],sourceset[i][0]+sourceset[i][1]))
+              if hist3.Integral()>0:
                 hist3.Scale(histyear[sourceset[i][1]].Integral()/hist3.Integral())
- 	      hist3.Divide(hist3,histyear[sourceset[i][1]])
- 	      hist3.Add(hist,-1)
+              hist3.Divide(hist3,histyear[sourceset[i][1]])
+              hist3.Add(hist,-1)
               hist3.Scale(lumifactor[sourceset[i][1]])
- 	      hist3.Add(hist,1)
+              hist3.Add(hist,1)
              hist3.SetLineWidth(1)
              hist3.SetLineColor(colors[i])
              hist3.SetLineStyle(3)
-	     hist3.SetTitle("")
+             hist3.SetTitle("")
              hist3.SetStats(False)
-	     fit=TF1(hist3.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
-	     hist3.Fit(fit,"NQ")
+             fit=TF1(hist3.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
+             hist3.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
               if fit.Integral(1.,16.)>0:
-	       hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
-	     hist3.Draw("histsame")
+               hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+             hist3.Draw("histsame")
              for chi_bin in range(len(chi_binnings[mass])):
-	       if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:
-	        sum_in_quadrature_up[mass][chi_bin]=sqrt(pow(sum_in_quadrature_up[mass][chi_bin],2)+pow(hist3.GetBinContent(chi_bin+1)-1.0,2))
+               if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:
+                sum_in_quadrature_up[mass][chi_bin]=sqrt(pow(sum_in_quadrature_up[mass][chi_bin],2)+pow(hist3.GetBinContent(chi_bin+1)-1.0,2))
                else:
-	        sum_in_quadrature_down[mass][chi_bin]=sqrt(pow(sum_in_quadrature_down[mass][chi_bin],2)+pow(hist3.GetBinContent(chi_bin+1)-1.0,2))
+                sum_in_quadrature_down[mass][chi_bin]=sqrt(pow(sum_in_quadrature_down[mass][chi_bin],2)+pow(hist3.GetBinContent(chi_bin+1)-1.0,2))
 
         legend.SetTextSize(0.04)
         legend.SetFillStyle(0)
         legend.Draw("same")
 
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2.root")
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2.pdf")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated.root")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated.pdf")

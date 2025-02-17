@@ -125,10 +125,11 @@ if __name__ == '__main__':
                 ["PileUpDataMC",
                 "PileUpPtRef",
                 "PileUpPtBB",
-                "PileUpPtEC1",
-                "SumInQuadrature",
+                #"PileUpPtEC1",
+                ]+["PileUpPtEC1"+y for y in years]+\
+                ["SumInQuadrature",
                 ]
-    print len(jessources)-1,"jes sources"
+    print(len(jessources)-1,"jes sources")
     jersources=["JER"+y for y in years]+\
                ["SumInQuadrature",
                 ] #["JER1"+y for y in years]+["JER2"+y for y in years]+
@@ -366,10 +367,12 @@ if __name__ == '__main__':
 
     # all samples
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
+    # for add
+    samples=samples1
     # for alp+tripleG
     #samples=samples5
     #samples=samples6
-    samples=samples7
+    #samples=samples7
     # for postfit plots
     #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
@@ -380,7 +383,7 @@ if __name__ == '__main__':
       else:
         samples=[samples[int(sys.argv[1])]]
 
-    print len(samples)
+    print(len(samples))
 
     dataevents={}
     datahist={}
@@ -483,12 +486,12 @@ if __name__ == '__main__':
       #  sample=prefix + '_GENciminusv3_chi2016.root'
       else:
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
-      print "output file", sample
+      print("output file", sample)
       if "GEN" in sample:
         insignalsample=sample.replace(prefix,input_prefix1)
       else:
         insignalsample=sample.replace(prefix,input_prefix2)
-      print "input signal file", insignalsample
+      print("input signal file", insignalsample)
   
       insignalfile=TFile(insignalsample,'READ')
       closefiles=[insignalfile]
@@ -498,23 +501,23 @@ if __name__ == '__main__':
       # RECO sample
       if responsePostfix=="RECO":
         recosample=insignalsample.replace("-GEN","")
-        print "open reco file", recosample
+        print("open reco file", recosample)
         freco=TFile(recosample,'READ')
         closefiles+=[freco]
       
       # LO QCD file
       sample2='datacards/datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
-      print sample2
+      print(sample2)
       in2=TFile(sample2,'READ')
 
       # LO QCD 13 TeV CP5 file to compute 13.6 TeV / 13 TeV k-factor
       sample13TeV='datacards/datacard_shapelimit13TeV_GEN-QCD-CP5-run2_chi.root'
-      print sample13TeV
+      print(sample13TeV)
       in13TeV=TFile(sample13TeV,'READ')
 
      # Madgraph QCD file
       sampleMadgraph=input_prefix2 + '_alp_QCD_fa50000-run2_chi.root'
-      print sampleMadgraph
+      print(sampleMadgraph)
       inMadgraph=TFile(sampleMadgraph,'READ')
 
       # data file
@@ -524,30 +527,30 @@ if __name__ == '__main__':
         insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
       else:
         insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
-      print insample
+      print(insample)
       infile=TFile(insample,'READ')
       insample16postVFP="datacards/datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
-      print insample16postVFP
+      print(insample16postVFP)
       infile16postVFP=TFile(insample16postVFP,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
       if use_UL:
         insample17="datacards/datacard_shapelimit13TeV_run2_UL17_L1prefire_chi.root"
       else:
         insample17="datacards/datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
-      print insample17
+      print(insample17)
       infile17=TFile(insample17,'READ')
       #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
       if use_UL:
         insample18="datacards/datacard_shapelimit13TeV_run2_UL18_HEM_chi.root"
       else:
         insample18="datacards/datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
-      print insample18
+      print(insample18)
       infile18=TFile(insample18,'READ')
 
       # unfolded data file
       #unfoldsample='datacards/Unfolded_chiNtuple_dataReReco_v3_Coarse_PFHT900_fromCB_AK4SF_pythia8_Pt_170toInf.root'
       unfoldsample='datacards/Unfolded_chiNtuple_dataReReco_v3_Coarse_PFHT900_fromCB_AK4SF_pythia8_Pt_170toInf_MatrixInvert.root'
-      print unfoldsample
+      print(unfoldsample)
       unfoldfile=TFile(unfoldsample,'READ')
 
       # (N)NLO correction
@@ -557,40 +560,40 @@ if __name__ == '__main__':
         filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nnlo_cppread_mu_"+muScale+".root"
       else:
         filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
-      print filename1nu2
+      print(filename1nu2)
       nlofile2 = TFile.Open(filename1nu2)
       closefiles+=[nlofile2]
 
       # (N)NLO uncertainties
       filename1nusys="fastnlo/NNLO/fnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_30000_V-A-.root"
-      print filename1nusys
+      print(filename1nusys)
       nlofilesys = TFile.Open(filename1nusys)
       closefiles+=[nlofilesys]
       if useNNLO:
         filename1altscale="fastnlo/NNLO/fnl5662j_cs_"+pdfset+("_"+muAltScale if useNNLO else "")+"_30000_V-A-.root"
       else:
         filename1altscale="fastnlo/NNLO/fnl5662j_cs_ct14nnlo_pt12_30000_V-A-.root" # NNLO is alternative to NLO
-      print filename1altscale
+      print(filename1altscale)
       nlofilealtscale = TFile.Open(filename1altscale)
       closefiles+=[nlofilealtscale]
       
        # DM uncertainties
       filename1dmpdf="datacards/chi_dm_pdf_plots6000_13TeV_run2.root"
-      print filename1dmpdf
+      print(filename1dmpdf)
       dmpdffile = TFile.Open(filename1dmpdf)
       closefiles+=[dmpdffile]
 
       # EWK correction
       filename1ewk="fastnlo/RunII/DijetAngularCMS13_ewk.root"
-      print filename1ewk
+      print(filename1ewk)
       ewkfile = TFile.Open(filename1ewk)
       closefiles+=[ewkfile]
 
       # JES uncertainty QCD
       jesfiles=[]
       for n in range(5):
-        filename1jes="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2.root"
-        print filename1jes
+        filename1jes="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated.root"
+        print(filename1jes)
         jesfiles += [TFile.Open(filename1jes)]
         closefiles+=[jesfiles[-1]]
       jeshists={}
@@ -602,14 +605,14 @@ if __name__ == '__main__':
             jes=jespad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jeshists[str(j)+source]+=[a for a in jes.GetListOfPrimitives() if source in str(a)]
           if len(jeshists[str(j)+source])!=2:
-            print "JES source not found", source
+            print("JES source not found", source)
             error
 
       # JES uncertainty CI
       jescifiles=[]
       for n in range(5):
-        filename1jesci="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2.root"
-        print filename1jesci
+        filename1jesci="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated.root"
+        print(filename1jesci)
         jescifiles += [TFile.Open(filename1jesci)]
         closefiles+=[jescifiles[-1]]
       jescihists={}
@@ -621,14 +624,14 @@ if __name__ == '__main__':
             jes=jespad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jescihists[str(j)+source]+=[a for a in jes.GetListOfPrimitives() if source in str(a)]
           if len(jescihists[str(j)+source])!=2:
-            print "JES source not found", source
+            print("JES source not found", source)
             error
 
       # JER uncertainty QCD
       jerfiles=[]
       for n in range(2):
         filename1jer="plots/chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2.root"
-        print filename1jer
+        print(filename1jer)
         jerfiles += [TFile.Open(filename1jer)]
         closefiles+=[jerfiles[-1]]
       jerhists={}
@@ -640,14 +643,14 @@ if __name__ == '__main__':
             jer=jerpad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jerhists[str(j)+source]+=[a for a in jer.GetListOfPrimitives() if source in str(a)]
           if len(jerhists[str(j)+source])!=2:
-            print "JER source not found", source
+            print("JER source not found", source)
             error
 
       # JER uncertainty CI
       jercifiles=[]
       for n in range(2):
         filename1jerci="plots/chi_systematic_plotschi_QCDJER_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2.root"
-        print filename1jerci
+        print(filename1jerci)
         jercifiles += [TFile.Open(filename1jerci)]
         closefiles+=[jercifiles[-1]]
       jercihists={}
@@ -659,13 +662,13 @@ if __name__ == '__main__':
             jer=jerpad.GetListOfPrimitives()[j+useUnfoldedData*1]
             jercihists[str(j)+source]+=[a for a in jer.GetListOfPrimitives() if source in str(a)]
           if len(jercihists[str(j)+source])!=2:
-            print "JER source not found", source
+            print("JER source not found", source)
             error
 
       # prefire uncertainty
       prefirefiles=[]
       filename1prefire="plots/chi_systematic_plotschi_run2prefire_13TeV_run2.root"
-      print filename1prefire
+      print(filename1prefire)
       prefirefiles += [TFile.Open(filename1prefire)]
       closefiles+=[prefirefiles[-1]]
       prefirehists={}
@@ -674,9 +677,9 @@ if __name__ == '__main__':
           for prefirefile in prefirefiles:
             prefirepad=prefirefile.Get("prefire")
             prefire=prefirepad.GetListOfPrimitives()[j+useUnfoldedData*1]
-            prefirehists[str(j)]+=[a for a in prefire.GetListOfPrimitives() if "TF1" in str(a)]
+            prefirehists[str(j)]+=[a for a in prefire.GetListOfPrimitives() if "TF1" in str(a) or "pol" in str(a)]
           if len(prefirehists[str(j)])!=2:
-            print "prefire source not found"
+            print("prefire source not found",prefirehists)
             error
       
       # trigger efficiency
@@ -684,7 +687,7 @@ if __name__ == '__main__':
       trigger_files+=[TFile("plots/chi_trigger_plots_2016_SingleMuonHLT_PFHT900orHLT_PFHT800orHLT_PFJet450orHLT_PFJet500orHLT_CaloJet500_NoJetID_run2.root")]
       trigger_files+=[TFile("plots/chi_trigger_plots_2017_SingleMuonHLT_PFHT1050orHLT_PFJet500orHLT_PFJet550orHLT_CaloJet500_NoJetIDorHLT_CaloJet550_NoJetID_run2.root")]
       trigger_files+=[TFile("plots/chi_trigger_plots_2018_SingleMuonHLT_PFHT1050orHLT_PFJet500orHLT_PFJet550orHLT_CaloJet500_NoJetIDorHLT_CaloJet550_NoJetID_run2.root")]
-      print trigger_files
+      print(trigger_files)
       mass_spectrum=in2.Get("QCDmass")
       trigger_canvases=[]
       for trigger_file in trigger_files:
@@ -695,7 +698,7 @@ if __name__ == '__main__':
        for j in range(len(massbins)):
         trigger_efficiency[tc][j]={}
        for ft in trigger_canvases[tc].GetListOfPrimitives():
-        if "TF1" in str(ft) and "chi-" in str(ft):
+        if ("TF1" in str(ft) or "erf" in str(ft)) and "chi-" in str(ft):
           #ft.SetRange(massbins[0][0],massbins[-1][1])
           #ft.Update()
           #print ft.GetXmin(),ft.GetXmax()
@@ -729,7 +732,7 @@ if __name__ == '__main__':
 
         # QCD (empty background, not used in limit)
         histname='QCD#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
-        print histname
+        print(histname)
         if only6000:
           qcd=in2.Get(histname.replace("6000_13000","6000_7000"))
         else:
@@ -752,14 +755,14 @@ if __name__ == '__main__':
         else:
            qcd13TeVnorm[j]=qcd13TeV.Integral()
         factor13p6=qcd.Integral()/qcd13TeV.Integral()
-        print "k-factor LO 13.6 TeV / 13 TeV", factor13p6
+        print("k-factor LO 13.6 TeV / 13 TeV", factor13p6)
 
         # NLO
         nloqcd=None
         for k in mass_bins_nlo_list[j]:
          #histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
          histname='qcd_chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0"
-         print histname
+         print(histname)
          hnlo = TH1F(nlofile2.Get(histname))
          #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnlo=hnlo.Rebin(len(chi_binnings[j])-1,hnlo.GetName()+"_rebin1",chi_binnings[j])
@@ -775,14 +778,14 @@ if __name__ == '__main__':
         nloqcdbackup=nloqcd.Clone(nloqcd.GetName()+"_backup")
         if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
            nloqcdbackup.Scale(factor13p6)
-        print "theory integral (pb):", nloqcdbackup.Integral()
-        print "k-factor NNLO / LO", nloqcdbackup.Integral()/qcd.Integral()
+        print("theory integral (pb):", nloqcdbackup.Integral())
+        print("k-factor NNLO / LO", nloqcdbackup.Integral()/qcd.Integral())
 
         # NLO normalized
         nloqcdnormd=None
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
-         print histname
+         print(histname)
          hnlo = TH1F(nlofilesys.Get(histname))
          #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnlo=rebin(hnlo,len(chi_binnings[j])-1,chi_binnings[j])
@@ -793,7 +796,7 @@ if __name__ == '__main__':
 
         # EWK corrections
         histname='chi-'+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000") # FIX compute lower and higher mass bins
-        print histname
+        print(histname)
         ewk=ewkfile.Get(histname)
         for b in range(nloqcd.GetXaxis().GetNbins()):
             low_bin=ewk.FindBin(nloqcd.GetXaxis().GetBinLowEdge(b+1))
@@ -811,26 +814,26 @@ if __name__ == '__main__':
 
         # DATA
         histname="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi"
-        print histname
+        print(histname)
         if useLensData:
           if "13000" in str(massbins[j]):
             histname2="dijet_m_chi_2__projY_"+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"")
           else:
             histname2="dijet_m_chi_2__projY_"+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"")
-          print histname2
+          print(histname2)
           data = TH1D(unfoldfile.Get(histname2))
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
         elif useUnfoldedData:
           histname2="dijet_mass_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_chi_unfolded"
-          print histname2
+          print(histname2)
           data = TH1F(unfoldfile.Get(histname2))
           data.SetName(histname)
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
         else:
           #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi"
           histname2="datacard_shapelimit13TeV_run2_"+years[0]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          print histname2
+          print(histname2)
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
           for b in range(data.GetXaxis().GetNbins()):
@@ -839,7 +842,7 @@ if __name__ == '__main__':
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           if use_UL:
             histname16postVFP="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-            print histname16postVFP
+            print(histname16postVFP)
             data16postVFP = TH1F(infile16postVFP.Get(histname16postVFP))
             for b in range(data.GetXaxis().GetNbins()):
               datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data16postVFP.GetBinContent(b+1))
@@ -851,7 +854,7 @@ if __name__ == '__main__':
           if j==2: data.Scale(14.44) # trigger prescales
           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000")
           histname17="datacard_shapelimit13TeV_run2_"+years[-2]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          print histname17
+          print(histname17)
           data17 = TH1F(infile17.Get(histname17))
           for b in range(data.GetXaxis().GetNbins()):
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data17.GetBinContent(b+1))
@@ -863,7 +866,7 @@ if __name__ == '__main__':
           data.Add(data17)
           #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
           histname18="datacard_shapelimit13TeV_run2_"+years[-1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          print histname18
+          print(histname18)
           data18 = TH1F(infile18.Get(histname18))
           for b in range(data.GetXaxis().GetNbins()):
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data18.GetBinContent(b+1))
@@ -880,7 +883,7 @@ if __name__ == '__main__':
            data=nloqcd.Clone(histname)
            data.Scale(dn/nloqcd.Integral())
         dataevents[j]=data.Integral()
-        print "data events:", dataevents[j], ", in pb:", dataevents[j]/138000.
+        print("data events:", dataevents[j], ", in pb:", dataevents[j]/138000.)
         out.cd()
         if not injectSignal:
          histname='data_obs#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -888,7 +891,7 @@ if __name__ == '__main__':
 
         # Madgraph reference sample
         histname='alp_QCD_fa50000#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
-        print histname
+        print(histname)
         if only6000:
           qcdMadgraph=inMadgraph.Get(histname.replace("6000_13000","6000_7000"))
         else:
@@ -896,7 +899,7 @@ if __name__ == '__main__':
 
         # CI (=LO CI+NLO QCD)
         histname=samples[i][0].replace("Anti","")+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
-        print histname
+        print(histname)
         if "EWK" in samples[i][0]:
           histname=histname.replace("_backup","")
           ci=nloqcdbackup.Clone(histname)
@@ -908,17 +911,17 @@ if __name__ == '__main__':
           ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
           filenamecinlo="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
-          print filenamecinlo
+          print(filenamecinlo)
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]
           filenamecinloaltscale="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
-          print filenamecinloaltscale
+          print(filenamecinloaltscale)
           cinlofilealtscale = TFile.Open(filenamecinloaltscale)
           closefiles+=[cinlofilealtscale]
           ci=None
           for k in mass_bins_nlo_list[j]:
             histname2='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
-            print histname2
+            print(histname2)
             hci = TH1F(cinlofile.Get(histname2))
             #hci=rebin(hci,len(chi_binnings[j])-1,chi_binnings[j])
             hci=hci.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
@@ -946,11 +949,11 @@ if __name__ == '__main__':
             filenamecinlo="fastnlo/cidijet_DijetChi_DILHC_2012_Lambda-"+lambdamass+"_Order-0_xmu-1.root"
           else:
             filenamecinlo="fastnlo/cidijet_DijetChi_CILHC_2012_Lambda-"+lambdamass+"_Order-0_xmu-1.root"
-          print filenamecinlo
+          print(filenamecinlo)
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]
           histname2="chi-"+str(massbinsci[0])+"-"+str(massbinsci[1])
-          print histname2
+          print(histname2)
           histname=histname.replace("_backup","")
           ci = TH1F(cinlofile.Get(histname2))
           ci=ci.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
@@ -972,7 +975,7 @@ if __name__ == '__main__':
           ci=smoothChi(ci) # SMOOTH DM PREDICTION (FIX ME)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1./nloqcdbackup.Integral())
-          print histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1)
+          print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
           ci.Add(nloqcd)
         elif "alp" in samples[i][0]:
           if only6000:
@@ -981,19 +984,19 @@ if __name__ == '__main__':
             cibackup=insignalfile.Get(histname)
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
-          print "ALP:",ci.Integral(), "QCDMG:",qcdMadgraph.Integral(), "QCDPY:",qcd.Integral(), "QCDNLO:",nloqcdbackup.Integral()
+          print("ALP:",ci.Integral(), "QCDMG:",qcdMadgraph.Integral(), "QCDPY:",qcd.Integral(), "QCDNLO:",nloqcdbackup.Integral())
           ci.Add(qcdMadgraph,-1)
           #ci=smooth(ci,"pol3") # SMOOTH ALP PREDICTION (FIX ME)
           ci=smoothChi(ci) # SMOOTH ALP PREDICTION (FIX ME)
           ci.Scale(nloqcdbackup.Integral()/qcdMadgraph.Integral()) # CORRECT FOR MISSING FACTOR LO->NNLO k-factor of ~10 in Madgraph QCD cross sections
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1./nloqcdbackup.Integral())
-          print histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1)
+          print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
           ci.Add(nloqcd)
         elif "QBH_MD" in samples[i][0]:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-            print histnamein
+            print(histnamein)
             cibackup=insignalfile.Get(histnamein)
             ci=cibackup.Clone(histname)
             ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1009,7 +1012,7 @@ if __name__ == '__main__':
                     histnamein='QCDADD'+samples[i][0].split("_")[2]+samples[i][0].split("_")[0]+samples[i][0].split("_")[1]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
                 else:
                     histnamein='QCD'+samples[i][0].split("_")[2]+samples[i][0].split("_")[0]+samples[i][0].split("_")[1]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
-                print histnamein
+                print(histnamein)
                 cibackup=insignalfile.Get(histnamein.replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")) # FIX compute QBH for highest mass bins
                 ci=cibackup.Clone(histname)
                 ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1021,14 +1024,14 @@ if __name__ == '__main__':
           try:
               histname=cibackup.GetName().replace("_backup","")
           except:
-            print "problem reading", histname
+            print("problem reading", histname)
             break
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(10./nloqcdbackup.Integral()) # make in units if 10pb
           ci.Add(nloqcd)
         elif "CIplus" in samples[i][0]:
-          print "CREATE FAKE SIGNAL"
+          print("CREATE FAKE SIGNAL")
           if True:#j<=3: # fake signal for signficances
             histnamealt=samples[i][0].replace("Anti","")+'#chi'+str((4800,5400)).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_backup"
           else:
@@ -1121,7 +1124,7 @@ if __name__ == '__main__':
 
         # ALT (=NLO QCD)
         histname=samples[i][0].replace("Anti","")+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-        print histname
+        print(histname)
         #if "LOCI" in samples[i][0] or "CT10" in samples[i][0] or "cteq" in samples[i][0] or "EWK" in samples[i][0]:
         alt=nloqcd.Clone(histname)
         #else:
@@ -1171,7 +1174,7 @@ if __name__ == '__main__':
         cimodeldown={}
         uncertaintyvariants=[[str(mn[0]) for mn in massbins]+[""],[str(mn[0]) for mn in massbins]+[""],[str(mn[0]) for mn in massbins]+[""]]
         for unc in uncertainties:
-         print unc
+         print(unc)
          for modeln in uncertaintyvariants[uncertainties.index(unc)]:
                histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
                clone=ci.Clone(histname)
@@ -1213,7 +1216,7 @@ if __name__ == '__main__':
                if modeln=="": col+=1
 
         # jes uncertainty
-        print "jes"
+        print("jes")
         for source in jessources:
           if source=="SumInQuadrature":
             jesname=""
@@ -1259,7 +1262,7 @@ if __name__ == '__main__':
           if jesname=="": col+=1
 
         # jer uncertainty
-        print "jer"
+        print("jer")
         for source in jersources:
           if source=="SumInQuadrature":
             jername=""
@@ -1305,7 +1308,7 @@ if __name__ == '__main__':
           if jername=="": col+=1
 
         # prefire uncertainty
-        print "prefire"
+        print("prefire")
         histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         clone=ci.Clone(histname)
         clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
@@ -1340,7 +1343,7 @@ if __name__ == '__main__':
         col+=1
 
         # trigger uncertainty
-        print "trigger"
+        print("trigger")
         histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         clone=ci.Clone(histname)
         clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
@@ -1387,7 +1390,7 @@ if __name__ == '__main__':
         nloPDFupqcd=None
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFUp"
-         print histname
+         print(histname)
          hnloPDFup = TH1F(nlofilesys.Get(histname))
          #hnloPDFup.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnloPDFup=rebin(hnloPDFup,len(chi_binnings[j])-1,chi_binnings[j])
@@ -1402,7 +1405,7 @@ if __name__ == '__main__':
         nloPDFdownqcd=None
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFDown"
-         print histname
+         print(histname)
          hnloPDFdown = TH1F(nlofilesys.Get(histname))
          #hnloPDFdown.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
          hnloPDFdown=rebin(hnloPDFdown,len(chi_binnings[j])-1,chi_binnings[j])
@@ -1439,7 +1442,7 @@ if __name__ == '__main__':
            nloPDFupci=None
            for k in mass_bins_nlo_list[j]:
             histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFUp"
-            print histname
+            print(histname)
             hnloPDFup = TH1F(cinlofile.Get(histname))
             hnloPDFup=hnloPDFup.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
             if nloPDFupci:
@@ -1452,7 +1455,7 @@ if __name__ == '__main__':
            nloPDFdownci=None
            for k in mass_bins_nlo_list[j]:
             histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"PDFDown"
-            print histname
+            print(histname)
             hnloPDFdown = TH1F(cinlofile.Get(histname))
             hnloPDFdown=hnloPDFdown.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
             if nloPDFdownci:
@@ -1502,7 +1505,7 @@ if __name__ == '__main__':
           nloScaleupqcd=None
           for k in mass_bins_nlo_list[j]:
            histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"Scale"+scaleVariation+"Up"
-           print histname
+           print(histname)
            if scaleVariation=="":
              if useNNLO:
                hnloScaleup = TH1F(nlofilesys.Get(histname))
@@ -1527,7 +1530,7 @@ if __name__ == '__main__':
           nloScaledownqcd=None
           for k in mass_bins_nlo_list[j]:
            histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"Scale"+scaleVariation+"Down"
-           print histname
+           print(histname)
            if scaleVariation=="":
              if useNNLO:
                hnloScaledown = TH1F(nlofilesys.Get(histname))
@@ -1589,7 +1592,7 @@ if __name__ == '__main__':
              nloScaleupci=None
              for k in mass_bins_nlo_list[j]:
               histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"Scale"+scaleVariation+"Up"
-              print histname
+              print(histname)
               if scaleVariation=="":
                 if useNNLO:
                   hnloScaleup = TH1F(cinlofile.Get(histname))
@@ -1612,7 +1615,7 @@ if __name__ == '__main__':
              nloScaledownci=None
              for k in mass_bins_nlo_list[j]:
               histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"Scale"+scaleVariation+"Down"
-              print histname
+              print(histname)
               if scaleVariation=="":
                 if useNNLO:
                   hnloScaledown = TH1F(cinlofile.Get(histname))
@@ -1679,7 +1682,7 @@ if __name__ == '__main__':
         nloStatupqcd=None
         for k in mass_bins_nlo_list[j]:
          histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"StatUp"
-         print histname
+         print(histname)
          if useNNLO:
            hnloStatup = TH1F(nlofilesys.Get(histname))
          else:
@@ -1930,7 +1933,7 @@ if __name__ == '__main__':
       if not useUnfoldedData:
         canvas = TCanvas("","",0,0,800,600)
         canvas.Divide(4,3)
-        print "Applying response matrix"
+        print("Applying response matrix")
         #matrix=TFile("datacards/responseMatrices_20190930.root",'READ')
         #matrix1=matrix.Get("TMatrixT<double>;2") #low mass chi binning
         #matrix2=matrix.Get("TMatrixT<double>;3") #highest mass chi binning
@@ -2062,18 +2065,18 @@ if __name__ == '__main__':
             histnonorm=althists[j].Clone(althists[j].GetName()+"_nonorm").Write(althists[j].GetName()+"_nonorm")
 
             if responsePostfix=="RECO" and pre==samples[i][0]+'#chi':
-              print "Using RECO QBH instead of smeared QBH prediction"
+              print("Using RECO QBH instead of smeared QBH prediction")
               althists[j]=out.Get(althists[j].GetName().replace(samples[i][0]+'#chi',samples[i][0]+'_ALT#chi')+"_nonorm").Clone(althists[j].GetName())
               histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-              print histnamein
+              print(histnamein)
               reco=freco.Get(histnamein)
               reco=reco.Rebin(len(chi_binnings[j])-1,reco.GetName(),chi_binnings[j])
               reco.Scale(samples[i][1][0][1]*nloqcdnorm[j]/nloqcdnormraw[j])
-              print reco.Integral(), althists[j].Integral()
+              print(reco.Integral(), althists[j].Integral())
               althists[j].Add(reco)
 
             #print althists[j].GetName()+"_nonorm"
-            print dataevents[j],althistsclones[j].Integral(),althists[j].Integral()
+            print(dataevents[j],althistsclones[j].Integral(),althists[j].Integral())
             althists[j].Scale(dataevents[j]/althists[j].Integral())
             althistsclones[j].Scale(dataevents[j]/althistsclones[j].Integral())
             for b in range(althists[j].GetXaxis().GetNbins()):
@@ -2129,7 +2132,7 @@ if __name__ == '__main__':
               syss+=["stat"+str(mn)+"_"+str(cn)]
               skipInSum+=["stat"+str(mn)+"_"+str(cn)]
           for j in range(len(massbins)):
-            print massbins[j]
+            print(massbins[j])
             for sys in syss:
               #print sys
               for shift in ["Up","Down"]:
@@ -2177,22 +2180,22 @@ if __name__ == '__main__':
 
             dataplot[j].Draw("pe0zsame")
             legend=legend1.Clone()
-	    legend.SetHeader((str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
+            legend.SetHeader((str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
             legend.Draw("same")
             plots+=[legend]
             chi2=0
             for b in range(datahist[j].GetNbinsX()):
               if datahist[j].GetBinContent(b+1)==0: continue
               unc2=max(pow(dataplot[j].GetErrorYlow(b),2),pow(dataplot[j].GetErrorYhigh(b),2))
-              print "stat",sqrt(unc2)/datahist[j].GetBinContent(b+1)
+              print("stat",sqrt(unc2)/datahist[j].GetBinContent(b+1))
               for sys in syss:
                if not sys in skipInSum:
                 unc2+=max(pow(syshists[sys+"Up"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2),pow(syshists[sys+"Down"].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2))
-              print "stat+sys",sqrt(unc2)/datahist[j].GetBinContent(b+1)
+              print("stat+sys",sqrt(unc2)/datahist[j].GetBinContent(b+1))
               chi2+=pow(datahist[j].GetBinContent(b+1)-althists[j].GetBinContent(b+1),2)/unc2
             pvalue=stats.distributions.chi2.sf(chi2, datahist[j].GetNbinsX())
             sign=-stats.norm.ppf(pvalue)
-            print "sign",sign,"chi2/ndof",chi2/datahist[j].GetNbinsX()
+            print("sign",sign,"chi2/ndof",chi2/datahist[j].GetNbinsX())
         canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run'+run+'_smear.pdf')
         #canvas.SaveAs(prefix + "_"+samples[i][0].replace("QCD","") + '_sys_run2_smear.eps')
 
