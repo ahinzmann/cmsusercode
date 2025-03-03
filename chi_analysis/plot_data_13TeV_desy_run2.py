@@ -4,7 +4,7 @@ import array
 import math
 from operator import xor
 
-StandAloneROOT=True # crashed when reading  CMSSW files
+StandAloneROOT=False # crashed when reading  CMSSW files
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
@@ -251,7 +251,7 @@ if __name__ == '__main__':
     wait=False
     vetoHEM=False
     correctPrefire=False
-    genLevel=True
+    genLevel=False
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -318,6 +318,7 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
             ("datacard_shapelimit13TeV_run2_UL18_QBH","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qbhUL18"),
+            ("datacard_shapelimit13TeV_run2_2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -885,6 +886,22 @@ if __name__ == '__main__':
           [],
          ],
 
+          [["HLT_PFHT510","HLT_PFJet260"], #2024
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+         
           ]
 
     if len(sys.argv)>1:

@@ -77,7 +77,7 @@ if __name__ == '__main__':
     useM2=True # choice of mu-scale for QCD
     use_UL=True
     responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="2" # "2" for Run2 or "3" for 13.6 TeV projection
+    run="3" # "2" for Run2 or "3" for 13.6 TeV projection
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -103,7 +103,7 @@ if __name__ == '__main__':
       else:
         prefixs=["versions/run2ULNLO_pt12/datacard_shapelimit13TeV"]
     elif run=="3":
-      prefixs=["versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"]
+      prefixs=["versions/run3NNLO_m2/datacard_shapelimit13TeV"]
     else:
       whatprefix
     input_prefix1="datacards/datacard_shapelimit13TeV" # GEN signals
@@ -133,6 +133,9 @@ if __name__ == '__main__':
     jersources=["JER"+y for y in years]+\
                ["SumInQuadrature",
                 ] #["JER1"+y for y in years]+["JER2"+y for y in years]+
+
+    if run=="3":
+      years=["2024"]
 
     colors=[1,2,3,4,6,7,8,9,12,28,34,38,40,41,42,43,44,45,46,47,48,49] #11,20
  
@@ -368,13 +371,13 @@ if __name__ == '__main__':
     # all samples
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
     # for add
-    samples=samples1
+    #samples=samples1
     # for alp+tripleG
     #samples=samples5
     #samples=samples6
     #samples=samples7
     # for postfit plots
-    #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
     
     if len(sys.argv)>1:
@@ -493,7 +496,7 @@ if __name__ == '__main__':
         insignalsample=sample.replace(prefix,input_prefix2)
       print("input signal file", insignalsample)
   
-      insignalfile=TFile(insignalsample,'READ')
+      insignalfile=TFile(insignalsample.replace("_1-run3","_1-run2"),'READ') ###### FIXME when run3 samples exist
       closefiles=[insignalfile]
       out=TFile(sample,'RECREATE')
       closefiles+=[out]
@@ -523,7 +526,9 @@ if __name__ == '__main__':
       # data file
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
-      if use_UL:
+      if run=="3":
+        insample="data/datacard_shapelimit13TeV_run2_2024_chi.root" # ultra legacy reco
+      elif use_UL:
         insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
       else:
         insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
@@ -840,7 +845,8 @@ if __name__ == '__main__':
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
             datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-          if use_UL:
+          if run=="2":
+           if use_UL:
             histname16postVFP="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print(histname16postVFP)
             data16postVFP = TH1F(infile16postVFP.Get(histname16postVFP))
@@ -849,39 +855,39 @@ if __name__ == '__main__':
               datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data16postVFP.GetBinContent(b+1))
             data16postVFP=data16postVFP.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
             data.Add(data16postVFP)
-          if j==0: data.Scale(40.77) # trigger prescales
-          if j==1: data.Scale(40.77) # trigger prescales
-          if j==2: data.Scale(14.44) # trigger prescales
-          #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000")
-          histname17="datacard_shapelimit13TeV_run2_"+years[-2]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          print(histname17)
-          data17 = TH1F(infile17.Get(histname17))
-          for b in range(data.GetXaxis().GetNbins()):
+           if j==0: data.Scale(40.77) # trigger prescales
+           if j==1: data.Scale(40.77) # trigger prescales
+           if j==2: data.Scale(14.44) # trigger prescales
+           #histname17="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_6600").replace("7000_13000","6600_13000")
+           histname17="datacard_shapelimit13TeV_run2_"+years[-2]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+           print(histname17)
+           data17 = TH1F(infile17.Get(histname17))
+           for b in range(data.GetXaxis().GetNbins()):
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data17.GetBinContent(b+1))
             datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data17.GetBinContent(b+1))
-          data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-          if j==0: data17.Scale(60.17) # trigger prescales
-          if j==1: data17.Scale(60.17) # trigger prescales
-          if j==2: data17.Scale(23.76) # trigger prescales
-          data.Add(data17)
-          #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
-          histname18="datacard_shapelimit13TeV_run2_"+years[-1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          print(histname18)
-          data18 = TH1F(infile18.Get(histname18))
-          for b in range(data.GetXaxis().GetNbins()):
+           data17=data17.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+           if j==0: data17.Scale(60.17) # trigger prescales
+           if j==1: data17.Scale(60.17) # trigger prescales
+           if j==2: data17.Scale(23.76) # trigger prescales
+           data.Add(data17)
+           #histname18="Dijet/chi_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")
+           histname18="datacard_shapelimit13TeV_run2_"+years[-1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+           print(histname18)
+           data18 = TH1F(infile18.Get(histname18))
+           for b in range(data.GetXaxis().GetNbins()):
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data18.GetBinContent(b+1))
             datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data18.GetBinContent(b+1))
-          data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-          if j==0: data18.Scale(83.37) # trigger prescales
-          if j==1: data18.Scale(83.37) # trigger prescales
-          if j==2: data18.Scale(29.54) # trigger prescales
-          data.Add(data18)
-        if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
-           lumiratio=35./138. # LUMI ASSUMPTION FOR RUN3
-           data.Scale(factor13p6*lumiratio)
-           dn=data.Integral()
-           data=nloqcd.Clone(histname)
-           data.Scale(dn/nloqcd.Integral())
+           data18=data18.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+           if j==0: data18.Scale(83.37) # trigger prescales
+           if j==1: data18.Scale(83.37) # trigger prescales
+           if j==2: data18.Scale(29.54) # trigger prescales
+           data.Add(data18)
+        #if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
+        #   lumiratio=35./138. # LUMI ASSUMPTION FOR RUN3
+        #   data.Scale(factor13p6*lumiratio)
+        #   dn=data.Integral()
+        #   data=nloqcd.Clone(histname)
+        #   data.Scale(dn/nloqcd.Integral())
         dataevents[j]=data.Integral()
         print("data events:", dataevents[j], ", in pb:", dataevents[j]/138000.)
         out.cd()

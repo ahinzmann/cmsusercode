@@ -11,8 +11,8 @@ samples=[#("data2016",0,74,""),
 	 #("QCD2018",5,7,""),
 #	 ("QCDpy2018",6,1,""),
 #	 ("QCDhw2018",7,1,""),
-	 ("QCDpy2018",6,1,"-GEN"),
-	 ("QCDhw2018",7,1,"-GEN"),
+	 #("QCDpy2018",6,1,"-GEN"),
+	 #("QCDhw2018",7,1,"-GEN"),
 	 #("dataUL16preVFP",11,58,""),
          #("dataUL16postVFP",12,38,""),
          #("dataUL17",13,61,""),
@@ -43,6 +43,7 @@ samples=[#("data2016",0,74,""),
 	 #("qcd2023",34,8,"-28May2024"),
 	 #("qcd2023BPix",35,8,"-28May2024"),
 	 #("qbhUL18",36,24,""),
+	 ("data2024",37,18,""),
 	 ]
 
 count=0
@@ -53,9 +54,10 @@ for year,number,ns,postfix in samples:
     with open(name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/jetmass/CMSSW_14_1_0_pre4/src/
 cmsenv
-python plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+python3 plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
 """)
     with open(name+".submit",'w+') as htc_config:
             htc_config.write("""

@@ -56,16 +56,19 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata):
     for b in range(hdataG.GetN()):
         if unfoldedData:
             N=hdata.GetBinContent(b+1)
-        else:
+        elif hdata.GetBinContent(b+1)>0:
             N=1./pow(hdata.GetBinError(b+1)/hdata.GetBinContent(b+1),2)
+        else:
+            N=0
         print(N)
         nevents+=N
         L=0
         if N>0:
             L=ROOT.Math.gamma_quantile(alpha/2.,N,1.)
         U=ROOT.Math.gamma_quantile_c(alpha/2.,N+1,1.)
-        hdataG.SetPointEYlow(b,(N-L)/N*hdata.GetBinContent(b+1))
-        hdataG.SetPointEYhigh(b,(U-N)/N*hdata.GetBinContent(b+1))
+        if N>0:
+          hdataG.SetPointEYlow(b,(N-L)/N*hdata.GetBinContent(b+1))
+          hdataG.SetPointEYhigh(b,(U-N)/N*hdata.GetBinContent(b+1))
     print("data events:", nevents)
 
     hdataGsysstat=hdataG.Clone(hdataG.GetName()+"_sysstat")
@@ -146,7 +149,7 @@ if __name__=="__main__":
 
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
-    runs="2" # "2" or "3" or "23"
+    runs="3" # "2" or "3" or "23"
     run=runs[-1]
   
     controlRegionCheck=False
@@ -225,7 +228,7 @@ if __name__=="__main__":
       else:
         prefix="versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
     elif run=="3":
-      prefix="versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"
+      prefix="versions/run3NNLO_m2/datacard_shapelimit13TeV"
     else:
       whatprefix
     if unfoldedData:
@@ -233,7 +236,8 @@ if __name__=="__main__":
 
     new_hists=[]
     #for j in [1102,1103,1104,1105,1106,1107,1108]:
-    for j in [1106,1108]:
+    #for j in [1106,1108]:
+    for j in [1108]:
         for signalMass in signalMasses:
             if version=="v6":
               if signalMass<=2500:
@@ -358,7 +362,7 @@ if __name__=="__main__":
                 elif isCB:
                     filename="./crystalBallSmearedAug30/"+filenameprefix+"-run2_chi.root"
                 else:
-                    filename=SaveDir+filenameprefix+"-run2_chi.root"
+                    filename=SaveDir+filenameprefix+"-run"+run+"_chi.root"
 
                 if unfoldedData:
                     fitFile=TFile("limitsGenLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
@@ -570,6 +574,6 @@ if __name__=="__main__":
 
                 CMS_lumi( canvas, iPeriod, iPos );
         
-                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix))+"_"+masstext+"_run2.pdf")
+                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix))+"_"+masstext+"_run"+run+".pdf")
 
                 #sys.exit()

@@ -44,7 +44,7 @@ scaleUncertainty=True
 theoryStatUncertainties=True
 useNNLO=True # choice for QCD
 useM2=True # choice of mu-scale for QCD
-runs="2" # "2" or "3" or "23"
+runs="3" # "2" or "3" or "23"
 run=runs[-1]
 
 isGen=False
@@ -53,7 +53,7 @@ isCB=False
 
 isInjection=False
 
-DMpvalue=True
+DMpvalue=False
 
 signalName={}
 signalExtraName={}
@@ -530,7 +530,7 @@ for model in models:
    else:
      prefix=dire+"versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
  elif run=="3":
-   prefix=dire+"versions/run3ULNNLO_pt12/datacard_shapelimit13TeV"
+   prefix=dire+"versions/run3NNLO_m2/datacard_shapelimit13TeV"
  else:
    whatprefix
 
@@ -541,8 +541,8 @@ for model in models:
     signalExtra=signalExtraName[model]
     #if float(signalExtraName[model].split("_")[2])<=2:
     #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    #signalMasses=[4000,4500,5000,6000,7000]
+    #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
+    signalMasses=[4000,4500,5000,6000,7000]
     #signalMasses=[7000]
     includeSignalTheoryUncertainties=True # Assign QCD-only scale uncertainty to QCD+DM
     
@@ -1155,8 +1155,9 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
          return text  # or whatever
 
       out=system_call("mkdir "+name+version)
-      out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
-      out=system_call("python diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
+      #out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      out=system_call("combine -m "+str(signalMass)+" -M FitDiagnostics "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      out=system_call("python3 diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
       print(out)
 
  for signalMass in signalMasses:
@@ -1167,11 +1168,12 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
      tname=name+"_"+str(signalMass)+"_run"+runs+version+".txt"
     try:
       print("open",tname)
-      f=file(tname)
+      f=open(tname)
     except:
       print("file not found", tname)
       continue
-    for line in f.readlines():
+    for lineb in f.readlines():
+      for line in lineb.split("\\n"):
         if "Observed Limit" in line and asym:
            limits[signalMass]=[signalMass,float(line.strip().split(" ")[-1]),0]
         if "CLs = " in line and testStat=="LEP":
@@ -1190,11 +1192,13 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
          limits[signalMass]+=[signalMass,0,0]
     try:
       tname=name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt"
-      f=file(tname)
+      f=open(tname)
     except:
       print("file not found", tname)
       continue
-    for line in f.readlines():
+    for lineb in f.readlines():
+      for line in lineb.split("\\n"):
+        #if "Observed Limit" in line and asym:
         if "Expected" in line and asym:
            limits[signalMass]+=[float(line.strip().split(" ")[-1])]
         if "Expected CLs" in line:
@@ -1213,6 +1217,6 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
 
  print(limits)
  name=name+"_run"+runs+version+".txt"
- f=file(name,"w")
+ f=open(name,"w")
  f.write(str([limits[signalMass] for signalMass in signalMasses]))
  f.close()

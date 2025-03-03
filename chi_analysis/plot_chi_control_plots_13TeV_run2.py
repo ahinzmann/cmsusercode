@@ -107,10 +107,13 @@ if __name__ == '__main__':
           ("UL17", 1, ""),
           ("UL18", 1, "")
          ]
-    data2=[("2023-28May2024", 1, "Data (2023)")
+    #data2=[("2023-28May2024", 1, "Data (2023)")
+    #     ]
+    #data3=[("2022", 1, "Data (2022)")
+    #     ]
+    data2=[("2024", 1, "Data (2024)")
          ]
-    data3=[("2022", 1, "Data (2022)")
-         ]
+    data3=[]
     #data3=[("UL16preVFP", 1, "Data (UL 2016)"),
     #      ("UL16postVFP", 1, "")
     #     ]
@@ -232,23 +235,24 @@ if __name__ == '__main__':
        ("2023_QCDmadgraphBPix-28May2024-HT1500to2000",9.525/27.207*1.340e+02/17117867, ""),
        ("2023_QCDmadgraphBPix-28May2024-HT2000",9.525/27.207*2.676e+01/20420289, ""),
        ]
-    mc3=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
-       ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
-       ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
-       ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
-       ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
-       ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
-       ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
-       ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
-       ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
-       ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
-       ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
-       ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
-       ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
-       ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
-       ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
-       ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
-       ]
+    mc3=[]
+    #mc3=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
+    #   ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
+    #   ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
+    #   ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
+    #   ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
+    #   ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
+    #   ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
+    #   ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
+    #   ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
+    #   ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
+    #   ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
+    #   ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
+    #   ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
+    #   ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
+    #   ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
+    #   ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
+    #   ]
     #mc3=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
     #   ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
     #   ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/55497082, ""),
@@ -351,7 +355,8 @@ if __name__ == '__main__':
       f_data3+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print(prefix+name+postfix+"_chi.root")
    if compare_Run2Run3:
-     lumi=[137.62,35.18,27.20]
+     #lumi=[137.62,35.18,27.20]
+     lumi=[137.62,35.18,109.08]
    else:
      lumi=[36.33,41.53,59.74]
    f_mc=[]
@@ -460,24 +465,25 @@ if __name__ == '__main__':
      hist2.Draw("pesame")
      legend.AddEntry(hist2,data2[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
      
-     hist3=f_data3[0].Get(prefix+data3[0][0].split("-HT")[0]+var)
-     hist3.Scale(data3[0][1])
-     for i in range(1,len(data3)):
-        hist3.Add(f_data3[i].Get(prefix+data3[i][0].split("-HT")[0]+var),data3[i][1])
-     hist3=hist3.Rebin(4)#len(mass_binning)-1,hist3.GetName()+"_rebin1",mass_binning)
-     normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
-     if compare_EOYvsUL or compare_NULvsUL:
-       normfactor3=lumi[2]*1000.
-     if compare_EOYvsUL_MC or compare_RECOvsGEN:
-       normfactor3=1.
-     hist3.Scale(1./normfactor3)
-     hist3.SetLineColor(4)
-     hist3.SetMarkerStyle(26)
-     hist3.SetMarkerColor(4)
-     hist3.SetMarkerSize(0.2)
-     hist3.SetStats(False)
-     hist3.Draw("pesame")
-     legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
+     if len(f_data3)>0:
+       hist3=f_data3[0].Get(prefix+data3[0][0].split("-HT")[0]+var)
+       hist3.Scale(data3[0][1])
+       for i in range(1,len(data3)):
+          hist3.Add(f_data3[i].Get(prefix+data3[i][0].split("-HT")[0]+var),data3[i][1])
+       hist3=hist3.Rebin(4)#len(mass_binning)-1,hist3.GetName()+"_rebin1",mass_binning)
+       normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
+       if compare_EOYvsUL or compare_NULvsUL:
+         normfactor3=lumi[2]*1000.
+       if compare_EOYvsUL_MC or compare_RECOvsGEN:
+         normfactor3=1.
+       hist3.Scale(1./normfactor3)
+       hist3.SetLineColor(4)
+       hist3.SetMarkerStyle(26)
+       hist3.SetMarkerColor(4)
+       hist3.SetMarkerSize(0.2)
+       hist3.SetStats(False)
+       hist3.Draw("pesame")
+       legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
      
      hist_mc=f_mc[0].Get(prefix+mc[0][0].split("-HT")[0]+var)
      hist_mc.Scale(mc[0][1])
@@ -512,25 +518,26 @@ if __name__ == '__main__':
      hist_mc2.Draw("histsame")
      legend.AddEntry(hist_mc2,mc2[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
-     hist_mc3=f_mc3[0].Get(prefix+mc3[0][0].split("-HT")[0]+var)
-     hist_mc3.Scale(mc3[0][1])
-     for i in range(1,len(mc3)):
-        hist_mc3.Add(f_mc3[i].Get(prefix+mc3[i][0].split("-HT")[0]+var),mc3[i][1])
-     hist_mc3=hist_mc3.Rebin(4)#len(mass_binning)-1,hist_mc3.GetName()+"_rebin1",mass_binning)
-     if compare_EOYvsUL or compare_NULvsUL:
-       hist_mc3.Scale(1./normfactor3)
-     elif compare_EOYvsUL_MC or compare_RECOvsGEN:
-       hist_mc3.Scale(1.)
-     else:
-       hist_mc3.Scale(hist3.Integral(hist3.FindBin(minmass),hist3.GetNbinsX())/hist_mc3.Integral(hist_mc3.FindBin(minmass),hist_mc3.GetNbinsX()))
-     hist_mc3.SetLineColor(4)
-     hist_mc3.SetStats(False)
-     hist_mc3.Draw("histsame")
-     legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
+     if len(f_mc3)>0:
+       hist_mc3=f_mc3[0].Get(prefix+mc3[0][0].split("-HT")[0]+var)
+       hist_mc3.Scale(mc3[0][1])
+       for i in range(1,len(mc3)):
+          hist_mc3.Add(f_mc3[i].Get(prefix+mc3[i][0].split("-HT")[0]+var),mc3[i][1])
+       hist_mc3=hist_mc3.Rebin(4)#len(mass_binning)-1,hist_mc3.GetName()+"_rebin1",mass_binning)
+       if compare_EOYvsUL or compare_NULvsUL:
+         hist_mc3.Scale(1./normfactor3)
+       elif compare_EOYvsUL_MC or compare_RECOvsGEN:
+         hist_mc3.Scale(1.)
+       else:
+         hist_mc3.Scale(hist3.Integral(hist3.FindBin(minmass),hist3.GetNbinsX())/hist_mc3.Integral(hist_mc3.FindBin(minmass),hist_mc3.GetNbinsX()))
+       hist_mc3.SetLineColor(4)
+       hist_mc3.SetStats(False)
+       hist_mc3.Draw("histsame")
+       legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
      hist.Draw("pesame")
      hist2.Draw("pesame")
-     hist3.Draw("pesame")
+     if len(f_data3)>0: hist3.Draw("pesame")
      hist.Draw("axissame")
      
      legend.SetTextSize(0.04)
@@ -546,6 +553,9 @@ if __name__ == '__main__':
      if compare_Run2Run3:
        histbackup=hist
        hist=hist_mc # use MC as reference for first ratio plot
+       hist.GetXaxis().SetRangeUser(minmass,9000)
+       histbackup2=hist2
+       hist2=hist_mc
      ratio.SetTitle("")
      ratio.GetYaxis().SetTitle("Run / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
      ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
@@ -574,15 +584,18 @@ if __name__ == '__main__':
        if hist2.GetBinContent(b+1)>0:
          ratio_mc2.SetBinError(b+1,hist2.GetBinError(b+1)/hist2.GetBinContent(b+1))
      ratio_mc2.Draw("histsame")
-     ratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ratio")
-     ratio_mc3.Divide(hist_mc3,hist3)
-     for b in range(hist3.GetNbinsX()):
-       if hist3.GetBinContent(b+1)>0:
-         ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
-     ratio_mc3.Draw("histsame")
-     ratio.Draw("axissame")
+     if len(f_mc3)>0:
+       ratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ratio")
+       ratio_mc3.Divide(hist_mc3,hist3)
+       for b in range(hist3.GetNbinsX()):
+         if hist3.GetBinContent(b+1)>0:
+           ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
+       ratio_mc3.Draw("histsame")
+       ratio.Draw("axissame")
+
      if compare_Run2Run3:
        hist=histbackup
+       hist2=histbackup2
 
      canvas.cd(3)
      ddratio=hist.Clone(hist.GetName()+"ddratio")
@@ -617,12 +630,13 @@ if __name__ == '__main__':
        if hist.GetBinContent(b+1)>0:
          ddratio2.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
      ddratio2.Draw("histsame")
-     ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
-     ddratio3.Divide(hist3,hist)
-     for b in range(hist.GetNbinsX()):
-       if hist.GetBinContent(b+1)>0:
-         ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-     ddratio3.Draw("histsame")
+     if len(f_data3)>0:
+       ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
+       ddratio3.Divide(hist3,hist)
+       for b in range(hist.GetNbinsX()):
+         if hist.GetBinContent(b+1)>0:
+           ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+       ddratio3.Draw("histsame")
      ratio.Draw("axissame")
 
      canvas.cd(1)
@@ -674,6 +688,7 @@ if __name__ == '__main__':
             else:
               hist.Add(f_data[i].Get(namei),data[i][1]/data[0][1])
         print("mass bin",mass,"data 2016 integral",hist.Integral())
+        integral=hist.Integral()
         if var=="#chi":
             hist=hist.Rebin(len(chi_binnings[mass])-1,hist.GetName()+"_rebin1",chi_binnings[mass])
             for b in range(hist.GetNbinsX()):
@@ -687,7 +702,7 @@ if __name__ == '__main__':
         miny=0
         if hist.Integral()>0:
             miny=log*0.1/hist.GetMaximum()
-            hist.Scale(1./hist.Integral())
+            hist.Scale(1./integral)
         hist.SetTitle("")
         #hist.GetXaxis().SetTitle(label[variables.index(var)])
         hist.GetXaxis().SetLabelColor(0)
@@ -719,6 +734,7 @@ if __name__ == '__main__':
             else:
               hist2.Add(f_data2[i].Get(namei),data2[i][1]/data2[0][1])
         print("mass bin",mass,"data 2017 integral",hist2.Integral())
+        integral=hist2.Integral()
         if var=="#chi":
             hist2=hist2.Rebin(len(chi_binnings[mass])-1,hist2.GetName()+"_rebin1",chi_binnings[mass])
             for b in range(hist2.GetNbinsX()):
@@ -732,48 +748,50 @@ if __name__ == '__main__':
         hist2.SetMarkerSize(0.2)
         miny=0
         if hist2.Integral()>0:
-            miny=log*0.1/hist2.Integral()
-            hist2.Scale(1./hist2.Integral())
+            miny=log*0.1/integral
+            hist2.Scale(1./integral)
         hist2.SetTitle("")
         hist2.SetStats(False)
         hist2.Draw("pesame")
         legend.AddEntry(hist2,data2[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
-        name=prefix+data3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-        if var=="#chi": name+="_rebin1"
-        if var=="y":
-          hist3=f_data3[0].Get(name.replace("y","y_{1}"))
-          hist3.Add(f_data3[0].Get(name.replace("y","y_{2}")))
-        else:
-          hist3=f_data3[0].Get(name)
-        for i in range(1,len(data3)):
-            namei=prefix+data3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-            if var=="#chi": namei+="_rebin1"
-            if var=="y":
-              hist3.Add(f_data3[i].Get(namei.replace("y","y_{1}")),data3[i][1]/data3[0][1])
-              hist3.Add(f_data3[i].Get(namei.replace("y","y_{2}")),data3[i][1]/data3[0][1])
-            else:
-              hist3.Add(f_data3[i].Get(namei),data3[i][1]/data3[0][1])
-        print("mass bin",mass,"data 2018 integral",hist3.Integral())
-        if var=="#chi":
-            hist3=hist3.Rebin(len(chi_binnings[mass])-1,hist3.GetName()+"_rebin1",chi_binnings[mass])
-            for b in range(hist3.GetNbinsX()):
-               hist3.SetBinContent(b+1,hist3.GetBinContent(b+1)/hist3.GetBinWidth(b+1))
-               hist3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinWidth(b+1))
-        if var.startswith("#phi"):
-          hist3=hist3.Rebin(2)
-        hist3.SetLineColor(4)
-        hist3.SetMarkerStyle(25)
-        hist3.SetMarkerColor(4)
-        hist3.SetMarkerSize(0.2)
-        miny=0
-        if hist3.Integral()>0:
-            miny=log*0.1/hist3.Integral()
-            hist3.Scale(1./hist3.Integral())
-        hist3.SetTitle("")
-        hist3.SetStats(False)
-        hist3.Draw("pesame")
-        legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
+        if len(f_data3)>0:
+          name=prefix+data3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+          if var=="#chi": name+="_rebin1"
+          if var=="y":
+            hist3=f_data3[0].Get(name.replace("y","y_{1}"))
+            hist3.Add(f_data3[0].Get(name.replace("y","y_{2}")))
+          else:
+            hist3=f_data3[0].Get(name)
+          for i in range(1,len(data3)):
+              namei=prefix+data3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+              if var=="#chi": namei+="_rebin1"
+              if var=="y":
+                hist3.Add(f_data3[i].Get(namei.replace("y","y_{1}")),data3[i][1]/data3[0][1])
+                hist3.Add(f_data3[i].Get(namei.replace("y","y_{2}")),data3[i][1]/data3[0][1])
+              else:
+                hist3.Add(f_data3[i].Get(namei),data3[i][1]/data3[0][1])
+          print("mass bin",mass,"data 2018 integral",hist3.Integral())
+          integral=hist3.Integral()
+          if var=="#chi":
+              hist3=hist3.Rebin(len(chi_binnings[mass])-1,hist3.GetName()+"_rebin1",chi_binnings[mass])
+              for b in range(hist3.GetNbinsX()):
+                 hist3.SetBinContent(b+1,hist3.GetBinContent(b+1)/hist3.GetBinWidth(b+1))
+                 hist3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinWidth(b+1))
+          if var.startswith("#phi"):
+            hist3=hist3.Rebin(2)
+          hist3.SetLineColor(4)
+          hist3.SetMarkerStyle(25)
+          hist3.SetMarkerColor(4)
+          hist3.SetMarkerSize(0.2)
+          miny=0
+          if hist3.Integral()>0:
+              miny=log*0.1/integral
+              hist3.Scale(1./integral)
+          hist3.SetTitle("")
+          hist3.SetStats(False)
+          hist3.Draw("pesame")
+          legend.AddEntry(hist3,data3[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
         name=prefix+mc[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
         if var=="#chi": name+="_rebin1"
@@ -807,16 +825,16 @@ if __name__ == '__main__':
         name=prefix+mc2[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
         if var=="#chi": name+="_rebin1"
         if var=="y":
-          hist_mc2=f_mc2[0].Get(name.replace("y","y_{1}"))
-          hist_mc2.Add(f_mc2[0].Get(name.replace("y","y_{2}")))
+          hist_mc2=f_mc2[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+          hist_mc2.Add(f_mc2[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
         else:
           hist_mc2=f_mc2[0].Get(name)
         for i in range(1,len(mc2)):
             namei=prefix+mc2[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
             if var=="#chi": namei+="_rebin1"
             if var=="y":
-              hist_mc2.Add(f_mc2[i].Get(namei.replace("y","y_{1}")),mc2[i][1]/mc2[0][1])
-              hist_mc2.Add(f_mc2[i].Get(namei.replace("y","y_{2}")),mc2[i][1]/mc2[0][1])
+              hist_mc2.Add(f_mc2[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),mc2[i][1]/mc2[0][1])
+              hist_mc2.Add(f_mc2[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),mc2[i][1]/mc2[0][1])
             else:
               hist_mc2.Add(f_mc2[i].Get(namei),mc2[i][1]/mc2[0][1])
         if var=="#chi":
@@ -833,38 +851,39 @@ if __name__ == '__main__':
         hist_mc2.Draw("histsame")
         legend.AddEntry(hist_mc2,mc2[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
-        name=prefix+mc3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-        if var=="#chi": name+="_rebin1"
-        if var=="y":
-          hist_mc3=f_mc3[0].Get(name.replace("y","y_{1}"))
-          hist_mc3.Add(f_mc3[0].Get(name.replace("y","y_{2}")))
-        else:
-          hist_mc3=f_mc3[0].Get(name)
-        for i in range(1,len(mc3)):
-            namei=prefix+mc3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
-            if var=="#chi": namei+="_rebin1"
-            if var=="y":
-              hist_mc3.Add(f_mc3[i].Get(namei.replace("y","y_{1}")),mc3[i][1]/mc3[0][1])
-              hist_mc3.Add(f_mc3[i].Get(namei.replace("y","y_{2}")),mc3[i][1]/mc3[0][1])
-            else:
-              hist_mc3.Add(f_mc3[i].Get(namei),mc3[i][1]/mc3[0][1])
-        if var=="#chi":
-            hist_mc3=hist_mc3.Rebin(len(chi_binnings[mass])-1,hist_mc3.GetName()+"_rebin1",chi_binnings[mass])
-            for b in range(hist_mc3.GetNbinsX()):
-               hist_mc3.SetBinContent(b+1,hist_mc3.GetBinContent(b+1)/hist_mc3.GetBinWidth(b+1))
-               hist_mc3.SetBinError(b+1,hist_mc3.GetBinError(b+1)/hist_mc3.GetBinWidth(b+1))
-        if var.startswith("#phi"):
-           hist_mc3=hist_mc3.Rebin(2)
-        if hist_mc3.Integral()>0:
-            hist_mc3.Scale(hist3.Integral()/hist_mc3.Integral())
-        hist_mc3.SetLineColor(4)
-        hist_mc3.SetStats(False)
-        hist_mc3.Draw("histsame")
-        legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
+        if len(f_mc3)>0:
+          name=prefix+mc3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+          if var=="#chi": name+="_rebin1"
+          if var=="y":
+            hist_mc3=f_mc3[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+            hist_mc3.Add(f_mc3[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
+          else:
+            hist_mc3=f_mc3[0].Get(name)
+          for i in range(1,len(mc3)):
+              namei=prefix+mc3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+              if var=="#chi": namei+="_rebin1"
+              if var=="y":
+                hist_mc3.Add(f_mc3[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),mc3[i][1]/mc3[0][1])
+                hist_mc3.Add(f_mc3[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),mc3[i][1]/mc3[0][1])
+              else:
+                hist_mc3.Add(f_mc3[i].Get(namei),mc3[i][1]/mc3[0][1])
+          if var=="#chi":
+              hist_mc3=hist_mc3.Rebin(len(chi_binnings[mass])-1,hist_mc3.GetName()+"_rebin1",chi_binnings[mass])
+              for b in range(hist_mc3.GetNbinsX()):
+                 hist_mc3.SetBinContent(b+1,hist_mc3.GetBinContent(b+1)/hist_mc3.GetBinWidth(b+1))
+                 hist_mc3.SetBinError(b+1,hist_mc3.GetBinError(b+1)/hist_mc3.GetBinWidth(b+1))
+          if var.startswith("#phi"):
+             hist_mc3=hist_mc3.Rebin(2)
+          if hist_mc3.Integral()>0:
+              hist_mc3.Scale(hist3.Integral()/hist_mc3.Integral())
+          hist_mc3.SetLineColor(4)
+          hist_mc3.SetStats(False)
+          hist_mc3.Draw("histsame")
+          legend.AddEntry(hist_mc3,mc3[0][2]+(" GEN" if compare_RECOvsGEN else ""),"l")
 
         hist.Draw("lesame")
         hist2.Draw("lesame")
-        hist3.Draw("lesame")
+        if len(f_data3)>0: hist3.Draw("lesame")
         hist.Draw("axissame")
 
         legend.SetTextSize(0.04)
@@ -880,6 +899,8 @@ if __name__ == '__main__':
         if compare_Run2Run3:
           histbackup=hist
           hist=hist_mc # use MC as reference for first ratio plot
+          histbackup2=hist2
+          hist2=hist_mc
         ratio.SetTitle("")
         ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
         ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
@@ -891,7 +912,7 @@ if __name__ == '__main__':
           ratio.GetYaxis().SetRangeUser(0.5,1.5)
         if var=="#chi" and mass<=5:
           ratio.GetYaxis().SetRangeUser(0.8,1.2)
-        if compare_EOYvsUL or compare_NULvsUL or compare_years:
+        if compare_EOYvsUL or compare_NULvsUL or compare_years or compare_Run2Run3:
          if var in ["#chi","y_{boost}","p_{T1}","p_{T2}","y_{1}","y_{2}","y","#phi_{1}","#phi_{2}"] and mass<=7:
           ratio.GetYaxis().SetRangeUser(0.5,1.5)
          if var=="#chi" and mass<=5:
@@ -917,15 +938,17 @@ if __name__ == '__main__':
           if hist2.GetBinContent(b+1)>0:
             ratio_mc2.SetBinError(b+1,hist2.GetBinError(b+1)/hist2.GetBinContent(b+1))
         ratio_mc2.Draw("histsame")
-        ratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ratio")
-        ratio_mc3.Divide(hist_mc3,hist3)
-        for b in range(hist3.GetNbinsX()):
-          if hist3.GetBinContent(b+1)>0:
-            ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
-        ratio_mc3.Draw("histsame")
-        ratio.Draw("axissame")
+        if len(f_mc3)>0: 
+          ratio_mc3=hist_mc3.Clone(hist_mc3.GetName()+"ratio")
+          ratio_mc3.Divide(hist_mc3,hist3)
+          for b in range(hist3.GetNbinsX()):
+            if hist3.GetBinContent(b+1)>0:
+              ratio_mc3.SetBinError(b+1,hist3.GetBinError(b+1)/hist3.GetBinContent(b+1))
+          ratio_mc3.Draw("histsame")
+          ratio.Draw("axissame")
         if compare_Run2Run3:
           hist=histbackup
+          hist2=histbackup2
 
         canvas.cd(3)
         ddratio=hist.Clone(hist.GetName()+"ddratio")
@@ -963,12 +986,13 @@ if __name__ == '__main__':
           if hist.GetBinContent(b+1)>0:
             ddratio2.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
         ddratio2.Draw("histsame")
-        ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
-        ddratio3.Divide(hist3,hist)
-        for b in range(hist.GetNbinsX()):
-          if hist.GetBinContent(b+1)>0:
-            ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-        ddratio3.Draw("histsame")
+        if len(f_data3)>0: 
+          ddratio3=hist3.Clone(hist3.GetName()+"ddratio")
+          ddratio3.Divide(hist3,hist)
+          for b in range(hist.GetNbinsX()):
+            if hist.GetBinContent(b+1)>0:
+              ddratio3.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
+          ddratio3.Draw("histsame")
         ratio.Draw("axissame")
 
         canvas.cd(1)
