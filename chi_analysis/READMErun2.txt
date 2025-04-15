@@ -4,7 +4,7 @@ The order of the execution matters in some cases.
 -------- MC production in CMSSW_7_1_X:
 
 submit_ci_samples_13TeV.py # produce GEN samples for LO QCD and LO QCD+CI
-#submit_add_samples_13TeV.py # produce GEN samples for LO QCD+ADD CUETP8M1 tune
+submit_add_samples_13TeV.py # produce GEN samples for LO QCD+ADD CUETP8M1 tune
 submit_herwig_samples_13TeV.py # produce GEN samples for QCD
 
 #calculate_crosssections_uzh.py # extract LO QCD, LO QCD+CI and LO QCD+ADD from production Pythia log files, Herwig cross sections have to be taken from LHC.log file by hand.
@@ -13,7 +13,7 @@ xsdj_table.py # extract LO DM cross sections from LHC headers
 copy-samples.py # copy GEN samples from PSI to CERN
 copy-tree.sh # copy data and full simulation QCD from PSI to CERN
 
---------- MC production in CMSSW_10_6_19 -------:
+--------- MC production in CMSSW_10_6_19 and 14_0_X or CMSSW_14_1_X -------:
 
 submit_add_samples_CP5.py # produce GEN samples for LO QCD and QCD+ADD CP5 tune
 submit_add_samples_CUETP8M1.py # produce GEN samples for LO QCD and QCD+ADD CUETP8M1 tune
@@ -33,9 +33,12 @@ submit_madgraph_samples_13TeV.py # produce samples for alp and tripleG
 
 calculate_xsecs_blackmax.py # calculate cross sections with Blackmax
 
--------- Data analysis in CMSSW_10_6_X:
+qbh/run_all.sh # QBH with CP5
+submit_qbh_samples_13TeV.py # produce samples for QBH with CP5
 
-plotSignal_13TeV_desy_run2_loop.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI and ADD samples
+-------- Data analysis in CMSSW_10_6_X or CMSSW_14_1_X:
+
+plotSignal_13TeV_desy_run2_loop.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for QCD, CI, ADD and QBH samples
 plotSignal_13TeV_desy_dm_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for DM samples
 plotSignal_13TeV_desy_alp_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for alp samples
 plotSignal_13TeV_desy_tripleG_run2.py # call plotSignal_13TeV_desy_run2.py # produce dijet angular histograms from GEN samples for tripleG samples
@@ -63,8 +66,9 @@ plot_chi_uncertainties_13TeV_run2.py # plot summary of all systematic uncertaint
 plot_chi_combined_data_13TeV_dm_run2.py # DM comparison plots postfit
 plot_chi_combined_theory_13TeV_run2.py # final result plot
 
--------- Limit calculation in CMSSW_8_1_X:
+-------- Limit calculation in CMSSW_14_1_X:
 
+cp HiggsJPCmodified.py /data/dust/user/hinzmann/jetmass/CMSSW_14_1_0_pre4/src/HiggsAnalysis/CombinedLimit/python/
 calculate_limit_shape_13TeV_run2.py # calculate CLS for each CI, ADD, DM and QBH, alp, tripleG model
 calculate_limit_shape_13TeV_dm_run2.py # calculate CLS for each DM model
 plot_limit_shape_13TeV_run2.py # compute CLS limit for each CI, ADD and QBH, alp, tripleG model

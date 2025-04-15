@@ -10,10 +10,10 @@ allmassbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6
 
 models=[]
 models+=[3] #ADD
-#models+=[10] #QBH ADD6
-#models+=[11] #QBH RS1
-models+=[12] #QBH Blackmax n=6
-models+=[13] #QBH Blackmax n=6 RECO
+models+=[10] #QBH ADD6
+models+=[11] #QBH RS1
+#models+=[12] #QBH Blackmax n=6
+#models+=[13] #QBH Blackmax n=6 RECO
 #models+=[60,61,62,63,64,65,66,67,68,69] #CI
 #models+=[70,71,72,73,74,75,76,77] 
 #models+=[78,79,80,81,82,83,84,85] 
@@ -44,8 +44,10 @@ scaleUncertainty=True
 theoryStatUncertainties=True
 useNNLO=True # choice for QCD
 useM2=True # choice of mu-scale for QCD
-runs="3" # "2" or "3" or "23"
+runs="2" # "2" or "3" or "23"
 run=runs[-1]
+use_NNPDF3_signals=True
+use_CP2=False
 
 isGen=False
 
@@ -148,16 +150,28 @@ for model in models:
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4800,13000)]
  if model==10:
-    signal="QBH_"    
-    signalMasses=[7500,8000,8500,9000,9500,10000,10500,11000]
-    massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
-    signalExtra="_6"
+    if use_NNPDF3_signals:
+      signal="QBH_ADD6_"    
+      signalMasses=[7500,8000,8500,9000,9500,10000,11000,12000]
+      massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+      signalExtra=""
+    else:
+      signal="QBH_"    
+      signalMasses=[7500,8000,8500,9000,9500,10000,10500,11000]
+      massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+      signalExtra="_6"
  if model==11:
-    signal="QBH_"
-    signalMasses=[4500,5000,5500,6000,6500,7000]
-    #massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
-    massbins=[(5400,6000),(6000,7000),(7000,13000)]
-    signalExtra="_RS1"
+    if use_NNPDF3_signals:
+      signal="QBH_RS1_"    
+      signalMasses=[4500,5000,5500,6000,6500,7000,7500,8000]
+      massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+      signalExtra=""
+    else:
+      signal="QBH_"
+      signalMasses=[4500,5000,5500,6000,6500,7000]
+      #massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+      massbins=[(5400,6000),(6000,7000),(7000,13000)]
+      signalExtra="_RS1"
  if model==12:
     signal="QBH_MD"
     signalMasses=[6000,7000,8000,9000]
@@ -523,7 +537,9 @@ for model in models:
 
  dire="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  if run=="2":
-   if useM2:
+   if use_NNPDF3_signals:
+     prefix=dire+"versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"
+   elif useM2:
      prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
    elif useNNLO:
      prefix=dire+"versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
@@ -542,8 +558,10 @@ for model in models:
     #if float(signalExtraName[model].split("_")[2])<=2:
     #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
     #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
-    signalMasses=[4000,4500,5000,6000,7000]
-    #signalMasses=[7000]
+    signalMasses=[4000,4500,5000,6000,7000] # for usual limits
+    #signalMasses=[7000] # for postfit plots
+    #signalMasses=[2000] # for control region check
+    #signalMasses=[5000] # for low bins check
     includeSignalTheoryUncertainties=True # Assign QCD-only scale uncertainty to QCD+DM
     
     if isGen:
@@ -614,9 +632,10 @@ for model in models:
             fname=prefix + '_GENnp-16-run'+run+'_chi.root'
     elif signalWithMass=="CIminusLL18000":
             fname=prefix + '_GENnp-17-run'+run+'_chi.root'
-    elif "ADD" in signalWithMass and run=="3":
-        lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
-        fname=prefix + '_GENnp-'+str(lambdaTes.index(int(signalWithMass.strip("ADD")))+18)+'-run'+run+'_chi.root'
+    elif model==3 and run=="3":
+        fname=prefix + "_GENnp-run-"+run+"-" + signalWithMass + '_chi.root'
+    elif (model==3 or model==10 or model==11) and use_NNPDF3_signals:
+        fname=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + signalWithMass + '_chi.root'
     elif signalWithMass=="ADD6000":
         fname=prefix + '_GENnp-18-run'+run+'_chi.root'
     elif signalWithMass=="ADD7000":
@@ -793,7 +812,8 @@ for model in models:
       elif signalMass<=4500:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
       elif signalMass<=5000:
-        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+        #massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)] # for usual limits
+        massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400)] # for lowestBinsCheck
       elif signalMass<=6000:
         massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
       else:
@@ -873,6 +893,8 @@ for model in models:
           massbins.insert(allmassbins.index(massbin),massbin)
         else:
           break
+    #massbins=[(5400,6000),(6000,7000),(7000,13000)] # for tests
+    #signalmassbins=[(5400,6000),(6000,7000),(7000,13000)] # for tests
     print("massbins", massbins)
     print("signalmassbins", signalmassbins)
     
@@ -1079,10 +1101,10 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
            return text[len(prefix):]
        return text  # or whatever
 
-    #out=system_call("cp "+dire+"HiggsJPC.py ${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/python")
+    #out=system_call("cp "+dire+"HiggsJPCmodified.py ${CMSSW_BASE}/src/HiggsAnalysis/CombinedLimit/python")
     if runs=="23":
       out=system_call("combineCards.py run2=chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run2.txt run3=chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run3.txt > chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run23.txt")
-    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".txt -P HiggsAnalysis.CombinedLimit.HiggsJPC:twoHypothesisHiggs -o fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+    out=system_call("text2workspace.py -m "+str(signalMass)+" chi_datacard13TeV"+str(model)+"_"+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".txt -P HiggsAnalysis.CombinedLimit.HiggsJPCmodified:twoHypothesisHiggs -o fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
     
     if testStat=="LEP":
      poi=""
@@ -1112,7 +1134,8 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
       # -H ProfileLikelihood
       f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(str(out));f.close()
      else: 
-      out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      out=system_call("combine -m "+str(signalMass)+" -M Significance -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+      #out=system_call("combine --signif -m "+str(signalMass)+" -M ProfileLikelihood -n "+signal+signalExtra+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
       f = open(name+"_exp_"+str(signalMass)+"_run"+runs+version+".txt","w");f.write(str(out));f.close()
 
     elif testStat=="LHC":

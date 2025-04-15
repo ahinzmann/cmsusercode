@@ -28,7 +28,7 @@ count=0
 for sample,signalMass,mDM,coupling,nxsec,version in samples:
   
     samplename=sample+"_"+str(signalMass)+"_"+str(mDM)+"_"+coupling[0]+"_"+coupling[1]+"_"+version
-    with open(samplename+str(nxsec)+".sh",'w+') as wrapper_script:
+    with open("submit/"+samplename+str(nxsec)+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /afs/desy.de/user/h/hinzmann/rivet/CMSSW_10_6_16/src
@@ -36,7 +36,7 @@ cmsenv
 cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 python plotSignal_13TeV_desy_run2.py """+samplename+""" """+str(nxsec)+"""
 """)
-    with open(samplename+str(nxsec)+".submit",'w+') as htc_config:
+    with open("submit/"+samplename+str(nxsec)+".submit",'w+') as htc_config:
             htc_config.write("""
 #HTC Submission File for GEN sample production
 #requirements      =  OpSysAndVer == "SL7"
@@ -54,13 +54,13 @@ JobBatchName      = """+samplename+"""
 #RequestDisk       = 10G
 getenv            = True
 executable        = /usr/bin/sh
-arguments         = " """+samplename+str(nxsec)+""".sh"
+arguments         = " submit/"""+samplename+str(nxsec)+""".sh"
 queue 1
 """)
-    string="condor_submit "+samplename+str(nxsec)+".submit"
+    string="condor_submit submit/"+samplename+str(nxsec)+".submit"
     if count%5!=4:
       string+=" &"
-    print string
+    print(string)
     count+=1
 
     #samplename=sample+"_"+str(signalMass)+"_"+str(mDM)+"_"+coupling[0]+"_"+coupling[1]+"_"+version

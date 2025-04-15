@@ -2,7 +2,7 @@ import os
 
 count=0
 
-for n in range(480):
+for n in range(504):
     name="add_systematics_"+str(n)
     with open("submit/"+name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
@@ -36,5 +36,5 @@ queue 1
     #string="source "+name+".sh"
     if count%5!=4:
       string+=" &"
-    print string
+    print(string)
     count+=1

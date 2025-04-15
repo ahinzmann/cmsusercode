@@ -108,7 +108,8 @@ if __name__=="__main__":
             continue
           
         limits+=[[]]
-        for line in f.readlines():
+        for lin in f.readlines():
+         for line in lin.split("\\n"):
  
           if "Observed Limit" in line and asym:
             limits[-1]=[float(g.replace('p','.')),float(line.strip().split(" ")[-1]),0]
@@ -144,7 +145,9 @@ if __name__=="__main__":
           print("can't open",prefix+testStat+asym+str(signalCounter[style+"_mdm"+mdm+"_g"+g])+"_"+style+"_Dijet_LO_Mphi_exp_"+str(signalMass)+"_run2"+version+".txt")
           del limits[-1]
           continue
-        for line in f.readlines():
+        #for line in f.readlines():
+        for lin in f.readlines():
+         for line in lin.split("\\n"):
           if "Expected" in line and asym:
               limits[-1]+=[float(line.strip().split(" ")[-1])]
           if "Expected CLs" in line:
@@ -458,7 +461,7 @@ if __name__=="__main__":
     g_q.SetMarkerSize(0)
     g_q.SetLineColor(1)
     g_q.SetLineWidth(3)
-    #mg.Add(g_q,"pl")
+    mg.Add(g_q,"pl")
 
     g_q.SetName("gq_obs")
     g_q_exp.SetName("gq_exp")
@@ -548,7 +551,7 @@ if __name__=="__main__":
     l.SetFillStyle(0)
     l.SetTextSize(0.04)
     l.SetShadowColor(0)
-    #l.AddEntry(g_q,"Observed","LP")
+    l.AddEntry(g_q,"Observed","LP")
     l.AddEntry(g_q_exp,"Expected","LP")
     l.AddEntry(g_q_old,"2016 Observed","L")
     l.AddEntry(g_q_resonance,"Resonance Search Observed","L")

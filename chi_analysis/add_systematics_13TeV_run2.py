@@ -77,7 +77,9 @@ if __name__ == '__main__':
     useM2=True # choice of mu-scale for QCD
     use_UL=True
     responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="3" # "2" for Run2 or "3" for 13.6 TeV projection
+    run="2" # "2" for Run2 or "3" for 13.6 TeV projection
+    use_NNPDF3_signals=True
+    use_CP2=False
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -96,7 +98,9 @@ if __name__ == '__main__':
       muAltScale="m2"
 
     if run=="2":
-      if useM2:
+      if use_NNPDF3_signals:
+        prefixs=["versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"]
+      elif useM2:
         prefixs=["versions/run2ULNNLO_m2/datacard_shapelimit13TeV"]
       elif useNNLO:
         prefixs=["versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"]
@@ -277,6 +281,13 @@ if __name__ == '__main__':
        couplings=[(0,0,0,1),]
        for lambdaT in lambdaTes:
          samples1+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13p6TeV_Nov2022",1) for minMass in minMasses])]
+    elif use_NNPDF3_signals:
+       minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       maxMasses=[1900,2400,2800,3300,3800,4300,5200,6000,13000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
+       couplings=[(0,0,0,1),]
+       for lambdaT in lambdaTes:
+         samples1+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13TeV_Feb2025"+("CP2" if use_CP2 else "CP5"),1) for minMass in minMasses])]
     else:
       samples1+=[#("QCDADD6000",[]),
              #("QCDADD7000",[]),
@@ -350,11 +361,19 @@ if __name__ == '__main__':
          samples4+=[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
 
-    for m in [[7500,0.01678352],[8000,0.004871688],[8500,0.001292072],[9000,0.0003054339],[9500,0.00006221544],[10000,0.00001040396],[10500,0.000001327101],[11000,0.0000001145733]]:
-        samples3+=[("QBH_"+str(m[0])+"_6",[("QBH_"+str(m[0])+"_6",m[1])]),]
+    if use_NNPDF3_signals:
+       xsecs_qbhadd6={7500.0: 0.01255937, 8000.0: 0.003966422, 8500.0: 0.001199453, 9000.0: 0.0003439181, 9500.0: 9.214433e-05, 10000.0: 2.255567e-05, 11000.0: 8.795348e-07, 12000.0: 1.020805e-08}
+       for signalMass in [7500,8000,8500,9000,9500,10000,11000,12000]:
+         samples3+=[("QBH_ADD6_"+str(signalMass),[('qbh_ADD6_'+str(+signalMass)+"_Feb2025CP5",1.*xsecs_qbhadd6[signalMass]),])] # Factor 3 to reproduce old results. To be fixed.
+       xsecs_qbhrs1={4500.0: 0.04722447, 5000.0: 0.0164621, 5500.0: 0.005754282, 6000.0: 0.001997539, 6500.0: 0.0006832241, 7000.0: 0.0002286843, 7500.0: 7.442768e-05, 8000.0: 2.339223e-05}
+       for signalMass in [4500,5000,5500,6000,6500,7000,7500,8000]:
+         samples3+=[("QBH_RS1_"+str(signalMass),[('qbh_RS1_'+str(signalMass)+"_Feb2025CP5",1.*xsecs_qbhrs1[signalMass]),])] # Factor 3 to reproduce old results. To be fixed.
+    else:
+       for m in [[7500,0.01678352],[8000,0.004871688],[8500,0.001292072],[9000,0.0003054339],[9500,0.00006221544],[10000,0.00001040396],[10500,0.000001327101],[11000,0.0000001145733]]:
+         samples3+=[("QBH_"+str(m[0])+"_6",[("QBH_"+str(m[0])+"_6",m[1])]),]
 
-    for m in [[4500,0.05148],[5000,0.01829],[5500,0.006472],[6000,0.002250],[6500,0.0007599],[7000,0.0002461]]:
-        samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
+       for m in [[4500,0.05148],[5000,0.01829],[5500,0.006472],[6000,0.002250],[6500,0.0007599],[7000,0.0002461]]:
+         samples3+=[("QBH_"+str(m[0])+"_RS1",[("QBH_"+str(m[0])+"_RS1",m[1])]),]
 
     for weight in ['fa1000','fa1500','fa2000','fa2500','fa3000','fa3500','fa4000','fa4500','fa5000','fa50000']:
          samples5+=[("alp_QCD_"+weight,[("alp_QCD_"+weight,0)]),]
@@ -372,12 +391,17 @@ if __name__ == '__main__':
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
     # for add
     #samples=samples1
+    # for qbh
+    samples=samples3
     # for alp+tripleG
     #samples=samples5
     #samples=samples6
+    # for QBH check
     #samples=samples7
     # for postfit plots
-    samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    #samples=[("DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
+    #samples=[("DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("cs_ct14nnlo_14000_V-A-",[])]
     
     if len(sys.argv)>1:
@@ -436,9 +460,10 @@ if __name__ == '__main__':
         sample=prefix + '_GENnp-16-run'+run+'_chi.root'
       elif samples[i][0]=="QCDCIminusLL18000":
         sample=prefix + '_GENnp-17-run'+run+'_chi.root'
-      elif "QCDADD" in samples[i][0] and run=="3":
-        lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
-        sample=prefix + '_GENnp-'+str(lambdaTes.index(int(samples[i][0].strip("QCDADD")))+18)+'-run'+run+'_chi.root'
+      elif "ADD" in samples[i][0] and run=="3":
+        sample=prefix + "_GENnp-run"+run+"-" + samples[i][0] + '_chi.root'
+      elif ("ADD" in samples[i][0] or "QBH" in samples[i][0]) and use_NNPDF3_signals:
+        sample=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + samples[i][0] + '_chi.root'
       elif samples[i][0]=="QCDADD6000":
         sample=prefix + '_GENnp-18-run'+run+'_chi.root'
       elif samples[i][0]=="QCDADD7000":
@@ -477,7 +502,7 @@ if __name__ == '__main__':
         sample=prefix + '_GENnp-antici-run'+run+'_chi.root'
       elif samples[i][0]=="QCD":
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
-      elif "QBH" in samples[i][0]:
+      elif "QBH_MD" in samples[i][0]:
         sample=prefix + "_run2_UL18_" + samples[i][0] + '-GEN_chi.root'
       elif "alp" in samples[i][0] or "tripleG" in samples[i][0] or "DM" in samples[i][0] or "ll" in samples[i][0] or "cs" in samples[i][0] or "wide" in samples[i][0] or "QBH" in samples[i][0]:
         sample=prefix + "_" + samples[i][0] + '-run'+run+'_chi.root'
@@ -1004,6 +1029,15 @@ if __name__ == '__main__':
             histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print(histnamein)
             cibackup=insignalfile.Get(histnamein)
+            ci=cibackup.Clone(histname)
+            ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
+            ci.Scale(samples[i][1][0][1])
+            ci.Scale(1./nloqcdbackup.Integral())
+            ci.Add(nloqcd)
+        elif "QBH" in samples[i][0] and use_NNPDF3_signals:
+            histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+            cibackup=insignalfile.Get(histname)
+            histname=histname.replace("_backup","")
             ci=cibackup.Clone(histname)
             ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
             ci.Scale(samples[i][1][0][1])

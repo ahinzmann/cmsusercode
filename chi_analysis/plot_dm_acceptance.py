@@ -10,7 +10,7 @@ if __name__=="__main__":
 
   for mDM in [1,3000]:
 
-    print "start ROOT"
+    print("start ROOT")
     gROOT.Reset()
     gROOT.SetStyle("Plain")
     gStyle.SetOptStat(0)
@@ -30,7 +30,7 @@ if __name__=="__main__":
     gStyle.SetPadTickY(1)
     gStyle.SetEndErrorSize(5)
 
-    print "start CMS_lumi"
+    print("start CMS_lumi")
 
     #gROOT.LoadMacro("CMS_lumi.C");
     #iPeriod = 4;	#// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
@@ -50,28 +50,28 @@ if __name__=="__main__":
     
     style=0
     for scenario in range(4):
-       pointsX=array.array("f",[1,1.5,2,2.5,3,4,5,6])
+       pointsX=array.array("f",[1,1.5,2,2.5,3,4,5,6,7])
        if mDM==1:
         if scenario==0:
-         pointsY=array.array("f",[0.00061,0.0026,0.0140,0.163,0.336,0.332,0.239,0.154])
+         pointsY=array.array("f",[0.00061,0.0026,0.0140,0.163,0.336,0.332,0.239,0.154,0.110])
         elif scenario==1:
-         pointsY=array.array("f",[0.00093,0.0036,0.0164,0.158,0.326,0.340,0.224,0.173])
+         pointsY=array.array("f",[0.00093,0.0036,0.0164,0.158,0.326,0.340,0.224,0.173,0.111])
         elif scenario==2:
-         pointsY=array.array("f",[0.00095,0.0052,0.0261,0.085,0.134,0.141,0.121,0.097])
+         pointsY=array.array("f",[0.00095,0.0052,0.0261,0.085,0.134,0.141,0.121,0.097,0.082])
         else:
-         pointsY=array.array("f",[0.00102,0.0044,0.0299,0.081,0.137,0.153,0.114,0.111])
+         pointsY=array.array("f",[0.00102,0.0044,0.0299,0.081,0.137,0.153,0.114,0.111,0.078])
        else:
         if scenario==0:
-	 pointsX=array.array("f",[1,1.5,2.5,3,5,6])
+         pointsX=array.array("f",[1,1.5,2.5,3,5,6])
          pointsY=array.array("f",[0.000438,0.00239,0.1815,0.368,0.262,0.164])
         elif scenario==1:
-	 pointsX=array.array("f",[1,2,2.5,4,5])
+         pointsX=array.array("f",[1,2,2.5,4,5])
          pointsY=array.array("f",[0.00093,0.02538,0.0888,0.147,0.122])
         elif scenario==2:
-	 pointsX=array.array("f",[1.5,2,3,4,6])
+         pointsX=array.array("f",[1.5,2,3,4,6])
          pointsY=array.array("f",[0.0034,0.01349,0.339,0.4299,0.178])
         else:
-	 pointsX=array.array("f",[1,1.5,2.5,3,5,6])
+         pointsX=array.array("f",[1,1.5,2.5,3,5,6])
          pointsY=array.array("f",[0.0004,0.0061,0.0831,0.138,0.095,0.108])
        g=TGraph(len(pointsX),pointsX,pointsY)
        #g.SetMarkerStyle(styles[style])
@@ -94,7 +94,7 @@ if __name__=="__main__":
     mg.SetTitle("")
     mg.GetXaxis().SetTitle("m_{Med} (TeV)")
     mg.GetYaxis().SetTitle("Acceptance")
-    mg.GetXaxis().SetRangeUser(1,6)
+    mg.GetXaxis().SetRangeUser(1,7)
     mg.GetYaxis().SetRangeUser(0.0005,1)
 
     l3.SetFillStyle(0)

@@ -25,69 +25,81 @@ gStyle.SetLegendBorderSize(0)
 def createPlots(sample,prefix,weightname,massbins):
     files=[]
     normalize=False
-    print "list files", sample, prefix
+    print("list files", sample, prefix)
     if sample.endswith(".txt"):
         filelist=open(sample)
-	for line in filelist.readlines():
-	    if ".root" in line:
-	        files+=[line.strip()]
+        for line in filelist.readlines():
+           if ".root" in line:
+               files+=[line.strip()]
     else:
       if "alp" in prefix:
         #foldersM=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/")
         foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular/alp/")
-	for folder in foldersM:
-	 #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "newsamples2" in folder: continue
+        for folder in foldersM:
+         #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+         if not "newsamples2" in folder: continue
          #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample)
-	 #for folder in folders:
-	 if sample in folder and ".root" in folder:
+         #for folder in folders:
+         if sample in folder and ".root" in folder:
             files+=["file:///data/dust/user/hinzmann/dijetangular/alp/"+folder]
             #files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/alp/"+folder]
-	    #break
+            #break
       elif "qcd" in prefix:
         foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular")
-	for folderM in foldersM:
-	 if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")): continue
-	 if not "newsamples1" in folderM: continue
+        for folderM in foldersM:
+         if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")): continue
+         if not "newsamples1" in folderM: continue
          folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_",""))
-	 for folder in folders:
-	  if sample.replace("qcd_","") in folder and ".root" in folder:
+         for folder in folders:
+          if sample.replace("qcd_","") in folder and ".root" in folder:
             files+=["file:///data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample.replace("qcd_","")+"/"+folder]
-	    #break
+            #break
       elif "tripleG" in prefix:
         foldersM=os.listdir("/data/dust/user/hinzmann/dijetangular/tripleG")
-	for folder in foldersM:
-	 #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
-	 if not "mg" in folder: continue
+        for folder in foldersM:
+         #if not os.path.exists("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample): continue
+         if not "mg" in folder: continue
          #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/"+folderM+"/"+sample)
-  	 #for folder in folders:
-	 if sample in folder and ".root" in folder:
+         #for folder in folders:
+         if sample in folder and ".root" in folder:
             files+=["file:///data/dust/user/hinzmann/dijetangular/tripleG/"+folder]
-	    #break
+            #break
       elif "DM" in prefix:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/")
         if weightname in [str(i) for i in range(1,111)]:
           normalize=True
-	for folder in folders:
-	  if sample in folder and ".root" in folder:
+        for folder in folders:
+          if sample in folder and ".root" in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/dm/"+folder]
-	    #break
+            #break
       elif "Nov2022" in sample:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/")
         #folders=os.listdir("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/")
-	for folder in folders:
-	  if sample in folder and ".root" in folder:
+        for folder in folders:
+          if sample in folder and ".root" in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Nov2022/"+folder]
-	    #files+=["file:///data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
-	    #break
+            #files+=["file:///data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"+folder]
+            #break
+      elif "Feb2025CP5" in sample:
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP5/")
+        for folder in folders:
+          if sample in folder and ".root" in folder:
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP5/"+folder]
+            #break
+      elif "Feb2025CP2" in sample:
+        folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP2/")
+        for folder in folders:
+          if sample in folder and ".root" in folder:
+            files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP2/"+folder]
+            #break
       else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
-	for folder in folders:
-	  if sample in folder:
+        for folder in folders:
+          if sample in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/"+folder+"/GEN.root"]
-	    #break
+            #break
 
-    print files
+    print(files)
     prunedgenjets_handle=Handle("std::vector<reco::GenJet>")
     prunedgenjets_label="ak4GenJets"
 
@@ -101,46 +113,46 @@ def createPlots(sample,prefix,weightname,massbins):
         plot.Sumw2()
 
     event_count=0
-    print "open chain"
+    print("open chain")
     events=TChain('Events')
     for f in files[:]:
       events.Add(f)
     
     nevents=events.GetEntries()
-    print sample,nevents,weightname
+    print(sample,nevents,weightname)
     event_count=0
     acceptance=0
     sumweights=0
     firstxsec=0
     for event in events:
          if "DM" in prefix or "alp" in prefix or "qcd" in prefix or "tripleG" in prefix:
-	  xsec=event.LHEEventProduct_externalLHEProducer__GEN.product().originalXWGTUP()*1000. # convert to pb
-	  if firstxsec>0 and xsec!=firstxsec:
-	     print "inconsistent xsec",firstxsec,xsec
-	     firstxsec=xsec
-	  if firstxsec==0:
-	     firstxsec=xsec
-	     print "xsec", xsec
-	  #weights=[(w.id,w.wgt) for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights()]
-	  #print weights
-	  try:
-	   weight=[w.wgt for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights() if weightname==w.id][0]/event.LHEEventProduct_externalLHEProducer__GEN.product().weights()[0].wgt
-	  except:
-	   print "error reading weight"
- 	   break
+          xsec=event.LHEEventProduct_externalLHEProducer__GEN.product().originalXWGTUP()*1000. # convert to pb
+          if firstxsec>0 and xsec!=firstxsec:
+             print("inconsistent xsec",firstxsec,xsec)
+             firstxsec=xsec
+          if firstxsec==0:
+             firstxsec=xsec
+             print("xsec", xsec)
+          #weights=[(w.id,w.wgt) for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights()]
+          #print weights
+          try:
+           weight=[w.wgt for w in event.LHEEventProduct_externalLHEProducer__GEN.product().weights() if weightname==w.id][0]/event.LHEEventProduct_externalLHEProducer__GEN.product().weights()[0].wgt
+          except:
+           print("error reading weight")
+           break
          else:
-	  xsec=weightname
-	  weight=1.
-	 event_count+=1
-	 #if event_count>100: break
-         if event_count%10000==1: print "event",event_count
-	 sumweights+=weight
+          xsec=weightname
+          weight=1.
+         event_count+=1
+         #if event_count>100: break
+         if event_count%10000==1: print("event",event_count)
+         sumweights+=weight
          jet1=TLorentzVector()
          jet2=TLorentzVector()
-	 jets=event.recoGenJets_ak4GenJets__GEN.product()
-	 if len(jets)<2: continue
-	 j1=jets[0]
-	 j2=jets[1]
+         jets=event.recoGenJets_ak4GenJets__GEN.product()
+         if len(jets)<2: continue
+         j1=jets[0]
+         j2=jets[1]
          jet1.SetPtEtaPhiM(j1.pt(),j1.eta(),j1.phi(),j1.mass())
          jet2.SetPtEtaPhiM(j2.pt(),j2.eta(),j2.phi(),j2.mass())
          mjj=(jet1+jet2).M()
@@ -149,12 +161,12 @@ def createPlots(sample,prefix,weightname,massbins):
          if mjj<1000 or chi>16. or yboost>1.11: continue
          if mjj>2400: acceptance+=weight
          irec=0
-	 for massbin in massbins:
+         for massbin in massbins:
             if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
                plots[irec].Fill(chi,weight)
-	    irec+=1
-	 plots[irec].Fill(mjj,weight)
-    print sample,weightname,"acceptance",acceptance/sumweights if sumweights>0 else 0, "xsec",xsec*sumweights/event_count if event_count>0 else 0
+            irec+=1
+         plots[irec].Fill(mjj,weight)
+    print(sample,weightname,"acceptance",acceptance/sumweights if sumweights>0 else 0, "xsec",xsec*sumweights/event_count if event_count>0 else 0)
     for plot in plots:
       if event_count>0:
        if normalize:
@@ -195,7 +207,10 @@ if __name__ == '__main__':
       elif sys.argv[1]=="CP5":
        prefix="datacard_shapelimit13TeV_GEN-QCD-CP5-run2"
       else:
-       prefix="datacard_shapelimit13TeV_GENnp-"+sys.argv[1]
+       prefix="datacard_shapelimit13TeV_GENnp"
+       spli=sys.argv[1].split("-")
+       if len(spli)>1:
+        prefix+="-"+spli[1]
     if "run" in prefix:
       run=prefix[-1]
     else:
@@ -223,46 +238,46 @@ if __name__ == '__main__':
               (4200,4800),
               (4800,5400),
               (5400,6000),
-	      (6000,7000),
-	      (7000,13000),
+              (6000,7000),
+              (7000,13000),
               ]
  
     if run=="3":
       samples3=[("QCD",[("pythia8_add_m1500_1900__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m1900_2400__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m2400_2800__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m2800_3300__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m3300_3800__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m3800_4300__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m4300_5200__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m5200_6000__0_0_0_1_13p6TeV_Nov2022",1),
-		       ("pythia8_add_m6000_13600__0_0_0_1_13p6TeV_Nov2022",1),
-		       ]),
-	    ]
+                       ("pythia8_add_m1900_2400__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m2400_2800__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m2800_3300__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m3300_3800__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m3800_4300__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m4300_5200__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m5200_6000__0_0_0_1_13p6TeV_Nov2022",1),
+                       ("pythia8_add_m6000_13600__0_0_0_1_13p6TeV_Nov2022",1),
+                      ]),
+            ]
     elif "CP5" in prefix:
       samples3=[("QCD",[("pythia8_add_m1500_1900__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m1900_2400__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m2400_2800__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m2800_3300__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m3300_3800__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m3800_4300__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m4300_5200__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m5200_6000__0_0_0_1_13TeV_Nov2022",1),
-		       ("pythia8_add_m6000_13000__0_0_0_1_13TeV_Nov2022",1),
-		       ]),
-	    ]
+                       ("pythia8_add_m1900_2400__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m2400_2800__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m2800_3300__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m3300_3800__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m3800_4300__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m4300_5200__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m5200_6000__0_0_0_1_13TeV_Nov2022",1),
+                       ("pythia8_add_m6000_13000__0_0_0_1_13TeV_Nov2022",1),
+                      ]),
+            ]
     else:
       samples3=[("QCD",[("pythia8_add_m1500_1900__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m1900_2400__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m2400_2800__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m2800_3300__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m3300_3800__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m3800_4300__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m4300_5200__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m5200_6000__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ("pythia8_add_m6000_13000__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
-		       ]),
-	    ]
+                       ("pythia8_add_m1900_2400__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m2400_2800__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m2800_3300__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m3300_3800__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m3800_4300__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m4300_5200__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m5200_6000__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ("pythia8_add_m6000_13000__0_0_0_1_13TeV_CUETP8M1_Nov2022",1),
+                       ]),
+            ]
       #samples3=[("QCD",[("pythia8_ci_m1000_1500_50000_1_0_0_13TeV_Nov14",3.769e-05),
 	#	       ("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),
 	#	       ("pythia8_ci_m1900_2400_50000_1_0_0_13TeV_Nov14",8.836e-07),
@@ -465,6 +480,20 @@ if __name__ == '__main__':
        couplings=[(0,0,0,1),]
        for lambdaT in lambdaTes:
          samples+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13p6TeV_Nov2022",1) for minMass in minMasses])]
+    elif "CP5" in prefix:
+       minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       maxMasses=[1900,2400,2800,3300,3800,4300,5200,6000,13000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
+       couplings=[(0,0,0,1),]
+       for lambdaT in lambdaTes:
+         samples+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13TeV_Feb2025CP5",1) for minMass in minMasses])]
+    elif "CP2" in prefix:
+       minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       maxMasses=[1900,2400,2800,3300,3800,4300,5200,6000,13000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
+       lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
+       couplings=[(0,0,0,1),]
+       for lambdaT in lambdaTes:
+         samples+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13TeV_Feb2025CP2",1) for minMass in minMasses])]
     else:
        samples+=[\
              ("QCDADD6000",[("pythia8_add_m1500_1900_6000_0_0_0_1_13TeV_Nov14",1),
@@ -620,14 +649,20 @@ if __name__ == '__main__':
 		       ("pythia8_add_m5200_13000_22000_0_0_0_1_13TeV_Nov14",1),
 		       ]),
              ]
+
+    for signalMass in [4500,5000,5500,6000,6500,7000,7500,8000]:
+         samples+=[("QBH_RS1_"+str(signalMass),[('qbh_RS1_'+str(signalMass)+"_Feb2025CP5",1),])]
+    for signalMass in [7500,8000,8500,9000,9500,10000,11000,12000]:
+         samples+=[("QBH_ADD6_"+str(signalMass),[('qbh_ADD6_'+str(+signalMass)+"_Feb2025CP5",1),])]
              
     if "np" in prefix:
-       print "pick", int(prefix.split("-")[1])
+       print("pick", int(sys.argv[1].split("-")[0]))
        index=0
        for sample in samples:
-         print index,sample
+         print(index,sample)
          index+=1
-       samples=[samples[int(prefix.split("-")[1])]]
+       samples=[samples[int(sys.argv[1].split("-")[0])]]
+       prefix+="-"+samples[0][0]
     elif "DM" in prefix:
        samples=[("DM"+point+"_"+weights[nxsec],[(point,weights[nxsec])])]
     elif "alp" in prefix or "tripleG" in prefix:
@@ -636,22 +671,28 @@ if __name__ == '__main__':
                                               (point+"_HT2000to4000",weights[nxsec]),
                                               (point+"_HT4000toInf",weights[nxsec]),
                                               ]),
-	       ]
+               ]
     elif "qcd" in prefix:
        samples=[(""+point,[(point+"_HT200to1000",weights[nxsec]),
                                               (point+"_HT1000to2000",weights[nxsec]),
                                               (point+"_HT2000to4000",weights[nxsec]),
                                               (point+"_HT4000toInf",weights[nxsec]),
                                               ]),
-	       ]
+               ]
     elif "QCD" in prefix:
        samples=samples3
     
     xsecs=eval(open("xsecs_13TeV.txt").readline())
     xsecs13p6=eval(open("xsecs_13p6TeV.txt").readline())
+    xsecsCP5=eval(open("xsecs_13TeV_CP5.txt").readline())
+    xsecsCP2=eval(open("xsecs_13TeV_CP2.txt").readline())
     for key,val in xsecs13p6.items():
       xsecs[key]=val
-    print xsecs
+    for key,val in xsecsCP5.items():
+      xsecs[key]=val
+    for key,val in xsecsCP2.items():
+      xsecs[key]=val
+    print(xsecs)
 
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -663,17 +704,17 @@ if __name__ == '__main__':
 #        newsamples=[]
 #        for sample in samples:
 #          found=False
-#	  for arg in sys.argv:
-#	    if sample[0]==arg or sample[0]=="QCD":
-#	        newsamples+=[sample]
-#		break
-#	samples=newsamples
-#	if samples[-1][0]=="QCD":
+#          for arg in sys.argv:
+#           if sample[0]==arg or sample[0]=="QCD":
+#               newsamples+=[sample]
+#               break
+#       samples=newsamples
+#       if samples[-1][0]=="QCD":
     #        prefix+="_"+samples[-1][0]
     #    else:
-    #	    prefix+="_"+samples[-1][0].replace("QCD","")
+    #        prefix+="_"+samples[-1][0].replace("QCD","")
   
-    print prefix, samples
+    print(prefix, samples)
 
     plots=[]
     for name,files in samples:
@@ -681,14 +722,14 @@ if __name__ == '__main__':
       i=0
       for filename,xsec in files:
         i+=1
-	if "DM" in prefix or "alp" in prefix or "qcd" in prefix or "tripleG" in prefix:
+        if "DM" in prefix or "alp" in prefix or "qcd" in prefix or "tripleG" in prefix or "QBH" in prefix:
           ps=createPlots(filename,name,xsec,massbins)
         else:
-	  ps=createPlots(filename,name,float(xsecs[filename]),massbins)
+          ps=createPlots(filename,name,float(xsecs[filename]),massbins)
         if i==1:
           plots[-1]+=ps
-	else:
-	  for i in range(len(plots[-1])):
+        else:
+          for i in range(len(plots[-1])):
             plots[-1][i].Add(ps[i])
 
     out=TFile("data/"+prefix + '_chi.root','RECREATE')
@@ -697,25 +738,25 @@ if __name__ == '__main__':
         #if plots[i][j].Integral()>0:
         #  plots[i][j].Scale(expectedevents[j]/plots[i][j].Integral())
         plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
-	if samples[i][0]=="QCD":
-	   # data
-	   plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
-	   # ALT
-	   clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
-	   clone.Write()
-	   # QCD
+        if samples[i][0]=="QCD":
+           # data
+           plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
+           # ALT
+           clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
+           clone.Write()
+           # QCD
            plots[i][j].Scale(1e-10)
            plots[i][j].Write()
-	   # QCD backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
-	else:
-	   # signal
-	   clone=plots[i][j]
-	   clone.Write()
-	   # signal backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
+           # QCD backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
+        else:
+           # signal
+           clone=plots[i][j]
+           clone.Write()
+           # signal backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
     for j in range(len(massbins),len(plots[0])):
       for i in range(1):
         plots[i][j].Write()
@@ -736,7 +777,7 @@ if __name__ == '__main__':
     for j in range(len(massbins)):
       canvas.cd(j+1)
       plots[0][j].Draw("he")
-      print "number of events passed:",plots[0][j].GetEntries()
+      print("number of events passed:",plots[0][j].GetEntries())
       legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
       legends+=[legend1]
       legend1.AddEntry(plots[0][j],samples[0][0],"l")

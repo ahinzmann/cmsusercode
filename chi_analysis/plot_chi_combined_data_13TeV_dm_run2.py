@@ -149,11 +149,12 @@ if __name__=="__main__":
 
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
-    runs="3" # "2" or "3" or "23"
+    runs="2" # "2" or "3" or "23"
     run=runs[-1]
   
     controlRegionCheck=False
-    backgroundOnlyCheck=True
+    lowestBinsCheck=True
+    backgroundOnlyCheck=False
     unfoldedData=False
     isCB=False
     version="v6b"
@@ -206,6 +207,8 @@ if __name__=="__main__":
       signalMasses=[7000]
     if controlRegionCheck:
       signalMasses=[2000]
+    if lowestBinsCheck:
+      signalMasses=[5000]
 
     gas=["0p01","0p05","0p1","0p2","0p25","0p3","0p5","0p75","1","1p5","2p0","2p5","3p0"]
 
@@ -294,7 +297,7 @@ if __name__=="__main__":
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
 
-            if controlRegionCheck or backgroundOnlyCheck:
+            if controlRegionCheck or lowestBinsCheck or backgroundOnlyCheck:
               massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
             uncertaintynames=["pdf","jer","prefire","scale","scaleAlt","trigger"] # "scale", "sim"
@@ -517,7 +520,7 @@ if __name__=="__main__":
                 #h14Gsysstat.Draw("zesame")
                 hNloQcd.Draw("histsame")
                 hbPrefit.Draw("histsame")
-                if not controlRegionCheck and not backgroundOnlyCheck:
+                if not controlRegionCheck and not lowestBinsCheck and not backgroundOnlyCheck:
                   hDm.Draw("histsame")
                   hsPrefit.Draw("histsame")
                 hNloQcd.Draw("axissame")
@@ -542,7 +545,7 @@ if __name__=="__main__":
                 l3=TLegend(0.19,0.8,0.45,0.95,"M_{Med}="+str(signalMass)+", g_{q}="+GA[j].replace("p","."))
                 l3.SetFillStyle(0)
                 l3.SetTextSize(0.035)
-                if not controlRegionCheck and not backgroundOnlyCheck:
+                if not controlRegionCheck and not lowestBinsCheck and not backgroundOnlyCheck:
                   l3.Draw("same")
                 
                 if unfoldedData:
@@ -556,7 +559,7 @@ if __name__=="__main__":
                 l2.AddEntry(h14,"Data #pm stat","ple")
                 l2.AddEntry(h3newnew,"QCD post-fit #pm sys","fl")
                 l2.AddEntry(hbPrefit,"QCD pre-fit","l")
-                if not controlRegionCheck and not backgroundOnlyCheck:
+                if not controlRegionCheck and not lowestBinsCheck and not backgroundOnlyCheck:
                   l2.AddEntry(hDm,"QCD+Signal post-fit","fl")
                   l2.AddEntry(hsPrefit,"QCD+Signal pre-fit","l")
                 l2.SetFillStyle(0)
@@ -574,6 +577,6 @@ if __name__=="__main__":
 
                 CMS_lumi( canvas, iPeriod, iPos );
         
-                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix))+"_"+masstext+"_run"+run+".pdf")
+                canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("lowest_bins_fit" if lowestBinsCheck else ("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix)))+"_"+masstext+"_run"+run+".pdf")
 
                 #sys.exit()

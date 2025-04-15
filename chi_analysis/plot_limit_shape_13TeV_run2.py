@@ -42,6 +42,7 @@ if __name__=="__main__":
  testStat="LHC"
  asym="a" #asymptotic CLS
  runs="2" # "2" or "3" or "23"
+ use_NNPDF3_signals=True
 
  limit_list={}
 
@@ -66,8 +67,14 @@ if __name__=="__main__":
     if model==9:
        signal="cs_nn30nlo_0_"    
     if model==10:
+      if use_NNPDF3_signals:
+       signal="QBH_ADD6_"    
+      else:
        signal="QBH_"    
     if model==11:
+      if use_NNPDF3_signals:
+       signal="QBH_RS1_"    
+      else:
        signal="QBH_"    
     if model==12:
        signal="QBH_MD"
@@ -91,10 +98,10 @@ if __name__=="__main__":
     if model>=95 and model<100:
        signal="tripleG_QCD_CG"
 
-    print signal,model
+    print(signal,model)
 
-    print "limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt"
-    f=file("limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt")
+    print("limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt")
+    f=open("limits"+testStat+asym+str(model)+"_"+signal+"_run"+runs+".txt")
     limits=eval(f.readline())
     #print limits
 
@@ -110,17 +117,17 @@ if __name__=="__main__":
     if "tripleG" in signal:
       min_x=1000
       max_x=40000
-    g0=TGraph(0)
+    g0=TGraph()
     g0.SetPoint(0,min_x,0)
     g0.SetPoint(1,max_x,0)
     mg.Add(g0)
     
-    g=TGraph(0)
-    g_exp=TGraph(0)
-    g_exp1m=TGraph(0)
-    g_exp1p=TGraph(0)
-    g_exp2m=TGraph(0)
-    g_exp2p=TGraph(0)
+    g=TGraph()
+    g_exp=TGraph()
+    g_exp1m=TGraph()
+    g_exp1p=TGraph()
+    g_exp2m=TGraph()
+    g_exp2p=TGraph()
     for mass,limit,error,exp,exp1m,exp1p,exp2m,exp2p in limits:
       if "tripleG" in signal: mass=1000./sqrt(mass)
       if limit==0: limit=1e-5
@@ -209,18 +216,18 @@ if __name__=="__main__":
     for i in range(max_x):
         mass=i*(max_x-limits[0][0])/max_x+limits[0][0]
         if mass<min_x or mass>max_x: continue
-	if limit==0 and g.Eval(mass,0)>log10(cut):
-	    limit=mass
-	if exp==0 and g_exp.Eval(mass,0)>log10(cut):
-	    exp=mass
-	if exp1m==0 and g_exp1m.Eval(mass,0)>log10(cut):
-	    exp1m=mass
-	if exp1p==0 and g_exp1p.Eval(mass,0)>log10(cut):
-	    exp1p=mass
-	if exp2m==0 and g_exp2m.Eval(mass,0)>log10(cut):
-	    exp2m=mass
-	if exp2p==0 and g_exp2p.Eval(mass,0)>log10(cut):
-	    exp2p=mass
+        if limit==0 and g.Eval(mass,0)>log10(cut):
+           limit=mass
+        if exp==0 and g_exp.Eval(mass,0)>log10(cut):
+           exp=mass
+        if exp1m==0 and g_exp1m.Eval(mass,0)>log10(cut):
+           exp1m=mass
+        if exp1p==0 and g_exp1p.Eval(mass,0)>log10(cut):
+           exp1p=mass
+        if exp2m==0 and g_exp2m.Eval(mass,0)>log10(cut):
+           exp2m=mass
+        if exp2p==0 and g_exp2p.Eval(mass,0)>log10(cut):
+           exp2p=mass
     err=0
     if exp1m>0: err=exp-exp1m
     if exp1p>0 and exp1p-exp>exp-exp1m: err=exp1p-exp
@@ -252,8 +259,8 @@ if __name__=="__main__":
     #  print "limit: %.4f" % (100./max(1e-5,limit)), "& %.4f" % (100./max(1e-5,exp)), "$\pm$ %.4f" % (-err)
     #  print "limit: %.4f," % (100./max(1e-5,limit)), "%.4f," % (100./max(1e-5,exp)), "%.4f, %.4f, 0, 0" % ((100./max(1e-5,exp1m),(100./max(1e-5,exp1p))))
     #else:
-    print "limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.)
-    print "limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, %.2f, %.2f" % ((exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
+    print("limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.))
+    print("limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, %.2f, %.2f" % ((exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.))
     limit_list[model]=(limit/1000.,(exp/1000.),(exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
     
     canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run'+runs+'.pdf')
@@ -282,16 +289,16 @@ if __name__=="__main__":
       min_x=3.5
       max_x=14
       points=[(3.6,96),(4.2,97),(4.8,98),(5.4,99),(6.0,99),(7.0,99),(8.0,99),(9.0,99),(10.0,99),(12.0,99),(14.0,99),(16.0,99),(18.0,99),(20.0,99)] #(3.0,95),
-    g0=TGraph(0)
+    g0=TGraph()
     g0.SetPoint(0,min_x,0)
     g0.SetPoint(1,max_x,0)
     mg.Add(g0)
     
-    g=TGraph(0)
-    g_exp=TGraph(0)
-    g_band=TGraphAsymmErrors(0)
-    g_band_2sigma=TGraphAsymmErrors(0)
-    g_val=TGraph(0)
+    g=TGraph()
+    g_exp=TGraph()
+    g_band=TGraphAsymmErrors()
+    g_band_2sigma=TGraphAsymmErrors()
+    g_val=TGraph()
     g_val.SetPoint(0,3.6,0)
     g_val.SetPoint(1,3.6,10)
     
@@ -336,7 +343,7 @@ if __name__=="__main__":
     g.SetMarkerSize(0)
     g.SetLineColor(1)
     g.SetLineWidth(3)
-    #mg.Add(g,"pl")
+    mg.Add(g,"pl")
     g_val.SetLineColor(2)
     g_val.SetLineWidth(303)
     g_val.SetFillColor(2)
@@ -382,7 +389,7 @@ if __name__=="__main__":
     l.SetFillStyle(0)
     l.SetTextSize(0.04)
     l.SetShadowColor(0)
-    #l.AddEntry(g,"Observed","LP")
+    l.AddEntry(g,"Observed","LP")
     l.AddEntry(g_exp,"Expected","LP")
     l.AddEntry(g_band,"Expected #pm 1 s.d.","F")
     l.AddEntry(g_band_2sigma,"Expected #pm 2 s.d.","F")

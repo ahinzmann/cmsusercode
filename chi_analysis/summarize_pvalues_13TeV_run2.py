@@ -62,13 +62,14 @@ for signal,signalMass,massbinsset in [("CIplusLL","12000",massbinssets2),
         name=name.replace("v6b","v5")
     else:
       name="pvalue_LHCa"+signal+"_"+("_".join([s[0:4] for s in str(massbins).strip("[]").split("(")])).strip("_")+"_exp_"+signalMass+"_run2"
-    print name
+    print(name)
     f1=open(name+".txt")
     observed=0
-    for l in f1.readlines():
+    for lin in f1.readlines():
+      for l in lin.split("\\n"):
         if "CLb" in l:
-	    pval=float(l.split("=")[1].split("+")[0].strip(" "))
-            print "pvalue",pval,"significance",RooStats.PValueToSignificance((1.-pval)/2.)
+            pval=float(l.split("=")[1].split("+")[0].strip(" "))
+            print("pvalue",pval,"significance",RooStats.PValueToSignificance((1.-pval)/2.))
         if "Significance:" in l:
-	    significance=float(l.strip().split(" ")[-1].strip(")"))
-            print "significance",significance
+            significance=float(l.strip().split(" ")[-1].strip(")"))
+            print("significance",significance)

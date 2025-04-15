@@ -2,7 +2,7 @@ import os
 
 #version="13p6TeV_Nov2022"
 #com="13600"
-version="13TeV_Feb2025CP5"
+version="13TeV_Feb2025CP2"
 com="13000"
 
 minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
@@ -119,7 +119,7 @@ process.MessageLogger=cms.Service("MessageLogger",
 )
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
-from Configuration.Generator.MCTunes2017.PythiaCP5Settings_cfi import *
+from Configuration.Generator.MCTunes2017.PythiaCP2Settings_cfi import *
 
 process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 	comEnergy = cms.double("""+com+"""),
@@ -131,7 +131,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 	
 	PythiaParameters = cms.PSet(
                 pythia8CommonSettingsBlock,
-                pythia8CP5SettingsBlock,
+                pythia8CP2SettingsBlock,
 
 		processParameters = cms.vstring(
 			'PhaseSpace:mHatMin = """+str(minMass)+""" ',
@@ -162,7 +162,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
     cfg.writelines("""
 		),
 		parameterSets = cms.vstring('pythia8CommonSettings',
-                                            'pythia8CP5Settings',
+                                            'pythia8CP2Settings',
                                             'processParameters')
 	)
 )
@@ -192,7 +192,7 @@ cmsenv
 cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 export X509_USER_PROXY=/afs/desy.de/user/h/hinzmann/run2023/myproxy.pem
 cmsRun submit/"""+samplename+str(jobnum)+""".py
-gfal-copy -f data/"""+samplename+str(jobnum)+""".root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP5/
+gfal-copy -f data/"""+samplename+str(jobnum)+""".root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/Feb2025CP2/
 rm data/"""+samplename+str(jobnum)+""".root
 """)
     with open("submit/"+samplename+str(jobnum)+".submit",'w+') as htc_config:
@@ -208,7 +208,7 @@ error             = submit/"""+samplename+str(jobnum)+""".e
 #log               = submit/"""+samplename+str(jobnum)+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
 +RequestRuntime   = 40000
-#RequestMemory     = 10G
+RequestMemory     = 10G
 JobBatchName      = """+samplename+"""
 #RequestDisk       = 10G
 getenv            = True

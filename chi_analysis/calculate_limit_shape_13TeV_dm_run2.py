@@ -23,9 +23,9 @@ if VectorDM:
       signalName[counter]="DMVector_Dijet_LO_Mphi"
       signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_1p0_gdma_0_gv_"+gv+"_ga_0"
       if counter%5==4:
-        print "nohup python calculate_limit_shape_13TeV_run2.py "+str(counter)+" >& log"+str(counter)
+        print("nohup python3 calculate_limit_shape_13TeV_run2.py "+str(counter)+" >& log"+str(counter))
       else:
-        print "nohup python calculate_limit_shape_13TeV_run2.py "+str(counter)+" >& log"+str(counter)+" &"
+        print("nohup python3 calculate_limit_shape_13TeV_run2.py "+str(counter)+" >& log"+str(counter)+" &")
       counter+=1
 
 if AxialDM:
@@ -39,9 +39,9 @@ if AxialDM:
       signalName[counter]="DMAxial_Dijet_LO_Mphi"
       signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_"+ga
       if counter%15==4:
-        print "nohup python calculate_limit_shape_13TeV_run2.py "+str(counter)+" &> log"+str(counter)
+        print("nohup python3 calculate_limit_shape_13TeV_run2.py "+str(counter)+" &> log"+str(counter))
       else:
-        print "nohup python calculate_limit_shape_13TeV_run2.py "+str(counter)+" &> log"+str(counter)+" &"
+        print("nohup python3 calculate_limit_shape_13TeV_run2.py "+str(counter)+" &> log"+str(counter)+" &")
       counter+=1
 
 
