@@ -86,13 +86,14 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
   compareRun3=False
   oldTheory=False
-  signalsBSM=True
+  signalsBSM=False
   signalsDM=False
-  compareScales=False
+  compareScales=True
+  comparePDFs=True
   compareMu30=False
 
   massbins=[(1200,1500),
@@ -152,42 +153,42 @@ if __name__=="__main__":
       for chi_bin in mass_bin:
         chi_binnings[-1].append(chi_bin)
 
+  #gROOT.Reset()
+  gROOT.SetBatch(True)
+  gROOT.SetStyle("Plain")
+  gStyle.SetOptStat(0)
+  gStyle.SetOptFit(0)
+  gStyle.SetTitleOffset(1.2,"Y")
+  gStyle.SetPadLeftMargin(0.18)
+  gStyle.SetPadBottomMargin(0.11)
+  gStyle.SetPadTopMargin(0.055)
+  gStyle.SetPadRightMargin(0.05)
+  gStyle.SetMarkerSize(1.5)
+  gStyle.SetHistLineWidth(1)
+  gStyle.SetStatFontSize(0.020)
+  gStyle.SetTitleSize(0.06, "XYZ")
+  gStyle.SetLabelSize(0.05, "XYZ")
+  gStyle.SetNdivisions(510, "XYZ")
+  gStyle.SetLegendBorderSize(0)
+  gStyle.SetPadTickX(1)
+  gStyle.SetPadTickY(1)
+  gStyle.SetEndErrorSize(8)
+
+  print("load CMS style")
+  gROOT.LoadMacro("CMS_lumi.C");
+  iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
+  iPos = 33;
+  #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
+  #// iPos=11 : top-left, left-aligned
+  #// iPos=33 : top-right, right-aligned
+  #// iPos=22 : center, centered
+  #// mode generally : 
+  #//   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
+
   for massbin in range(len(massbins)):
       
     massbintext = str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")
     
-    #gROOT.Reset()
-    gROOT.SetBatch(True)
-    gROOT.SetStyle("Plain")
-    gStyle.SetOptStat(0)
-    gStyle.SetOptFit(0)
-    gStyle.SetTitleOffset(1.2,"Y")
-    gStyle.SetPadLeftMargin(0.18)
-    gStyle.SetPadBottomMargin(0.11)
-    gStyle.SetPadTopMargin(0.055)
-    gStyle.SetPadRightMargin(0.05)
-    gStyle.SetMarkerSize(1.5)
-    gStyle.SetHistLineWidth(1)
-    gStyle.SetStatFontSize(0.020)
-    gStyle.SetTitleSize(0.06, "XYZ")
-    gStyle.SetLabelSize(0.05, "XYZ")
-    gStyle.SetNdivisions(510, "XYZ")
-    gStyle.SetLegendBorderSize(0)
-    gStyle.SetPadTickX(1)
-    gStyle.SetPadTickY(1)
-    gStyle.SetEndErrorSize(8)
-
-    print("load CMS style")
-    gROOT.LoadMacro("CMS_lumi.C");
-    iPeriod = 5;	#// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
-    iPos = 33;
-    #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
-    #// iPos=11 : top-left, left-aligned
-    #// iPos=33 : top-right, right-aligned
-    #// iPos=22 : center, centered
-    #// mode generally : 
-    #//   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
-
     prefix="datacard_shapelimit13TeV"
 
     c = TCanvas("combined", "combined", 0, 0, 650, 800)
@@ -377,6 +378,49 @@ if __name__=="__main__":
              hNloQcdAlt.Scale(1./hNloQcdAlt.Integral())
              for b in range(hNloQcdAlt.GetXaxis().GetNbins()):
                  hNloQcdAlt.SetBinContent(b+1,hNloQcdAlt.GetBinContent(b+1)/hNloQcdAlt.GetBinWidth(b+1))
+
+            if comparePDFs:
+             filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_nn31nnlo_cppread_mu_"+muScale+".root"
+             print(filename1nu2)
+             nlofile3 = TFile.Open(filename1nu2)
+             new_hists+=[nlofile3]
+             hNloQcdPdf=None
+             for k in mass_bins_nlo_list[massbin]:
+              #histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
+              histname='qcd_chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0"
+              print(histname)
+              hnlo = TH1F(nlofile3.Get(histname))
+              #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
+              hnlo=hnlo.Rebin(len(chi_binnings[massbin])-1,hnlo.GetName()+"_rebin1",chi_binnings[massbin])
+              #hnlo=rebin(hnlo,len(chi_binnings[j])-1,chi_binnings[j])
+              if hNloQcdPdf:
+                 hNloQcdPdf.Add(hnlo)
+              else:
+                 hNloQcdPdf=hnlo
+             hNloQcdPdf=smoothChi(hNloQcdPdf) # SMOOTH NNLO PREDICTION (FIX ME)
+             hNloQcdPdf.SetLineColor(6)
+             hNloQcdPdf.SetLineStyle(3)
+             hNloQcdPdf.SetLineWidth(2)
+    
+             filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
+             print(filename)
+             fEWK = TFile.Open(filename)
+             new_hists+=[fEWK]
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             print(histname)
+             hEWK=fEWK.Get(histname)
+             print("EWK hist: ")
+             print(hEWK)
+             for b in range(hNloQcdPdf.GetXaxis().GetNbins()):
+                 low_bin=hEWK.FindBin(hNloQcdPdf.GetXaxis().GetBinLowEdge(b+1))
+                 up_bin=hEWK.FindBin(hNloQcdPdf.GetXaxis().GetBinUpEdge(b+1))
+                 correction=hEWK.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
+                 print("correction: ")
+                 print(correction)
+                 hNloQcdPdf.SetBinContent(b+1,hNloQcdPdf.GetBinContent(b+1)*correction)
+             hNloQcdPdf.Scale(1./hNloQcdPdf.Integral())
+             for b in range(hNloQcdPdf.GetXaxis().GetNbins()):
+                 hNloQcdPdf.SetBinContent(b+1,hNloQcdPdf.GetBinContent(b+1)/hNloQcdPdf.GetBinWidth(b+1))
 
         else:
             filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
@@ -916,6 +960,8 @@ if __name__=="__main__":
           hNloQcdOldDiv=hNloQcdOld.Clone(hNloQcdOld.GetName()+"_ratio")
         if compareScales:
           hNloQcdAltDiv=hNloQcdAlt.Clone(hNloQcdAlt.GetName()+"_ratio")
+        if comparePDFs:
+          hNloQcdPdfDiv=hNloQcdPdf.Clone(hNloQcdAlt.GetName()+"_ratio")
 
         h14GDiv=h14G.Clone(h14G.GetName()+"_ratio")
         h14GsysDiv=h14Gsys.Clone(h14Gsys.GetName()+"_ratio")
@@ -937,6 +983,8 @@ if __name__=="__main__":
           hDataDivs+=[g30Div]
         if compareScales:
           hNloQcdAltDiv.Divide(h0)
+        if comparePDFs:
+          hNloQcdPdfDiv.Divide(h0)
         if oldMeasurements or compareRun3:
          for hData2 in hDatas:
           hData2Div=divideAsymErrors(hData2,h0,True)
@@ -991,6 +1039,8 @@ if __name__=="__main__":
          g30Div.Draw("esame")
         if compareScales:
          hNloQcdAltDiv.Draw("histsame")
+        if comparePDFs:
+         hNloQcdPdfDiv.Draw("histsame")
         if oldMeasurements or compareRun3:
          for hData2Div in hDataDivs:
           hData2Div.Draw("pzesame")
@@ -1022,6 +1072,8 @@ if __name__=="__main__":
          g30.Draw("esame")
         if compareScales:
          hNloQcdAlt.Draw("histsame")
+        if comparePDFs:
+         hNloQcdPdf.Draw("histsame")
         if oldMeasurements or compareRun3:
          for hData2 in hDatas:
           hData2.Draw("pzesame")
@@ -1156,15 +1208,19 @@ if __name__=="__main__":
     else:
       l2.AddEntry(h14G,"Data","ple")
     if compareScales:
-      l2.AddEntry(h3newnew,"NNLO QCD + EW (#mu=m_{jj}, 6)","fl")
       if compareMu30:
+        l2.AddEntry(h3newnew,"NNLO QCD + EW (#mu=m_{jj}, 6)","fl")
         l2.AddEntry(g30,"NNLO QCD + EW (#mu=m_{jj}, 30)","le")
+      else:
+        l2.AddEntry(h3newnew,"NNLO QCD + EW (#mu=m_{jj})","fl")
       l2.AddEntry(hNloQcdAlt,"NNLO QCD + EW (#mu=<p_{T}>)","fl")
     else:
       if useNNLO:
         l2.AddEntry(h3newnew,"NNLO QCD + EW","fl")
       else:
         l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
+    if comparePDFs:
+      l2.AddEntry(hNloQcdPdf,"NNLO QCD + EW (NNPDF 3.1)","fl")
     if oldTheory:
       l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>)","fl")
 #    if massbin>=5: #FIX
@@ -1244,6 +1300,8 @@ if __name__=="__main__":
       postfix+="_compare"
     if compareScales:
       postfix+="_scales"
+    if comparePDFs:
+      postfix+="_pdfs"
     if signalsDM:
       postfix+="_dm"
     if compareRun3:

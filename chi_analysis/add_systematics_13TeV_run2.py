@@ -78,7 +78,7 @@ if __name__ == '__main__':
     use_UL=True
     responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
-    use_NNPDF3_signals=True
+    use_NNPDF3_signals=False
     use_CP2=False
     
     if use_UL:
@@ -392,7 +392,7 @@ if __name__ == '__main__':
     # for add
     #samples=samples1
     # for qbh
-    samples=samples3
+    #samples=samples3
     # for alp+tripleG
     #samples=samples5
     #samples=samples6
