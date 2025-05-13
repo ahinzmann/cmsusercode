@@ -1,0 +1,309 @@
+ ##################################################################################
+ # INFO.    [fnlo-tk-yodaout] Program to read fastNLO tables and write out
+ # INFO.    [fnlo-tk-yodaout] QCD cross sections in YODA format for use with Rivet
+ # INFO.    [fnlo-tk-yodaout] (If compiled without YODA support only text printout is given)
+ #---------------------------------------------------------------------------------
+ # INFO.    [fnlo-tk-yodaout] For more explanations type:
+ # INFO.    [fnlo-tk-yodaout] ./fnlo-tk-yodaout -h
+ # INFO.    [fnlo-tk-yodaout] For version number printout type:
+ # INFO.    [fnlo-tk-yodaout] ./fnlo-tk-yodaout -v
+ ##################################################################################
+
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj4_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : CT14nnlo
+ # [fnlo-tk-yodaout] Showing statistical uncertainty of x section calculation.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Preparing unnormalized cross sections.
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor,
+ #                   using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for verbosity level, using WARNING default.
+ ##################################################################################
+
+ ##################################################################################
+ #
+ # [0;31mfast[0;34mNLO[0m_toolkit
+ # Version 2.5.0_2826-4-g5ce4c5c0
+ #
+ # C++ program and toolkit to read and create fastNLO v2 tables and
+ # derive QCD cross sections using PDFs, e.g. from LHAPDF
+ #
+ #---------------------------------------------------------------------------------
+ #
+ # Copyright © 2005-2022 [0;31mfast[0;34mNLO[0m Collaboration
+ # D. Britzger, T. Kluge, K. Rabbertz, F. Stober, G. Sieber, M. Wobisch
+ #
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation, either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program. If not, see <http://www.gnu.org/licenses/>.
+ #
+ #---------------------------------------------------------------------------------
+ #
+ # The projects web page can be found at:
+ #   http://projects.hepforge.org/fastnlo
+ #
+ # If you use this code, please cite:
+ #   T. Kluge, K. Rabbertz, M. Wobisch, Proc. DIS 2006, 483 (2006), hep-ph/0609285.
+ #   D. Britzger, K. Rabbertz, F. Stober, M. Wobisch, Proc. DIS 2012, 217 (2012), arXiv:1208.3641.
+ #
+ ##################################################################################
+
+ ##################################################################################
+ # Overview on contribution types and numbers contained in table: ./2jet.NNLO.fnl5662j_mjj4_chi_norm_v25.tab.gz
+ #---------------------------------------------------------------------------------
+ # Total number of contributions:  3
+ #   No.: 1, type: Fixed order calculation       , Id: 0, order: LO                  , by: NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ #   No.: 2, type: Fixed order calculation       , Id: 1, order: NLO                 , by: NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ #   No.: 3, type: Fixed order calculation       , Id: 2, order: NNLO                , by: NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ ##################################################################################
+
+ ##################################################################################
+ # Information on table header
+ #---------------------------------------------------------------------------------
+ #===================== fastNLO Table: Header ====================
+ # Table version (ITabVersionRead)         25000
+ # Scenario name (ScenName)            fnl5662j
+ # Theory contributions (Ncontrib)     3
+ # Data contribution 0/1 (Ndata)       0
+ ##################################################################################
+
+ ##################################################################################
+ # Information on fastNLO scenario: fnl5662j
+ #---------------------------------------------------------------------------------
+ #===================== fastNLO Table: Scenario ====================
+ # Scenario description (ScDescript)
+ #   0	d2sigma-dijet_dChi_dmjj_[pb_GeV]
+ #   1	CMS_Collaboration
+ #   2	Dijet_Chi_mjj0-a
+ #   3	anti-kT_R=0.4
+ #   4	CMS-PAPER-EXO-22-xxx, arXiv:aaaa.bbbbb.
+ #   5	RIVET_ID=CMS_2022_IXXXXXXX/d05-x01-y01,INSPIRE_RECORD=NNNNNNN
+ #   6	THEORY_LABEL=NNLOJET
+ #   7	provided by:
+ #   8	fastNLO_2.5.0
+ #   9	If you use this table, please cite:
+ #   10	  D. Britzger, K. Rabbertz, F. Stober, M. Wobisch, Proc. DIS 2012, 217 (2012), arXiv:1208.3641.
+ #
+ # Publ. x section (10^-Ipublunits b)  12
+ # Centre-of-mass energy (Ecms/GeV)    13000
+ # Power in a_s of LO process (ILOord) 2
+ # No. of observable bins (NObsBin)    12
+ # Dim. of observable binning (NDim)   1
+ #
+ # Dimension labels (DimLabel)
+ #   0	Chi
+ # Differential dimension (IDiffBin)
+ #   0	2
+ #
+ # Normalization flag (INormFlag)      1
+ #
+ # Total no. of contributions (theory + optional data) in this table: 3
+ ##################################################################################
+
+ ##################################################################################
+ # Information on table contribution no. 0: LO
+ #---------------------------------------------------------------------------------
+ #===================== fastNLO Table: CoeffBase ====================
+ # Contribution description (CtrbDescript)
+ #   0	LO
+ # Code description (CodeDescript)
+ #   0	NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ #   1	Dijet production, please cite: J. Currie et al., Phys. Rev. Lett. 119, 152001 (2017), arXiv:1705.10271.
+ #   2	3D dijet production, please cite: A. Gehrmann-de Ridder et al., Phys. Rev. Lett. 123, 102001 (2019), arXiv:1905.09047.
+ #   3	APPLfast interface, please cite: D. Britzger et al., Eur. Phys. J. C79, 845 (2019), arXiv:1906.05303.
+ #===================== fastNLO Table: CoeffAddBase ====================
+ # No. of events (Nevt)                0.000000
+ # Weight of table [=Nevt] (fWgtNevt)  0.000000
+ # Number of tables merged together    100
+ # No. of filled events (WgtNumEv)     37331392366
+ # Sum of weights squared (WgtSumW2)   26758892000000.000000
+ # Sum of sigma squared (SigSumW2)     133.893130
+ # Sum of sigma (SigSum)               230976.110000
+ # Sigma / Nevt (SigSum/WgtNevt)       204866744790169890425867555641783798882499559424.000000
+ # Abs. order in a_s (Npow)            2
+ # No. of hadrons involved (NPDF)      2
+ # Type(s) of hadrons (NPDFPDG)
+ #   0	2212
+ #   1	2212
+ # PDF storage format (NPDFDim)        2
+ #   --> x-interpolation storage format: Full-Matrix
+ # Observable bin no. 1
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # Observable bin no. 12
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # No. of scales involved (NScales)    1
+ # Scale descriptions (ScaleDescript)
+ #   0	ptavg_j12_[GeV]
+ #   1	m12_[GeV]
+ # No. of subprocess contributions     13
+ #ISub  Processes
+ #   0: (0,0), 
+ #   1: (1,0), (2,0), (3,0), (4,0), (5,0), 
+ #   2: (1,-1), (2,-2), (3,-3), (4,-4), (5,-5), 
+ #   3: (0,1), (0,2), (0,3), (0,4), (0,5), 
+ #   4: (-1,1), (-2,2), (-3,3), (-4,4), (-5,5), 
+ #   5: (0,-1), (0,-2), (0,-3), (0,-4), (0,-5), 
+ #   6: (-1,0), (-2,0), (-3,0), (-4,0), (-5,0), 
+ #   7: (1,-1), (1,-2), (1,-3), (1,-4), (1,-5), (2,-1), (2,-2), (2,-3), (2,-4), (2,-5), (3,-1), (3,-2), (3,-3), (3,-4), (3,-5), (4,-1), (4,-2), (4,-3), (4,-4), (4,-5), (5,-1), (5,-2), (5,-3), (5,-4), (5,-5), 
+ #   8: (1,1), (1,2), (1,3), (1,4), (1,5), (2,1), (2,2), (2,3), (2,4), (2,5), (3,1), (3,2), (3,3), (3,4), (3,5), (4,1), (4,2), (4,3), (4,4), (4,5), (5,1), (5,2), (5,3), (5,4), (5,5), 
+ #   9: (-1,-1), (-1,-2), (-1,-3), (-1,-4), (-1,-5), (-2,-1), (-2,-2), (-2,-3), (-2,-4), (-2,-5), (-3,-1), (-3,-2), (-3,-3), (-3,-4), (-3,-5), (-4,-1), (-4,-2), (-4,-3), (-4,-4), (-4,-5), (-5,-1), (-5,-2), (-5,-3), (-5,-4), (-5,-5), 
+ #  10: (-1,1), (-1,2), (-1,3), (-1,4), (-1,5), (-2,1), (-2,2), (-2,3), (-2,4), (-2,5), (-3,1), (-3,2), (-3,3), (-3,4), (-3,5), (-4,1), (-4,2), (-4,3), (-4,4), (-4,5), (-5,1), (-5,2), (-5,3), (-5,4), (-5,5), 
+ #  11: (1,1), (2,2), (3,3), (4,4), (5,5), 
+ #  12: (-1,-1), (-2,-2), (-3,-3), (-4,-4), (-5,-5), 
+ #===================== fastNLO Table: CoeffAddFlex ====================
+ # No. of scale1 nodes (Nscalenode1)   6
+ # No. of scale2 nodes (Nscalenode2)   6
+ ##################################################################################
+
+ ##################################################################################
+ # Information on table contribution no. 1: NLO
+ #---------------------------------------------------------------------------------
+ #===================== fastNLO Table: CoeffBase ====================
+ # Contribution description (CtrbDescript)
+ #   0	NLO
+ # Code description (CodeDescript)
+ #   0	NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ #   1	Dijet production, please cite: J. Currie et al., Phys. Rev. Lett. 119, 152001 (2017), arXiv:1705.10271.
+ #   2	3D dijet production, please cite: A. Gehrmann-de Ridder et al., Phys. Rev. Lett. 123, 102001 (2019), arXiv:1905.09047.
+ #   3	APPLfast interface, please cite: D. Britzger et al., Eur. Phys. J. C79, 845 (2019), arXiv:1906.05303.
+ #===================== fastNLO Table: CoeffAddBase ====================
+ # No. of events (Nevt)                1.000000
+ # Weight of table [=Nevt] (fWgtNevt)  1.000000
+ # Number of tables merged together    1200
+ # No. of filled events (WgtNumEv)     557195188886
+ # Sum of weights squared (WgtSumW2)   3989264399999999996405481472.000000
+ # Sum of sigma squared (SigSumW2)     1540336400000.000000
+ # Sum of sigma (SigSum)               -997146.300000
+ # Sigma / Nevt (SigSum/WgtNevt)       -997146.300000
+ # Abs. order in a_s (Npow)            3
+ # No. of hadrons involved (NPDF)      2
+ # Type(s) of hadrons (NPDFPDG)
+ #   0	2212
+ #   1	2212
+ # PDF storage format (NPDFDim)        2
+ #   --> x-interpolation storage format: Full-Matrix
+ # Observable bin no. 1
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # Observable bin no. 12
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # No. of scales involved (NScales)    1
+ # Scale descriptions (ScaleDescript)
+ #   0	ptavg_j12_[GeV]
+ #   1	m12_[GeV]
+ # No. of subprocess contributions     13
+ #ISub  Processes
+ #   0: (0,0), 
+ #   1: (1,0), (2,0), (3,0), (4,0), (5,0), 
+ #   2: (1,-1), (2,-2), (3,-3), (4,-4), (5,-5), 
+ #   3: (0,1), (0,2), (0,3), (0,4), (0,5), 
+ #   4: (-1,1), (-2,2), (-3,3), (-4,4), (-5,5), 
+ #   5: (0,-1), (0,-2), (0,-3), (0,-4), (0,-5), 
+ #   6: (-1,0), (-2,0), (-3,0), (-4,0), (-5,0), 
+ #   7: (1,1), (1,2), (1,3), (1,4), (1,5), (2,1), (2,2), (2,3), (2,4), (2,5), (3,1), (3,2), (3,3), (3,4), (3,5), (4,1), (4,2), (4,3), (4,4), (4,5), (5,1), (5,2), (5,3), (5,4), (5,5), 
+ #   8: (1,-1), (1,-2), (1,-3), (1,-4), (1,-5), (2,-1), (2,-2), (2,-3), (2,-4), (2,-5), (3,-1), (3,-2), (3,-3), (3,-4), (3,-5), (4,-1), (4,-2), (4,-3), (4,-4), (4,-5), (5,-1), (5,-2), (5,-3), (5,-4), (5,-5), 
+ #   9: (-1,1), (-1,2), (-1,3), (-1,4), (-1,5), (-2,1), (-2,2), (-2,3), (-2,4), (-2,5), (-3,1), (-3,2), (-3,3), (-3,4), (-3,5), (-4,1), (-4,2), (-4,3), (-4,4), (-4,5), (-5,1), (-5,2), (-5,3), (-5,4), (-5,5), 
+ #  10: (-1,-1), (-1,-2), (-1,-3), (-1,-4), (-1,-5), (-2,-1), (-2,-2), (-2,-3), (-2,-4), (-2,-5), (-3,-1), (-3,-2), (-3,-3), (-3,-4), (-3,-5), (-4,-1), (-4,-2), (-4,-3), (-4,-4), (-4,-5), (-5,-1), (-5,-2), (-5,-3), (-5,-4), (-5,-5), 
+ #  11: (1,1), (2,2), (3,3), (4,4), (5,5), 
+ #  12: (-1,-1), (-2,-2), (-3,-3), (-4,-4), (-5,-5), 
+ #===================== fastNLO Table: CoeffAddFlex ====================
+ # No. of scale1 nodes (Nscalenode1)   6
+ # No. of scale2 nodes (Nscalenode2)   6
+ ##################################################################################
+
+ ##################################################################################
+ # Information on table contribution no. 2: NNLO
+ #---------------------------------------------------------------------------------
+ #===================== fastNLO Table: CoeffBase ====================
+ # Contribution description (CtrbDescript)
+ #   0	NNLO
+ # Code description (CodeDescript)
+ #   0	NNLOJET_rev5918, please cite: T. Gehrmann et al., PoS RADCOR2017, 074 (2018), arXiv:1801.06415.
+ #   1	Dijet production, please cite: J. Currie et al., Phys. Rev. Lett. 119, 152001 (2017), arXiv:1705.10271.
+ #   2	3D dijet production, please cite: A. Gehrmann-de Ridder et al., Phys. Rev. Lett. 123, 102001 (2019), arXiv:1905.09047.
+ #   3	APPLfast interface, please cite: D. Britzger et al., Eur. Phys. J. C79, 845 (2019), arXiv:1906.05303.
+ #===================== fastNLO Table: CoeffAddBase ====================
+ # No. of events (Nevt)                1.000000
+ # Weight of table [=Nevt] (fWgtNevt)  1.000000
+ # Number of tables merged together    11197
+ # No. of filled events (WgtNumEv)     2198434774792
+ # Sum of weights squared (WgtSumW2)   1615997199999999957624482157222166528.000000
+ # Sum of sigma squared (SigSumW2)     943655980000000000.000000
+ # Sum of sigma (SigSum)               -3125644.600000
+ # Sigma / Nevt (SigSum/WgtNevt)       -3125644.600000
+ # Abs. order in a_s (Npow)            4
+ # No. of hadrons involved (NPDF)      2
+ # Type(s) of hadrons (NPDFPDG)
+ #   0	2212
+ #   1	2212
+ # PDF storage format (NPDFDim)        2
+ #   --> x-interpolation storage format: Full-Matrix
+ # Observable bin no. 1
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # Observable bin no. 12
+ #   No. of X1 nodes (XNode1[i].size())          20
+ # No. of scales involved (NScales)    1
+ # Scale descriptions (ScaleDescript)
+ #   0	ptavg_j12_[GeV]
+ #   1	m12_[GeV]
+ # No. of subprocess contributions     13
+ #ISub  Processes
+ #   0: (0,0), 
+ #   1: (1,0), (2,0), (3,0), (4,0), (5,0), 
+ #   2: (1,-1), (2,-2), (3,-3), (4,-4), (5,-5), 
+ #   3: (0,1), (0,2), (0,3), (0,4), (0,5), 
+ #   4: (-1,1), (-2,2), (-3,3), (-4,4), (-5,5), 
+ #   5: (0,-1), (0,-2), (0,-3), (0,-4), (0,-5), 
+ #   6: (-1,0), (-2,0), (-3,0), (-4,0), (-5,0), 
+ #   7: (1,1), (1,2), (1,3), (1,4), (1,5), (2,1), (2,2), (2,3), (2,4), (2,5), (3,1), (3,2), (3,3), (3,4), (3,5), (4,1), (4,2), (4,3), (4,4), (4,5), (5,1), (5,2), (5,3), (5,4), (5,5), 
+ #   8: (1,-1), (1,-2), (1,-3), (1,-4), (1,-5), (2,-1), (2,-2), (2,-3), (2,-4), (2,-5), (3,-1), (3,-2), (3,-3), (3,-4), (3,-5), (4,-1), (4,-2), (4,-3), (4,-4), (4,-5), (5,-1), (5,-2), (5,-3), (5,-4), (5,-5), 
+ #   9: (-1,1), (-1,2), (-1,3), (-1,4), (-1,5), (-2,1), (-2,2), (-2,3), (-2,4), (-2,5), (-3,1), (-3,2), (-3,3), (-3,4), (-3,5), (-4,1), (-4,2), (-4,3), (-4,4), (-4,5), (-5,1), (-5,2), (-5,3), (-5,4), (-5,5), 
+ #  10: (-1,-1), (-1,-2), (-1,-3), (-1,-4), (-1,-5), (-2,-1), (-2,-2), (-2,-3), (-2,-4), (-2,-5), (-3,-1), (-3,-2), (-3,-3), (-3,-4), (-3,-5), (-4,-1), (-4,-2), (-4,-3), (-4,-4), (-4,-5), (-5,-1), (-5,-2), (-5,-3), (-5,-4), (-5,-5), 
+ #  11: (1,1), (2,2), (3,3), (4,4), (5,5), 
+ #  12: (-1,-1), (-2,-2), (-3,-3), (-4,-4), (-5,-5), 
+ #===================== fastNLO Table: CoeffAddFlex ====================
+ # No. of scale1 nodes (Nscalenode1)   6
+ # No. of scale2 nodes (Nscalenode2)   6
+ ##################################################################################
+LHAPDF 6.3.0 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+LHAPDF 6.3.0 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+ ##################################################################################
+ # fnlo-tk-yodaout: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative statistical uncertainties (ST)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       2.91553242331E-04      -6.76786584502E-04       6.76786584502E-04
+    2       2.48652587775E-04      -6.48570190836E-04       6.48570190836E-04
+    3       2.43992713022E-04      -1.05119022115E-03       1.05119022115E-03
+    4       2.46753275294E-04      -1.45866904971E-03       1.45866904971E-03
+    5       2.49254526891E-04      -2.14968311738E-03       2.14968311738E-03
+    6       2.57435875951E-04      -2.48243328329E-03       2.48243328329E-03
+    7       2.60929031904E-04      -3.10719319227E-03       3.10719319227E-03
+    8       2.59366072091E-04      -4.28240338747E-03       4.28240338747E-03
+    9       2.64794988832E-04      -5.00695589811E-03       5.00695589811E-03
+   10       2.71861099714E-04      -3.93608077959E-03       3.93608077959E-03
+   11       2.74088197078E-04      -5.16967447394E-03       5.16967447394E-03
+   12       2.78466657322E-04      -6.32575616659E-03       6.32575616659E-03
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ ##################################################################################
+ #
+ # NNLO_CT14nnlo_ST_kScale2_no.yoda was successfully produced
+ #
+ ##################################################################################
+

@@ -1,0 +1,46 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj8_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : NNPDF31_nnlo_as_0118
+ # [fnlo-tk-yodaout] Showing uncertainty from asymmetric 30-point scale factor variation for ratios.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Normalizing cross sections. 
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.4 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+LHAPDF 6.5.4 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative scale uncertainties (30 NNPDF31_nnlo_as_0118 NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       7.29388059031E-02      -1.98548942338E-02       2.23695426014E-02
+    2       6.22518920643E-02      -1.83616972963E-02       2.23695426014E-02
+    3       6.22604927604E-02      -1.95616045323E-02       2.23695426014E-02
+    4       6.15359596785E-02      -2.80096976890E-02       2.23695426014E-02
+    5       6.28686716778E-02      -2.46018207517E-02       2.23695426014E-02
+    6       6.31693831955E-02      -3.29423545543E-02       2.23695426014E-02
+    7       6.53662889406E-02      -2.00299017204E-02       2.23695426014E-02
+    8       6.61700160075E-02      -2.06980763840E-02       2.23695426014E-02
+    9       6.62406340965E-02      -3.14245733102E-02       2.23695426014E-02
+   10       6.82393373769E-02      -2.64530298854E-02       2.23695426014E-02
+   11       6.73883743847E-02      -3.03310187987E-02       2.23695426014E-02
+   12       7.29712160763E-02      -2.69623375991E-02       2.32415707313E-02
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ ##################################################################################
+ #
+ # NNLO_NNPDF31_nnl_30_norm_kScale2_no.yoda was successfully produced
+ #
+ ##################################################################################
+

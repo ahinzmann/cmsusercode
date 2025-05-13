@@ -1,0 +1,42 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj0_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : CT14nnlo
+ # [fnlo-tk-yodaout] Showing uncertainty from asymmetric 6-point scale factor variation.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Normalizing cross sections. 
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative scale uncertainties (6P CT14nnlo NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       7.49751447861E-02      -1.15003688218E-02       1.16628433768E-02
+    2       6.27207459003E-02      -5.30346269621E-03       6.82137152874E-03
+    3       6.13838531114E-02      -3.07002605631E-03       4.68434652582E-03
+    4       6.20433930138E-02      -2.87200243365E-03       3.46661925210E-03
+    5       6.27422019095E-02      -7.68649956664E-03       5.18335325592E-03
+    6       6.35036124870E-02      -2.35080206395E-03       2.20727007759E-03
+    7       6.52034216535E-02      -7.71338368326E-04       8.29547948142E-04
+    8       6.42093206557E-02      -4.86942902023E-03       3.25017248273E-03
+    9       6.63128703085E-02      -1.87268924271E-03       2.14145137894E-03
+   10       6.84377695899E-02      -4.07742962615E-03       3.27628338557E-03
+   11       6.87423506099E-02      -1.52990057678E-03       2.61239648662E-04
+   12       7.12725978872E-02      -1.08837189064E-02       1.45324612567E-02
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ ##################################################################################
+ #
+ # Compiled without YODA support ==> No YODA file produced!
+ #
+ ##################################################################################
+

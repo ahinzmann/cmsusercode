@@ -30,9 +30,9 @@ def calcHessianPDFUncert(myxsecs):
         #    myuncertdown+=myxsec**2
         #print i
         #if i==0: continue
-        if i%2==1:
+        if i%2==0:
             xsc.append(myxsec)
-        if i%2==0 and i!=0:
+        if i%2==1:
             xsc.append(myxsec)
             xsc.append(0)
             #print myxsecplus,myxsecminus
@@ -46,7 +46,7 @@ def calcHessianPDFUncert(myxsecs):
     myfinaluncertdown=(-1)*math.sqrt(myuncertdown)
     return myfinaluncertup,myfinaluncertdown
 
-def calcTrivialHessianPDFUncert(myxsecs):
+def calcMCPDFUncert(myxsecs):
     myuncertup=0
     myuncertdown=0
     for myxsec in myxsecs:
@@ -54,8 +54,8 @@ def calcTrivialHessianPDFUncert(myxsecs):
             myuncertup+=myxsec**2
         if myxsec<0:
             myuncertdown+=myxsec**2
-    myfinaluncertup=math.sqrt(myuncertup)
-    myfinaluncertdown=(-1)*math.sqrt(myuncertdown)
+    myfinaluncertup=math.sqrt(myuncertup/len(myxsecs))
+    myfinaluncertdown=(-1)*math.sqrt(myuncertdown/len(myxsecs))
     return myfinaluncertup,myfinaluncertdown
     
 
@@ -72,12 +72,18 @@ ciDir="./CIJET_fnl5662j_cs_001_ct14nlo_0_56_/"
 order="NNLO"
 
 if order=="NNLO":
-  PDF="ct14nnlo"
+  #PDF="ct14nnlo"
+  PDF="nn31nnlo"
   mscale="m2"
   #mscale="pt12"
 else:
   PDF="ct14nlo"
   mscale="pt12"
+
+if PDF=="nn31nnlo":
+  PDFmembers=100
+else:
+  PDFmembers=56
 
 normalizeBack=False  
 
@@ -103,7 +109,7 @@ if calcUncert:
     
     scaleFactorsmu={}
     for f in cimufiles:
-        print f
+        print("read",f)
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
         newfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"RECREATE")
@@ -119,7 +125,7 @@ if calcUncert:
                     qcdhistadd.Write()
             else:
                 for scale in scales:
-		    n=f.replace("mu.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1])
+                    n=f.replace("mu.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1])
                     cihist=file.Get(n.replace("-7000","-6600")) ## TODO NEW CONTACT CALCULATION
                     qcdhist=qcdmufile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1]))
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+qcdhist.GetName()+"_addmu")
@@ -139,7 +145,7 @@ if calcUncert:
         myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
         for massbin in massbins:
             if massbins.index(massbin)<5:
-                for i in range(0,57):
+                for i in range(0,PDFmembers+1):
                     qcdhist=qcdmemfile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i))
                     if i==0:
                         scaleFactor=qcdhist.Integral()
@@ -148,8 +154,8 @@ if calcUncert:
                     qcdhistadd.Scale(1./qcdhistadd.Integral())
                     qcdhistadd.Write()
             else:
-                for i in range(0,57):            
-                    n=f.replace("mem.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i)
+                for i in range(0,PDFmembers+1):
+                    n=f.replace("mem.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+(str(i) if PDFmembers==56 else "0") ## TODO NEW CONTACT CALCULATION WITH NNPDF
                     cihist=file.Get(n.replace("-7000","-6600")) ## TODO NEW CONTACT CALCULATION
                     qcdhist=qcdmemfile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i))
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+"qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i)+"_addmem")
@@ -195,7 +201,7 @@ if calcUncert:
     
     for f in cimemfiles:
         myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
-        print f
+        print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
             histcentral=TH1F("chi-"+str(massbin[0])+"-"+str(massbin[1])+"backup","chi-"+str(massbin[0])+"-"+str(massbin[1]),len(chibins)-1,chibins)
@@ -208,18 +214,21 @@ if calcUncert:
                 #print "Bin number:",b
                 xsec=[]
                 i=0
-                for i in range(0,57):
+                for i in range(0,PDFmembers+1):
                     myhist=myfile.Get(f.replace(".root","")+"_"+"qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i)+"_addmem")
                     i+=1
                     if i==1:
                         central=myhist.GetBinContent(b)
                         histcentral.SetBinContent(b,central)
-                    #print myhist
-                    xsec.append(myhist.GetBinContent(b)-central)
-                    if i==57:
+                    else:
+                        xsec.append(myhist.GetBinContent(b)-central)
+                    if i==PDFmembers+1:
                         #print "central:",central
                         #print "xsec:",xsec
-                        pdf_up,pdf_down=calcHessianPDFUncert(xsec)
+                        if PDFmembers==100: ## MC uncertainties
+                          pdf_up,pdf_down=calcMCPDFUncert(xsec)
+                        else: ## Hessian uncertainties
+                          pdf_up,pdf_down=calcHessianPDFUncert(xsec)
                         #print pdf_up,pdf_down
                         histscaleup.SetBinContent(b,central+pdf_up)
                         histscaledown.SetBinContent(b,central+pdf_down)
@@ -234,7 +243,7 @@ if calcUncert:
 
     for f in cimemfiles:
         myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
-        print f
+        print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
             histcentral=TH1F("chi-"+str(massbin[0])+"-"+str(massbin[1])+"backup","chi-"+str(massbin[0])+"-"+str(massbin[1]),len(chibins)-1,chibins)
