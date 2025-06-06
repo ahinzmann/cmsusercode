@@ -2,14 +2,15 @@ import os
 
 count=0
 
-for n in range(504):
+for n in range(410):
     name="add_systematics_"+str(n)
     with open("submit/"+name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+cd /data/dust/user/hinzmann/jetmass/CMSSW_14_1_0_pre4/src/
 cmsenv
-python add_systematics_13TeV_run2.py """+str(n)+"""
+cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
+python3 add_systematics_13TeV_run2.py """+str(n)+"""
 """)
     with open("submit/"+name+".submit",'w+') as htc_config:
             htc_config.write("""
@@ -24,7 +25,7 @@ error             = submit/"""+name+""".e
 log               = submit/"""+name+""".log
 #Requesting CPU and DISK Memory - default +RequestRuntime of 3h stays unaltered
 """+("+RequestRuntime   = 50000" if n==0 else "+RequestRuntime   = 2000")+"""
-#RequestMemory     = 10G
+RequestMemory     = 4G
 JobBatchName      = add_systematics
 #RequestDisk       = 10G
 getenv            = True

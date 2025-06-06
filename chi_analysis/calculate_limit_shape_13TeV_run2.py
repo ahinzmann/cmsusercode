@@ -9,22 +9,22 @@ only6000=False
 allmassbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
 models=[]
-models+=[3] #ADD
-models+=[10] #QBH ADD6
-models+=[11] #QBH RS1
+#models+=[3] #ADD
+#models+=[10] #QBH ADD6
+#models+=[11] #QBH RS1
 #models+=[12] #QBH Blackmax n=6
 #models+=[13] #QBH Blackmax n=6 RECO
-#models+=[60,61,62,63,64,65,66,67,68,69] #CI
+models+=[60,61,62,63,64,65,66,67,68,69] #CI
 #models+=[70,71,72,73,74,75,76,77] 
 #models+=[78,79,80,81,82,83,84,85] 
-models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues (CI-LO)
-models+=[41,42,43,44] #pvalues (CI-NLO)
-models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues (Anti-CI-LO)
+#models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues (CI-LO)
+#models+=[41,42,43,44] #pvalues (CI-NLO)
+#models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues (Anti-CI-LO)
 #models+=[47]
 #models+=[88,89]
 #models+=[60,61]
-models+=[90,91,92,93,94] #alp
-models+=[95,96,97,98,99] #tripleG
+#models+=[90,91,92,93,94] #alp
+#models+=[95,96,97,98,99] #tripleG
 #>100 steered by loop script #DM, can be run with DMpvalue=True/False
 
 VectorDM=False
@@ -46,7 +46,7 @@ useNNLO=True # choice for QCD
 useM2=True # choice of mu-scale for QCD
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
-use_NNPDF3_signals=True
+use_NNPDF3=False
 use_CP2=False
 
 isGen=False
@@ -56,6 +56,15 @@ isCB=False
 isInjection=False
 
 DMpvalue=False
+
+withDiffNuisance=False
+
+if use_NNPDF3:
+  pdfset="nn31nnlo"
+else:
+  pdfset="ct14nnlo"
+if not useNNLO:
+  pdfset="ct14nlo"
 
 signalName={}
 signalExtraName={}
@@ -120,37 +129,37 @@ for model in models:
       massbins=[(4800,5400),(5400,6000),(6000,13000)] #signal MC statistics not enough in bins <4800
     #includeSignalTheoryUncertainties=True # from QCD-only though
  if model==4:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
     massbins=[(4200,4800),(4800,13000)]
  if model==5:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
     massbins=[(4800,13000)]
  if model==6:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
     massbins=[(4200,4800)]
  if model==7:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
     massbins=[(3600,4200)]
  if model==8:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4200,4800),(4800,13000)]
  if model==9:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4800,13000)]
  if model==10:
-    if use_NNPDF3_signals:
+    if use_NNPDF3:
       signal="QBH_ADD6_"    
       signalMasses=[7500,8000,8500,9000,9500,10000,11000,12000]
       massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -161,7 +170,7 @@ for model in models:
       massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
       signalExtra="_6"
  if model==11:
-    if use_NNPDF3_signals:
+    if use_NNPDF3:
       signal="QBH_RS1_"    
       signalMasses=[4500,5000,5500,6000,6500,7000,7500,8000]
       massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -186,55 +195,55 @@ for model in models:
     signalExtra="_n6"
 
  if model==18:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
  if model==19:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
     includeSignalTheoryUncertainties=True
 
  if model==20:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000] #dropped 8000, 9000
  if model==21:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_LL-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
  if model==22:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_RR+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000] # dropped 8000, 9000
  if model==23:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_RR-"
     signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000]
  if model==24:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_VV+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
  if model==25:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_VV-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000]
  if model==26:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_AA+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
  if model==27:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_AA-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000]
  if model==28:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_V-A+"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000] # dropped 8000, 9000
  if model==29:
-    signal="cs_ct14nnlo_0_"
+    signal="cs_"+pdfset+"_0_"
     signalExtra="_V-A-"
-    signalMasses=[8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000]#8000,9000,
 
  if model>=30 and model<50:
     includeSignalTheoryUncertainties=True
@@ -286,26 +295,26 @@ for model in models:
     signalMasses=[12000]
     massbins=[(1200,1500),]
  if model==41:
-    signal="cs_ct14"+("n" if useNNLO else "")+"nlo_" #nlo/nnlo
+    signal="cs_"+pdfset+"_" #nlo/nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(6000,7000),(7000,13000)]
  if model==42:
-    signal="cs_ct14"+("n" if useNNLO else "")+"nlo_" #nlo/nnlo
+    signal="cs_"+pdfset+"_" #nlo/nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     if only6000:
       massbins=[(4800,5400),(5400,6000),(6000,13000)]
  if model==43:
-    signal="cs_ct14"+("n" if useNNLO else "")+"nlo_" #nlo/nnlo
+    signal="cs_"+pdfset+"_" #nlo/nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     if only6000:
       massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,13000)]
  if model==44:
-    signal="cs_ct14"+("n" if useNNLO else "")+"nlo_" #nlo/nnlo
+    signal="cs_"+pdfset+"_" #nlo/nnlo
     signalExtra="_LL+"
     signalMasses=[13000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -363,133 +372,133 @@ for model in models:
     includeSignalTheoryUncertainties=True
 
  if model==60 or model==88:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000]
+    signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000] #21000
  if model==61 or model==89:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
-    signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,25000,26000,28000,30000]
+    signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000] # 25000
  if model==62:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_RR+"
-    signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000]
+    signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000] # 21000
  if model==63:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_RR-"
-    signalMasses=[16000,17000,18000,19000,20000,22000,24000,25000,26000,27000,28000]
+    signalMasses=[16000,17000,18000,19000,20000,22000,24000,26000,28000] # 25000,27000
  if model==64:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_VV+"
-    signalMasses=[14000,15000,16000,17000,18000,19000,20000,21000,22000,23000,24000]
+    signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000] #21000,23000
  if model==65:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_VV-"
-    signalMasses=[20000,22000,24000,26000,27000,28000,29000,30000]#,32000,34000,36000
+    signalMasses=[20000,22000,24000,26000,28000,30000]#,32000,34000,36000, 27000, 29000
  if model==66:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_AA+"
-    signalMasses=[14000,15000,16000,17000,18000,19000,20000,21000,22000,23000,24000]
+    signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000] # 21000, 23000
  if model==67:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_AA-"
-    signalMasses=[20000,22000,24000,26000,27000,28000,29000,30000]#,32000,34000,36000
+    signalMasses=[20000,22000,24000,26000,28000,30000]#,32000,34000,36000 , 27000,29000
  if model==68:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_V-A+"
-    signalMasses=[7000,8000,9000,10000,11000,12000,13000,14000,15000,16000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000] # dropped 7000,8000,9000
  if model==69:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_V-A-"
-    signalMasses=[7000,8000,9000,10000,11000,12000,13000,14000,15000,16000]
+    signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,22000,24000,26000] # dropped 7000,8000,9000
 
  if model==70:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
     signalMasses=[10000,11000,12000,13000,14000,15000,16000,17000,18000,19000]
     massbins=[(6000,13000)]
  if model==71:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
     massbins=[(5400,6000)]
  if model==72:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
     signalMasses=[11000,12000,13000,14000,15000,16000,17000,18000,19000,20000]
     massbins=[(4800,5400)]
  if model==73:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000]#23000
     massbins=[(5400,6000),(6000,7000),(7000,13000)]
  if model==74:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[13000,14000,15000,16000,17000,18000,19000,20000,22000]
     massbins=[(6000,13000)]
  if model==75:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(5400,6000)]
  if model==76:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(4800,5400)]
  if model==77:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000]
     massbins=[(5400,6000),(6000,7000),(7000,13000)]
  if model==78:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000]#21000,23000
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==79:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==80:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000]#21000,23000
     massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==81:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==82:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000]#21000,23000
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==83:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==84:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000]#21000,23000
     massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==85:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==86:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL+"
-    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,23000]
+    signalMasses=[12000,13000,14000,15000,16000,17000,18000,19000,20000,22000]#21000,23000
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
  if model==87:
-    signal="cs_ct14nnlo_"
+    signal="cs_"+pdfset+"_"
     signalExtra="_LL-"
     signalMasses=[14000,15000,16000,17000,18000,19000,20000,22000,24000,26000,28000,30000]
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -537,7 +546,7 @@ for model in models:
 
  dire="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  if run=="2":
-   if use_NNPDF3_signals:
+   if use_NNPDF3:
      prefix=dire+"versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"
    elif useM2:
      prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
@@ -634,7 +643,7 @@ for model in models:
             fname=prefix + '_GENnp-17-run'+run+'_chi.root'
     elif model==3 and run=="3":
         fname=prefix + "_GENnp-run-"+run+"-" + signalWithMass + '_chi.root'
-    elif (model==3 or model==10 or model==11) and use_NNPDF3_signals:
+    elif (model==3 or model==10 or model==11) and use_NNPDF3:
         fname=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + signalWithMass + '_chi.root'
     elif signalWithMass=="ADD6000":
         fname=prefix + '_GENnp-18-run'+run+'_chi.root'
@@ -1179,9 +1188,10 @@ kmax """+str(3+3+3*(len(massbins)-1)*uncorrelatedSimUncertainties+jesSources+jer
 
       out=system_call("mkdir "+name+version)
       #out=system_call("combine -m "+str(signalMass)+" -M MaxLikelihoodFit "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
-      out=system_call("combine -m "+str(signalMass)+" -M FitDiagnostics "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
-      out=system_call("python3 diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
-      print(out)
+      if withDiffNuisance:
+        out=system_call("combine -m "+str(signalMass)+" -M FitDiagnostics "+poi+" --plots --out "+name+version+" -n "+remove_prefix(signalWithMass,"QCD")+" fixedMu_"+str(model)+remove_prefix(signalWithMass,"QCD")+"_run"+runs+".root")
+        out=system_call("python3 diffNuisances.py -p x -a "+name+version+"/fitDiagnostics"+remove_prefix(signalWithMass,"QCD")+".root -A")
+        print(out)
 
  for signalMass in signalMasses:
     limits[signalMass]=[]

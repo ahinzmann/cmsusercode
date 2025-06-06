@@ -73,6 +73,7 @@ if __name__ == '__main__':
    #version="_run2_noHEM_noPrefire"; postfix1617=""; postfix18=""
    use_UL=False
    compare_Run2Run3=True
+   use_2024=True
    compare_EOYvsUL=False
    compare_NULvsUL=False
    compare_EOYvsUL_MC=False
@@ -81,7 +82,10 @@ if __name__ == '__main__':
    if use_UL:
      version="_UL"+version
    if compare_Run2Run3:
-     version="_Run3"+version
+     if not use_2024:
+       version="_2022_2023"+version
+     else:
+       version="_2024"+version
    if compare_EOYvsUL:
      version="_EOYvsUL"+version
    if compare_NULvsUL:
@@ -107,18 +111,15 @@ if __name__ == '__main__':
           ("UL17", 1, ""),
           ("UL18", 1, "")
          ]
-    #data2=[("2023-28May2024", 1, "Data (2023)")
-    #     ]
-    #data3=[("2022", 1, "Data (2022)")
-    #     ]
-    data2=[("2024", 1, "Data (2024)")
-         ]
-    data3=[]
-    #data3=[("UL16preVFP", 1, "Data (UL 2016)"),
-    #      ("UL16postVFP", 1, "")
-    #     ]
-    #data3=[("UL17", 1, "Data (UL 2017)")
-    #     ]
+    if use_2024:
+      data2=[("2024-16May2025", 1, "Data (2024)")
+           ]
+      data3=[]#("2024", 1, "Data (2024 old)")]
+    else:
+      data2=[("2023-28May2024", 1, "Data (2023)")
+           ]
+      data3=[("2022", 1, "Data (2022)")
+           ]
    elif compare_EOYvsUL_MC or compare_RECOvsGEN:
     UL16preFactor=19.52/36.33 # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
     UL16postFactor=16.81/36.33 # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
@@ -167,7 +168,7 @@ if __name__ == '__main__':
          ]
     mc3=[("2018", 1, "Data (EOY 2018)")
          ]
-   if compare_NULvsUL:
+   elif compare_NULvsUL:
     mc=[("NUL16preVFP", 1, "Data (NUL 2016)"),
           ("NUL16postVFP", 1, "")
          ]
@@ -235,47 +236,26 @@ if __name__ == '__main__':
        ("2023_QCDmadgraphBPix-28May2024-HT1500to2000",9.525/27.207*1.340e+02/17117867, ""),
        ("2023_QCDmadgraphBPix-28May2024-HT2000",9.525/27.207*2.676e+01/20420289, ""),
        ]
-    mc3=[]
-    #mc3=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
-    #   ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
-    #   ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
-    #   ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
-    #   ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
-    #   ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
-    #   ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
-    #   ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
-    #   ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
-    #   ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
-    #   ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
-    #   ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
-    #   ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
-    #   ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
-    #   ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
-    #   ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
-    #   ]
-    #mc3=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
-    #   ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
-    #   ("UL16preVFP_QCDmadgraph-HT500to700",19.52/36.33*30363.051/55497082, ""),
-    #   ("UL16preVFP_QCDmadgraph-HT700to1000",19.52/36.33*6428.869/15242034, ""),
-    #   ("UL16preVFP_QCDmadgraph-HT1000to1500",19.52/36.33*1122.659/13559959, ""),
-    #   ("UL16preVFP_QCDmadgraph-HT1500to2000",19.52/36.33*108.163/9661950, ""),
-    #   ("UL16preVFP_QCDmadgraph-HT2000toInf",19.52/36.33*22.008/4827641, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT200to300",16.81/36.33*1710000./42723038, "MG+Py QCD (UL16)"), # 16.81 is lumi of postVFP, 36.33 is lumi of all UL16
-    #   ("UL16postVFP_QCDmadgraph-HT300to500",16.81/36.33*347500./45502889, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT500to700",16.81/36.33*30363.051/15066884, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT700to1000",16.81/36.33*6428.869/13714842, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT1000to1500",16.81/36.33*1122.659/12416669, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT1500to2000",16.81/36.33*108.163/9244228, ""),
-    #   ("UL16postVFP_QCDmadgraph-HT2000toInf",16.81/36.33*22.008/4843949, ""),
-    #   ]
-    #mc3=[("UL17_QCDmadgraph-HT200to300",1710000./42316128, "MG+Py QCD (UL17)"),
-    #   ("UL17_QCDmadgraph-HT300to500",347500./42914024, ""),
-    #   ("UL17_QCDmadgraph-HT500to700",30363.051/35745565, ""),
-    #   ("UL17_QCDmadgraph-HT700to1000",6428.869/33646855, ""),
-    #   ("UL17_QCDmadgraph-HT1000to1500",1122.659/10136610, ""),
-    #   ("UL17_QCDmadgraph-HT1500to2000",108.163/7528926, ""),
-    #   ("UL17_QCDmadgraph-HT2000toInf",22.008/4089387, ""),
-    #   ]
+    if use_2024:
+      mc3=[]
+    else:
+      mc3=[("2022_QCDmadgraph-HT200to400",8.077/35.18188*2.028e+06/20642715, "MG+Py QCD (2022)"),
+       ("2022_QCDmadgraph-HT400to600",8.077/35.18188*1.003e+05/19602817, ""),
+       ("2022_QCDmadgraph-HT600to800",8.077/35.18188*1.332e+04/19028458, ""),
+       ("2022_QCDmadgraph-HT800to1000",8.077/35.18188*3.031e+03/21602068, ""),
+       ("2022_QCDmadgraph-HT1000to1200",8.077/35.18188*8.579e+02/20642169, ""),
+       ("2022_QCDmadgraph-HT1200to1500",8.077/35.18188*3.893e+02/21112774, ""),
+       ("2022_QCDmadgraph-HT1500to2000",8.077/35.18188*1.290e+02/21191630, ""),
+       ("2022_QCDmadgraph-HT2000",8.077/35.18188*2.496e+01/18132719, ""),
+       ("2022_QCDmadgraphEE-HT200to400",27.0072/35.18188*1.824e+06/70275585, ""),
+       ("2022_QCDmadgraphEE-HT400to600",27.0072/35.18188*9.232e+04/68707093, ""),
+       ("2022_QCDmadgraphEE-HT600to800",27.0072/35.18188*1.340e+04/63298004, ""),
+       ("2022_QCDmadgraphEE-HT800to1000",27.0072/35.18188*3.011e+03/66615474, ""),
+       ("2022_QCDmadgraphEE-HT1000to1200",27.0072/35.18188*9.685e+02/70854616, ""),
+       ("2022_QCDmadgraphEE-HT1200to1500",27.0072/35.18188*4.131e+02/70804499, ""),
+       ("2022_QCDmadgraphEE-HT1500to2000",27.0072/35.18188*1.234e+02/63307771, ""),
+       ("2022_QCDmadgraphEE-HT2000",27.0072/35.18188*2.612e+01/65102938, ""),
+       ]
    elif use_UL and not compare_EOYvsUL_MC or compare_RECOvsGEN:
     mc=[("UL16preVFP_QCDmadgraph-HT200to300",19.52/36.33*1710000./17969592, "MG+Py QCD (UL16)"), # 19.52 is lumi of preVFP, 36.33 is lumi of all UL16
        ("UL16preVFP_QCDmadgraph-HT300to500",19.52/36.33*347500./13586390, ""),
@@ -355,8 +335,10 @@ if __name__ == '__main__':
       f_data3+=[TFile.Open(dire+prefix+name+postfix+"_chi.root")]
       print(prefix+name+postfix+"_chi.root")
    if compare_Run2Run3:
-     #lumi=[137.62,35.18,27.20]
-     lumi=[137.62,35.18,109.08]
+     if not use_2024:
+       lumi=[35.18,137.62,27.20]
+     else:
+       lumi=[109.08,137.62,0]
    else:
      lumi=[36.33,41.53,59.74]
    f_mc=[]
@@ -408,13 +390,13 @@ if __name__ == '__main__':
      canvas.GetPad(1).SetLogy(True)
 
      legend=TLegend(0.5,0.5,0.95,0.9,"1<=#Chi<16 , y_{boost}<1.11")
-
+     
      hist=f_data[0].Get(prefix+data[0][0].split("-HT")[0]+var)
      hist.Scale(data[0][1])
      for i in range(1,len(data)):
          hist.Add(f_data[i].Get(prefix+data[i][0].split("-HT")[0]+var),data[i][1])
      hist=hist.Rebin(4)#len(mass_binning)-1,hist.GetName()+"_rebin1",mass_binning)
-     normfactor=hist.Integral(hist.FindBin(minmass),hist.FindBin(9000))
+     normfactor=hist.Integral(hist.FindBin(minmass),hist.FindBin(10000))
      if compare_EOYvsUL or compare_NULvsUL:
        normfactor=lumi[0]*1000.
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
@@ -430,7 +412,7 @@ if __name__ == '__main__':
        hist.GetYaxis().SetTitle("Cross section [pb]")
      else:
        hist.GetYaxis().SetTitle("Normalized distribution")
-     hist.GetXaxis().SetRangeUser(minmass,9000)
+     hist.GetXaxis().SetRangeUser(minmass,10000)
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
        hist.GetYaxis().SetRangeUser(0.5/1e6,hist.GetMaximum()*1.5)
      else:
@@ -443,7 +425,7 @@ if __name__ == '__main__':
      hist.GetYaxis().SetTitleSize(0.06)
      hist.SetStats(False)
      hist.Draw("pe")
-     hist.GetXaxis().SetRangeUser(minmass,9000)
+     hist.GetXaxis().SetRangeUser(minmass,10000)
      legend.AddEntry(hist,data[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
      hist2=f_data2[0].Get(prefix+data2[0][0].split("-HT")[0]+var)
@@ -451,7 +433,7 @@ if __name__ == '__main__':
      for i in range(1,len(data2)):
         hist2.Add(f_data2[i].Get(prefix+data2[i][0].split("-HT")[0]+var),data2[i][1])
      hist2=hist2.Rebin(4)#len(mass_binning)-1,hist2.GetName()+"_rebin1",mass_binning)
-     normfactor2=hist2.Integral(hist2.FindBin(minmass),hist2.FindBin(9000))
+     normfactor2=hist2.Integral(hist2.FindBin(minmass),hist2.FindBin(10000))
      if compare_EOYvsUL or compare_NULvsUL:
        normfactor2=lumi[1]*1000.
      if compare_EOYvsUL_MC or compare_RECOvsGEN:
@@ -471,7 +453,7 @@ if __name__ == '__main__':
        for i in range(1,len(data3)):
           hist3.Add(f_data3[i].Get(prefix+data3[i][0].split("-HT")[0]+var),data3[i][1])
        hist3=hist3.Rebin(4)#len(mass_binning)-1,hist3.GetName()+"_rebin1",mass_binning)
-       normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(9000))
+       normfactor3=hist3.Integral(hist3.FindBin(minmass),hist3.FindBin(10000))
        if compare_EOYvsUL or compare_NULvsUL:
          normfactor3=lumi[2]*1000.
        if compare_EOYvsUL_MC or compare_RECOvsGEN:
@@ -544,20 +526,35 @@ if __name__ == '__main__':
      legend.SetFillStyle(0)
      legend.Draw("same")
 
+     if compare_Run2Run3:
+       histrebinned=hist2.Clone(hist.GetName()+"rebinned")
+       for b in range(hist.GetNbinsX()):
+           histrebinned.SetBinContent(b+1,hist.GetBinContent(b+1))
+           histrebinned.SetBinError(b+1,hist.GetBinError(b+1))
+       histrebinned.SetLineColor(hist.GetLineColor())
+       histrebinned.SetLineStyle(hist.GetLineStyle())
+       histrebinned.SetMarkerColor(hist.GetMarkerColor())
+       histrebinned.SetMarkerStyle(hist.GetMarkerStyle())
+       histrebinned.SetMarkerSize(hist.GetMarkerSize())
+       hist=histrebinned
+       hist.GetXaxis().SetRangeUser(minmass,10000)
+       histbackup=hist
+       hist=hist_mc # use MC as reference for first ratio plot
+       hist.GetXaxis().SetRangeUser(minmass,10000)
+       histbackup2=hist2
+       hist2=hist_mc
+       if len(f_mc3)>0:
+         histbackup3=hist3
+         hist3=hist_mc
+
      canvas.cd(2)
      ratio=hist.Clone(hist.GetName()+"ratio")
      ratio.Divide(hist,hist)
      for b in range(hist.GetNbinsX()):
        if hist.GetBinContent(b+1)>0:
          ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-     if compare_Run2Run3:
-       histbackup=hist
-       hist=hist_mc # use MC as reference for first ratio plot
-       hist.GetXaxis().SetRangeUser(minmass,9000)
-       histbackup2=hist2
-       hist2=hist_mc
      ratio.SetTitle("")
-     ratio.GetYaxis().SetTitle("Run / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
+     ratio.GetYaxis().SetTitle("Run / year" if compare_years else ("Sim / "+mc[0][2] if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
      ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
      ratio.GetYaxis().SetTitleOffset(0.3)
      ratio.SetMarkerSize(0.1)
@@ -596,6 +593,8 @@ if __name__ == '__main__':
      if compare_Run2Run3:
        hist=histbackup
        hist2=histbackup2
+       if len(f_mc3)>0:
+         hist3=histbackup3
 
      canvas.cd(3)
      ddratio=hist.Clone(hist.GetName()+"ddratio")
@@ -672,19 +671,19 @@ if __name__ == '__main__':
         legend=TLegend(0.45,0.6,0.95,0.90,(str(massbins[mass][0])+"<m_{jj}<"+str(massbins[mass][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
         legends+=[legend]
     
-        name=prefix+data[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        name=prefix+data[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024" in data[0][0] and massbins[mass][1]==13000 else massbins[mass][1])
         if var=="#chi": name+="_rebin1"
         if var=="y":
-          hist=f_data[0].Get(name.replace("y","y_{1}"))
-          hist.Add(f_data[0].Get(name.replace("y","y_{2}")))
+          hist=f_data[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+          hist.Add(f_data[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
         else:
           hist=f_data[0].Get(name)
         for i in range(1,len(data)):
-            namei=prefix+data[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+            namei=prefix+data[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024" in data[i][0] and massbins[mass][1]==13000 else massbins[mass][1])
             if var=="#chi": namei+="_rebin1"
             if var=="y":
-              hist.Add(f_data[i].Get(namei.replace("y","y_{1}")),data[i][1]/data[0][1])
-              hist.Add(f_data[i].Get(namei.replace("y","y_{2}")),data[i][1]/data[0][1])
+              hist.Add(f_data[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),data[i][1]/data[0][1])
+              hist.Add(f_data[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),data[i][1]/data[0][1])
             else:
               hist.Add(f_data[i].Get(namei),data[i][1]/data[0][1])
         print("mass bin",mass,"data 2016 integral",hist.Integral())
@@ -718,19 +717,19 @@ if __name__ == '__main__':
         hist.Draw("pe")
         legend.AddEntry(hist,data[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
-        name=prefix+data2[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+        name=prefix+data2[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024" in data2[0][0] and massbins[mass][1]==13000 else massbins[mass][1])
         if var=="#chi": name+="_rebin1"
         if var=="y":
-          hist2=f_data2[0].Get(name.replace("y","y_{1}"))
-          hist2.Add(f_data2[0].Get(name.replace("y","y_{2}")))
+          hist2=f_data2[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+          hist2.Add(f_data2[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
         else:
           hist2=f_data2[0].Get(name)
         for i in range(1,len(data2)):
-            namei=prefix+data2[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+            namei=prefix+data2[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024" in data2[i][0] and massbins[mass][1]==13000 else massbins[mass][1])
             if var=="#chi": namei+="_rebin1"
             if var=="y":
-              hist2.Add(f_data2[i].Get(namei.replace("y","y_{1}")),data2[i][1]/data2[0][1])
-              hist2.Add(f_data2[i].Get(namei.replace("y","y_{2}")),data2[i][1]/data2[0][1])
+              hist2.Add(f_data2[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),data2[i][1]/data2[0][1])
+              hist2.Add(f_data2[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),data2[i][1]/data2[0][1])
             else:
               hist2.Add(f_data2[i].Get(namei),data2[i][1]/data2[0][1])
         print("mass bin",mass,"data 2017 integral",hist2.Integral())
@@ -756,19 +755,19 @@ if __name__ == '__main__':
         legend.AddEntry(hist2,data2[0][2]+(" RECO" if compare_RECOvsGEN else ""),"lpe")
 
         if len(f_data3)>0:
-          name=prefix+data3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+          name=prefix+data3[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024" in data3[0][0] and massbins[mass][1]==13000 else massbins[mass][1])
           if var=="#chi": name+="_rebin1"
           if var=="y":
-            hist3=f_data3[0].Get(name.replace("y","y_{1}"))
-            hist3.Add(f_data3[0].Get(name.replace("y","y_{2}")))
+            hist3=f_data3[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+            hist3.Add(f_data3[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
           else:
             hist3=f_data3[0].Get(name)
           for i in range(1,len(data3)):
-              namei=prefix+data3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
+              namei=prefix+data3[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(13600 if "2024-" in data3[i][0] and massbins[mass][1]==13000 else massbins[mass][1])
               if var=="#chi": namei+="_rebin1"
               if var=="y":
-                hist3.Add(f_data3[i].Get(namei.replace("y","y_{1}")),data3[i][1]/data3[0][1])
-                hist3.Add(f_data3[i].Get(namei.replace("y","y_{2}")),data3[i][1]/data3[0][1])
+                hist3.Add(f_data3[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),data3[i][1]/data3[0][1])
+                hist3.Add(f_data3[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),data3[i][1]/data3[0][1])
               else:
                 hist3.Add(f_data3[i].Get(namei),data3[i][1]/data3[0][1])
           print("mass bin",mass,"data 2018 integral",hist3.Integral())
@@ -796,16 +795,16 @@ if __name__ == '__main__':
         name=prefix+mc[0][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
         if var=="#chi": name+="_rebin1"
         if var=="y":
-          hist_mc=f_mc[0].Get(name.replace("y","y_{1}"))
-          hist_mc.Add(f_mc[0].Get(name.replace("y","y_{2}")))
+          hist_mc=f_mc[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0])))
+          hist_mc.Add(f_mc[0].Get(name.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))))
         else:
           hist_mc=f_mc[0].Get(name)
         for i in range(1,len(mc)):
             namei=prefix+mc[i][0].split("-HT")[0]+var+str(massbins[mass][0])+"_"+str(massbins[mass][1])
             if var=="#chi": namei+="_rebin1"
             if var=="y":
-              hist_mc.Add(f_mc[i].Get(namei.replace("y","y_{1}")),mc[i][1]/mc[0][1])
-              hist_mc.Add(f_mc[i].Get(namei.replace("y","y_{2}")),mc[i][1]/mc[0][1])
+              hist_mc.Add(f_mc[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{1}"+str(massbins[mass][0]))),mc[i][1]/mc[0][1])
+              hist_mc.Add(f_mc[i].Get(namei.replace("y"+str(massbins[mass][0]),"y_{2}"+str(massbins[mass][0]))),mc[i][1]/mc[0][1])
             else:
               hist_mc.Add(f_mc[i].Get(namei),mc[i][1]/mc[0][1])
         if var=="#chi":
@@ -890,19 +889,23 @@ if __name__ == '__main__':
         legend.SetFillStyle(0)
         legend.Draw("same")
 
+        if compare_Run2Run3:
+          histbackup=hist
+          hist=hist_mc # use MC as reference for first ratio plot
+          histbackup2=hist2
+          hist2=hist_mc
+          if len(f_mc3)>0:
+            histbackup3=hist3
+            hist3=hist_mc
+
         canvas.cd(2)
         ratio=hist.Clone(hist.GetName()+"ratio")
         ratio.Divide(hist,hist)
         for b in range(hist.GetNbinsX()):
           if hist.GetBinContent(b+1)>0:
             ratio.SetBinError(b+1,hist.GetBinError(b+1)/hist.GetBinContent(b+1))
-        if compare_Run2Run3:
-          histbackup=hist
-          hist=hist_mc # use MC as reference for first ratio plot
-          histbackup2=hist2
-          hist2=hist_mc
         ratio.SetTitle("")
-        ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("Sim / Sim (Run2)" if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
+        ratio.GetYaxis().SetTitle("Run2 / year" if compare_years else ("Sim / "+mc[0][2] if compare_Run2Run3 else ("EOY / UL" if compare_EOYvsUL or compare_EOYvsUL_MC else ("new / old" if compare_NULvsUL else ("RECO / GEN" if compare_RECOvsGEN else "Sim / Data")))))
         ratio.GetYaxis().SetTitleSize(0.18/(len(ratio.GetYaxis().GetTitle())/10))
         ratio.GetYaxis().SetTitleOffset(0.3)
         ratio.SetMarkerSize(0.1)
@@ -949,6 +952,8 @@ if __name__ == '__main__':
         if compare_Run2Run3:
           hist=histbackup
           hist2=histbackup2
+          if len(f_mc3)>0:
+            hist3=histbackup3
 
         canvas.cd(3)
         ddratio=hist.Clone(hist.GetName()+"ddratio")

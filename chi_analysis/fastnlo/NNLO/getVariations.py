@@ -2,9 +2,8 @@ from ROOT import *
 from array import *
 import subprocess,os
 
-massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
-
 order="NNLO"
+newci=True
 
 if order=="NNLO":
   #PDF="ct14nnlo"
@@ -14,6 +13,18 @@ if order=="NNLO":
 else:
   PDF="ct14nlo"
   mscale="pt12"
+
+if PDF=="nn31nnlo":
+  PDFmembers=100
+else:
+  PDFmembers=56
+
+if newci:
+  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30] # TeV
+  massbins=[[5400,6000],[6000,7000],[7000,13000]]
+else:
+  ciscales=range(5,31) # TeV
+  massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
 
 class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++ program and store the xsecs into root histograms or python lists/dictionaries 
     
@@ -29,7 +40,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         self.bins=array('d',[1,2,3,4,5,6,7,8,9,10,12,14,16])
         self.styles=["LL-","LL+","RR-","RR+","VV-","VV+","AA-","AA+","V-A-","V-A+"]
         #self.styles=["AA-","AA+"]
-        self.cixsecDir="CIJET_fnl5662"+self.version+"_cs_001_ct14nlo_0_56_"
+        self.cixsecDir=("NEWCI" if newci else "CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_")
 
     def getqcdallmu(self):
       allmulist=[]
@@ -173,13 +184,17 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
 ##                 i=-9999
         cimudict={}
         for style in self.styles:
-            for m in range(5,31):
-                cimudict["CIJET_fnl5662"+self.version+"_cs_001_ct14nlo_0_56_"+str(m*1000)+"_"+style]=[]
-##                 for j in range(0,57):
-                filename="CIJET_fnl5662"+self.version+"_cs_001_ct14nlo_0_"+str(m*1000)+"_"+style+".xsc"
+            for m in ciscales:
+                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                cimudict[name]=[]
+##                 for j in range(0,PDFmembers+1):
+                if newci:
+                  filename="CIJET_cs_fnl5662"+self.version+"_mjj8-a_"+PDF.replace("nlo","-nlo").replace("n-nlo","-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
+                else:
+                  filename=name.replace("_0_"+str(PDFmembers)+"_","_0_")+".xsc"
                 muxsecs=[]
                 print(filename)
-                with open(self.BaseDir+"/"+self.cixsecDir+style+"/"+filename) as f:
+                with open(self.BaseDir+"/"+self.cixsecDir+("" if newci else style)+"/"+filename) as f:
                     i=-9999
                     for line in f:
                         i+=1
@@ -193,37 +208,42 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                             mass_high=float(line.split()[3])
                             chi_low=float(line.split()[0])
                             chi_high=float(line.split()[1])
+                            #print(mass_low)
                         if i>2:
                             xsec=float(line.split()[3])
                             mur=float(line.split()[1])
                             muf=float(line.split()[0])
                             #print cimudict
-                            if len(cimudict[filename.replace('.xsc','').replace('_0_','_0_56_')])<9:
+                            if len(cimudict[name])<9:
                                 mu=[mur,muf]
                                 xsecs=[mass_low,mass_high,chi_low,chi_high,xsec]
                                 muxsecs=[mu,xsecs]
-                                cimudict[filename.replace('.xsc','').replace('_0_','_0_56_')].append(muxsecs)    
+                                cimudict[name].append(muxsecs)    
                             else:
                                 xsecs=[mass_low,mass_high,chi_low,chi_high,xsec]
-                                cimudict[filename.replace('.xsc','').replace('_0_','_0_56_')][i-3].append(xsecs)
+                                cimudict[name][i-3].append(xsecs)
         return cimudict
 
     def getciallmem(self):
         cimemdict={}
         for style in self.styles:
-            for m in range(5,31):
-                cimemdict["CIJET_fnl5662"+self.version+"_cs_001_ct14nlo_0_56_"+str(m*1000)+"_"+style]=[]
-                for j in range(0,57):
-                    filename="CIJET_fnl5662"+self.version+"_cs_001_ct14nlo_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+            for m in ciscales:
+                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                cimemdict[name]=[]
+                for j in range(0,PDFmembers+1):
+                    if newci:
+                      filename="CIJET_cs_fnl5662"+self.version+"_mjj8-a_"+PDF.replace("nlo","-nlo").replace("n-nlo","-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+                    else:
+                      filename=name.replace('_0_'+str(PDFmembers)+'_','_'+str(j)+'_')+".xsc"
                     memxsecs=[]
                     print(filename)
-                    with open(self.BaseDir+"/"+self.cixsecDir+style+"/"+filename) as f:
+                    with open(self.BaseDir+"/"+self.cixsecDir+("" if newci else style)+"/"+filename) as f:
                         #print f
                         mem=j
                         memxsecs.append(mem)
                         i=-9999
                         for line in f:
-                            #print line
+                            #print(line)
                             i+=1
                             if "CT14nlo" in line: continue
                             if "xsec" in line: continue
@@ -236,6 +256,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                                 mass_high=float(line.split()[3])
                                 chi_low=float(line.split()[0])
                                 chi_high=float(line.split()[1])
+                                #print(mass_low)
                             if i>2:
                                 xsec=float(line.split()[3])
                                 mur=float(line.split()[1])
@@ -243,7 +264,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                                 if mur==1 and muf==1:
                                     xsecs=[mass_low,mass_high,chi_low,chi_high,xsec]
                                     memxsecs.append(xsecs)
-                        cimemdict[filename.replace('.xsc','').replace('_'+str(j)+'_','_0_56_')].append(memxsecs)
+                        cimemdict[name].append(memxsecs)
         return cimemdict
     
     def dictPrint(self,mydict):
@@ -352,23 +373,23 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
 if __name__ == "__main__":
     myVariations=getVariations()
 
-    qcdallmu=myVariations.getqcdallmu()
-    myVariations.listFill(qcdallmu,"mu")
+    #qcdallmu=myVariations.getqcdallmu()
+    #myVariations.listFill(qcdallmu,"mu")
     
-    qcdmu6p=myVariations.getqcdmup("6P")
-    myVariations.listFill(qcdmu6p,"mu6")
+    #qcdmu6p=myVariations.getqcdmup("6P")
+    #myVariations.listFill(qcdmu6p,"mu6")
     
-    qcdmu30=myVariations.getqcdmup("30")
-    myVariations.listFill(qcdmu30,"mu30")
+    #qcdmu30=myVariations.getqcdmup("30")
+    #myVariations.listFill(qcdmu30,"mu30")
     
-    qcdallmem=myVariations.getqcdallmem()
-    myVariations.listFill(qcdallmem,"mem")
+    #qcdallmem=myVariations.getqcdallmem()
+    #myVariations.listFill(qcdallmem,"mem")
 
-    qcdstat=myVariations.getqcdstat()
-    myVariations.listFill(qcdstat,"stat")
+    #qcdstat=myVariations.getqcdstat()
+    #myVariations.listFill(qcdstat,"stat")
 
-    #ciallmu=myVariations.getciallmu()
-    #myVariations.dictFill(ciallmu,"mu")
+    ciallmu=myVariations.getciallmu()
+    myVariations.dictFill(ciallmu,"mu")
     
-    #ciallmem=myVariations.getciallmem()
-    #myVariations.dictFill(ciallmem,"mem")    
+    ciallmem=myVariations.getciallmem()
+    myVariations.dictFill(ciallmem,"mem")    

@@ -25,8 +25,8 @@ if __name__=="__main__":
  models=[3] #ADD
  models+=[10] #QBH ADD6
  models+=[11] #QBH RS1
- models+=[12] #QBH Blackmax n=6
- models+=[13] #QBH Blackmax n=6 RECO
+ #models+=[12] #QBH Blackmax n=6
+ #models+=[13] #QBH Blackmax n=6 RECO
  models+=[60,61,62,63,64,65,66,67,68,69] #CI
  #models+=[70,71,72,73,74,75,76,77]
  #models+=[78,79,80,81,82,83,84,85,86,87]
@@ -42,7 +42,12 @@ if __name__=="__main__":
  testStat="LHC"
  asym="a" #asymptotic CLS
  runs="2" # "2" or "3" or "23"
- use_NNPDF3_signals=True
+ use_NNPDF3=False
+
+ if use_NNPDF3:
+   pdfset="nn31nnlo"
+ else:
+   pdfset="ct14nnlo"
 
  limit_list={}
 
@@ -55,24 +60,24 @@ if __name__=="__main__":
     if model==3:
        signal="ADD"    
     if model==4:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==5:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==6:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==7:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==8:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==9:
-       signal="cs_nn30nlo_0_"    
+       signal="cs_"+pdfset+"_0_"    
     if model==10:
-      if use_NNPDF3_signals:
+      if use_NNPDF3:
        signal="QBH_ADD6_"    
       else:
        signal="QBH_"    
     if model==11:
-      if use_NNPDF3_signals:
+      if use_NNPDF3:
        signal="QBH_RS1_"    
       else:
        signal="QBH_"    
@@ -82,17 +87,17 @@ if __name__=="__main__":
        signal="QBH_MD"
 
     if model>=18 and model<20:
-       signal="cs_ct14nlo_"
+       signal="cs_"+pdfset+"_"
     if model>=20 and model<30:
-       signal="cs_nn30nlo_0_"
+       signal="cs_"+pdfset+"_0_"
     if model>=30 and model<40:
-       signal="cs_ct14nlo_"
+       signal="cs_"+pdfset+"_"
     if model>=40 and model<50:
        signal="AntiCIplusLL"
     if model>=60 and model<70:
-       signal="cs_ct14nnlo_"
+       signal="cs_"+pdfset+"_"
     if model>=70 and model<90:
-       signal="cs_ct14nlo_"
+       signal="cs_"+pdfset+"_"
     if model>=90 and model<95:
        signal="alp_QCD_fa"
     if model>=95 and model<100:

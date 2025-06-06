@@ -66,14 +66,30 @@ def multiplyBinWidth(myhist):
         mynewhist.SetBinContent(b+1,myhist.GetBinContent(b+1)*myhist.GetBinWidth(b+1))
     return mynewhist
 
-massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
-ciDir="./CIJET_fnl5662j_cs_001_ct14nlo_0_56_/"
 
 order="NNLO"
+newci=True
+
+#### Hack factor 2*pi for CI
+import math
+hackFactor=2*math.pi if newci else 1.
+
+if newci:
+  ciDir="./NEWCI/"
+  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30]
+  massbins=[[5400,6000],[6000,7000],[7000,13000]]
+  plotmassbins=range(0,3)
+  lowestcimassbin=5400
+else:
+  ciDir="./CIJET_fnl5662j_cs_001_ct14nlo_0_56_/"
+  ciscales=range(5,31)
+  massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
+  plotmassbins=range(3,11)
+  lowestcimassbin=3600
 
 if order=="NNLO":
-  #PDF="ct14nnlo"
-  PDF="nn31nnlo"
+  PDF="ct14nnlo"
+  #PDF="nn31nnlo"
   mscale="m2"
   #mscale="pt12"
 else:
@@ -87,8 +103,9 @@ else:
 
 normalizeBack=False  
 
-calcUncert=False        # calculate qcd+ci uncertainties
-compareUncert=True      # compare qcd uncertainty with qcd+ci uncertainty
+calcUncert=True        # calculate qcd+ci uncertainties
+compareUncert=False      # compare qcd uncertainty with qcd+ci uncertainty
+compareNewci=False
 
 if calcUncert:
     
@@ -101,9 +118,13 @@ if calcUncert:
     cimufiles=[]
     cimemfiles=[]
     for j in styles:
-        for i in range(5,31):
-            cimufile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mu.root"
-            cimemfile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mem.root"
+        for i in ciscales:
+            if newci:
+              cimufile="CIJET_fnl5662j_cs_001_"+PDF.replace("ct14nnlo","ct14nlo")+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mu.root"
+              cimemfile="CIJET_fnl5662j_cs_001_"+PDF.replace("ct14nnlo","ct14nlo")+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mem.root"
+            else:
+              cimufile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mu.root"
+              cimemfile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mem.root"
             cimufiles.append(cimufile)
             cimemfiles.append(cimemfile)
     
@@ -112,9 +133,11 @@ if calcUncert:
         print("read",f)
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        newfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"RECREATE")
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        print("write",fname)
+        newfile=TFile(fname,"RECREATE")
         for massbin in massbins:
-            if massbins.index(massbin)<5:
+            if massbin[0]<lowestcimassbin:
                 for scale in scales:
                     qcdhist=qcdmufile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1]))
                     if scales.index(scale)==0:
@@ -126,10 +149,12 @@ if calcUncert:
             else:
                 for scale in scales:
                     n=f.replace("mu.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1])
-                    cihist=file.Get(n.replace("-7000","-6600")) ## TODO NEW CONTACT CALCULATION
+                    #print(n)
+                    cihist=file.Get(n if newci else n.replace("-7000","-6600"))
+                    if "-7000" in n and not newci: cihist.Scale(0)
                     qcdhist=qcdmufile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1]))
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+qcdhist.GetName()+"_addmu")
-                    qcdhistadd.Add(cihist)
+                    qcdhistadd.Add(cihist,hackFactor)
                     if scales.index(scale)==0:
                         scaleFactor=qcdhistadd.Integral()
                         scaleFactorsmu[f.replace(".root","")].append(scaleFactor)
@@ -140,11 +165,14 @@ if calcUncert:
     
     scaleFactorsmem={}
     for f in cimemfiles:
+        print("read",f)
         scaleFactorsmem[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        print("write",fname)
+        myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
-            if massbins.index(massbin)<5:
+            if massbin[0]<lowestcimassbin:
                 for i in range(0,PDFmembers+1):
                     qcdhist=qcdmemfile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i))
                     if i==0:
@@ -155,11 +183,13 @@ if calcUncert:
                     qcdhistadd.Write()
             else:
                 for i in range(0,PDFmembers+1):
-                    n=f.replace("mem.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+(str(i) if PDFmembers==56 else "0") ## TODO NEW CONTACT CALCULATION WITH NNPDF
-                    cihist=file.Get(n.replace("-7000","-6600")) ## TODO NEW CONTACT CALCULATION
+                    n=f.replace("mem.root","")+"chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+(str(i) if newci else (str(i) if PDFmembers==56 else "0"))
+                    #print(n)
+                    cihist=file.Get(n if newci else n.replace("-7000","-6600"))
+                    if "-7000" in n and not newci: cihist.Scale(0)
                     qcdhist=qcdmemfile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i))
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+"qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i)+"_addmem")
-                    qcdhistadd.Add(cihist)
+                    qcdhistadd.Add(cihist,hackFactor)
                     if i==0:
                         scaleFactor=qcdhistadd.Integral()
                         scaleFactorsmem[f.replace(".root","")].append(scaleFactor)
@@ -167,7 +197,9 @@ if calcUncert:
                     qcdhistadd.Write()
                         
     for f in cimufiles:
-        myfile=TFile(f.replace("CIJET_","").replace("_mu","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        print("write",fname)
+        myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
             histcentral=TH1F("chi-"+str(massbin[0])+"-"+str(massbin[1]),"chi-"+str(massbin[0])+"-"+str(massbin[1]),len(chibins)-1,chibins)
             histcentral.Sumw2()
@@ -200,7 +232,7 @@ if calcUncert:
             histscaledown.Write()
     
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -242,7 +274,7 @@ if calcUncert:
             histscaledown.Write()
 
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_","").replace("_mem","").replace("_0_56_","_").replace("ct14nlo",PDF+"_"+mscale).replace("_001_","_"),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -273,11 +305,11 @@ if calcUncert:
         myfile.Close()
     
     
-if compareUncert:
+if compareUncert or compareNewci:
 
     for style in styles:
-        for i in range(5,31):
-            ciqcdfilename="fnl5662j_cs_ct14nlo_".replace("ct14nlo",PDF+"_"+mscale)+str(i*1000)+"_"+style+".root"
+        for i in ciscales:
+            ciqcdfilename=("newci" if newci else "")+"fnl5662j_cs_ct14nlo_".replace("ct14nlo",PDF+"_"+mscale)+str(i*1000)+"_"+style+".root"
 
             os.system("cp ../RunII/fnl5662i_v23_fix_CT14_ak4.root .")   # copy qcd file to current directory, this file will be used in the comparison
     
@@ -302,7 +334,8 @@ if compareUncert:
             hist3statdowns=[]
     
             file1=TFile("fnl5662i_v23_fix_CT14_ak4.root","UPDATE")
-            for massbin in massbins[2:8]:
+            for massbin in massbins:
+                if massbin[0]<1900 or massbin[0]>5400: continue
                 histname="chi-"+str(massbin[0])+"-"+str(massbin[1])
                 h1=file1.Get(histname)
                 h1scaleup=file1.Get(histname+"scaleUp")
@@ -328,7 +361,8 @@ if compareUncert:
             file1.Close()
     
             file1new=TFile("fnl5662i_v23_fix_CT14_ak4.root")
-            for massbin in massbins[2:8]:
+            for massbin in massbins:
+                if massbin[0]<1900 or massbin[0]>5400: continue
                 histname="chi-"+str(massbin[0])+"-"+str(massbin[1])
                 hist1=file1new.Get(histname+"_norm")
                 hist1scaleup=file1new.Get(histname+"scaleUp"+"_norm")
@@ -345,7 +379,7 @@ if compareUncert:
                 hist1pdfups.append(hist1pdfup)
                 hist1pdfdowns.append(hist1pdfdown)
     
-            file2=TFile.Open(ciqcdfilename.replace("m2","pt12"))
+            file2=TFile.Open((ciqcdfilename.replace("m2","pt12") if compareUncert else ciqcdfilename.replace("newci","")))
             for massbin in massbins:
                 histname="chi-"+str(massbin[0])+"-"+str(massbin[1])
                 hist2=file2.Get(histname)
@@ -369,7 +403,7 @@ if compareUncert:
                 hist2statups.append(hist2statup)
                 hist2statdowns.append(hist2statdown)
         
-            file3=TFile.Open(ciqcdfilename.replace("pt12","m2"))
+            file3=TFile.Open((ciqcdfilename.replace("pt12","m2") if compareUncert else "newci"+ciqcdfilename.replace("newci","")))
             for massbin in massbins:
                 histname="chi-"+str(massbin[0])+"-"+str(massbin[1])
                 hist3=file3.Get(histname)
@@ -400,18 +434,18 @@ if compareUncert:
             canvas.Divide(4,2)
             
             legends=[]
-            for j in range(3,11):
+            for j in plotmassbins:
                 
                 legend=TLegend(0.2,0.6,0.8,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV"))
                 legend.SetFillStyle(0)
-                if j<8:
+                if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   legend.AddEntry(hist1s[j-2],"2016 NLO mu=pTave","l")
-                legend.AddEntry(hist2s[j],"Run2 NNLO mu=pTave","l")
-                legend.AddEntry(hist3s[j],"Run2 NNLO mu=mjj","l")
+                legend.AddEntry(hist2s[j],("old" if newci else "Run2 NNLO mu=pTave"),"l")
+                legend.AddEntry(hist3s[j],("new" if newci else "Run2 NNLO mu=mjj"),"l")
                 legends.append(legend)
         
-            for j in range(3,11):
-                canvas.cd(j-2)
+            for j in plotmassbins:
+                canvas.cd(plotmassbins.index(j)+1)
                 pad1=TPad("","",0, 0, 1, 1)
                 pad1.Draw()
                 pad1.cd()
@@ -422,11 +456,11 @@ if compareUncert:
                 hist2s[j].Draw()
                 hist3s[j].SetLineColor(6)
                 hist3s[j].Draw("samehist")
-                if j<8:
+                if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   hist1s[j-2].SetLineColor(1)
                   hist1s[j-2].SetLineStyle(2)
                   hist1s[j-2].Draw("samehist")
-                legends[j-3].Draw()
+                legends[plotmassbins.index(j)].Draw()
         
             canvas.SaveAs(saveName)
         
@@ -435,11 +469,11 @@ if compareUncert:
             canvas2.Divide(4,2)
             
             legends2=[]
-            for j in range(3,11):
+            for j in plotmassbins:
                 
                 legend=TLegend(0.2,0.6,0.8,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV"))
                 legend.SetFillStyle(0)
-                if j<8:
+                if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   legend.AddEntry(hist1pdfups[j-2],"2016 NLO mu=pTave PDF unc.","l")
                   legend.AddEntry(hist1scaleups[j-2],"2016 NLO mu=pTave scale unc.","l")
                 legend.AddEntry(hist2pdfups[j],"Run2 NNLO mu=pTave PDF unc.","l")
@@ -450,8 +484,8 @@ if compareUncert:
                 legend.AddEntry(hist3statups[j],"Run2 NNLO mu=mjj stat unc.","l")
                 legends2.append(legend)
         
-            for j in range(3,11):
-                canvas2.cd(j-2)
+            for j in plotmassbins:
+                canvas2.cd(plotmassbins.index(j)+1)
                 pad2=TPad("","",0, 0, 1, 1)
                 pad2.Draw()
                 pad2.cd()
@@ -487,7 +521,7 @@ if compareUncert:
                 hist2statdowns[j].SetLineStyle(3)
                 hist2statdowns[j].Draw("samehist")
                 
-                if j<8:
+                if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   hist1pdfups[j-2].SetLineColor(4)
                   hist1pdfups[j-2].SetLineStyle(2)
                   hist1pdfups[j-2].GetXaxis().SetTitle("#chi_{dijet}")
@@ -528,9 +562,9 @@ if compareUncert:
                 hist3statdowns[j].SetLineStyle(1)
                 hist3statdowns[j].Draw("samehist")
                 
-                if j<8:
+                if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   hist1s[j-2].SetLineColor(1)
                   hist1s[j-2].Draw("samehist")
-                legends2[j-3].Draw()
+                legends2[plotmassbins.index(j)].Draw()
         
             canvas2.SaveAs(saveName2)

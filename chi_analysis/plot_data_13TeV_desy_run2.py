@@ -34,6 +34,15 @@ prefireUL16preVFP=prefireULfile.Get("L1prefiring_jetptvseta_UL2016preVFP")
 prefireUL16postVFP=prefireULfile.Get("L1prefiring_jetptvseta_UL2016postVFP")
 prefireUL17=prefireULfile.Get("L1prefiring_jetptvseta_UL2017BtoF")
 
+#import json
+#jetVetoMap2024 = json.load(open("jetvetomaps-2024.json","r"))
+#print(jetVetoMap2024["corrections"])
+import correctionlib
+jetVetoMap2024 = correctionlib.CorrectionSet.from_file("jetvetomaps-2024.json")['Winter24Prompt2024BCDEFGHI_V1']
+#print([key for key in jetVetoMap2024.keys()])
+#print([i.name for i in jetVetoMap2024.inputs])
+#print(jetVetoMap2024.evaluate("jetvetomap",1.,1.))
+
 def deltaPhi(phi1, phi2):
   deltaphi = phi2 - phi1
   if abs(deltaphi) > math.pi:
@@ -95,14 +104,14 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
       plots += [TH1F(prefix+'dPtsumPt'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';(p_{T1}-p_{T2})/(p_{T1}+p_{T2});N',25,0,0.5)]
     for massbin in massbins:
       plots += [TH1F(prefix+'#Delta#phi'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';#Delta#phi;N',32,0,3.1415)]
-    plots += [TH1F(prefix+'mass',';dijet mass;N',260,0,13000)]
+    plots += [TH1F(prefix+'mass',';dijet mass;N',272,0,13600)]
     for c in range(len(chi_bins[0])-1):
-      plots += [TH1F(prefix+'mass-reftrig-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
-    plots += [TH1F(prefix+'mass-reftrig',';dijet mass;N',260,0,13000)]
+      plots += [TH1F(prefix+'mass-reftrig-chi-'+str(chi_bins[0][c]),';dijet mass;N',272,0,13600)]
+    plots += [TH1F(prefix+'mass-reftrig',';dijet mass;N',272,0,13600)]
     for t in range(len(triggers)-len(massbins)-1):
       for c in range(len(chi_bins[0])-1):
-        plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t])+'-chi-'+str(chi_bins[0][c]),';dijet mass;N',260,0,13000)]
-      plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t]),';dijet mass;N',260,0,13000)]
+        plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t])+'-chi-'+str(chi_bins[0][c]),';dijet mass;N',272,0,13700)]
+      plots += [TH1F(prefix+'mass-trig'+"or".join(triggers[len(massbins)+1+t]),';dijet mass;N',272,0,13600)]
     
     for plot in plots:
         plot.Sumw2()
@@ -167,6 +176,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          mjj=(jet1+jet2).M()
          chi=math.exp(abs(jet1.Rapidity()-jet2.Rapidity()))
          yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
+         if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
          weight=1.0
          #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
          if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
@@ -177,14 +187,23 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
          if "NANOAOD" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
+            if not event.Flag_goodVertices or\
+               not event.Flag_globalSuperTightHalo2016Filter or\
+               not event.Flag_EcalDeadCellTriggerPrimitiveFilter or\
+               not event.Flag_BadPFMuonFilter or\
+               not event.Flag_BadPFMuonDzFilter or\
+               not event.Flag_hfNoisyHitsFilter or\
+               not event.Flag_eeBadScFilter or\
+               not event.Flag_ecalBadCalibFilter: continue
+         if "2024" in f:
+            if jetVetoMap2024.evaluate("jetvetomap",jet1.Eta(),jet1.Phi())!=0 or jetVetoMap2024.evaluate("jetvetomap",jet2.Eta(),jet2.Phi())!=0: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
-         if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
          if mjj>6000 and "data" in sample:
            if "NANOAOD" in f:
              print("found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
            else:
              print("found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
-         if jet1.Pt()>13000: continue
+         if jet1.Pt()>13600: continue
          irec=0
          for massbin in massbins:
             passedHLT=len(triggers[massbins.index(massbin)])==0
@@ -275,9 +294,9 @@ if __name__ == '__main__':
               (4200,4800),
               (4800,5400),
               (5400,6000),
-              (6000,13000),
+              (6000,13600),
               (6000,7000),
-              (7000,13000),
+              (7000,13600),
               ]
  
     samples=[#("datacard_shapelimit13TeV_run2_2016old","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/jobtmpFeb5_data9"),
@@ -318,7 +337,7 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023"),
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
             ("datacard_shapelimit13TeV_run2_UL18_QBH","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qbhUL18"),
-            ("datacard_shapelimit13TeV_run2_2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024"),
+            ("datacard_shapelimit13TeV_run2_2024-16May2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_16May2025"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -1005,7 +1024,7 @@ if __name__ == '__main__':
         canvas.cd(j+1)
         plots[0][j].Draw("he")
         print("number of events passed:",plots[0][j].GetEntries())
-        legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("<13000",""))
+        legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV").replace("<13600",""))
         legends+=[legend1]
         legend1.AddEntry(plots[0][j],samples[0][0],"l")
         legend1.SetTextSize(0.04)

@@ -158,3 +158,4 @@ hadd -f datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024-HT1500to200
 hadd -f datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024-HT2000_chi.root datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024-HT2000_*_chi.root
 
 hadd -f data/datacard_shapelimit13TeV_run2_2024_chi.root data/datacard_shapelimit13TeV_run2_2024-*_chi.root
+hadd -f data/datacard_shapelimit13TeV_run2_2024-16May2025_chi.root data/datacard_shapelimit13TeV_run2_2024-16May2025-*_chi.root

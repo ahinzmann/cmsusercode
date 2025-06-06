@@ -78,7 +78,7 @@ if __name__ == '__main__':
     use_UL=True
     responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
-    use_NNPDF3_signals=False
+    use_NNPDF3=True
     use_CP2=False
     
     if use_UL:
@@ -87,7 +87,10 @@ if __name__ == '__main__':
       years=["2016","2017","2018"]
 
     if useNNLO:
-      pdfset="ct14nnlo"
+      if use_NNPDF3:
+        pdfset="nn31nnlo"
+      else:
+        pdfset="ct14nnlo"
     else:
       pdfset="ct14nlo"
     if useM2:
@@ -97,8 +100,13 @@ if __name__ == '__main__':
       muScale="pt12"
       muAltScale="m2"
 
+    if "ct14" in pdfset:
+      PDFmembers=56
+    else:
+      PDFmembers=100
+
     if run=="2":
-      if use_NNPDF3_signals:
+      if use_NNPDF3:
         prefixs=["versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"]
       elif useM2:
         prefixs=["versions/run2ULNNLO_m2/datacard_shapelimit13TeV"]
@@ -281,7 +289,7 @@ if __name__ == '__main__':
        couplings=[(0,0,0,1),]
        for lambdaT in lambdaTes:
          samples1+=[("QCDADD"+str(lambdaT),[("pythia8_add_m"+str(minMass)+"_"+str(maxMasses[minMasses.index(minMass)])+"_"+str(lambdaT)+"_0_0_0_1_13p6TeV_Nov2022",1) for minMass in minMasses])]
-    elif use_NNPDF3_signals:
+    elif use_NNPDF3:
        minMasses=[1500,1900,2400,2800,3300,3800,4300,5200,6000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
        maxMasses=[1900,2400,2800,3300,3800,4300,5200,6000,13000] # for mass bins 1.9, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 7.0
        lambdaTes=[9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,21000,22000,25000,30000]
@@ -308,8 +316,9 @@ if __name__ == '__main__':
              #("QCDADD22000",[]),
              ]
 
-    for m in range(5,31):
+    #for m in range(5,31):
     #for m in [13]:
+    for m in [10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30]:
        samples2+=[("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
                ("cs_"+pdfset+"_"+str(m*1000)+"_LL-",[]),
                ("cs_"+pdfset+"_"+str(m*1000)+"_RR+",[]),
@@ -361,7 +370,7 @@ if __name__ == '__main__':
          samples4+=[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,[("DMAxial_Dijet_LO_Mphi_"+str(mass)+"_"+str(mDM)+"_1p0_1p0_Mar5_"+weight,0)]),
              ]
 
-    if use_NNPDF3_signals:
+    if use_NNPDF3:
        xsecs_qbhadd6={7500.0: 0.01255937, 8000.0: 0.003966422, 8500.0: 0.001199453, 9000.0: 0.0003439181, 9500.0: 9.214433e-05, 10000.0: 2.255567e-05, 11000.0: 8.795348e-07, 12000.0: 1.020805e-08}
        for signalMass in [7500,8000,8500,9000,9500,10000,11000,12000]:
          samples3+=[("QBH_ADD6_"+str(signalMass),[('qbh_ADD6_'+str(+signalMass)+"_Feb2025CP5",1.*xsecs_qbhadd6[signalMass]),])] # Factor 3 to reproduce old results. To be fixed.
@@ -391,6 +400,8 @@ if __name__ == '__main__':
     samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
     # for add
     #samples=samples1
+    # for ci
+    #samples=samples2
     # for qbh
     #samples=samples3
     # for alp+tripleG
@@ -462,7 +473,7 @@ if __name__ == '__main__':
         sample=prefix + '_GENnp-17-run'+run+'_chi.root'
       elif "ADD" in samples[i][0] and run=="3":
         sample=prefix + "_GENnp-run"+run+"-" + samples[i][0] + '_chi.root'
-      elif ("ADD" in samples[i][0] or "QBH" in samples[i][0]) and use_NNPDF3_signals:
+      elif ("ADD" in samples[i][0] or "QBH" in samples[i][0]) and use_NNPDF3:
         sample=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + samples[i][0] + '_chi.root'
       elif samples[i][0]=="QCDADD6000":
         sample=prefix + '_GENnp-18-run'+run+'_chi.root'
@@ -516,12 +527,12 @@ if __name__ == '__main__':
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
       print("output file", sample)
       if "GEN" in sample:
-        insignalsample=sample.replace(prefix,input_prefix1)
+        insignalsample=(input_prefix1 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       else:
-        insignalsample=sample.replace(prefix,input_prefix2)
+        insignalsample=(input_prefix2 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix2).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       print("input signal file", insignalsample)
   
-      insignalfile=TFile(insignalsample.replace("_1-run3","_1-run2"),'READ') ###### FIXME when run3 samples exist
+      insignalfile=TFile(insignalsample,'READ')
       closefiles=[insignalfile]
       out=TFile(sample,'RECREATE')
       closefiles+=[out]
@@ -587,9 +598,9 @@ if __name__ == '__main__':
       #filename1nu2="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
       if useNNLO:
         #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
-        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nnlo_cppread_mu_"+muScale+".root"
+        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+".root"
       else:
-        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
+        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_"+pdfset+"_cppread_mu_pt12.root"
       print(filename1nu2)
       nlofile2 = TFile.Open(filename1nu2)
       closefiles+=[nlofile2]
@@ -941,11 +952,11 @@ if __name__ == '__main__':
             ci.SetBinContent(b+1,ci.GetBinContent(b+1)*correction)
           ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
-          filenamecinlo="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinlo="fastnlo/NNLO/"+("newci" if massbins[j][0]>=5400 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           print(filenamecinlo)
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]
-          filenamecinloaltscale="fastnlo/NNLO/fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinloaltscale="fastnlo/NNLO/"+("newci" if massbins[j][0]>=5400 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           print(filenamecinloaltscale)
           cinlofilealtscale = TFile.Open(filenamecinloaltscale)
           closefiles+=[cinlofilealtscale]
@@ -1034,7 +1045,7 @@ if __name__ == '__main__':
             ci.Scale(samples[i][1][0][1])
             ci.Scale(1./nloqcdbackup.Integral())
             ci.Add(nloqcd)
-        elif "QBH" in samples[i][0] and use_NNPDF3_signals:
+        elif "QBH" in samples[i][0] and use_NNPDF3:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             cibackup=insignalfile.Get(histname)
             histname=histname.replace("_backup","")
@@ -1639,11 +1650,11 @@ if __name__ == '__main__':
                 else:
                   hnloScaleup = TH1F(cinlofile.Get(histname.replace("Scale","scale")).Clone(histname))
               elif scaleVariation=="Alt":
-                hnloScaleup = TH1F(cinlofilealtscale.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofilealtscale.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuR":
-                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuF":
-                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
               hnloScaleup=hnloScaleup.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
               if nloScaleupci:
                   nloScaleupci.Add(hnloScaleup)
@@ -1662,11 +1673,11 @@ if __name__ == '__main__':
                 else:
                   hnloScaledown = TH1F(cinlofile.Get(histname.replace("Scale","scale")).Clone(histname))
               elif scaleVariation=="Alt":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuR":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuF":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
               hnloScaledown=hnloScaledown.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
               if nloScaledownci:
                  nloScaledownci.Add(hnloScaledown)
