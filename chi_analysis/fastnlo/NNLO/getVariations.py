@@ -6,8 +6,8 @@ order="NNLO"
 newci=True
 
 if order=="NNLO":
-  #PDF="ct14nnlo"
-  PDF="nn31nnlo"
+  PDF="ct14nnlo"
+  #PDF="nn31nnlo"
   mscale="m2"
   #mscale="pt12"
 else:
@@ -20,8 +20,8 @@ else:
   PDFmembers=56
 
 if newci:
-  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30] # TeV
-  massbins=[[5400,6000],[6000,7000],[7000,13000]]
+  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30,35,40,45,50,55,60,65,70] # TeV
+  massbins=[[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
 else:
   ciscales=range(5,31) # TeV
   massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
@@ -185,11 +185,11 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         cimudict={}
         for style in self.styles:
             for m in ciscales:
-                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimudict[name]=[]
 ##                 for j in range(0,PDFmembers+1):
                 if newci:
-                  filename="CIJET_cs_fnl5662"+self.version+"_mjj8-a_"+PDF.replace("nlo","-nlo").replace("n-nlo","-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
+                  filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
                 else:
                   filename=name.replace("_0_"+str(PDFmembers)+"_","_0_")+".xsc"
                 muxsecs=[]
@@ -210,7 +210,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                             chi_high=float(line.split()[1])
                             #print(mass_low)
                         if i>2:
-                            xsec=float(line.split()[3])
+                            xsec=float(line.split()[3]) # LO=2/NLO=3
                             mur=float(line.split()[1])
                             muf=float(line.split()[0])
                             #print cimudict
@@ -228,11 +228,11 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         cimemdict={}
         for style in self.styles:
             for m in ciscales:
-                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimemdict[name]=[]
                 for j in range(0,PDFmembers+1):
                     if newci:
-                      filename="CIJET_cs_fnl5662"+self.version+"_mjj8-a_"+PDF.replace("nlo","-nlo").replace("n-nlo","-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+                      filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
                     else:
                       filename=name.replace('_0_'+str(PDFmembers)+'_','_'+str(j)+'_')+".xsc"
                     memxsecs=[]
@@ -258,7 +258,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                                 chi_high=float(line.split()[1])
                                 #print(mass_low)
                             if i>2:
-                                xsec=float(line.split()[3])
+                                xsec=float(line.split()[3]) # LO=2/NLO=3
                                 mur=float(line.split()[1])
                                 muf=float(line.split()[0])
                                 if mur==1 and muf==1:

@@ -79,7 +79,7 @@ if __name__ == '__main__':
     responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
     use_NNPDF3=True
-    use_CP2=False
+    use_CP2=True # for ADD
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -318,7 +318,8 @@ if __name__ == '__main__':
 
     #for m in range(5,31):
     #for m in [13]:
-    for m in [10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30]:
+    #for m in [10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30]:
+    for m in [10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30,35,40,45,50,55,60,65,70]:
        samples2+=[("cs_"+pdfset+"_"+str(m*1000)+"_LL+",[]),
                ("cs_"+pdfset+"_"+str(m*1000)+"_LL-",[]),
                ("cs_"+pdfset+"_"+str(m*1000)+"_RR+",[]),
@@ -527,7 +528,7 @@ if __name__ == '__main__':
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
       print("output file", sample)
       if "GEN" in sample:
-        insignalsample=(input_prefix1 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
+        insignalsample=(input_prefix1 + sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       else:
         insignalsample=(input_prefix2 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix2).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       print("input signal file", insignalsample)
@@ -606,14 +607,14 @@ if __name__ == '__main__':
       closefiles+=[nlofile2]
 
       # (N)NLO uncertainties
-      filename1nusys="fastnlo/NNLO/fnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_30000_V-A-.root"
+      filename1nusys="fastnlo/NNLO/newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
       print(filename1nusys)
       nlofilesys = TFile.Open(filename1nusys)
       closefiles+=[nlofilesys]
       if useNNLO:
-        filename1altscale="fastnlo/NNLO/fnl5662j_cs_"+pdfset+("_"+muAltScale if useNNLO else "")+"_30000_V-A-.root"
+        filename1altscale="fastnlo/NNLO/newcifnl5662j_cs_"+pdfset+("_"+muAltScale if useNNLO else "")+"_70000_V-A-.root"
       else:
-        filename1altscale="fastnlo/NNLO/fnl5662j_cs_ct14nnlo_pt12_30000_V-A-.root" # NNLO is alternative to NLO
+        filename1altscale="fastnlo/NNLO/newcifnl5662j_cs_ct14nnlo_pt12_70000_V-A-.root" # NNLO is alternative to NLO
       print(filename1altscale)
       nlofilealtscale = TFile.Open(filename1altscale)
       closefiles+=[nlofilealtscale]
@@ -815,8 +816,8 @@ if __name__ == '__main__':
         #for b in range(nloqcd.GetXaxis().GetNbins()):
         #  nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)/nloqcd.GetBinWidth(b+1))
         #if not useUnfoldedData:
-        nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
         nloqcdbackup=nloqcd.Clone(nloqcd.GetName()+"_backup")
+        nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
         if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
            nloqcdbackup.Scale(factor13p6)
         print("theory integral (pb):", nloqcdbackup.Integral())
@@ -952,11 +953,15 @@ if __name__ == '__main__':
             ci.SetBinContent(b+1,ci.GetBinContent(b+1)*correction)
           ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
-          filenamecinlo="fastnlo/NNLO/"+("newci" if massbins[j][0]>=5400 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinlo="fastnlo/NNLO/"+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          if massbins[j][0]<3600: # No CI calculation available
+            filenamecinlo=filenamecinlo.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
           print(filenamecinlo)
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]
-          filenamecinloaltscale="fastnlo/NNLO/"+("newci" if massbins[j][0]>=5400 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinloaltscale="fastnlo/NNLO/"+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          if massbins[j][0]<3600:# No CI calculation available
+            filenamecinloaltscale=filenamecinloaltscale.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
           print(filenamecinloaltscale)
           cinlofilealtscale = TFile.Open(filenamecinloaltscale)
           closefiles+=[cinlofilealtscale]
@@ -1563,11 +1568,11 @@ if __name__ == '__main__':
              else:
                hnloScaleup = TH1F(nlofilesys.Get(histname.replace("Scale","scale")).Clone(histname))
            elif scaleVariation=="Alt":
-             hnloScaleup = TH1F(nlofilealtscale.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+             hnloScaleup = TH1F(nlofilealtscale.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muAltScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuR":
-             hnloScaleup = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
+             hnloScaleup = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuF":
-             hnloScaleup = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
+             hnloScaleup = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
            #hnloScaleup.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
            hnloScaleup=rebin(hnloScaleup,len(chi_binnings[j])-1,chi_binnings[j])
            if nloScaleupqcd:
@@ -1588,11 +1593,11 @@ if __name__ == '__main__':
              else:
                hnloScaledown = TH1F(nlofilesys.Get(histname.replace("Scale","scale")).Clone(histname))
            elif scaleVariation=="Alt":
-             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuR":
-             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
+             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
            elif scaleVariation=="MuF":
-             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_ct14nlo_0_56_30000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
+             hnloScaledown = TH1F(nlofilesys.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
            #hnloScaledown.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
            hnloScaledown=rebin(hnloScaledown,len(chi_binnings[j])-1,chi_binnings[j])
            if nloScaledownqcd:
@@ -1640,6 +1645,8 @@ if __name__ == '__main__':
           
           if "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
              signalmassname="_".join(samples[i][0].split("_")[2:4])
+             if massbins[j][0]<3600: ### No CI calculation available
+               signalmassname=signalmassname.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
              nloScaleupci=None
              for k in mass_bins_nlo_list[j]:
               histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"Scale"+scaleVariation+"Up"
@@ -1650,11 +1657,11 @@ if __name__ == '__main__':
                 else:
                   hnloScaleup = TH1F(cinlofile.Get(histname.replace("Scale","scale")).Clone(histname))
               elif scaleVariation=="Alt":
-                hnloScaleup = TH1F(cinlofilealtscale.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofilealtscale.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muAltScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuR":
-                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-2.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuF":
-                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
+                hnloScaleup = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-2.0_addmu")).Clone(histname)
               hnloScaleup=hnloScaleup.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
               if nloScaleupci:
                   nloScaleupci.Add(hnloScaleup)
@@ -1673,11 +1680,11 @@ if __name__ == '__main__':
                 else:
                   hnloScaledown = TH1F(cinlofile.Get(histname.replace("Scale","scale")).Clone(histname))
               elif scaleVariation=="Alt":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuR":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-0.5-1.0_addmu")).Clone(histname)
               elif scaleVariation=="MuF":
-                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<5400 or pdfset=="ct14nnlo" else pdfset+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
+                hnloScaledown = TH1F(cinlofile.Get("CIJET_fnl5662j_cs_001_"+("ct14nlo_0_56" if massbins[j][0]<3600 else pdfset+"_"+muScale+"_0_"+str(PDFmembers))+"_"+signalmassname+"_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-0.5_addmu")).Clone(histname)
               hnloScaledown=hnloScaledown.Rebin(len(chi_binnings[j])-1,histname.replace("_backup",""),chi_binnings[j])
               if nloScaledownci:
                  nloScaledownci.Add(hnloScaledown)
@@ -1830,60 +1837,60 @@ if __name__ == '__main__':
         for unc in uncertainties:
           modelup[unc]=cloneNormalize(modelup[unc])
           plots+=[modelup[unc]]
-          modelup[unc].Draw("hesame")
+          #modelup[unc].Draw("hesame")
           legend1.AddEntry(modelup[unc],unc,"l")
           modeldown[unc]=cloneNormalize(modeldown[unc])
           plots+=[modeldown[unc]]
-          modeldown[unc].Draw("hesame")
+          #modeldown[unc].Draw("hesame")
         jesup=cloneNormalize(jesup)
         plots+=[jesup]
-        jesup.Draw("hesame")
+        #jesup.Draw("hesame")
         legend1.AddEntry(jesup,"JES","l")
         jesdown=cloneNormalize(jesdown)
         plots+=[jesdown]
-        jesdown.Draw("hesame")
+        #jesdown.Draw("hesame")
         jerup=cloneNormalize(jerup)
         plots+=[jerup]
-        jerup.Draw("hesame")
+        #jerup.Draw("hesame")
         legend1.AddEntry(jerup,"JER","l")
         jerdown=cloneNormalize(jerdown)
         plots+=[jerdown]
-        jerdown.Draw("hesame")
+        #jerdown.Draw("hesame")
         prefireup=cloneNormalize(prefireup)
         plots+=[prefireup]
-        prefireup.Draw("hesame")
+        #prefireup.Draw("hesame")
         legend1.AddEntry(prefireup,"prefire","l")
         prefiredown=cloneNormalize(prefiredown)
         plots+=[prefiredown]
-        prefiredown.Draw("hesame")
+        #prefiredown.Draw("hesame")
         triggerup=cloneNormalize(triggerup)
         plots+=[triggerup]
-        triggerup.Draw("hesame")
+        #triggerup.Draw("hesame")
         legend1.AddEntry(triggerup,"trigger","l")
         triggerdown=cloneNormalize(triggerdown)
         plots+=[triggerdown]
-        triggerdown.Draw("hesame")
+        #triggerdown.Draw("hesame")
         pdfup=cloneNormalize(pdfup)
         plots+=[pdfup]
-        pdfup.Draw("hesame")
+        #pdfup.Draw("hesame")
         legend1.AddEntry(pdfup,"PDF","l")
         pdfdown=cloneNormalize(pdfdown)
         plots+=[pdfdown]
-        pdfdown.Draw("hesame")
+        #pdfdown.Draw("hesame")
         scaleup=cloneNormalize(scaleup)
         plots+=[scaleup]
-        scaleup.Draw("hesame")
+        #scaleup.Draw("hesame")
         legend1.AddEntry(scaleup,"scale","l")
         scaledown=cloneNormalize(scaledown)
         plots+=[scaledown]
-        scaledown.Draw("hesame")
+        #scaledown.Draw("hesame")
         theorystatup[""]=cloneNormalize(theorystatup[""])
         plots+=[theorystatup[""]]
-        theorystatup[""].Draw("hesame")
+        #theorystatup[""].Draw("hesame")
         legend1.AddEntry(theorystatup[""],"stat","l")
         theorystatdown[""]=cloneNormalize(theorystatdown[""])
         plots+=[theorystatdown[""]]
-        theorystatdown[""].Draw("hesame")
+        #theorystatdown[""].Draw("hesame")
         
         if samples[i][0]!="QCD":
          ci=cloneNormalize(ci)
@@ -1963,8 +1970,11 @@ if __name__ == '__main__':
         dataplot[j].SetMarkerSize(0.5)
         dataplot[j].Draw("pe0zsame")
 
-        miny=0#min(cloneNormalize(datahist[j]).GetMinimum(),alt.GetMinimum())
-        maxy=max(cloneNormalize(datahist[j]).GetMaximum(),alt.GetMaximum())
+        #miny=0#min(cloneNormalize(datahist[j]).GetMinimum(),alt.GetMinimum())
+        #maxy=max(cloneNormalize(datahist[j]).GetMaximum(),alt.GetMaximum())
+        #alt.GetYaxis().SetRangeUser(miny*0.8,(maxy-miny)*2.+miny)
+        miny=alt.GetMinimum()
+        maxy=alt.GetMaximum()
         alt.GetYaxis().SetRangeUser(miny*0.8,(maxy-miny)*2.+miny)
         
         legend1.SetTextSize(0.04)

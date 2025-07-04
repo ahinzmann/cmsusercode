@@ -71,15 +71,15 @@ order="NNLO"
 newci=True
 
 #### Hack factor 2*pi for CI
-import math
-hackFactor=2*math.pi if newci else 1.
+#import math
+hackFactor=1. #2*math.pi if newci else 1.
 
 if newci:
   ciDir="./NEWCI/"
-  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30]
-  massbins=[[5400,6000],[6000,7000],[7000,13000]]
-  plotmassbins=range(0,3)
-  lowestcimassbin=5400
+  ciscales=[10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,30,35,40,45,50,55,60,65,70] # TeV
+  massbins=[[1200,1500],[1500,1900],[1900,2400],[2400,3000],[3000,3600],[3600,4200],[4200,4800],[4800,5400],[5400,6000],[6000,7000],[7000,13000]]
+  plotmassbins=range(3,11)
+  lowestcimassbin=3600
 else:
   ciDir="./CIJET_fnl5662j_cs_001_ct14nlo_0_56_/"
   ciscales=range(5,31)
@@ -103,8 +103,8 @@ else:
 
 normalizeBack=False  
 
-calcUncert=True        # calculate qcd+ci uncertainties
-compareUncert=False      # compare qcd uncertainty with qcd+ci uncertainty
+calcUncert=False        # calculate qcd+ci uncertainties
+compareUncert=True      # compare qcd uncertainty with qcd+ci uncertainty
 compareNewci=False
 
 if calcUncert:
@@ -120,8 +120,8 @@ if calcUncert:
     for j in styles:
         for i in ciscales:
             if newci:
-              cimufile="CIJET_fnl5662j_cs_001_"+PDF.replace("ct14nnlo","ct14nlo")+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mu.root"
-              cimemfile="CIJET_fnl5662j_cs_001_"+PDF.replace("ct14nnlo","ct14nlo")+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mem.root"
+              cimufile="CIJET_fnl5662j_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mu.root"
+              cimemfile="CIJET_fnl5662j_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(int(i*1000))+"_"+j+"_mem.root"
             else:
               cimufile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mu.root"
               cimemfile="CIJET_fnl5662j_cs_001_ct14nlo_0_56_"+str(int(i*1000))+"_"+j+"_mem.root"
@@ -133,11 +133,11 @@ if calcUncert:
         print("read",f)
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         newfile=TFile(fname,"RECREATE")
         for massbin in massbins:
-            if massbin[0]<lowestcimassbin:
+            if massbin[0]<lowestcimassbin or "70000" in f: # Remove CI from 70 TeV signal as reference
                 for scale in scales:
                     qcdhist=qcdmufile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"scale-"+str(scale[0])+"-"+str(scale[1]))
                     if scales.index(scale)==0:
@@ -168,11 +168,11 @@ if calcUncert:
         print("read",f)
         scaleFactorsmem[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
-            if massbin[0]<lowestcimassbin:
+            if massbin[0]<lowestcimassbin or "70000" in f:
                 for i in range(0,PDFmembers+1):
                     qcdhist=qcdmemfile.Get("qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i))
                     if i==0:
@@ -197,7 +197,7 @@ if calcUncert:
                     qcdhistadd.Write()
                         
     for f in cimufiles:
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale)
+        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
@@ -232,7 +232,7 @@ if calcUncert:
             histscaledown.Write()
     
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -274,7 +274,7 @@ if calcUncert:
             histscaledown.Write()
 
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_nn31nnlo",PDF+"_"+mscale).replace("001_ct14nlo",PDF+"_"+mscale),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -309,7 +309,8 @@ if compareUncert or compareNewci:
 
     for style in styles:
         for i in ciscales:
-            ciqcdfilename=("newci" if newci else "")+"fnl5662j_cs_ct14nlo_".replace("ct14nlo",PDF+"_"+mscale)+str(i*1000)+"_"+style+".root"
+            if compareNewci and i>30: continue
+            ciqcdfilename=("newci" if newci else "")+"fnl5662j_cs_"+PDF+"_"+mscale+"_"+str(i*1000)+"_"+style+".root"
 
             os.system("cp ../RunII/fnl5662i_v23_fix_CT14_ak4.root .")   # copy qcd file to current directory, this file will be used in the comparison
     
@@ -406,6 +407,7 @@ if compareUncert or compareNewci:
             file3=TFile.Open((ciqcdfilename.replace("pt12","m2") if compareUncert else "newci"+ciqcdfilename.replace("newci","")))
             for massbin in massbins:
                 histname="chi-"+str(massbin[0])+"-"+str(massbin[1])
+                print((ciqcdfilename.replace("pt12","m2") if compareUncert else "newci"+ciqcdfilename.replace("newci","")),histname)
                 hist3=file3.Get(histname)
                 hist3scaleup=file3.Get(histname+"ScaleUp")
                 hist3scaleup.Divide(hist3)
@@ -455,6 +457,7 @@ if compareUncert or compareNewci:
                 hist2s[j].GetXaxis().SetTitle("#chi_{dijet}")
                 hist2s[j].Draw()
                 hist3s[j].SetLineColor(6)
+                hist3s[j].SetLineStyle(4)
                 hist3s[j].Draw("samehist")
                 if massbins[j][0]>=1900 and massbins[j][0]<=5400 and not newci:
                   hist1s[j-2].SetLineColor(1)

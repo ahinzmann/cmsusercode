@@ -42,7 +42,7 @@ if __name__=="__main__":
  testStat="LHC"
  asym="a" #asymptotic CLS
  runs="2" # "2" or "3" or "23"
- use_NNPDF3=False
+ use_NNPDF3=True
 
  if use_NNPDF3:
    pdfset="nn31nnlo"
