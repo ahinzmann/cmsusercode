@@ -115,7 +115,7 @@ if __name__=="__main__":
     mg=TMultiGraph()
 
     min_x=5000
-    max_x=40000
+    max_x=70000
     if "alp" in signal:
       min_x=1000
       max_x=5000
@@ -265,6 +265,7 @@ if __name__=="__main__":
     #  print "limit: %.4f," % (100./max(1e-5,limit)), "%.4f," % (100./max(1e-5,exp)), "%.4f, %.4f, 0, 0" % ((100./max(1e-5,exp1m),(100./max(1e-5,exp1p))))
     #else:
     print("limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$\pm$ %.1f" % (err/1000.))
+    print("limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$^{+ %.1f}_{- %.1f}$" % ((exp1p-exp)/1000.,(exp-exp1m)/1000.))
     print("limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, %.2f, %.2f" % ((exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.))
     limit_list[model]=(limit/1000.,(exp/1000.),(exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
     
