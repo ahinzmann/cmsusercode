@@ -528,7 +528,7 @@ if __name__ == '__main__':
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
       print("output file", sample)
       if "GEN" in sample:
-        insignalsample=(input_prefix1 + sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
+        insignalsample=(sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       else:
         insignalsample=(input_prefix2 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix2).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       print("input signal file", insignalsample)
@@ -1642,6 +1642,8 @@ if __name__ == '__main__':
           out.cd()
           scaleup.Write()
           scaledown.Write()
+          if scaleVariation=="Alt":
+            scalealt=scaleup
           
           if "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
              signalmassname="_".join(samples[i][0].split("_")[2:4])
@@ -1720,8 +1722,8 @@ if __name__ == '__main__':
           out.cd()
           ciscaleup.Write()
           ciscaledown.Write()
-          if scaleVariation=="": col+=1
           if scaleVariation=="":
+           col+=1
            for mn in massbins:
             if massbins.index(mn)==j:
               ciscaleupmn=scaleup.Clone(ciscaleup.GetName().replace("scale","scale"+str(mn[0])))
@@ -1731,6 +1733,9 @@ if __name__ == '__main__':
               ciscaledownmn=ci.Clone(ciscaledown.GetName().replace("scale","scale"+str(mn[0])))
             ciscaleupmn.Write()
             ciscaledownmn.Write()
+          if scaleVariation=="Alt":
+            col+=1
+            ciscalealt=ciscaleup
         
         # theory stat uncertainties
         theorystatup={}
@@ -1877,6 +1882,10 @@ if __name__ == '__main__':
         pdfdown=cloneNormalize(pdfdown)
         plots+=[pdfdown]
         #pdfdown.Draw("hesame")
+        scalealt=cloneNormalize(scalealt)
+        plots+=[scalealt]
+        #scalealt.Draw("hesame")
+        legend1.AddEntry(scalealt,"scale alt","l")
         scaleup=cloneNormalize(scaleup)
         plots+=[scaleup]
         #scaleup.Draw("hesame")
@@ -1936,6 +1945,9 @@ if __name__ == '__main__':
          cipdfdown=cloneNormalize(cipdfdown)
          plots+=[cipdfdown]
          cipdfdown.Draw("hesame")
+         ciscalealt=cloneNormalize(ciscalealt)
+         plots+=[ciscalealt]
+         ciscalealt.Draw("hesame")
          ciscaleup=cloneNormalize(ciscaleup)
          plots+=[ciscaleup]
          ciscaleup.Draw("hesame")

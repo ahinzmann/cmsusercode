@@ -218,11 +218,17 @@ if __name__=="__main__":
     exp1p=0
     exp2m=0
     exp2p=0
+    limitdown=0
+    limitup=0
     for i in range(max_x):
         mass=i*(max_x-limits[0][0])/max_x+limits[0][0]
         if mass<min_x or mass>max_x: continue
         if limit==0 and g.Eval(mass,0)>log10(cut):
            limit=mass
+        elif limit!=0 and limitdown==0 and g.Eval(mass,0)<log10(cut):
+           limitdown=mass
+        elif limitdown!=0 and limitup==0 and g.Eval(mass,0)>log10(cut):
+           limitup=mass
         if exp==0 and g_exp.Eval(mass,0)>log10(cut):
            exp=mass
         if exp1m==0 and g_exp1m.Eval(mass,0)>log10(cut):
@@ -268,7 +274,8 @@ if __name__=="__main__":
     print("limit: %.1f" % (limit/1000.), "& %.1f" % (exp/1000.), "$^{+ %.1f}_{- %.1f}$" % ((exp1p-exp)/1000.,(exp-exp1m)/1000.))
     print("limit: %.2f," % (limit/1000.), "%.2f," % (exp/1000.), "%.2f, %.2f, %.2f, %.2f" % ((exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.))
     limit_list[model]=(limit/1000.,(exp/1000.),(exp1m)/1000.,(exp1p)/1000.,(exp2m)/1000.,(exp2p)/1000.)
-    
+    if limitdown!=0:
+      print("limit gap: %.1f" % (limitdown/1000.), "-- %.1f" % (limitup/1000.))
     canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run'+runs+'.pdf')
     #canvas.SaveAs('limits'+testStat+asym+str(model)+signal+'_run2.eps')
     

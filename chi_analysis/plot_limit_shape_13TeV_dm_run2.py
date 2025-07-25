@@ -62,7 +62,7 @@ if __name__=="__main__":
   #signalMasses=[1000,1500,1750,2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
   #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000,7000]
   #signalMasses=[2000,2250,2500,3000,3500,4000,4500,5000,6000]
-  signalMasses=[4000,4500,5000,6000,7000]
+  signalMasses=[3500,4000,4500,5000,6000,7000]
  
   for mdm in mdms:
     for g in gs:
@@ -394,7 +394,7 @@ if __name__=="__main__":
     # from https://gitlab.cern.ch/cms-exo-mci/exo-dmsummaryplots/-/blob/master/GQSummary/data/cl90/EXO19012_obs.dat?ref_type=heads
     exo19012limit=[(1800,0.101873), (1900,0.13199), (2000,0.136569), (2100,0.114894), (2200,0.0729184), (2300,0.0586678), (2400,0.0678256), (2500,0.103493), (2600,0.145027), (2700,0.166081), (2800,0.183731), (2900,0.199127), (3000,0.21702), (3100,0.211135), (3200,0.19009), (3300,0.181343), (3400,0.19753), (3500,0.234712), (3600,0.263661), (3700,0.303623), (3800,0.345381), (3900,0.359206), (4000,0.371823), (4100,0.355785), (4200,0.344932), (4300,0.349693), (4400,0.372859), (4500,0.451645), (4600,0.528722), (4700,0.581656), (4800,0.650748)]
 
-    bins=array.array('d',[3.75,4.25,4.75,5.25,6.75,7.25])
+    bins=array.array('d',[3.45,3.75,4.25,4.75,5.25,6.75,7.25])
     h_band_low=TH1F("low","low",len(signalMasses),0,7)
     h_band_low.SetBins(len(signalMasses),bins)
     h_band_high=TH1F("high","high",len(signalMasses),0,7)
@@ -422,8 +422,7 @@ if __name__=="__main__":
     canvas = TCanvas("","",0,0,1800,1550)
     mg=TMultiGraph()
 
-    min_x_new=signalMasses[0]/1000
-    #min_x_new=2000
+    min_x_new=3.6 #signalMasses[0]/1000
 
     ymin=0.0
     ymax=1.42788
@@ -565,6 +564,11 @@ if __name__=="__main__":
     x2.SetTitleSize(0)
     x2.Draw()
 
+    x3=TGaxis(min_x_new, 0, max_x_new, 0, min_x_new,max_x_new,510,"-")
+    x3.SetLabelSize(0)
+    x3.SetTitleSize(0)
+    x3.Draw()
+
     minwidth=medWidth(ymin)
     myFunc=TF1("myFunc","pow((x-1/(12*3.141592653))*(4*3.141592653)/6,0.5)",minwidth,1)
     y2=TGaxis(max_x_new, ymin, max_x_new, ymax,"myFunc",510,"+L")
@@ -592,7 +596,7 @@ if __name__=="__main__":
     l1p0.SetLineStyle(7)
     l1p0.Draw("same")
       
-    l1p0T=TLatex((max_x_new-min_x_new)*0.5+min_x_new,1.0-0.07,"g_{q}=1.0")
+    l1p0T=TLatex(max_x_new-0.6,1.0-0.07,"g_{q}=1.0")
     l1p0T.SetTextSize(0.04)
     l1p0T.SetTextFont(42)
     l1p0T.SetTextColor(kGray+3)
@@ -600,16 +604,16 @@ if __name__=="__main__":
     
     if style=="DMAxial":
       #lt=TLatex(signalMasses[0]+100,1.27,"#splitline{Vector/Axial-Vector Mediator}{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}")
-      lt=TLatex((signalMasses[0]+100)/1000.,0.14,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
       #lt=TLatex(signalMasses[0]+100,1.31,"m_{DM} = "+mdm+" GeV, g_{DM} = 1.0")
     else:
-      lt=TLatex((signalMasses[0]+100)/1000.,1.26,"#splitline{#bf{Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
     lt.SetTextSize(0.04)
     lt.SetTextFont(42)
     lt.Draw("same")
     
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
-    l=TLegend(0.15,0.52,0.4,0.79,"95% CL upper limits")
+    l=TLegend(0.14,0.12,0.4,0.23,"95% CL upper limits")
     l.SetFillColor(0)
     l.SetTextFont(42)
     l.SetFillStyle(0)
@@ -617,17 +621,26 @@ if __name__=="__main__":
     l.SetShadowColor(0)
     l.AddEntry(g_q,"Observed","LP")
     l.AddEntry(g_q_exp,"Expected","LP")
-    l.AddEntry(g_q_old,"2016 Observed","L")
-    l.AddEntry(g_q_resonance,"Resonance Search Observed","L")
-    l.AddEntry(g_q_band,"Expected #pm 1 s.d.","F")
-    l.AddEntry(g_q_band_2sigma,"Expected #pm 2 s.d.","F")
     l.Draw()
+    
+    #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
+    l2=TLegend(0.42,0.12,0.8,0.28,"")
+    l2.SetFillColor(0)
+    l2.SetTextFont(42)
+    l2.SetFillStyle(0)
+    l2.SetTextSize(0.04)
+    l2.SetShadowColor(0)
+    l2.AddEntry(g_q_band,"Expected #pm 1 s.d.","F")
+    l2.AddEntry(g_q_band_2sigma,"Expected #pm 2 s.d.","F")
+    l2.AddEntry(g_q_old,"Eur. Phys. J. C 78 (2018)","L")
+    l2.AddEntry(g_q_resonance,"JHEP 05 (2020) 033","L")
+    l2.Draw()
     
 
     # CMS
     #leg2=TLatex(min_x_new,ymax+0.03,"#bf{CMS} #it{Preliminary}")
-    cmsPos=min_x_new+220/1000.
-    leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
+    cmsPos=min_x_new #+220/1000.
+    leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS}")
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.06)
     # lumi

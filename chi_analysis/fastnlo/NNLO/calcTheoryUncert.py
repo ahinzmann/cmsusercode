@@ -88,8 +88,8 @@ else:
   lowestcimassbin=3600
 
 if order=="NNLO":
-  PDF="ct14nnlo"
-  #PDF="nn31nnlo"
+  #PDF="ct14nnlo"
+  PDF="nn31nnlo"
   mscale="m2"
   #mscale="pt12"
 else:
@@ -103,9 +103,9 @@ else:
 
 normalizeBack=False  
 
-calcUncert=False        # calculate qcd+ci uncertainties
-compareUncert=True      # compare qcd uncertainty with qcd+ci uncertainty
-compareNewci=False
+calcUncert=True        # calculate qcd+ci uncertainties
+compareUncert=False      # compare qcd uncertainty with qcd+ci uncertainty
+compareNewci=True
 
 if calcUncert:
     

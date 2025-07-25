@@ -188,7 +188,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimudict[name]=[]
 ##                 for j in range(0,PDFmembers+1):
-                if newci:
+                if newci and mscale=="m2":
+                  filename="CIJET_cs_fnl5662"+self.version+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
+                elif newci:
                   filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
                 else:
                   filename=name.replace("_0_"+str(PDFmembers)+"_","_0_")+".xsc"
@@ -231,7 +233,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
                 name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimemdict[name]=[]
                 for j in range(0,PDFmembers+1):
-                    if newci:
+                    if newci and mscale=="m2":
+                      filename="CIJET_cs_fnl5662"+self.version+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+                    elif newci:
                       filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
                     else:
                       filename=name.replace('_0_'+str(PDFmembers)+'_','_'+str(j)+'_')+".xsc"
