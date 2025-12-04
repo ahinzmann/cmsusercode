@@ -76,10 +76,11 @@ if __name__ == '__main__':
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
     use_UL=True
-    responsePostfix="" # "", "herwigpp", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
+    responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
     use_NNPDF3=True
     use_CP2=True # for ADD
+    normalize=False
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -106,7 +107,9 @@ if __name__ == '__main__':
       PDFmembers=100
 
     if run=="2":
-      if use_NNPDF3:
+      if not normalize:
+        prefixs=["versions/run2ULNNLO_m2_NNPDF3_nonorm/datacard_shapelimit13TeV"]
+      elif use_NNPDF3:
         prefixs=["versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"]
       elif useM2:
         prefixs=["versions/run2ULNNLO_m2/datacard_shapelimit13TeV"]
@@ -146,8 +149,11 @@ if __name__ == '__main__':
                ["SumInQuadrature",
                 ] #["JER1"+y for y in years]+["JER2"+y for y in years]+
 
+    if run=="2":
+      lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
     if run=="3":
       years=["2024"]
+      lumi=320000
 
     colors=[1,2,3,4,6,7,8,9,12,28,34,38,40,41,42,43,44,45,46,47,48,49] #11,20
  
@@ -607,14 +613,14 @@ if __name__ == '__main__':
       closefiles+=[nlofile2]
 
       # (N)NLO uncertainties
-      filename1nusys="fastnlo/NNLO/newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
+      filename1nusys="fastnlo/NNLO/"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
       print(filename1nusys)
       nlofilesys = TFile.Open(filename1nusys)
       closefiles+=[nlofilesys]
       if useNNLO:
-        filename1altscale="fastnlo/NNLO/newcifnl5662j_cs_"+pdfset+("_"+muAltScale if useNNLO else "")+"_70000_V-A-.root"
+        filename1altscale="fastnlo/NNLO/"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_"+pdfset+("_"+muAltScale if useNNLO else "")+"_70000_V-A-.root"
       else:
-        filename1altscale="fastnlo/NNLO/newcifnl5662j_cs_ct14nnlo_pt12_70000_V-A-.root" # NNLO is alternative to NLO
+        filename1altscale="fastnlo/NNLO/"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_ct14nnlo_pt12_70000_V-A-.root" # NNLO is alternative to NLO
       print(filename1altscale)
       nlofilealtscale = TFile.Open(filename1altscale)
       closefiles+=[nlofilealtscale]
@@ -634,7 +640,7 @@ if __name__ == '__main__':
       # JES uncertainty QCD
       jesfiles=[]
       for n in range(5):
-        filename1jes="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated.root"
+        filename1jes="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".root"
         print(filename1jes)
         jesfiles += [TFile.Open(filename1jes)]
         closefiles+=[jesfiles[-1]]
@@ -653,7 +659,7 @@ if __name__ == '__main__':
       # JES uncertainty CI
       jescifiles=[]
       for n in range(5):
-        filename1jesci="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated.root"
+        filename1jesci="plots/chi_systematic_plotschi_QCDmadgraphJES_"+str(n)+"_13TeV"+("_UL" if use_UL else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".root"
         print(filename1jesci)
         jescifiles += [TFile.Open(filename1jesci)]
         closefiles+=[jescifiles[-1]]
@@ -849,9 +855,9 @@ if __name__ == '__main__':
                nloqcd.SetBinContent(b+1,nloqcd.GetBinContent(b+1)*correction)
         nloqcdnormraw[j]=nloqcdbackup.Integral()
         nloqcdnorm[j]=nloqcdbackup.Integral()
-        nloqcdnorm[j]*=(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
-        nloqcdnorm[j]*=138000. # SCALE CROSS SECTION BY LUMI
-        nloqcd.Scale(1./nloqcd.Integral())
+        nloqcdnorm[j]*=lumi # SCALE CROSS SECTION BY LUMI
+        if normalize:
+          nloqcd.Scale(1./nloqcd.Integral())
         ewk.SetName("ewk-"+histname)
 
         # DATA
@@ -951,15 +957,16 @@ if __name__ == '__main__':
             up_bin=ewk.FindBin(ci.GetXaxis().GetBinUpEdge(b+1))
             correction=ewk.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
             ci.SetBinContent(b+1,ci.GetBinContent(b+1)*correction)
-          ci.Scale(1./ci.Integral())
+          if normalize:
+            ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
-          filenamecinlo="fastnlo/NNLO/"+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinlo="fastnlo/NNLO/"+("nonorm" if not normalize else "")+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           if massbins[j][0]<3600: # No CI calculation available
             filenamecinlo=filenamecinlo.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
           print(filenamecinlo)
           cinlofile = TFile.Open(filenamecinlo)
           closefiles+=[cinlofile]
-          filenamecinloaltscale="fastnlo/NNLO/"+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          filenamecinloaltscale="fastnlo/NNLO/"+("nonorm" if not normalize else "")+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muAltScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           if massbins[j][0]<3600:# No CI calculation available
             filenamecinloaltscale=filenamecinloaltscale.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
           print(filenamecinloaltscale)
@@ -1021,7 +1028,8 @@ if __name__ == '__main__':
           #ci=smooth(ci,"pol3") # SMOOTH DM PREDICTION (FIX ME)
           ci=smoothChi(ci) # SMOOTH DM PREDICTION (FIX ME)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
-          ci.Scale(1./nloqcdbackup.Integral())
+          if normalize:
+            ci.Scale(1./nloqcdbackup.Integral())
           print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
           ci.Add(nloqcd)
         elif "alp" in samples[i][0]:
@@ -1037,7 +1045,8 @@ if __name__ == '__main__':
           ci=smoothChi(ci) # SMOOTH ALP PREDICTION (FIX ME)
           ci.Scale(nloqcdbackup.Integral()/qcdMadgraph.Integral()) # CORRECT FOR MISSING FACTOR LO->NNLO k-factor of ~10 in Madgraph QCD cross sections
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
-          ci.Scale(1./nloqcdbackup.Integral())
+          if normalize:
+            ci.Scale(1./nloqcdbackup.Integral())
           print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
           ci.Add(nloqcd)
         elif "QBH_MD" in samples[i][0]:
@@ -1048,7 +1057,8 @@ if __name__ == '__main__':
             ci=cibackup.Clone(histname)
             ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
             ci.Scale(samples[i][1][0][1])
-            ci.Scale(1./nloqcdbackup.Integral())
+            if normalize:
+              ci.Scale(1./nloqcdbackup.Integral())
             ci.Add(nloqcd)
         elif "QBH" in samples[i][0] and use_NNPDF3:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1057,7 +1067,8 @@ if __name__ == '__main__':
             ci=cibackup.Clone(histname)
             ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
             ci.Scale(samples[i][1][0][1])
-            ci.Scale(1./nloqcdbackup.Integral())
+            if normalize:
+              ci.Scale(1./nloqcdbackup.Integral())
             ci.Add(nloqcd)
         elif "QBH" in samples[i][0]:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1073,7 +1084,8 @@ if __name__ == '__main__':
                 ci=cibackup.Clone(histname)
                 ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
                 ci.Scale(samples[i][1][0][1]/1000000)
-                ci.Scale(1./nloqcdbackup.Integral())
+                if normalize:
+                  ci.Scale(1./nloqcdbackup.Integral())
                 ci.Add(nloqcd)
         elif "wide" in samples[i][0]:
           cibackup=insignalfile.Get(histname)
@@ -1084,7 +1096,9 @@ if __name__ == '__main__':
             break
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
-          ci.Scale(10./nloqcdbackup.Integral()) # make in units if 10pb
+          ci.Scale(10.) # make in units if 10pb
+          if normalize:
+            ci.Scale(1./nloqcdbackup.Integral())
           ci.Add(nloqcd)
         elif "CIplus" in samples[i][0]:
           print("CREATE FAKE SIGNAL")
@@ -1133,7 +1147,8 @@ if __name__ == '__main__':
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
           ci.Scale(1e9) #mb -> pb
-          ci.Scale(1./ci.Integral())
+          if normalize:
+            ci.Scale(1./ci.Integral())
         else:
           if only6000:
             cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
@@ -1159,22 +1174,26 @@ if __name__ == '__main__':
           #  # APPROXIMATE FORMULA
           #  #ci.Scale(1./qcdnorm[j])
           #  # CORRECT FORMULA
-          ci.Scale(1./nloqcdbackup.Integral())
+          if normalize:
+            ci.Scale(1./nloqcdbackup.Integral())
           #else:
           #  # APPROXIMATE FORMULA
           #  #ci.Scale(nloqcd.Integral()/qcdnorm[j]/5.)
           #  # CORRECT FORMULA
           #ci.Scale(nloqcd.Integral()/nloqcdbackup.Integral()/5.)
           ci.Add(nloqcd)
-        if ci.Integral()!=0:
+        if ci.Integral()!=0 and normalize:
           ci.Scale(dataevents[j]/ci.Integral())
+        else:
+          ci.Scale(lumi)
         for b in range(ci.GetXaxis().GetNbins()):
             ci.SetBinError(b+1,0)
         out.cd()
         #cibackup.Write()
         ci.Clone(histname+"_nosmear").Write(histname+"_nosmear")
         cinonorm=ci.Clone(histname+"_nonorm_nosmear")
-        cinonorm.Scale(nloqcdnorm[j]/dataevents[j])
+        if normalize:
+          cinonorm.Scale(nloqcdnorm[j]/dataevents[j])
         cinonorm.Write(histname+"_nonorm_nosmear")
         ci.Write(histname)
 
@@ -1188,7 +1207,10 @@ if __name__ == '__main__':
         #alt=alt.Rebin(len(chi_binnings[j])-1,alt.GetName(),chi_binnings[j])
         #alt.Add(alt,-1)
         #alt.Add(nloqcd)
-        alt.Scale(dataevents[j]/alt.Integral())
+        if normalize:
+          alt.Scale(dataevents[j]/alt.Integral())
+        else:
+          alt.Scale(lumi)
         for b in range(alt.GetXaxis().GetNbins()):
             alt.SetBinError(b+1,0)
         out.cd()
@@ -1199,7 +1221,8 @@ if __name__ == '__main__':
         alt.GetYaxis().SetTitle("dN/d#chi")
         alt.Clone(histname+"_nosmear").Write(histname+"_nosmear")
         altnonorm=alt.Clone(histname+"_nonorm_nosmear")
-        altnonorm.Scale(nloqcdnorm[j]/dataevents[j])
+        if normalize:
+          altnonorm.Scale(nloqcdnorm[j]/dataevents[j])
         altnonorm.Write(histname+"_nonorm_nosmear")
         alt.Write(histname)
         col+=1
@@ -1455,7 +1478,10 @@ if __name__ == '__main__':
          else:
             nloPDFupqcd=hnloPDFup
         nloPDFupqcd.Add(nloqcdnormd,-1)
-        nloPDFupqcd.Scale(1./nloqcdnormd.Integral())
+        if normalize:
+          nloPDFupqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+        else:
+          nloPDFupqcd.Scale(alt.Integral()/nloqcdnormd.Integral())
         nloPDFupqcd=smooth(nloPDFupqcd,"pol3") # SMOOTH NNLO PREDICTION (FIX ME)
 
         nloPDFdownqcd=None
@@ -1470,13 +1496,16 @@ if __name__ == '__main__':
          else:
             nloPDFdownqcd=hnloPDFdown
         nloPDFdownqcd.Add(nloqcdnormd,-1)
-        nloPDFdownqcd.Scale(1./nloqcdnormd.Integral())
+        if normalize:
+          nloPDFdownqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+        else:
+          nloPDFdownqcd.Scale(alt.Integral()/nloqcdnormd.Integral())
         nloPDFdownqcd=smooth(nloPDFdownqcd,"pol3") # SMOOTH NNLO PREDICTION (FIX ME)
 
         pdfup=alt.Clone(alt.GetName()+"_pdfUp")
         pdfdown=alt.Clone(alt.GetName()+"_pdfDown")
-        pdfup.Add(nloPDFupqcd,dataevents[j])
-        pdfdown.Add(nloPDFdownqcd,dataevents[j])
+        pdfup.Add(nloPDFupqcd)
+        pdfdown.Add(nloPDFdownqcd)
         for b in range(pdfup.GetXaxis().GetNbins()):
             pdfup.SetBinError(b+1,0)
             pdfdown.SetBinError(b+1,0)
@@ -1506,7 +1535,10 @@ if __name__ == '__main__':
             else:
                nloPDFupci=hnloPDFup
            nloPDFupci.Add(cibackup,-1)
-           nloPDFupci.Scale(1./cibackup.Integral())
+           if normalize:
+             nloPDFupci.Scale(dataevents[j]/cibackup.Integral())
+           else:
+             nloPDFupci.Scale(ci.Integral()/cibackup.Integral())
 
            nloPDFdownci=None
            for k in mass_bins_nlo_list[j]:
@@ -1519,7 +1551,10 @@ if __name__ == '__main__':
             else:
               nloPDFdownci=hnloPDFdown
            nloPDFdownci.Add(cibackup,-1)
-           nloPDFdownci.Scale(1./cibackup.Integral())
+           if normalize:
+             nloPDFdownci.Scale(dataevents[j]/cibackup.Integral())
+           else:
+             nloPDFdownci.Scale(ci.Integral()/cibackup.Integral())
         elif "DM" in samples[i][0] and ("Mphi_6000" in samples[i][0] or "Mphi_7000" in samples[i][0]):
            nloPDFdownci=nloPDFdownqcd.Clone("DM_pdf_down")
            nloPDFupci=nloPDFupqcd.Clone("DM_pdf_up")
@@ -1536,8 +1571,8 @@ if __name__ == '__main__':
 
         cipdfup=ci.Clone(ci.GetName()+"_pdfUp")
         cipdfdown=ci.Clone(ci.GetName()+"_pdfDown")
-        cipdfup.Add(nloPDFupci,dataevents[j])
-        cipdfdown.Add(nloPDFdownci,dataevents[j])
+        cipdfup.Add(nloPDFupci)
+        cipdfdown.Add(nloPDFdownci)
         for b in range(cipdfup.GetXaxis().GetNbins()):
             cipdfup.SetBinError(b+1,0)
             cipdfdown.SetBinError(b+1,0)
@@ -1580,7 +1615,10 @@ if __name__ == '__main__':
            else:
               nloScaleupqcd=hnloScaleup
           nloScaleupqcd.Add(nloqcdnormd,-1)
-          nloScaleupqcd.Scale(1./nloqcdnormd.Integral())
+          if normalize:
+            nloScaleupqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+          else:
+            nloScaleupqcd.Scale(alt.Integral()/nloqcdnormd.Integral())
           nloScaleupqcd=smooth(nloScaleupqcd,"pol3") # SMOOTH NNLO PREDICTION (FIX ME)
 
           nloScaledownqcd=None
@@ -1605,13 +1643,16 @@ if __name__ == '__main__':
            else:
               nloScaledownqcd=hnloScaledown
           nloScaledownqcd.Add(nloqcdnormd,-1)
-          nloScaledownqcd.Scale(1./nloqcdnormd.Integral())
+          if normalize:
+            nloScaledownqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+          else:
+            nloScaledownqcd.Scale(alt.Integral()/nloqcdnormd.Integral())
           nloScaledownqcd=smooth(nloScaledownqcd,"pol3") # SMOOTH NNLO PREDICTION (FIX ME)
 
           scaleup=alt.Clone(alt.GetName()+"_scale"+scaleVariation+"Up")
           scaledown=alt.Clone(alt.GetName()+"_scale"+scaleVariation+"Down")
-          scaleup.Add(nloScaleupqcd,dataevents[j])
-          scaledown.Add(nloScaledownqcd,dataevents[j])
+          scaleup.Add(nloScaleupqcd)
+          scaledown.Add(nloScaledownqcd)
           for b in range(scaleup.GetXaxis().GetNbins()):
               scaleup.SetBinError(b+1,0)
               scaledown.SetBinError(b+1,0)
@@ -1670,7 +1711,10 @@ if __name__ == '__main__':
               else:
                   nloScaleupci=hnloScaleup
              nloScaleupci.Add(cibackup,-1)
-             nloScaleupci.Scale(1./cibackup.Integral())
+             if normalize:
+               nloScaleupci.Scale(dataevents[j]/cibackup.Integral())
+             else:
+               nloScaleupci.Scale(ci.Integral()/cibackup.Integral())
 
              nloScaledownci=None
              for k in mass_bins_nlo_list[j]:
@@ -1693,15 +1737,18 @@ if __name__ == '__main__':
               else:
                  nloScaledownci=hnloScaledown
              nloScaledownci.Add(cibackup,-1)
-             nloScaledownci.Scale(1./cibackup.Integral())
+             if normalize:
+               nloScaledownci.Scale(dataevents[j]/cibackup.Integral())
+             else:
+               nloScaledownci.Scale(ci.Integral()/cibackup.Integral())  
           else:
              nloScaledownci=nloScaledownqcd
              nloScaleupci=nloScaleupqcd
 
           ciscaleup=ci.Clone(ci.GetName()+"_scale"+scaleVariation+"Up")
           ciscaledown=ci.Clone(ci.GetName()+"_scale"+scaleVariation+"Down")
-          ciscaleup.Add(nloScaleupci,dataevents[j])
-          ciscaledown.Add(nloScaledownci,dataevents[j])
+          ciscaleup.Add(nloScaleupci)
+          ciscaledown.Add(nloScaledownci)
           for b in range(ciscaleup.GetXaxis().GetNbins()):
               ciscaleup.SetBinError(b+1,0)
               ciscaledown.SetBinError(b+1,0)
@@ -1763,7 +1810,10 @@ if __name__ == '__main__':
            hnloref = TH1F(nlofilealtscale.Get(histname.replace("StatUp","")))
          hnloref=rebin(hnloref,len(chi_binnings[j])-1,chi_binnings[j])
          nloStatupqcd.Add(hnloref,-1)
-        nloStatupqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+        if normalize:
+          nloStatupqcd.Scale(dataevents[j]/nloqcdnormd.Integral())
+        else:
+          nloStatupqcd.Scale(alt.Integral()/nloqcdnormd.Integral())
         cihistname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
         ciclone=ci.Clone(cihistname)
         ciclone=ciclone.Rebin(len(chi_binnings[j])-1,ciclone.GetName(),chi_binnings[j])
@@ -1842,64 +1892,64 @@ if __name__ == '__main__':
         for unc in uncertainties:
           modelup[unc]=cloneNormalize(modelup[unc])
           plots+=[modelup[unc]]
-          #modelup[unc].Draw("hesame")
+          modelup[unc].Draw("hesame")
           legend1.AddEntry(modelup[unc],unc,"l")
           modeldown[unc]=cloneNormalize(modeldown[unc])
           plots+=[modeldown[unc]]
-          #modeldown[unc].Draw("hesame")
+          modeldown[unc].Draw("hesame")
         jesup=cloneNormalize(jesup)
         plots+=[jesup]
-        #jesup.Draw("hesame")
+        jesup.Draw("hesame")
         legend1.AddEntry(jesup,"JES","l")
         jesdown=cloneNormalize(jesdown)
         plots+=[jesdown]
-        #jesdown.Draw("hesame")
+        jesdown.Draw("hesame")
         jerup=cloneNormalize(jerup)
         plots+=[jerup]
-        #jerup.Draw("hesame")
+        jerup.Draw("hesame")
         legend1.AddEntry(jerup,"JER","l")
         jerdown=cloneNormalize(jerdown)
         plots+=[jerdown]
-        #jerdown.Draw("hesame")
+        jerdown.Draw("hesame")
         prefireup=cloneNormalize(prefireup)
         plots+=[prefireup]
-        #prefireup.Draw("hesame")
+        prefireup.Draw("hesame")
         legend1.AddEntry(prefireup,"prefire","l")
         prefiredown=cloneNormalize(prefiredown)
         plots+=[prefiredown]
-        #prefiredown.Draw("hesame")
+        prefiredown.Draw("hesame")
         triggerup=cloneNormalize(triggerup)
         plots+=[triggerup]
-        #triggerup.Draw("hesame")
+        triggerup.Draw("hesame")
         legend1.AddEntry(triggerup,"trigger","l")
         triggerdown=cloneNormalize(triggerdown)
         plots+=[triggerdown]
-        #triggerdown.Draw("hesame")
+        triggerdown.Draw("hesame")
         pdfup=cloneNormalize(pdfup)
         plots+=[pdfup]
-        #pdfup.Draw("hesame")
+        pdfup.Draw("hesame")
         legend1.AddEntry(pdfup,"PDF","l")
         pdfdown=cloneNormalize(pdfdown)
         plots+=[pdfdown]
-        #pdfdown.Draw("hesame")
+        pdfdown.Draw("hesame")
         scalealt=cloneNormalize(scalealt)
         plots+=[scalealt]
-        #scalealt.Draw("hesame")
+        scalealt.Draw("hesame")
         legend1.AddEntry(scalealt,"scale alt","l")
         scaleup=cloneNormalize(scaleup)
         plots+=[scaleup]
-        #scaleup.Draw("hesame")
+        scaleup.Draw("hesame")
         legend1.AddEntry(scaleup,"scale","l")
         scaledown=cloneNormalize(scaledown)
         plots+=[scaledown]
-        #scaledown.Draw("hesame")
+        scaledown.Draw("hesame")
         theorystatup[""]=cloneNormalize(theorystatup[""])
         plots+=[theorystatup[""]]
-        #theorystatup[""].Draw("hesame")
+        theorystatup[""].Draw("hesame")
         legend1.AddEntry(theorystatup[""],"stat","l")
         theorystatdown[""]=cloneNormalize(theorystatdown[""])
         plots+=[theorystatdown[""]]
-        #theorystatdown[""].Draw("hesame")
+        theorystatdown[""].Draw("hesame")
         
         if samples[i][0]!="QCD":
          ci=cloneNormalize(ci)
@@ -1911,55 +1961,55 @@ if __name__ == '__main__':
          for unc in uncertainties:
            cimodelup[unc]=cloneNormalize(cimodelup[unc])
            plots+=[cimodelup[unc]]
-           cimodelup[unc].Draw("hesame")
+           #cimodelup[unc].Draw("hesame")
            cimodeldown[unc]=cloneNormalize(cimodeldown[unc])
            plots+=[cimodeldown[unc]]
-           cimodeldown[unc].Draw("hesame")
+           #cimodeldown[unc].Draw("hesame")
          cijesup=cloneNormalize(cijesup)
          plots+=[cijesup]
-         cijesup.Draw("hesame")
+         #cijesup.Draw("hesame")
          cijesdown=cloneNormalize(cijesdown)
          plots+=[cijesdown]
-         cijesdown.Draw("hesame")
+         #cijesdown.Draw("hesame")
          cijerup=cloneNormalize(cijerup)
          plots+=[cijerup]
-         cijerup.Draw("hesame")
+         #cijerup.Draw("hesame")
          cijerdown=cloneNormalize(cijerdown)
          plots+=[cijerdown]
-         cijerdown.Draw("hesame")
+         #cijerdown.Draw("hesame")
          ciprefireup=cloneNormalize(ciprefireup)
          plots+=[ciprefireup]
-         ciprefireup.Draw("hesame")
+         #ciprefireup.Draw("hesame")
          ciprefiredown=cloneNormalize(ciprefiredown)
          plots+=[ciprefiredown]
-         ciprefiredown.Draw("hesame")
+         #ciprefiredown.Draw("hesame")
          citriggerup=cloneNormalize(citriggerup)
          plots+=[citriggerup]
-         citriggerup.Draw("hesame")
+         #citriggerup.Draw("hesame")
          citriggerdown=cloneNormalize(citriggerdown)
          plots+=[citriggerdown]
-         citriggerdown.Draw("hesame")
+         #citriggerdown.Draw("hesame")
          cipdfup=cloneNormalize(cipdfup)
          plots+=[cipdfup]
-         cipdfup.Draw("hesame")
+         #cipdfup.Draw("hesame")
          cipdfdown=cloneNormalize(cipdfdown)
          plots+=[cipdfdown]
-         cipdfdown.Draw("hesame")
+         #cipdfdown.Draw("hesame")
          ciscalealt=cloneNormalize(ciscalealt)
          plots+=[ciscalealt]
-         ciscalealt.Draw("hesame")
+         #ciscalealt.Draw("hesame")
          ciscaleup=cloneNormalize(ciscaleup)
          plots+=[ciscaleup]
-         ciscaleup.Draw("hesame")
+         #ciscaleup.Draw("hesame")
          ciscaledown=cloneNormalize(ciscaledown)
          plots+=[ciscaledown]
-         ciscaledown.Draw("hesame")
+         #ciscaledown.Draw("hesame")
          citheorystatup[""]=cloneNormalize(citheorystatup[""])
          plots+=[citheorystatup[""]]
-         citheorystatup[""].Draw("hesame")
+         #citheorystatup[""].Draw("hesame")
          citheorystatdown[""]=cloneNormalize(citheorystatdown[""])
          plots+=[citheorystatdown[""]]
-         citheorystatdown[""].Draw("hesame")
+         #citheorystatdown[""].Draw("hesame")
  
         origdata=data
         datahist[j]=data
@@ -2042,7 +2092,8 @@ if __name__ == '__main__':
             #print histname
             althists+=[out.Get(histname)]
             althistsclones+=[althists[-1].Clone(althists[-1].GetName()+"original")]
-            althistsclones[-1].Scale(nloqcdnorm[j]/dataevents[j]) # Use (N)NLO norm rather than data (since event numbers in mjj<2.4 TeV are not accurate)
+            if normalize:
+              althistsclones[-1].Scale(nloqcdnorm[j]/dataevents[j]) # Use (N)NLO norm rather than data (since event numbers in mjj<2.4 TeV are not accurate)
             althists[-1].Scale(0)
 
           # integral response matrix files from Jingyu
@@ -2132,7 +2183,8 @@ if __name__ == '__main__':
               for j1 in range(len(massbins)-3):
                 for b1 in range(althists[j1].GetNbinsX()):
                    unfoldbin="_bin_"+str(j1)+"_"+str(b1)+"_"
-                   histsunfold[str(j)+unfoldbin].Scale(dataevents[j]/althists[j].Integral())
+                   if normalize:
+                     histsunfold[str(j)+unfoldbin].Scale(dataevents[j]/althists[j].Integral())
                    for b in range(althists[j].GetXaxis().GetNbins()):
                      histsunfold[str(j)+unfoldbin].SetBinError(b+1,0)
             histnonorm=althists[j].Clone(althists[j].GetName()+"_nonorm").Write(althists[j].GetName()+"_nonorm")
@@ -2150,8 +2202,9 @@ if __name__ == '__main__':
 
             #print althists[j].GetName()+"_nonorm"
             print(dataevents[j],althistsclones[j].Integral(),althists[j].Integral())
-            althists[j].Scale(dataevents[j]/althists[j].Integral())
-            althistsclones[j].Scale(dataevents[j]/althistsclones[j].Integral())
+            if normalize:
+              althists[j].Scale(dataevents[j]/althists[j].Integral())
+              althistsclones[j].Scale(dataevents[j]/althistsclones[j].Integral())
             for b in range(althists[j].GetXaxis().GetNbins()):
               althists[j].SetBinError(b+1,0)
             #print althists[j].GetBinContent(1),althistsclones[j].GetBinContent(1)

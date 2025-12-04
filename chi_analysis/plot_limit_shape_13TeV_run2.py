@@ -292,14 +292,14 @@ if __name__=="__main__":
     points=[]
     if coupling=="alp":
       ymin=0
-      ymax=4
-      min_x=3.5
+      ymax=4.4
+      min_x=3.6 #3.5
       max_x=10
       points=[(3.6,91),(4.2,92),(4.8,93),(5.4,94),(6.0,94),(7.0,94),(8.0,94),(9.0,94),(10.0,94),(12.0,94),(14.0,94),(16.0,94),(18.0,94),(20.0,94)] #(3.0,90),
     if coupling=="tripleG":
       ymin=0
-      ymax=1.8
-      min_x=3.5
+      ymax=2.2
+      min_x=3.6 #3.5
       max_x=14
       points=[(3.6,96),(4.2,97),(4.8,98),(5.4,99),(6.0,99),(7.0,99),(8.0,99),(9.0,99),(10.0,99),(12.0,99),(14.0,99),(16.0,99),(18.0,99),(20.0,99)] #(3.0,95),
     g0=TGraph()
@@ -361,7 +361,7 @@ if __name__=="__main__":
     g_val.SetLineWidth(303)
     g_val.SetFillColor(2)
     g_val.SetFillStyle(3004)
-    mg.Add(g_val,"l3")
+    #mg.Add(g_val,"l3")
     
     mg.Draw("apl")
     mg.SetTitle("")
@@ -406,15 +406,16 @@ if __name__=="__main__":
     l.AddEntry(g_exp,"Expected","LP")
     l.AddEntry(g_band,"Expected #pm 1 s.d.","F")
     l.AddEntry(g_band_2sigma,"Expected #pm 2 s.d.","F")
-    l.AddEntry(g_val,"Validity limit of EFT","LF")
+    #l.AddEntry(g_val,"Validity limit of EFT","LF")
     l.Draw()
 
     # CMS
-    leg2=TLatex(min_x,ymax+0.03,"#bf{CMS} #it{Preliminary}")
+    leg2=TLatex(min_x+0.05,ymax+0.03,"#bf{CMS}")
+    #leg2=TLatex(min_x,ymax+0.03,"#bf{CMS} #it{Preliminary}")
     #cmsPos=min_x+220/1000.
     #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
     leg2.SetTextFont(42)
-    leg2.SetTextSize(0.05)
+    leg2.SetTextSize(0.055)
     # lumi
     lumiPos=max_x*(0.75 if coupling=="alp" else 0.7)
     leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")

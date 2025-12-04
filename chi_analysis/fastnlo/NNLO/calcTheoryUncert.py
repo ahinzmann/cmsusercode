@@ -69,6 +69,7 @@ def multiplyBinWidth(myhist):
 
 order="NNLO"
 newci=True
+normalize=False
 
 #### Hack factor 2*pi for CI
 #import math
@@ -104,8 +105,8 @@ else:
 normalizeBack=False  
 
 calcUncert=True        # calculate qcd+ci uncertainties
-compareUncert=False      # compare qcd uncertainty with qcd+ci uncertainty
-compareNewci=True
+compareUncert=True      # compare qcd uncertainty with qcd+ci uncertainty
+compareNewci=False
 
 if calcUncert:
     
@@ -133,7 +134,7 @@ if calcUncert:
         print("read",f)
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         newfile=TFile(fname,"RECREATE")
         for massbin in massbins:
@@ -144,7 +145,8 @@ if calcUncert:
                         scaleFactor=qcdhist.Integral()
                         scaleFactorsmu[f.replace(".root","")].append(scaleFactor)
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+qcdhist.GetName()+"_addmu")
-                    qcdhistadd.Scale(1./qcdhistadd.Integral())
+                    if normalize:
+                      qcdhistadd.Scale(1./qcdhistadd.Integral())
                     qcdhistadd.Write()
             else:
                 for scale in scales:
@@ -159,7 +161,8 @@ if calcUncert:
                         scaleFactor=qcdhistadd.Integral()
                         scaleFactorsmu[f.replace(".root","")].append(scaleFactor)
                     #pdb.set_trace()
-                    qcdhistadd.Scale(1./qcdhistadd.Integral())
+                    if normalize:
+                      qcdhistadd.Scale(1./qcdhistadd.Integral())
                     qcdhistadd.Write()
         newfile.Close()
     
@@ -168,7 +171,7 @@ if calcUncert:
         print("read",f)
         scaleFactorsmem[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
@@ -179,7 +182,8 @@ if calcUncert:
                         scaleFactor=qcdhist.Integral()
                         scaleFactorsmem[f.replace(".root","")].append(scaleFactor)
                     qcdhistadd=qcdhist.Clone(f.replace(".root","")+"_"+"qcd_chi-"+str(massbin[0])+"-"+str(massbin[1])+"PDF-"+str(i)+"_addmem")
-                    qcdhistadd.Scale(1./qcdhistadd.Integral())
+                    if normalize:
+                      qcdhistadd.Scale(1./qcdhistadd.Integral())
                     qcdhistadd.Write()
             else:
                 for i in range(0,PDFmembers+1):
@@ -193,11 +197,12 @@ if calcUncert:
                     if i==0:
                         scaleFactor=qcdhistadd.Integral()
                         scaleFactorsmem[f.replace(".root","")].append(scaleFactor)
-                    qcdhistadd.Scale(1./qcdhistadd.Integral())
+                    if normalize:
+                      qcdhistadd.Scale(1./qcdhistadd.Integral())
                     qcdhistadd.Write()
                         
     for f in cimufiles:
-        fname=f.replace("CIJET_",("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
@@ -232,7 +237,7 @@ if calcUncert:
             histscaledown.Write()
     
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -274,7 +279,7 @@ if calcUncert:
             histscaledown.Write()
 
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -348,7 +353,10 @@ if compareUncert or compareNewci:
                 hist1scaledown=multiplyBinWidth(h1scaledown)
                 hist1pdfup=multiplyBinWidth(h1pdfup)
                 hist1pdfdown=multiplyBinWidth(h1pdfdown)
-                scaleFactor=hist1.Integral()
+                if normalize:
+                  scaleFactor=hist1.Integral()
+                else:
+                  scaleFactor=1.
                 hist1.Scale(1./scaleFactor)
                 hist1scaleup.Scale(1./scaleFactor)
                 hist1scaledown.Scale(1./scaleFactor)

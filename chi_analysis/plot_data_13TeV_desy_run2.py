@@ -91,6 +91,10 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
     for massbin in massbins:
       plots += [TH1F(prefix+'p_{T2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';p_{T2};N',50,0,5000)]
     for massbin in massbins:
+      plots += [TH1F(prefix+'E_{1}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';E_{1};N',50,0,10000)]
+    for massbin in massbins:
+      plots += [TH1F(prefix+'E_{2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';E_{2};N',50,0,10000)]
+    for massbin in massbins:
       plots += [TH1F(prefix+'y_{1}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{1};N',25,-2.5,2.5)]
     for massbin in massbins:
       plots += [TH1F(prefix+'y_{2}'+str(massbin).strip("()").replace(',',"_").replace(' ',""),';y_{2};N',25,-2.5,2.5)]
@@ -142,7 +146,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          #if not int(event.EVENT_event)==971086788: continue
          event_count+=1
          #if event_count>100000 and not "QCD" in prefix: break ###
-         #if event_count>1000: break
+         #if event_count>100000: break
          if event_count%10000==1:
            print("event",event_count)
          if not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
@@ -180,6 +184,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          weight=1.0
          #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
          if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+         if selectChi10 and chi<10: continue
          if prefiremap:
             if abs(jet1.Eta())>2:
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
@@ -187,6 +192,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
          if "NANOAOD" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
+         if "NANOAOD" in f and not "UL" in f: # flags missing in 12Feb2024 UL skims
             if not event.Flag_goodVertices or\
                not event.Flag_globalSuperTightHalo2016Filter or\
                not event.Flag_EcalDeadCellTriggerPrimitiveFilter or\
@@ -217,22 +223,24 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                plots[irec+1*len(massbins)].Fill(yboost,weight)
                plots[irec+2*len(massbins)].Fill(jet1.Pt(),weight)
                plots[irec+3*len(massbins)].Fill(jet2.Pt(),weight)
-               plots[irec+4*len(massbins)].Fill(jet1.Rapidity(),weight)
-               plots[irec+5*len(massbins)].Fill(jet2.Rapidity(),weight)
-               plots[irec+6*len(massbins)].Fill(jet1.Phi(),weight)
-               plots[irec+7*len(massbins)].Fill(jet2.Phi(),weight)
+               plots[irec+4*len(massbins)].Fill(jet1.Energy(),weight)
+               plots[irec+5*len(massbins)].Fill(jet2.Energy(),weight)
+               plots[irec+6*len(massbins)].Fill(jet1.Rapidity(),weight)
+               plots[irec+7*len(massbins)].Fill(jet2.Rapidity(),weight)
+               plots[irec+8*len(massbins)].Fill(jet1.Phi(),weight)
+               plots[irec+9*len(massbins)].Fill(jet2.Phi(),weight)
                if "NANOAOD" in f:
-                 plots[irec+8*len(massbins)].Fill(event.PuppiMET_pt/event.PuppiMET_sumEt,weight)
+                 plots[irec+10*len(massbins)].Fill(event.PuppiMET_pt/event.PuppiMET_sumEt,weight)
                else:
-                 plots[irec+8*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
-               plots[irec+9*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
-               plots[irec+10*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
+                 plots[irec+10*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
+               plots[irec+11*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
+               plots[irec+12*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
             irec+=1
-         irec=11*len(massbins)
+         irec=13*len(massbins)
          plots[irec].Fill(mjj,weight)
          irec+=1
          if StandAloneROOT or ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
-            (not "NANOAOD" in f and not trigger_indices.has_key(len(massbins))): continue # for MC
+            (not "NANOAOD" in f and not len(massbins) in trigger_indices): continue # for MC
          for i in trigger_indices[len(massbins)]:
           if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
              (not "NANOAOD" in f and event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
@@ -271,6 +279,7 @@ if __name__ == '__main__':
     vetoHEM=False
     correctPrefire=False
     genLevel=False
+    selectChi10=False
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -338,6 +347,14 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2023_QCDmadgraphBPix-28May2024","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2023BPix"),
             ("datacard_shapelimit13TeV_run2_UL18_QBH","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qbhUL18"),
             ("datacard_shapelimit13TeV_run2_2024-16May2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_16May2025"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16preVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL16postVFPoct"),
+            ("datacard_shapelimit13TeV_run2_UL17","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL17oct"),
+            ("datacard_shapelimit13TeV_run2_UL18","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dataUL18oct"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16preVFPfeb2023"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPfeb2023"),
+            ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17feb2023"),
+            ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18feb2023"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -920,6 +937,120 @@ if __name__ == '__main__':
           ["HLT_PFHT510"],
           ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
          ],
+
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 preVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT475","HLT_PFJet260"], #2016 postVFP
+          ["HLT_PFHT475","HLT_PFJet260"],
+          ["HLT_PFHT600","HLT_PFHT475","HLT_PFJet320"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT475"],
+          ["HLT_PFHT900","HLT_PFHT800","HLT_PFJet450","HLT_PFJet500","HLT_CaloJet500_NoJetID"],
+         ],
+          [["HLT_PFHT510","HLT_PFJet260"], #2017
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+          [["HLT_PFHT510","HLT_PFJet260"], #2018
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550","HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"],
+         ],
+
+          [[], #QCD 2016 preVFP
+          [],
+          [],
+          [],
+          [], 
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+          [[], #QCD 2016 postVFP
+          [],
+          [],
+          [],
+          [], 
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+          [[], #QCD 2017
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
+          [[], #QCD 2018
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
          
           ]
 
@@ -950,7 +1081,7 @@ if __name__ == '__main__':
       print(len(folders))
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
-        if "HT-" in s: name=s.replace("-","")+"_"+name; break
+        if "HT" in s: name=s.replace("-","")+"_"+name; break
       samples=[(samples[0][0],"-"+name,samples[0][2].replace("/pnfs/","dcap://dcache-cms-dcap.desy.de//pnfs/")+"/"+folders[int(sys.argv[2])])]
 
     if len(sys.argv)>3:
@@ -960,6 +1091,8 @@ if __name__ == '__main__':
         correctPrefire=True
       if "GEN" in sys.argv[3]:
         genLevel=True
+      if "Chi10" in sys.argv[3]:
+        selectChi10=True
 
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -977,6 +1110,8 @@ if __name__ == '__main__':
         postfix+="-L1prefire"
       if genLevel:
         postfix+="-GEN"
+      if selectChi10:
+        postfix+="-Chi10"
       out=TFile("data/"+prefix+postfix + '_chi.root','RECREATE')
       plots=[createPlots(files,prefix,pf,triggers[samples.index((prefix,pf,files))],massbins,chi_bins)]
 
@@ -1031,7 +1166,7 @@ if __name__ == '__main__':
         legend1.SetFillStyle(0)
         legend1.Draw("same")
 
-      canvas.SaveAs("data/"+prefix+postfix + '_chi.pdf')
+      canvas.SaveAs("plots/"+prefix+postfix + '_chi.pdf')
       #canvas.SaveAs(prefix+postfix + '_chi.eps')
       #if wait:
       #  os.system("ghostview "+prefix + '_chi.eps')

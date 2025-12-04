@@ -153,8 +153,8 @@ if __name__=="__main__":
     run=runs[-1]
   
     controlRegionCheck=False
-    lowestBinsCheck=True
-    backgroundOnlyCheck=False
+    lowestBinsCheck=False
+    backgroundOnlyCheck=True
     unfoldedData=False
     isCB=False
     version="v6b"

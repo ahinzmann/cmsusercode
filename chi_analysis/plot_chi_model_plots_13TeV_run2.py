@@ -1,6 +1,7 @@
 import os, sys
 import array
 from ROOT import gROOT,gStyle,TFile,TCanvas,TLegend
+from math import *
 
 #gROOT.Reset()
 gROOT.SetStyle("Plain")
@@ -62,10 +63,14 @@ if __name__ == '__main__':
    postfix="_run2"
    use_UL=True
    use_GEN=True
+   normalize=False
+   luminorm=False
    if use_UL:
      postfix="_UL_run2"
    if use_GEN:
      postfix="_UL_run2_GEN"
+   if not normalize:
+     postfix+="_nonorm"
    
    for scenario in ["model"]:
      if use_UL:
@@ -79,6 +84,7 @@ if __name__ == '__main__':
   	   "2017_L1prefire",
   	   "2018_HEM",
   	   ]
+     lumi=138000.*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
      lumifactor={}
      lumifactor["2016preVFP"]=19.52/137.6
      lumifactor["2016postVFP"]=16.81/137.6
@@ -253,6 +259,8 @@ if __name__ == '__main__':
          legend.AddEntry(hist,"Data (UL)","lpe")
        else:
          legend.AddEntry(hist,"Data (EOY)","lpe")
+       norm=hist.Integral(hist.FindBin(2400),hist.FindBin(3000))
+       norm_mc={}
 
        hist_mc={}
        for m in [1,2,3]:
@@ -263,7 +271,11 @@ if __name__ == '__main__':
            v=prefix+mc[m][0][0].replace("-HT200to300","").replace("2016",mc[m][i][0].split("_")[0]).replace("UL16preVFP",mc[m][i][0].split("_")[0])+var
            print(v)
            hist_mc[m].Add(f_mc[m][i].Get(v),mc[m][i][1]/mc[m][0][1])
-         hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
+         norm_mc[m]=hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].FindBin(3000))
+         #if luminorm:
+         #  hist_mc[m].Scale(lumi)
+         #else:
+         hist_mc[m].Scale(norm/norm_mc[m])
          hist_mc[m].SetLineColor(colors[m])
          hist_mc[m].SetStats(False)
          hist_mc[m].Draw("histesame")
@@ -274,7 +286,10 @@ if __name__ == '__main__':
          hist_mc[m]=f_mc[m][0].Get(v)
          for i in range(1,len(mc[m])):
            hist_mc[m].Add(f_mc[m][i].Get(mc[m][0][0].replace("_JER_2016_1","").replace("_JER_2017_1","").replace("_JER_2018_1","").replace("_JES_2016_1","").replace("_JES_2017_1","").replace("_JES_2018_1","")+var),mc[m][i][1]/mc[m][0][1])
-         hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.GetNbinsX())/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].GetNbinsX()))
+         #if luminorm:
+         #  hist_mc[m].Scale(lumi)
+         #else:
+         hist_mc[m].Scale(hist.Integral(hist.FindBin(2400),hist.FindBin(3000))/hist_mc[m].Integral(hist_mc[m].FindBin(2400),hist_mc[m].FindBin(3000)))
          hist_mc[m].SetLineColor(colors[m])
          hist_mc[m].SetStats(False)
          hist_mc[m].Draw("histesame")
@@ -321,8 +336,8 @@ if __name__ == '__main__':
        canvas.cd(1)
        hist.GetYaxis().SetTitleOffset(1.2)
        
-       canvas.SaveAs("chi_"+scenario+"_plots_mass"+postfix+".root")
-       canvas.SaveAs("chi_"+scenario+"_plots_mass"+postfix+".pdf")
+       canvas.SaveAs("plots/chi_"+scenario+"_plots_mass"+postfix+".root")
+       canvas.SaveAs("plots/chi_"+scenario+"_plots_mass"+postfix+".pdf")
 
      for var in variables:
       log=(var=="p_{T1}" or var=="p_{T2}" or var=="METsumET" or var=="#Delta#phi")
@@ -362,7 +377,8 @@ if __name__ == '__main__':
         miny=0
         if hist.Integral()>0:
           miny=log*0.1/hist.GetMaximum()
-          hist.Scale(1./hist.Integral())
+          if normalize:
+            hist.Scale(1./hist.Integral())
         hist.SetTitle("")
         #hist.GetXaxis().SetTitle(label[variables.index(var)])
         hist.GetXaxis().SetLabelColor(0)
@@ -395,7 +411,13 @@ if __name__ == '__main__':
               hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
               hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
           if hist_mc[m].Integral()>0:
+           if normalize:
             hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
+           else:
+            #if luminorm:
+            # hist_mc[m].Scale(lumi)
+            #else:
+            hist_mc[m].Scale(norm/norm_mc[m])
           hist_mc[m].SetLineColor(colors[m])
           hist_mc[m].SetStats(False)
           hist_mc[m].Draw("histesame")
@@ -413,7 +435,13 @@ if __name__ == '__main__':
                 hist_mc[m].SetBinContent(b+1,hist_mc[m].GetBinContent(b+1)/hist_mc[m].GetBinWidth(b+1))
                 hist_mc[m].SetBinError(b+1,hist_mc[m].GetBinError(b+1)/hist_mc[m].GetBinWidth(b+1))
             if hist_mc[m].Integral()>0:
+             if normalize:
               hist_mc[m].Scale(hist.Integral()/hist_mc[m].Integral())
+             else:
+              #if luminorm:
+              # hist_mc[m].Scale(lumi)
+              #else:
+              hist_mc[m].Scale(norm/norm_mc[m])
             hist_mc[m].SetLineColor(colors[m])
             hist_mc[m].SetStats(False)
             hist_mc[m].Draw("histesame")

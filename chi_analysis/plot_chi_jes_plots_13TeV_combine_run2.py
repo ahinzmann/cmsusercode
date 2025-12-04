@@ -27,6 +27,7 @@ if __name__ == '__main__':
    label="#chi"
    use_UL=True
    only2016=False
+   normalize=False
    
    if only2016 and use_UL:
      years=["UL16preVFP","UL16postVFP"]
@@ -93,7 +94,19 @@ if __name__ == '__main__':
 		("PileUpPtBB",""),
 		#("PileUpPtEC1",""),],
 		]+[("PileUpPtEC1",y) for y in years],
-		[("Sum","")]]
+		[("Sum","")],
+		[("AbsoluteStat",""), # dropped sources due to negligible effect
+		("Fragmentation",""),
+		("SinglePionECAL",""),
+		("RelativePtEC1",""),
+		("RelativePtEC2",""),
+		("RelativePtHF",""),
+		("RelativeStatFSR",""),
+		("RelativeStatHF",""),
+		("RelativeJEREC2",""),
+		("RelativeJERHF",""),
+		("PileUpPtEC2",""),],
+                ]
    print(sourcesets)
    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -241,7 +254,7 @@ if __name__ == '__main__':
               hist2.Scale(lumifactor[years[0]])
               for y in years[1:]:
                 hist2.Add(histyear2[y],lumifactor[y])
-              if hist2.Integral()>0:
+              if hist2.Integral()>0 and normalize:
                 hist2.Scale(histref.Integral()/hist2.Integral())
               hist2.Divide(hist2,histref)
              else:
@@ -261,8 +274,10 @@ if __name__ == '__main__':
              fit=TF1(hist2.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
              hist2.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
-              if fit.Integral(1.,16.)>0:
+              if fit.Integral(1.,16.)>0 and normalize:
                hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+              else:
+               hist2.SetBinContent(chi_bin+1,fit.Eval(hist2.GetBinCenter(chi_bin+1)))
              hist2.Draw("histsame")
              legend.AddEntry(hist2,"JEC "+sourceset[i][0]+" "+sourceset[i][1],"l")
              for chi_bin in range(len(chi_binnings[mass])):
@@ -291,7 +306,7 @@ if __name__ == '__main__':
               hist3.Scale(lumifactor[years[0]])
               for y in years[1:]:
                 hist3.Add(histyear3[y],lumifactor[y])
-              if hist3.Integral()>0:
+              if hist3.Integral()>0 and normalize:
                 hist3.Scale(histref.Integral()/hist3.Integral())
               hist3.Divide(hist3,histref)
              else:
@@ -311,8 +326,10 @@ if __name__ == '__main__':
              fit=TF1(hist3.GetName()+"smooth","pol2" if ("mad" in prefix and mass>7) or len(chi_binnings[mass])<10 else "pol3",1,16)
              hist3.Fit(fit,"NQ")
              for chi_bin in range(len(chi_binnings[mass])):
-              if fit.Integral(1.,16.)>0:
+              if fit.Integral(1.,16.)>0 and normalize:
                hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1))/fit.Integral(1.,16.)*15.)
+              else:
+               hist3.SetBinContent(chi_bin+1,fit.Eval(hist3.GetBinCenter(chi_bin+1)))
              hist3.Draw("histsame")
              for chi_bin in range(len(chi_binnings[mass])):
                if (hist3.GetBinContent(chi_bin+1)-1.0)*(hist3.GetBinCenter(chi_bin+1)-8.5)>0:
@@ -324,5 +341,5 @@ if __name__ == '__main__':
         legend.SetFillStyle(0)
         legend.Draw("same")
 
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated.root")
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated.pdf")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".root")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".pdf")

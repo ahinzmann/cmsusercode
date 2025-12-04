@@ -38,14 +38,17 @@ if __name__ == '__main__':
     crossClosureHerwig=False # Herwig vs Pythia response
     crossClosureMadgraph=False # Madgraph vs Pythia response
     modelUncertainty=False # Herwig vs Madgraph vs Pythia smearing
-    modelComparison=True # NNLO vs Pythia vs Madgraph and generator level
-    onlyMC=True # before/after smearing
+    modelComparison=False # NNLO vs Pythia vs Madgraph and generator level
+    onlyMC=False # before/after smearing
     onlyData=False # before/after unfolding
     withUncertainties=False
     compareNoUncertainty=False
-    noNorm=False
+    normalize=False
     run="2"
-    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
+    postfix=""
+    if not normalize:
+      postfix="_nonorm"
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3"+postfix+"/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
@@ -55,7 +58,10 @@ if __name__ == '__main__':
     if crossClosureMadgraph: name+="_crossClosureMadgraph"
     print(name)
 
-    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not modelUncertainty and not modelComparison:
+      massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    else:
+      massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -91,13 +97,13 @@ if __name__ == '__main__':
       fd = TFile.Open(filenamed)
       new_hists+=[fd]
     
-    fout=TFile.Open("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+"_run"+run+".root","RECREATE")
+    fout=TFile.Open("/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/datacards/datacard_shapelimit13TeV_"+name+postfix+"_run"+run+".root","RECREATE")
 
     if onlyMC: name+="_MC"
     if onlyData: name+="_data"
     if modelUncertainty: name+="_modelUncertainty"
     if modelComparison: name+="_modelComparison"
-    if noNorm: name+="_noNorm"
+    name+=postfix
 
     filename=prefix+"_GEN-QCD-run2_chi.root"
     print(filename)
@@ -114,9 +120,23 @@ if __name__ == '__main__':
     fm = TFile.Open(filenamem)
     new_hists+=[fm]
 
+    filenameu='datacards/datacard_shapelimit13TeV_unfold_withUncertainties'+postfix+'_run2.root'
+    print(filenameu)
+    fDataUnfolded = TFile.Open(filenameu)
+
     chi2detector=0
     chi2unfolded=0
-    
+    normsh1=1
+    normsh1postfit=1
+    normsh1gen=1
+    normsh1genpostfit=1
+    normsh2gen=1
+    normsh3gen=1
+    normsh4gen=1
+    normsh2=1
+    normsh3=1
+    normsh4=1
+   
     for i in range(len(massbins)):
       canvas.cd(i+1)
       legend1=TLegend(0.3,0.6,0.9,0.95,(str(massbins[i][0])+"<m_{jj}<"+str(massbins[i][1])+" GeV").replace("7000<m_{jj}<13000","m_{jj}>7000"))
@@ -124,7 +144,7 @@ if __name__ == '__main__':
 
       if trivialClosure or crossClosureNNLO or crossClosureHerwig or crossClosureMadgraph: # use Pythia instead of NNLO QCD
         histname='QCD#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmear"
-      elif noNorm:
+      elif not normalize:
         histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nonorm_nosmear"
       else:
         histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmear"
@@ -132,6 +152,9 @@ if __name__ == '__main__':
       h1gen=f.Get(histname)
       plots+=[h1gen]
       if modelComparison:
+        #histnameu="QCD_ALT#chi"+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmearpostfit"
+        #print(histnameu)
+        #h1dataUnfolded=fDataUnfolded.Get(histnameu)
         histname='QCD#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmear"
         print(histname)
         h1gen2=f.Get(histname)
@@ -150,6 +173,9 @@ if __name__ == '__main__':
         print(h.GetName())
         h1gen4=h.Clone("hw"+str(i))
         plots+=[h1gen4]
+        for b in range(h1gen3.GetXaxis().GetNbins()):
+          h1gen3.SetBinContent(b+1,h1gen3.GetBinContent(b+1)*h1gen3.GetBinWidth(b+1))
+          h1gen4.SetBinContent(b+1,h1gen4.GetBinContent(b+1)*h1gen4.GetBinWidth(b+1))
         canvas.cd(i+1)
       if crossClosureNNLO: # use NNLO smeared with Pythia response
         histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nosmear"
@@ -202,14 +228,17 @@ if __name__ == '__main__':
       fout.cd()
       h1genpostfit.Write()
 
-      if noNorm:
-        histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nonorm"
-        print(histname)
-        h1=f.Get(histname)
-        plots+=[h1]
-        histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-        print(histname)
-        h1genpostfit.Scale(f.Get(histname).Integral()/h1.Integral())
+      #if not normalize:
+      #  histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nonorm"
+      #  print(histname)
+      #  h1=f.Get(histname)
+      #  plots+=[h1]
+      #  histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+      #  print(histname)
+      #  h1genpostfit.Scale(f.Get(histname).Integral()/h1.Integral())
+
+      #if modelComparison:
+      #  h1genpostfit=h1dataUnfolded
 
       histname='data_obs#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
       print(histname)
@@ -232,24 +261,39 @@ if __name__ == '__main__':
         h5=fd.Get(histname)
         plots+=[h5]
       
-      if not noNorm:      
-        h1.Scale(1./h1.Integral())
-        h1postfit.Scale(1./h1postfit.Integral())
-        h1gen.Scale(1./h1gen.Integral())
+      if normalize or i==0:
+        normsh1=h1.Integral()
+        normsh1postfit=h1postfit.Integral()
+        normsh1gen=h1gen.Integral()
         if modelComparison:
-          h1gen2.Scale(1./h1gen2.Integral())
-          for b in range(h1.GetXaxis().GetNbins()):
-            h1gen3.SetBinContent(b+1,h1gen3.GetBinContent(b+1)*h1gen3.GetBinWidth(b+1))
-            h1gen4.SetBinContent(b+1,h1gen4.GetBinContent(b+1)*h1gen4.GetBinWidth(b+1))
-          h1gen3.Scale(1./h1gen3.Integral())
-          h1gen4.Scale(1./h1gen4.Integral())
-        h1genpostfit.Scale(1./h1genpostfit.Integral())
-        h2.Scale(1./h2.Integral())
-        h3.Scale(1./h3.Integral())
-        h4.Scale(1./h4.Integral())
+          normsh1gen2=h1gen2.Integral()
+          normsh1gen3=h1gen3.Integral()
+          normsh1gen4=h1gen4.Integral()
+        if not normalize:
+          normsh1genpostfit=normsh1gen
+        normsh2=h2.Integral()
+        normsh3=h3.Integral()
+        normsh4=h4.Integral()
         if compareNoUncertainty:
-          h5.Scale(1./h5.Integral())
+          normsh5=h5.Integral()
+
+      h1.Scale(normsh1genpostfit/normsh1)
+      h1postfit.Scale(normsh1genpostfit/normsh1postfit)
+      h1gen.Scale(normsh1genpostfit/normsh1gen)
+      if modelComparison:
+        h1gen2.Scale(normsh1genpostfit/normsh1gen2)
+        h1gen3.Scale(normsh1genpostfit/normsh1gen3)
+        h1gen4.Scale(normsh1genpostfit/normsh1gen4)
+        #print(h1genpostfit.Integral(),h1gen.Integral(),h1gen3.Integral(),h1gen4.Integral())
+      if normalize:
+        h1genpostfit.Scale(1./h1genpostfit.Integral())
+      h2.Scale(normsh1genpostfit/normsh2)
+      h3.Scale(normsh1genpostfit/normsh3)
+      h4.Scale(normsh1genpostfit/normsh4)
+      if compareNoUncertainty:
+        h5.Scale(normsh1genpostfit/normsh5)
       yscale=max(h1gen.Integral(),h1genpostfit.Integral())
+
 
       for b in range(h1.GetXaxis().GetNbins()):
         h1.SetBinContent(b+1,h1.GetBinContent(b+1)/h1.GetBinWidth(b+1))
@@ -311,10 +355,10 @@ if __name__ == '__main__':
           h1gen.GetYaxis().SetRangeUser(0.045*yscale,0.12*yscale)
       else:
           h1gen.GetYaxis().SetRangeUser(0.045*yscale,0.12*yscale)
-      if noNorm:
+      if not normalize:
         h1gen.GetYaxis().SetTitle("N")
       else:
-        h1gen.GetYaxis().SetTitle("1/#sigma d#sigma/d#chi")
+        h1gen.GetYaxis().SetTitle("1/#sigma"+("" if normalize else "")+" d#sigma/d#chi")
       h1gen.GetXaxis().SetTitle("#chi")
      
       if not onlyMC and not modelUncertainty and not compareNoUncertainty:
@@ -378,7 +422,7 @@ if __name__ == '__main__':
         hint.Draw("e3 same")
         print(fit.Eval(1),hint.GetBinError(1))
    
-      if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not onlyData and not modelUncertainty and not noNorm and not modelComparison:
+      if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not onlyData and not modelUncertainty and not modelComparison:
         h1postfit.SetLineColor(2)
         h1postfit.SetLineStyle(2)
         h1postfit.Draw("hesame")
@@ -412,7 +456,7 @@ if __name__ == '__main__':
       if modelUncertainty:
         legend1.AddEntry(h3,"Smeared (Herwig response)","l")
         legend1.AddEntry(h4,"Smeared (Madgraph response)","l")
-      if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not onlyData and not modelUncertainty and not noNorm and not modelComparison:
+      if not trivialClosure and not crossClosureNNLO and not crossClosureHerwig and not crossClosureMadgraph and not onlyMC and not onlyData and not modelUncertainty and not modelComparison:
         legend1.AddEntry(h1postfit,"Smeared-Postfit","l")
 
       legend1.SetTextSize(0.04)
