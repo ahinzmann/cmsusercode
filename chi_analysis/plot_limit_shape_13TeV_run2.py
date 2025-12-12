@@ -285,9 +285,9 @@ if __name__=="__main__":
     
  for coupling in ["alp","tripleG"]:
 
-    canvas = TCanvas("","",0,0,1800,1550)
+    canvas = TCanvas("main","main",0,0,1800,1550)
     #canvas.GetPad(0).SetLogy()
-    mg=TMultiGraph()
+    mg=TMultiGraph("mg","mg")
 
     points=[]
     if coupling=="alp":
@@ -425,3 +425,15 @@ if __name__=="__main__":
     leg3.Draw("same")
     
     canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.pdf')
+
+    # For HepData
+    g.SetName("Observed")   
+    g_exp.SetName("Expected")
+    g_band.SetName("Expected1sd")
+    g_band_2sigma.SetName("Expected2sd")
+    g.Draw("same")
+    g_exp.Draw("same")
+    g_band.Draw("same")
+    g_band_2sigma.Draw("same")
+
+    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.root')

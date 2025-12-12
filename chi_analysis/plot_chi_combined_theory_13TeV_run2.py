@@ -214,7 +214,7 @@ if __name__=="__main__":
   comparePDFs=True
   compareMu30=False
   compareMadgraph=False
-  compareNoEWK=False
+  compareNoEWK=True
   comparePostfit=False
   
   lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
@@ -363,7 +363,7 @@ if __name__=="__main__":
               hNloQcdNoEWK.Scale(lumi)
             for b in range(hNloQcdNoEWK.GetXaxis().GetNbins()):
                 hNloQcdNoEWK.SetBinContent(b+1,hNloQcdNoEWK.GetBinContent(b+1)/hNloQcdNoEWK.GetBinWidth(b+1))
-    
+            hNloQcdNoEWK.SetName("NoEWK")
     
             filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
             print(filename)
@@ -387,6 +387,7 @@ if __name__=="__main__":
               hNloQcd.Scale(lumi)
             for b in range(hNloQcd.GetXaxis().GetNbins()):
                 hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
+            hNloQcd.SetName("MainScale")
 
             if compareMu30:
               filename1nu30="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu30_m2.root"
@@ -453,6 +454,7 @@ if __name__=="__main__":
              hNloQcdOld.SetLineColor(2)
              hNloQcdOld.SetLineStyle(4)
              hNloQcdOld.SetLineWidth(2)
+             hNloQcdOld.SetName("OldNLO")
     
              filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
              print(filename)
@@ -504,6 +506,7 @@ if __name__=="__main__":
              hNloQcdAlt.SetLineColor(4)
              hNloQcdAlt.SetLineStyle(2)
              hNloQcdAlt.SetLineWidth(2)
+             hNloQcdAlt.SetName("AltScale")
              
              filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
              print(filename)
@@ -779,10 +782,13 @@ if __name__=="__main__":
               h14G.SetPointEYhigh(b,(U-N)/N*h14.GetBinContent(b+1))
             #print N, sqrt(N)/N, h14.GetBinError(b+1)/h14.GetBinContent(b+1), (N-L)/N, (U-N)/N
         print("data events:", nevents)
+        h14G.SetName("Data")
 
         h14Gsys=h14G.Clone(histname+"sys")
+        h14Gsys.SetName("DataSys")
         new_hists+=[h14Gsys]
         h14Gsysstat=h14G.Clone(histname+"sysstat")
+        h14Gsysstat.SetName("DataSysStat")
         new_hists+=[h14Gsysstat]
 
         filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
@@ -877,6 +883,8 @@ if __name__=="__main__":
         h2new.SetFillColor(10)
         h3new.SetLineColor(bandcolor)
         h3new.SetFillColor(bandcolor)
+        h2new.SetName("TheoryDown")
+        h3new.SetName("TheoryUp")
 
         #LOAD POSTFIT QCD
         if comparePostfit:
@@ -1190,7 +1198,7 @@ if __name__=="__main__":
         
         c.cd()
 
-        pad1=TPad("","",0,0,1,0.3)
+        pad1=TPad("div","div",0,0,1,0.3)
         pad1.SetTopMargin(0.08)
         pad1.SetBottomMargin(0.30)
         pad1.Draw()
@@ -1311,7 +1319,7 @@ if __name__=="__main__":
 
         c.cd()
 
-        pad2=TPad("","",0,0.3,1,1)
+        pad2=TPad("main","main",0,0.3,1,1)
         pad2.SetBottomMargin(0.001)
         pad2.SetTopMargin(0.07)
         pad2.Draw()
@@ -1582,4 +1590,5 @@ if __name__=="__main__":
     if not normalize:
       postfix+="_nonorm"
     c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
+    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.root")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")

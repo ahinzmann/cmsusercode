@@ -419,8 +419,8 @@ if __name__=="__main__":
     for mass, limit in exo19012limit:
       g_q_resonance.SetPoint(g_q_resonance.GetN(),mass/1000.,limit)
 
-    canvas = TCanvas("","",0,0,1800,1550)
-    mg=TMultiGraph()
+    canvas = TCanvas("main","main",0,0,1800,1550)
+    mg=TMultiGraph("mg","mg")
 
     min_x_new=3.6 #signalMasses[0]/1000
 
@@ -506,6 +506,11 @@ if __name__=="__main__":
     mg.SetName("chi")
     mg.Write()
     
+    g_q.SetName("Observed")    
+    g_q_exp.SetName("Expected")
+    g_q_band.SetName("Expected1sd")
+    g_q_band_2sigma.SetName("Expected2sd")
+
     mg=g_q
     mg.Draw("apl")
     mg.SetTitle("")
@@ -635,7 +640,6 @@ if __name__=="__main__":
     l2.AddEntry(g_q_old,"Eur. Phys. J. C 78 (2018)","L")
     l2.AddEntry(g_q_resonance,"JHEP 05 (2020) 033","L")
     l2.Draw()
-    
 
     # CMS
     #leg2=TLatex(min_x_new,ymax+0.03,"#bf{CMS} #it{Preliminary}")
@@ -657,3 +661,4 @@ if __name__=="__main__":
       canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'_run2.pdf')
     else:
       canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_run2.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_run2.root')
