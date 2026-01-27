@@ -27,12 +27,12 @@ if __name__ == '__main__':
     trivialClosure=False
     withUncertainties=True
     run="2"
-    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2/datacard_shapelimit13TeV"
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
     if trivialClosure: name+="_trivialClosure"
-    print name
+    print(name)
 
     massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     all_mass_bins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     new_hists=[]
 
     filename="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/multidimfit_"+name+"_run"+run+".root"
-    print filename
+    print(filename)
     fitfile = TFile.Open(filename)
     fittree=fitfile.Get("fit_mdf")
     fitParameters=[]
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     pois=fittree.floatParsFinal().Clone()
     pois.removeAll()
     fitted_pars=fittree.floatParsFinal()
-    print "All pars", len(fitted_pars)
+    print("All pars", len(fitted_pars))
     num=0
     for par in range(len(fitted_pars)):
       #print num, fitted_pars[par].GetName()
@@ -83,7 +83,7 @@ if __name__ == '__main__':
       if "r_Bin" in fitted_pars[par].GetName():
         pois.add(fitted_pars[par])
         num+=1
-    print "POIs", len(pois)
+    print("POIs", len(pois))
     reducedCovarianceMatrix=fittree.reducedCovarianceMatrix(pois)
     correlationMatrix=reducedCovarianceMatrix.Clone()
     for i in range(len(pois)):
@@ -95,6 +95,8 @@ if __name__ == '__main__':
     gStyle.SetNumberContours(200)
     gStyle.SetPalette(104)
     h=TH2D(correlationMatrix)
+    h.SetName("correlation")
     h.Draw("colz2")
     h.GetZaxis().SetRangeUser(-1,1)
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")
+    canvas.SaveAs(prefix + "_"+name+"_run"+run+".root")

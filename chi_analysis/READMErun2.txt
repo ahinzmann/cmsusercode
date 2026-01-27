@@ -84,3 +84,8 @@ unfold_13TeV_run2.py # run unfolding with combine
 plot_unfolded_distribution_13TeV_run2.py # plot unfolded data distribution
 plot_correlation_matrix_13TeV_run2.py #  plot correlation matrix
 plot_response_matrix_13TeV_run2.py # plot response matrix
+
+--------- HepData entry:
+
+cd hepdata-EXO-24-011
+python EXO-24-011--make-hepdata.py

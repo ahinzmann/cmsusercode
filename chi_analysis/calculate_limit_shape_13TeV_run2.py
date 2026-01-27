@@ -14,12 +14,14 @@ models=[]
 #models+=[11] #QBH RS1
 #models+=[12] #QBH Blackmax n=6
 #models+=[13] #QBH Blackmax n=6 RECO
-models+=[60,61,62,63,64,65,66,67,68,69] #CI
+#models+=[60,61,62,63,64,65,66,67,68,69] #CI
 #models+=[70,71,72,73,74,75,76,77] 
 #models+=[78,79,80,81,82,83,84,85] 
 #models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues (CI-LO)
 #models+=[41,42,43,44] #pvalues (CI-NLO)
 #models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues (Anti-CI-LO)
+models+=[56] #pvalues (Bragg)
+#models+=[57,58] #pvalues mjj,ptave
 #models+=[47]
 #models+=[88,89]
 #models+=[60,61]
@@ -43,7 +45,7 @@ uncorrelatedScaleUncertainties=False
 scaleUncertainty=True
 theoryStatUncertainties=True
 useNNLO=True # choice for QCD
-useM2=True # choice of mu-scale for QCD
+useM2=False # choice of mu-scale for QCD
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
 use_NNPDF3=True
@@ -369,6 +371,17 @@ for model in models:
     signalMasses=[12000]
     massbins=[(1200,1500),]
 
+ if model==56:
+    signal="bragg_G1p9_D0p3_A"
+    signalMasses=[0.05]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+
+ if model==57 or model==58: 
+    signal="altScale"
+    signalMasses=[0]
+    massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+    alternateScaleUncertainty=False
+
  if model>=60 and model<100:
     includeSignalTheoryUncertainties=True
 
@@ -547,12 +560,10 @@ for model in models:
 
  dire="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
  if run=="2":
-   if use_NNPDF3:
-     prefix=dire+"versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"
-   elif useM2:
-     prefix=dire+"versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
+   if useM2:
+     prefix=dire+"versions/run2ULNNLO_m2"+("_NNPDF3" if use_NNPDF3 else "")+"/datacard_shapelimit13TeV"
    elif useNNLO:
-     prefix=dire+"versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"
+     prefix=dire+"versions/run2ULNNLO_pt12"+("_NNPDF3" if use_NNPDF3 else "")+"/datacard_shapelimit13TeV"
    else:
      prefix=dire+"versions/run2ULNLO_pt12/datacard_shapelimit13TeV"
  elif run=="3":
@@ -603,7 +614,10 @@ for model in models:
 
  limits={}
  for signalMass in signalMasses:
-    signalWithMass=(signal+str(signalMass)+signalExtra).replace("MD"+str(signalMass),"MD"+str(signalMass)+"_MBH"+str(signalMass+1000))
+    if "altScale" in signal:
+      signalWithMass=signal
+    else:  
+      signalWithMass=(signal+str(signalMass)+signalExtra).replace("MD"+str(signalMass),"MD"+str(signalMass)+"_MBH"+str(signalMass+1000))
     print(signalWithMass)
 
     if signalWithMass=="CIplusLL8000":
@@ -690,9 +704,9 @@ for model in models:
         fname=prefix + "RECO_run2_UL18_" + signalWithMass + "-GEN_chi.root"
     elif signalWithMass=="QBH_MD"+str(signalMass)+"_MBH"+str(signalMass+1000)+"_n6":
         fname=prefix + "_run2_UL18_" + signalWithMass + "-GEN_chi.root"
-    elif "cs" in signal:
+    elif "cs" in signal or "altScale" in signal:
         fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
-    elif "alp" in signal or "tripleG" in signal:
+    elif "bragg" in signal or "alp" in signal or "tripleG" in signal:
       signalWithMass=signal+str(signalMass).replace(".","p")+signalExtra
       fname=prefix+"_"+str(signalWithMass)+"-run"+run+"_chi.root"
     elif "DM" in signal and version=="_v1":
@@ -892,7 +906,7 @@ for model in models:
       else:
         massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
     print(fname)
-    if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal:
+    if not "DM" in signal and not "cs" in signal and not "QBH" in signal and not "alp" in signal and not "tripleG" in signal and not "bragg" in signal and not "altScale" in signal:
         signalWithMass="QCD"+signalWithMass
 
     # Use all lower mass bins in fit with bg-only hypothesis where no signal is present

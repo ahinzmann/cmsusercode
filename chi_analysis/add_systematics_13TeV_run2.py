@@ -80,7 +80,7 @@ if __name__ == '__main__':
     run="2" # "2" for Run2 or "3" for 13.6 TeV projection
     use_NNPDF3=True
     use_CP2=True # for ADD
-    normalize=False
+    normalize=True
     
     if use_UL:
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
@@ -107,14 +107,10 @@ if __name__ == '__main__':
       PDFmembers=100
 
     if run=="2":
-      if not normalize:
-        prefixs=["versions/run2ULNNLO_m2_NNPDF3_nonorm/datacard_shapelimit13TeV"]
-      elif use_NNPDF3:
-        prefixs=["versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"]
-      elif useM2:
-        prefixs=["versions/run2ULNNLO_m2/datacard_shapelimit13TeV"]
+      if useM2:
+        prefixs=["versions/run2ULNNLO_m2"+("_NNPDF3" if use_NNPDF3 else "")+("_nonorm" if not normalize else "")+"/datacard_shapelimit13TeV"]
       elif useNNLO:
-        prefixs=["versions/run2ULNNLO_pt12/datacard_shapelimit13TeV"]
+        prefixs=["versions/run2ULNNLO_pt12"+("_NNPDF3" if use_NNPDF3 else "")+("_nonorm" if not normalize else "")+"/datacard_shapelimit13TeV"]
       else:
         prefixs=["versions/run2ULNLO_pt12/datacard_shapelimit13TeV"]
     elif run=="3":
@@ -402,9 +398,17 @@ if __name__ == '__main__':
     for md in [2000,3000,4000,5000,6000,7000,8000,9000]:
       for n in [2,4,6]:
         samples7+=[("QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n),[("UL18_QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n),xsecs_qbh["QBH_MD"+str(md)+"_MBH"+str(md+1000)+"_n"+str(n)])])]
+    
+    samples8=[]
+    for A in range(5,6):
+     for G in range(10,29):
+      samples8+=[("bragg_G"+(str(G/10.).replace(".","p"))+"_D0p3_A"+(str(A/100.).replace(".","p")),[("bragg_G"+(str(G/10.).replace(".","p"))+"_D0p3_A"+(str(A/100.).replace(".","p")),0)])]
+    
+    samples9=[]
+    samples9+=[("altScale",[("altScale",0)])]
 
     # all samples
-    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7
+    samples=samples+samples1+samples2+samples3+samples4+samples5+samples6+samples7+samples8
     # for add
     #samples=samples1
     # for ci
@@ -416,6 +420,10 @@ if __name__ == '__main__':
     #samples=samples6
     # for QBH check
     #samples=samples7
+    # for Bragg model
+    #samples=samples8
+    # fot alternative scale model
+    #samples=samples9
     # for postfit plots
     #samples=[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
     #samples=[("DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",[("DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1",0)]), ]
@@ -522,7 +530,7 @@ if __name__ == '__main__':
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
       elif "QBH_MD" in samples[i][0]:
         sample=prefix + "_run2_UL18_" + samples[i][0] + '-GEN_chi.root'
-      elif "alp" in samples[i][0] or "tripleG" in samples[i][0] or "DM" in samples[i][0] or "ll" in samples[i][0] or "cs" in samples[i][0] or "wide" in samples[i][0] or "QBH" in samples[i][0]:
+      elif "altScale" in samples[i][0] or "bragg" in samples[i][0] or "alp" in samples[i][0] or "tripleG" in samples[i][0] or "DM" in samples[i][0] or "ll" in samples[i][0] or "cs" in samples[i][0] or "wide" in samples[i][0] or "QBH" in samples[i][0]:
         sample=prefix + "_" + samples[i][0] + '-run'+run+'_chi.root'
       #if "ADD" in samples[i][0]:
       #  sample=prefix + '_GENaddv3_chi2016.root'
@@ -533,7 +541,9 @@ if __name__ == '__main__':
       else:
         sample=prefix + '_GEN-QCD-run'+run+'_chi.root'
       print("output file", sample)
-      if "GEN" in sample:
+      if "bragg" in sample or "altScale" in sample:
+        insignalsample=(input_prefix1 + '_GEN-QCD-run'+run+'_chi.root')
+      elif "GEN" in sample:
         insignalsample=(sample.replace(prefix,input_prefix1).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
       else:
         insignalsample=(input_prefix2 + "_cs_ct14nnlo_30000_V-A+-run2_chi.root" if "cs" in sample else sample.replace(prefix,input_prefix2).replace("_1-run3","_1-run2")) ###### FIXME when run3 samples exist
@@ -1049,6 +1059,40 @@ if __name__ == '__main__':
             ci.Scale(1./nloqcdbackup.Integral())
           print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
           ci.Add(nloqcd)
+        elif "bragg" in samples[i][0]:
+          def BraggRatio(chi, Mjj,G,sigma,A):
+             q  = Mjj/1000 / sqrt(chi + 1.0) # TeV
+             dq = (q - G) / sigma
+             ratio = 1.0 + A * exp(-0.5 * dq * dq)
+             print(chi,Mjj,G,sigma,A,q,dq,ratio)
+             return ratio
+          histname=histname.replace("_backup","")
+          ci=nloqcd.Clone(histname)
+          split=samples[i][0].replace("p",".").split("_")
+          G=float(split[1].strip("G")) # preferred |q| scale (TeV)  ~ 1.9 TeV
+          sigma=float(split[2].strip("D")) # width in q (TeV) ~ 0.3 TeV (tune)
+          A=float(split[3].strip("A")) # amplitude (~ few %) ~ 5% bump
+          for b in range(ci.GetXaxis().GetNbins()):
+            ci.SetBinContent(b+1,ci.GetBinContent(b+1)*BraggRatio(nloqcd.GetBinCenter(b+1),massbins[j][0],G,sigma,A))
+          ci.Scale(nloqcd.Integral()/ci.Integral())
+          print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
+        elif "altScale" in samples[i][0]:
+          histname=histname.replace("_backup","")
+          ci=None
+          for k in mass_bins_nlo_list[j]:
+           halt = TH1F(nlofilealtscale.Get("CIJET_fnl5662j_cs_001_"+pdfset+"_"+muAltScale+"_0_"+str(PDFmembers)+"_70000_V-A-_mu_qcd_chi-"+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0_addmu"))
+           halt=rebin(halt,len(chi_binnings[j])-1,chi_binnings[j])
+           if ci:
+              ci.Add(halt)
+           else:
+              ci=halt.Clone(histname)
+          ci.Add(nloqcdnormd,-1)
+          ci=smooth(ci,"pol3") # SMOOTH NNLO PREDICTION (FIX ME)
+          ci.Add(nloqcdnormd,+1)
+          # apply EWK corrections
+          ci.Multiply(nloqcd)
+          ci.Divide(nloqcdnormd)
+          print(histname,"signal fraction in first bin", ci.GetBinContent(1)/nloqcd.GetBinContent(1))
         elif "QBH_MD" in samples[i][0]:
             histname=samples[i][0]+'#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             histnamein='datacard_shapelimit13TeV_run2_UL18_QBH#chi'+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -2263,9 +2307,9 @@ if __name__ == '__main__':
               #print sys
               for shift in ["Up","Down"]:
                 histname=althists[j].GetName()+"_"+sys+shift
-                #print histname
+                #print(histname)
                 sysHist=out.Get(histname)#.Clone()
-                #print sysHist
+                #print(sysHist)
                 #print dir(sysHist)
                 sysNorm=sysHist.Integral()
 

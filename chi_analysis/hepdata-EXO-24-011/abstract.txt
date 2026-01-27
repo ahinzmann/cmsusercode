@@ -1,0 +1,2 @@
+A measurement is presented of dijet angular distributions in proton-proton collisions at $\sqrt{s} = 13$ TeV, using data collected with the CMS detector at the CERN LHC and corresponding to an integrated luminosity of 138 $\rm fb^{-1}$. The data are compared with predictions from perturbative quantum chromodynamics at next-to-next-to-leading order, including electroweak corrections.
+The distributions are used to search for proposed signatures of quark compositeness, extra spatial dimensions, quantum black holes, axion-like particles, and anomalous gluon couplings.

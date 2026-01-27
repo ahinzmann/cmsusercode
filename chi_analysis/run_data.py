@@ -21,10 +21,10 @@ samples=[#("data2016",0,74,""),
          #("dataUL16postVFP",16,38,"-L1prefire"),
          #("dataUL17",17,61,"-L1prefire"),
 	 #("dataUL18",18,97,"-HEM"),
-	 ("qcdUL16preVFP",19,105,""),
-         ("qcdUL16postVFP",20,102,""),
-         ("qcdUL17",21,115,""),
-	 ("qcdUL18",22,159,""),
+	 #("qcdUL16preVFP",19,105,""),
+         #("qcdUL16postVFP",20,102,""),
+         #("qcdUL17",21,115,""),
+	 #("qcdUL18",22,159,""),
 	 #("qcdUL16preVFP",19,105,"-GEN"),
          #("qcdUL16postVFP",20,102,"-GEN"),
          #("qcdUL17",21,115,"-GEN"),
@@ -35,23 +35,26 @@ samples=[#("data2016",0,74,""),
 	 #("qcd2022EE",26,8,""),
 	 #("qcd2023",27,8,""),
 	 #("qcd2023BPix",28,8,""),
-	 ("dataNUL16preVFP",29,6,"-L1prefire"),
-         ("dataNUL16postVFP",30,3,"-L1prefire"),
-         ("dataNUL17",31,5,"-L1prefire"),
-	 ("dataNUL18",32,4,"-HEM"),
+	 #("dataNUL16preVFP",29,6,"-L1prefire"),
+         #("dataNUL16postVFP",30,3,"-L1prefire"),
+         #("dataNUL17",31,5,"-L1prefire"),
+	 #("dataNUL18",32,4,"-HEM"),
 	 #("data2023",33,12,"-28May2024"),
 	 #("qcd2023",34,8,"-28May2024"),
 	 #("qcd2023BPix",35,8,"-28May2024"),
 	 #("qbhUL18",36,24,""),
 	 #("data2024",37,18,""),
-	 #("dataUL16preVFP",38,58,"-L1prefire-Chi10"),
-         #("dataUL16postVFP",39,38,"-L1prefire-Chi10"),
-         #("dataUL17",40,61,"-L1prefire-Chi10"),
-	 #("dataUL18",41,97,"-HEM-Chi10"),
-	 #("qcdUL16preVFP",19,105,"-Chi10"),
-         #("qcdUL16postVFP",20,102,"-Chi10"),
-         #("qcdUL17",21,115,"-Chi10"),
-	 #("qcdUL18",22,159,"-Chi10"),
+	 #("dataUL16preVFP",38,58,"-L1prefire-y2"), #-Chi10
+         #("dataUL16postVFP",39,38,"-L1prefire-y2"), #-Chi10
+         #("dataUL17",40,61,"-L1prefire-y2"), #-Chi10
+	 #("dataUL18",41,97,"-HEM-y2"), #-Chi10
+	 #("qcdUL16preVFP",43,105,"-y2"), #-Chi10
+         #("qcdUL16postVFP",42,102,"-y2"), #-Chi10
+         #("qcdUL17",44,115,"-y2"), #-Chi10
+	 #("qcdUL18",45,159,"-y2"), #-Chi10
+	 ("data2025",46,14,""),  #-y2
+	 ("qcd2024",47,8,""), #-y2
+	 ("data2024",48,16,""), #-y2
 	 ]
 
 count=0
@@ -59,7 +62,7 @@ count=0
 for year,number,ns,postfix in samples:
   for n in range(ns):
     name="run_"+str(year)+"_"+str(n)+postfix
-    with open(name+".sh",'w+') as wrapper_script:
+    with open("submit/"+name+".sh",'w+') as wrapper_script:
             wrapper_script.write("""#!/bin/bash
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /data/dust/user/hinzmann/jetmass/CMSSW_14_1_0_pre4/src/
@@ -67,7 +70,7 @@ cmsenv
 cd /data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis
 python3 plot_data_13TeV_desy_run2.py """+str(number)+""" """+str(n)+""" """+postfix.replace("-","")+"""
 """)
-    with open(name+".submit",'w+') as htc_config:
+    with open("submit/"+name+".submit",'w+') as htc_config:
             htc_config.write("""
 #HTC Submission File for GEN sample production
 #requirements      =  OpSysAndVer == "SL7"
@@ -85,10 +88,10 @@ JobBatchName      = run_"""+str(year)+postfix+"""
 #RequestDisk       = 10G
 getenv            = True
 executable        = /usr/bin/sh
-arguments         = " """+name+""".sh"
+arguments         = " submit/"""+name+""".sh"
 queue 1
 """)
-    string="condor_submit "+name+".submit"
+    string="condor_submit submit/"+name+".submit"
     if count%5!=4:
       string+=" &"
     print(string)

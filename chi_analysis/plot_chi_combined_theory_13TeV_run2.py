@@ -210,6 +210,7 @@ if __name__=="__main__":
   oldTheory=True
   signalsBSM=False
   signalsDM=False
+  signalsBragg=False
   compareScales=True
   comparePDFs=True
   compareMu30=False
@@ -504,7 +505,7 @@ if __name__=="__main__":
                  hNloQcdAlt=hnlo
              hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdAlt.SetLineColor(4)
-             hNloQcdAlt.SetLineStyle(2)
+             hNloQcdAlt.SetLineStyle(7)
              hNloQcdAlt.SetLineWidth(2)
              hNloQcdAlt.SetName("AltScale")
              
@@ -904,7 +905,7 @@ if __name__=="__main__":
                 hbPostfit.SetLineWidth(2)
                 hbPostfit.SetLineStyle(2)
 
-        if massbin>=0:
+        if massbin>=0 and signalsBSM:
          if True: #FIX
           filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_LL+-run2_chi.root"
           histname='cs_'+pdfset+'_30000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1059,7 +1060,7 @@ if __name__=="__main__":
           for b in range(hgrw.GetNbinsX()):
                hgrw.SetBinContent(b+1,hgrw.GetBinContent(b+1)/hgrw.GetBinWidth(b+1))
             
-          coupling="0p5"
+          coupling="0p3"
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
@@ -1087,6 +1088,7 @@ if __name__=="__main__":
           hdmb=f7b.Get(histname)
           setUpDMHists(hdmb,kTeal+4,10,2)
 
+          coupling="0p5"
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
@@ -1105,7 +1107,7 @@ if __name__=="__main__":
           hdmd=f7d.Get(histname)
           setUpDMHists(hdmd,kAzure+8,1,2)
 
-        if massbin>3:
+        if massbin>3 and signalsBSM:
          if True:
           filename=fdir+"datacard_shapelimit13TeV_GENnp-CP5-run2-QBH_ADD6_9000_chi.root"
           print(filename)
@@ -1125,7 +1127,7 @@ if __name__=="__main__":
           for b in range(hqbh.GetNbinsX()):
               hqbh.SetBinContent(b+1,hqbh.GetBinContent(b+1)/hqbh.GetBinWidth(b+1))
 
-        if True:
+        if signalsBSM:
           filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2500-run2_chi.root"
           histname='alp_QCD_fa2500#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
@@ -1159,6 +1161,24 @@ if __name__=="__main__":
             htripleG.Scale(lumi)
           for b in range(htripleG.GetNbinsX()):
                htripleG.SetBinContent(b+1,htripleG.GetBinContent(b+1)/htripleG.GetBinWidth(b+1))
+
+        if signalsBragg:
+          filename=fdir+"datacard_shapelimit13TeV_bragg_G1p9_D0p3_A0p05-run2_chi.root"
+          histname='bragg_G1p9_D0p3_A0p05#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          print(filename)
+          f = TFile.Open(filename)
+          new_hists+=[f]
+          print(histname)
+          hbragg=f.Get(histname)
+          hbragg.SetLineColor(kBlue)
+          hbragg.SetLineWidth(3)
+          hbragg.SetLineStyle(9)
+          if normalize:
+            hbragg.Scale(1./hbragg.Integral())
+          else:
+            hbragg.Scale(lumi)
+          for b in range(hbragg.GetNbinsX()):
+               hbragg.SetBinContent(b+1,hbragg.GetBinContent(b+1)/hbragg.GetBinWidth(b+1))
 
 #        if massbin>4:
 #            h0.GetYaxis().SetRangeUser(0.02,0.22)
@@ -1222,6 +1242,20 @@ if __name__=="__main__":
           hMC2Div=hMC2.Clone(hMC2.GetName()+"_ratio")
         if unfoldedData:
           hNloQcdNoEWKDiv=hNloQcdNoEWK.Clone(hNloQcdNoEWK.GetName()+"_ratio")
+        if massbin>=5 and signalsBSM:
+          hcibDiv=hcib.Clone(hcib.GetName()+"_ratio")
+          hcicDiv=hcic.Clone(hcic.GetName()+"_ratio")
+        if massbin>5 and signalsBSM:
+          hgrwDiv=hgrw.Clone(hgrw.GetName()+"_ratio")
+        if massbin>8 and signalsBSM:
+          hqbhDiv=hqbh.Clone(hqbh.GetName()+"_ratio")
+        if massbin>=3 and massbin <= 5 and signalsDM:
+          hdmbDiv=hdmb.Clone(hdmb.GetName()+"_ratio")
+        if massbin>2 and signalsBSM:
+          halpDiv=halp.Clone(halp.GetName()+"_ratio")
+          htripleGDiv=htripleG.Clone(htripleG.GetName()+"_ratio")
+        if massbin>2 and signalsBragg:
+          hbraggDiv=hbragg.Clone(hbragg.GetName()+"_ratio")
 
         hDataDivs=[]
         h0Div.Divide(h0)
@@ -1254,6 +1288,20 @@ if __name__=="__main__":
           hMC2Div.Divide(h0)
         if compareNoEWK:
           hNloQcdNoEWKDiv.Divide(h0)
+        if massbin>=5 and signalsBSM:
+          hcibDiv.Divide(h0)
+          hcicDiv.Divide(h0)
+        if massbin>5 and signalsBSM:
+          hgrwDiv.Divide(h0)
+        if massbin>8 and signalsBSM:
+          hqbhDiv.Divide(h0)
+        if massbin>=3 and massbin <= 5 and signalsDM:
+          hdmbDiv.Divide(h0)
+        if massbin>2 and signalsBSM:
+          halpDiv.Divide(h0)
+          htripleGDiv.Divide(h0)
+        if massbin>2 and signalsBragg:
+          hbraggDiv.Divide(h0)
 
         #print h14G.GetN(),h14G.Eval(1),h14G.Eval(1.5), h14.GetBinContent(1)
         #print h14G.GetX()[0], h14G.GetY()[0]
@@ -1309,6 +1357,20 @@ if __name__=="__main__":
          hMC2Div.Draw("histsame")
         if compareNoEWK:
          hNloQcdNoEWKDiv.Draw("histsame")
+        if massbin>=5 and signalsBSM:
+          hcibDiv.Draw("histsame")
+          hcicDiv.Draw("histsame")
+        if massbin>5 and signalsBSM:
+          hgrwDiv.Draw("histsame")
+        if massbin>8 and signalsBSM:
+          hqbhDiv.Draw("histsame")
+        if massbin>=3 and massbin <= 5 and signalsDM:
+          hdmbDiv.Draw("histsame")
+        if massbin>2 and signalsBSM:
+          halpDiv.Draw("histsame")
+          htripleGDiv.Draw("histsame")
+        if massbin>2 and signalsBragg:
+          hbraggDiv.Draw("histsame")
         h0Div.Draw("histsame")
         #h14GDiv.Draw("pzesame")
         h14GsysDiv.Draw("||same")
@@ -1362,34 +1424,25 @@ if __name__=="__main__":
             hgrw.Draw("histsame")
         if massbin>8 and signalsBSM:
             hqbh.Draw("histsame")
-        if massbin == 3 and signalsDM:
+        if massbin >= 3 and massbin<=3 and signalsDM:
             #hdm.Draw("histsame")
+            pass
+        if massbin>=3 and massbin <= 4 and signalsDM:
             #hdma.Draw("histsame")
+            pass
+        if massbin>=3 and massbin <= 5 and signalsDM:
             hdmb.Draw("histsame")
-            hdmc.Draw("histsame")
-        if massbin == 4 and signalsDM:
-            #hdma.Draw("histsame")
-            hdmb.Draw("histsame")
-            hdmc.Draw("histsame")
-            hdmd.Draw("histsame")
-        if massbin == 5 and signalsDM:
-            hdmb.Draw("histsame")
-            hdmc.Draw("histsame")
-            hdmd.Draw("histsame")
-        if massbin == 6 and signalsDM:
-            hdmc.Draw("histsame")
-            hdmd.Draw("histsame")
-        if massbin == 7 and signalsDM:
-            hdmc.Draw("histsame")
-            hdmd.Draw("histsame")
-        if massbin == 8 and signalsDM:
-            hdmc.Draw("histsame")
-            hdmd.Draw("histsame")
-        if massbin == 9 and signalsDM:
-            hdmd.Draw("histsame")
-        if massbin>3 and signalsBSM:
+        if massbin>=3 and massbin <= 8 and signalsDM:
+            #hdmc.Draw("histsame")
+            pass
+        if massbin>=4 and massbin <=9 and signalsDM:
+            #hdmd.Draw("histsame")
+            pass
+        if massbin>2 and signalsBSM:
             halp.Draw("histsame")
             htripleG.Draw("histsame")
+        if massbin>2 and signalsBragg:
+            hbragg.Draw("histsame")
         #h14G.Draw("pzesame")
         h14Gsys.Draw("||same")
         h14Gsysstat.Draw("zesame")
@@ -1513,34 +1566,40 @@ if __name__=="__main__":
         l2.AddEntry(hgrw,"#Lambda_{T} (GRW) = 13 TeV","l")
     if massbin > 6 and signalsBSM:
         l2.AddEntry(hqbh,"M_{QBH} (n_{ED} = 6 ADD) = 9 TeV","l")
-    if massbin == 3 and signalsDM:
-        #l2.AddEntry(hdm,"M_{Med} = 2 TeV (g_{q} = 0.5)","l")
-        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-    if massbin == 4 and signalsDM:
-        #l2.AddEntry(hdma,"M_{Med} = 3 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin == 5 and signalsDM:
-        l2.AddEntry(hdmb,"M_{Med} = 4 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin == 6 and signalsDM:
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin == 7 and signalsDM:
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin == 8 and signalsDM:
-        l2.AddEntry(hdmc,"M_{Med} = 5 TeV (g_{q} = 0.5)","l")
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin == 9 and signalsDM:
-        l2.AddEntry(hdmd,"M_{Med} = 6 TeV (g_{q} = 0.5)","l")
-    if massbin > 3 and signalsBSM:
+    if massbin >= 3 and massbin<=3 and signalsDM:
+        #hdm.Draw("histsame")
+        pass
+    if massbin>=3 and massbin <= 4 and signalsDM:
+        #hdma.Draw("histsame")
+        pass
+    if massbin>=3 and massbin <= 5 and signalsDM:
+        hdmb.Draw("histsame")
+    if massbin>=3 and massbin <= 8 and signalsDM:
+        #hdmc.Draw("histsame")
+        pass
+    if massbin>=4 and massbin <=9 and signalsDM:
+        #hdmd.Draw("histsame")
+        pass
+
+    if massbin >= 3 and massbin<=3 and signalsDM:
+        #l2.AddEntry(hdm,"m_{Med} = 2 TeV (g_{q} = 0.3)","l")
+        pass
+    if massbin >= 3 and massbin<=4 and signalsDM:
+        #l2.AddEntry(hdma,"m_{Med} = 3 TeV (g_{q} = 0.3)","l")
+        pass
+    if massbin >= 3 and massbin<=5 and signalsDM:
+        l2.AddEntry(hdmb,"m_{Med} = 4 TeV (g_{q} = 0.3)","l")
+    if massbin >=3 and massbin<=8 and signalsDM:
+        #l2.AddEntry(hdmc,"m_{Med} = 5 TeV (g_{q} = 0.5)","l")
+        pass
+    if massbin >= 4 and massbin<=9 and signalsDM:
+        #l2.AddEntry(hdmd,"m_{Med} = 6 TeV (g_{q} = 0.5)","l")
+        pass
+    if massbin > 2 and signalsBSM:
         l2.AddEntry(halp,"#font[52]{f}_{a} / #font[52]{c}_{g} (ALP) = 2.5 TeV","l")
         l2.AddEntry(htripleG,"#Lambda / #sqrt{#font[52]{C}_{G}} (SMEFT) = 10 TeV","l")
+    if massbin > 2 and signalsBragg:
+        l2.AddEntry(hbragg,"Bragg, G=1.9 TeV, sigma=0.3, A=0.05","l")
     l2.SetFillStyle(0)
     l2.Draw("same")
 
@@ -1579,7 +1638,9 @@ if __name__=="__main__":
       postfix+="_scales"
     if comparePDFs:
       postfix+="_pdfs"
-    if signalsDM:
+    if compareNoEWK:
+      postfix+="_noewk"
+    if signalsDM and not signalsBSM:
       postfix+="_dm"
     if compareRun3:
       postfix+="_run3"

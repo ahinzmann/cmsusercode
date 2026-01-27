@@ -38,10 +38,16 @@ prefireUL17=prefireULfile.Get("L1prefiring_jetptvseta_UL2017BtoF")
 #jetVetoMap2024 = json.load(open("jetvetomaps-2024.json","r"))
 #print(jetVetoMap2024["corrections"])
 import correctionlib
-jetVetoMap2024 = correctionlib.CorrectionSet.from_file("jetvetomaps-2024.json")['Winter24Prompt2024BCDEFGHI_V1']
+jetVetoMap2024 = correctionlib.CorrectionSet.from_file("jetvetomaps-2024.json")['Summer24Prompt24_RunBCDEFGHI_V1'] # Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15
+jetVetoMap2025 = correctionlib.CorrectionSet.from_file("jetvetomaps-2025.json")['Winter25Prompt25_RunCDE_V1'] # Run3-25Prompt-Winter25-NanoAODv15
 #print([key for key in jetVetoMap2024.keys()])
 #print([i.name for i in jetVetoMap2024.inputs])
 #print(jetVetoMap2024.evaluate("jetvetomap",1.,1.))
+
+jetid2024 = correctionlib.CorrectionSet.from_file("jetid-2024-prompt.json")['AK4PUPPI_TightLeptonVeto'] # Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15
+#print([key for key in jetid2024.keys()])
+print(jetid2024)
+print([(i.name,i.type) for i in jetid2024.inputs])
 
 def deltaPhi(phi1, phi2):
   deltaphi = phi2 - phi1
@@ -185,12 +191,34 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
          if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
          if selectChi10 and chi<10: continue
+         if selecty2 and yboost>0.61: continue
          if prefiremap:
             if abs(jet1.Eta())>2:
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
             if abs(jet2.Eta())>2:
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
-         if "NANOAOD" in f:
+         if "Run2024" in f or "Run2025" in f:
+            if not jetid2024.evaluate(
+              event.jetAK4_eta1,
+              event.jetAK4_chf1,
+              event.jetAK4_nhf1,
+              event.jetAK4_cemf1,
+              event.jetAK4_nemf1,
+              event.jetAK4_muf1,
+              float(event.jetAK4_nConstituents1), # chMultiplicity
+              float(event.jetAK4_nConstituents1), # neMultiplicity
+              float(event.jetAK4_nConstituents1)): continue
+            if not jetid2024.evaluate(
+              event.jetAK4_eta2,
+              event.jetAK4_chf2,
+              event.jetAK4_nhf2,
+              event.jetAK4_cemf2,
+              event.jetAK4_nemf2,
+              event.jetAK4_muf2,
+              float(event.jetAK4_nConstituents2), # chMultiplicity
+              float(event.jetAK4_nConstituents2), # neMultiplicity
+              float(event.jetAK4_nConstituents2)): continue
+         elif "NANOAOD" in f and not "RunIII" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
          if "NANOAOD" in f and not "UL" in f: # flags missing in 12Feb2024 UL skims
             if not event.Flag_goodVertices or\
@@ -201,8 +229,10 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                not event.Flag_hfNoisyHitsFilter or\
                not event.Flag_eeBadScFilter or\
                not event.Flag_ecalBadCalibFilter: continue
-         if "2024" in f:
+         if "Run2024" in f:
             if jetVetoMap2024.evaluate("jetvetomap",jet1.Eta(),jet1.Phi())!=0 or jetVetoMap2024.evaluate("jetvetomap",jet2.Eta(),jet2.Phi())!=0: continue
+         if "Run2025" in f:
+            if jetVetoMap2025.evaluate("jetvetomap",jet1.Eta(),jet1.Phi())!=0 or jetVetoMap2025.evaluate("jetvetomap",jet2.Eta(),jet2.Phi())!=0: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj>6000 and "data" in sample:
            if "NANOAOD" in f:
@@ -210,6 +240,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
            else:
              print("found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
          if jet1.Pt()>13600: continue
+         #if "NANOAOD" in f and (event.PuppiMET_pt/event.PuppiMET_sumEt>0.9): continue # workaround if no jet ID
          irec=0
          for massbin in massbins:
             passedHLT=len(triggers[massbins.index(massbin)])==0
@@ -280,6 +311,7 @@ if __name__ == '__main__':
     correctPrefire=False
     genLevel=False
     selectChi10=False
+    selecty2=False
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -355,6 +387,9 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_UL16postVFP_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL16postVFPfeb2023"),
             ("datacard_shapelimit13TeV_run2_UL17_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL17feb2023"),
             ("datacard_shapelimit13TeV_run2_UL18_QCDmadgraph","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcdUL18feb2023"),
+            ("datacard_shapelimit13TeV_run2_2025-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_21Dec2025"),
+            ("datacard_shapelimit13TeV_run2_2024_QCDmadgraph-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_21Dec2025"),
+            ("datacard_shapelimit13TeV_run2_2024-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_21Dec2025"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -1051,7 +1086,53 @@ if __name__ == '__main__':
           [],
           [],
          ],
+
+          [["HLT_PFHT510","HLT_PFJet260"], #2025
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+
+          [[], #QCD 2024
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+         ],
          
+          [["HLT_PFHT510","HLT_PFJet260"], #2024
+          ["HLT_PFHT590","HLT_PFHT510","HLT_PFJet260"],
+          ["HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet320"],
+          [],#["HLT_PFHT890","HLT_PFHT780","HLT_PFHT680","HLT_PFHT590","HLT_PFHT510","HLT_PFJet450"],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          ["HLT_PFHT510"],
+          ["HLT_PFHT1050","HLT_PFJet500","HLT_PFJet550"],#,"HLT_CaloJet500_NoJetID","HLT_CaloJet550_NoJetID"
+         ],
+
           ]
 
     if len(sys.argv)>1:
@@ -1093,6 +1174,8 @@ if __name__ == '__main__':
         genLevel=True
       if "Chi10" in sys.argv[3]:
         selectChi10=True
+      if "y2" in sys.argv[3]:
+        selecty2=True
 
     chi_binnings=[]
     for mass_bin in chi_bins:
@@ -1112,6 +1195,8 @@ if __name__ == '__main__':
         postfix+="-GEN"
       if selectChi10:
         postfix+="-Chi10"
+      if selecty2:
+        postfix+="-y2"
       out=TFile("data/"+prefix+postfix + '_chi.root','RECREATE')
       plots=[createPlots(files,prefix,pf,triggers[samples.index((prefix,pf,files))],massbins,chi_bins)]
 
