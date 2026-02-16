@@ -366,11 +366,11 @@ if __name__=="__main__":
     mg.Draw("apl")
     mg.SetTitle("")
     if coupling=="alp":
-      mg.GetXaxis().SetTitle("f_{a} [TeV]")
-      mg.GetYaxis().SetTitle("c_{g}")
+      mg.GetXaxis().SetTitle("#font[52]{f}_{a} [TeV]")
+      mg.GetYaxis().SetTitle("#font[52]{c}_{g}")
     if coupling=="tripleG":
       mg.GetXaxis().SetTitle("#Lambda [TeV]")
-      mg.GetYaxis().SetTitle("C_{G}")
+      mg.GetYaxis().SetTitle("#font[52]{C}_{G}")
     mg.GetYaxis().SetRangeUser(ymin,ymax)
     mg.GetYaxis().SetLabelSize(0.04)
     mg.GetYaxis().SetTitleSize(0.05)
@@ -385,7 +385,7 @@ if __name__=="__main__":
     mg.GetXaxis().SetTitleOffset(1.1)
    
     if coupling=="alp":
-      lt=TLatex(4.5,3.6,"#splitline{#bf{ALP linear EFT}}{#bf{m_{a} = 1 MeV}}")
+      lt=TLatex(4.5,3.6,"#splitline{#bf{ALP linear EFT}}{#bf{#font[72]{m}_{a} = 1 MeV}}")
     if coupling=="tripleG":
       lt=TLatex(10,0.09,"#splitline{#bf{SMEFT}}{}")
     lt.SetTextSize(0.04)
@@ -417,13 +417,23 @@ if __name__=="__main__":
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.055)
     # lumi
-    lumiPos=max_x*(0.75 if coupling=="alp" else 0.7)
+    lumiPos=max_x*(0.775 if coupling=="alp" else 0.735)
     leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)
     leg2.Draw("same")
     leg3.Draw("same")
     
+    y2=TGaxis(max_x, ymin, max_x, ymax, ymin, ymax, 510, "+L")
+    y2.SetLabelSize(0)
+    y2.SetTitleSize(0)
+    y2.Draw()
+
+    x2=TGaxis(min_x, ymax, max_x, ymax, min_x, max_x, 510 ,"-")
+    x2.SetLabelSize(0)
+    x2.SetTitleSize(0)
+    x2.Draw()
+
     canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.pdf')
 
     # For HepData

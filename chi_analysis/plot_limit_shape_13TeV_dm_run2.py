@@ -244,7 +244,7 @@ if __name__=="__main__":
   
       mg.Draw("apl")
       mg.SetTitle("")
-      mg.GetXaxis().SetTitle("g_{q}")
+      mg.GetXaxis().SetTitle("#font[52]{g}_{q}")
       if asym:
         mg.GetYaxis().SetTitle("log_{10}(signal strength)")
         miny=-1
@@ -514,8 +514,8 @@ if __name__=="__main__":
     mg=g_q
     mg.Draw("apl")
     mg.SetTitle("")
-    mg.GetXaxis().SetTitle("M_{Med} [TeV]")
-    mg.GetYaxis().SetTitle("g_{q}")
+    mg.GetXaxis().SetTitle("#font[52]{m}_{Med} [TeV]")
+    mg.GetYaxis().SetTitle("#font[52]{g}_{q}")
     mg.GetYaxis().SetLabelSize(0.04)
     mg.GetYaxis().SetTitleSize(0.05)
     mg.GetYaxis().SetTitleOffset(0.95)
@@ -569,7 +569,7 @@ if __name__=="__main__":
     x2.SetTitleSize(0)
     x2.Draw()
 
-    x3=TGaxis(min_x_new, 0, max_x_new, 0, min_x_new,max_x_new,510,"-")
+    x3=TGaxis(min_x_new, 0, max_x_new, 0, min_x_new,max_x_new,510,"")
     x3.SetLabelSize(0)
     x3.SetTitleSize(0)
     x3.Draw()
@@ -577,7 +577,7 @@ if __name__=="__main__":
     minwidth=medWidth(ymin)
     myFunc=TF1("myFunc","pow((x-1/(12*3.141592653))*(4*3.141592653)/6,0.5)",minwidth,1)
     y2=TGaxis(max_x_new, ymin, max_x_new, ymax,"myFunc",510,"+L")
-    y2.SetTitle("#Gamma/M_{Med}")
+    y2.SetTitle("#Gamma/#font[52]{m}_{Med}")
     y2.SetLabelSize(0.04)
     y2.SetTitleSize(0.05)
     y2.SetTitleOffset(1.)
@@ -591,7 +591,7 @@ if __name__=="__main__":
     l0p5.SetLineStyle(kDashed)
     #l0p5.Draw("same")
       
-    l0p5T=TLatex((max_x_new-min_x_new)*0.35+min_x_new,0.5-0.05,"g_{q}=0.5")
+    l0p5T=TLatex((max_x_new-min_x_new)*0.35+min_x_new,0.5-0.05,"#font[52]{g}_{q}=0.5")
     l0p5T.SetTextSize(0.03)
     l0p5T.SetTextColor(kGray+1)
     #l0p5T.Draw("same")
@@ -601,7 +601,7 @@ if __name__=="__main__":
     l1p0.SetLineStyle(7)
     l1p0.Draw("same")
       
-    l1p0T=TLatex(max_x_new-0.6,1.0-0.07,"g_{q}=1.0")
+    l1p0T=TLatex(max_x_new-0.6,1.0-0.07,"#font[52]{g}_{q}=1.0")
     l1p0T.SetTextSize(0.04)
     l1p0T.SetTextFont(42)
     l1p0T.SetTextColor(kGray+3)
@@ -609,16 +609,16 @@ if __name__=="__main__":
     
     if style=="DMAxial":
       #lt=TLatex(signalMasses[0]+100,1.27,"#splitline{Vector/Axial-Vector Mediator}{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}")
-      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV, #font[72]{g}_{DM} = 1.0}}")
       #lt=TLatex(signalMasses[0]+100,1.31,"m_{DM} = "+mdm+" GeV, g_{DM} = 1.0")
     else:
-      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector Mediator}}{#bf{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector Mediator}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV, #font[72]{g}_{DM} = 1.0}}")
     lt.SetTextSize(0.04)
     lt.SetTextFont(42)
     lt.Draw("same")
     
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
-    l=TLegend(0.14,0.12,0.4,0.23,"95% CL upper limits")
+    l=TLegend(0.14,0.14,0.4,0.23,"95% CL upper limits")
     l.SetFillColor(0)
     l.SetTextFont(42)
     l.SetFillStyle(0)
@@ -629,7 +629,7 @@ if __name__=="__main__":
     l.Draw()
     
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
-    l2=TLegend(0.42,0.12,0.8,0.28,"")
+    l2=TLegend(0.42,0.14,0.8,0.28,"")
     l2.SetFillColor(0)
     l2.SetTextFont(42)
     l2.SetFillStyle(0)
@@ -649,7 +649,7 @@ if __name__=="__main__":
     leg2.SetTextSize(0.06)
     # lumi
     #lumiPos=max_x_new-1700/1000.
-    lumiPos=max_x_new-1000/1000.
+    lumiPos=max_x_new-1200/1000.
     leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.045)

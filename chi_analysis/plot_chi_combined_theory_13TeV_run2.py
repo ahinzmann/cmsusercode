@@ -215,7 +215,7 @@ if __name__=="__main__":
   comparePDFs=True
   compareMu30=False
   compareMadgraph=False
-  compareNoEWK=True
+  compareNoEWK=False
   comparePostfit=False
   
   lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
@@ -1219,7 +1219,7 @@ if __name__=="__main__":
         c.cd()
 
         pad1=TPad("div","div",0,0,1,0.3)
-        pad1.SetTopMargin(0.08)
+        pad1.SetTopMargin(0.05)
         pad1.SetBottomMargin(0.30)
         pad1.Draw()
         pad1.cd()
@@ -1382,7 +1382,7 @@ if __name__=="__main__":
         c.cd()
 
         pad2=TPad("main","main",0,0.3,1,1)
-        pad2.SetBottomMargin(0.001)
+        pad2.SetBottomMargin(0.012)
         pad2.SetTopMargin(0.07)
         pad2.Draw()
         pad2.cd()
@@ -1391,6 +1391,7 @@ if __name__=="__main__":
             h0.Draw("axis")
         else:
             h0.Draw("axissame")
+        h0.SetLabelOffset(0.02,"X")
         h3new.Draw("histsame")
         h2new.Draw("histsame")
         if oldTheory:
@@ -1588,7 +1589,7 @@ if __name__=="__main__":
         #l2.AddEntry(hdma,"m_{Med} = 3 TeV (g_{q} = 0.3)","l")
         pass
     if massbin >= 3 and massbin<=5 and signalsDM:
-        l2.AddEntry(hdmb,"m_{Med} = 4 TeV (g_{q} = 0.3)","l")
+        l2.AddEntry(hdmb,"#font[52]{m}_{Med} = 4 TeV (g_{q} = 0.3)","l")
     if massbin >=3 and massbin<=8 and signalsDM:
         #l2.AddEntry(hdmc,"m_{Med} = 5 TeV (g_{q} = 0.5)","l")
         pass
