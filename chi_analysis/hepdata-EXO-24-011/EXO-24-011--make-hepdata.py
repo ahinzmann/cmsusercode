@@ -32,6 +32,14 @@ input_dir="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi
 input_dir2="versions/run2ULNNLO_m2_NNPDF3/"
 
 paper_plots=[]
+paper_plots+=[("2.4 < M(JJ) < 3.0 TeV","Figure 2 upper left","datacard_shapelimit13TeV_combined_theory3_detector_run2")]
+paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Figure 2 upper middle","datacard_shapelimit13TeV_combined_theory4_detector_run2")]
+paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Figure 2 upper right","datacard_shapelimit13TeV_combined_theory5_detector_run2")]
+paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Figure 2 middle left","datacard_shapelimit13TeV_combined_theory6_detector_run2")]
+paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Figure 2 middle center","datacard_shapelimit13TeV_combined_theory7_detector_run2")]
+paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Figure 2 middle right","datacard_shapelimit13TeV_combined_theory8_detector_run2")]
+paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Figure 2 lower left","datacard_shapelimit13TeV_combined_theory9_detector_run2")]
+paper_plots+=[("M(JJ) > 7.0 TeV","Figure 2 lower right","datacard_shapelimit13TeV_combined_theory10_detector_run2")]
 paper_plots+=[("DM mediator","Figure 3","limitsDetLHCa_DMAxial_mdm1_v6b_run2")]
 paper_plots+=[("ALP liniar EFT","Figure 4 left","limitsLHCaalp_coupling_run2")]
 paper_plots+=[("SMEFT","Figure 4 right","limitsLHCatripleG_coupling_run2")]
@@ -49,6 +57,68 @@ from hepdata_lib import RootFileReader
 from hepdata_lib import Variable, Uncertainty
 for massbin,figure,filename in paper_plots:
  
+ if "Figure 2" in figure:
+  table = Table("Fig. 2: Detector level CHI distribution ("+massbin+")")
+  print(figure)
+  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1. The data distributions at detector-level are compared to NNLO predictions, corrected for the detector response. The error bars represent statistical and experimental systematic uncertainties combined in quadrature. Theoretical uncertainties are provided as well. Also given are the predictions for various BSM scenarios."
+  table.location = "Data from "+figure
+  table.keywords["reactions"] = ["P P --> JET JET X"]
+  table.keywords["cmenergies"] = [13000]
+  table.keywords["observables"] = ["DN/DCHI"]
+  print(input_dir+input_dir2+filename)
+  table.add_image(input_dir+input_dir2+filename+".pdf")
+
+  reader = RootFileReader(input_dir+input_dir2+filename+".root")
+  canvas = reader.retrieve_object("combined/main")
+  print([p.GetName() for p in canvas.GetListOfPrimitives()])
+  data = reader.read_graph("combined/main/DataSysStat")
+  datasys = reader.read_graph("combined/main/DataSys")
+  nnlomain = reader.read_hist_1d("combined/main/MainScale")
+  nnlomainup = reader.read_hist_1d("combined/main/TheoryUp")
+  nnlomaindown = reader.read_hist_1d("combined/main/TheoryDown")
+  hsigs={}
+  signames=[("hcib","$\Lambda^{-}_{LL}$ (CI) = 30 TeV"),
+            ("hcic","$\Lambda^{+}_{VV}$ (CI) = 30 TeV"),
+            ("hgrw","$\Lambda_{T}$ (GRW) = 13 TeV"),
+            ("hqbh","$M_{QBH}$ ($n_{ED}$ = 6 ADD) = 9 TeV"),
+            ("hdmb","$m_{Med}$ = 4 TeV ($g_q$ = 0.3)"),
+            ("halp","$f_a/c_g$ (ALP) = 2.5 TeV"),
+            ("htripleG","$\Lambda/\sqrt{C_G}$ (SMEFT) = 10 TeV")]
+  sigcaptions=[]
+  for signame,label in signames:
+    if signame in canvas.GetListOfPrimitives():
+     hsigs[signame]=reader.read_hist_1d("combined/main/"+signame)
+
+  print(data)
+  print(nnlomain)
+  #print(nnlomainup)
+
+  chi = Variable("CHI = exp(|Y1-Y2|)", is_independent=True, is_binned=True, units="")
+  chi.values = [(round((([0.5]+data['x'])[i]+data['x'][i])/2.),round((data['x'][i]+(data['x']+[17])[i+1])/2.)) for i in range(len(data['x']))]
+
+  obs = Variable("Measured detector level", is_independent=False, is_binned=False, units="")
+  obs.values = data['y']
+  obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
+  total = Uncertainty("total", is_symmetric=False)
+  total.values = data['dy']
+  obs.add_uncertainty(total)
+  
+  thnnlomain = Variable("QCD NNLO + EW NLO", is_independent=False, is_binned=False, units="")
+  thnnlomain.values = nnlomain['y']
+  theory = Uncertainty("theory", is_symmetric=False)
+  theory.values = [(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))]
+  thnnlomain.add_uncertainty(theory)
+  table.add_variable(chi)
+  table.add_variable(obs)
+  table.add_variable(thnnlomain)
+  for signame,label in signames:
+    if signame in canvas.GetListOfPrimitives():
+     sig = Variable(label, is_independent=False, is_binned=False, units="")
+     sig.values = hsigs[signame]['y']
+     table.add_variable(sig)
+  table.add_additional_resource("ROOT file", input_dir+input_dir2+filename+".root", copy_file=True)  # optional
+  submission.add_table(table)
+
  if "Figure 3" in figure:
   table = Table("Fig. 3: Exclusion limit ("+massbin+")")
   print(figure)
@@ -154,7 +224,7 @@ for massbin,figure,filename in paper_plots:
   submission.add_table(table)
 
  if "Figure 5" in figure:
-  table = Table("Fig. 5: Dijet angular distribution ("+massbin+")")
+  table = Table("Fig. 5: Particle level CHI distribution ("+massbin+")")
   print(figure)
   table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set, and a comparison with the NLO prediction used in the previous publication are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction without EW corrections applied."
   table.location = "Data from "+figure

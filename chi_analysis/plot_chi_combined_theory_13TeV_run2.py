@@ -204,15 +204,15 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=True
+  unfoldedData=False
   oldMeasurements=False
   compareRun3=False
-  oldTheory=True
-  signalsBSM=False
-  signalsDM=False
+  oldTheory=False
+  signalsBSM=True
+  signalsDM=True
   signalsBragg=False
-  compareScales=True
-  comparePDFs=True
+  compareScales=False
+  comparePDFs=False
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
@@ -598,6 +598,7 @@ if __name__=="__main__":
               hNloQcd.Scale(lumi)
             for b in range(hNloQcd.GetNbinsX()):
                 hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
+            hNloQcd.SetName("MainScale")
 
             
         hNloQcdbackup=hNloQcd.Clone(hNloQcd.GetName()+"backup")    
@@ -1415,7 +1416,9 @@ if __name__=="__main__":
         if massbin>=5 and signalsBSM:
             #hci.Draw("histsame")
             hcib.Draw("histsame")
+            hcib.SetName("hcib")
             hcic.Draw("histsame")
+            hcic.SetName("hcic")
             #hcid.Draw("histsame")
             #hcie.Draw("histsame")
             #hcif.Draw("histsame")
@@ -1423,8 +1426,10 @@ if __name__=="__main__":
             #hcih.Draw("histsame")
         if massbin>5 and signalsBSM:
             hgrw.Draw("histsame")
+            hgrw.SetName("hgrw")
         if massbin>8 and signalsBSM:
             hqbh.Draw("histsame")
+            hqbh.SetName("hqbh")
         if massbin >= 3 and massbin<=3 and signalsDM:
             #hdm.Draw("histsame")
             pass
@@ -1433,6 +1438,7 @@ if __name__=="__main__":
             pass
         if massbin>=3 and massbin <= 5 and signalsDM:
             hdmb.Draw("histsame")
+            hdmb.SetName("hdmb")
         if massbin>=3 and massbin <= 8 and signalsDM:
             #hdmc.Draw("histsame")
             pass
@@ -1441,7 +1447,9 @@ if __name__=="__main__":
             pass
         if massbin>2 and signalsBSM:
             halp.Draw("histsame")
+            halp.SetName("halp")
             htripleG.Draw("histsame")
+            htripleG.SetName("htripleG")
         if massbin>2 and signalsBragg:
             hbragg.Draw("histsame")
         #h14G.Draw("pzesame")
