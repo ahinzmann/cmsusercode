@@ -50,9 +50,9 @@ from hepdata_lib import Variable, Uncertainty
 for massbin,figure,filename in paper_plots:
  
  if "Figure 3" in figure:
-  table = Table("Exclusion limit ("+massbin+")")
+  table = Table("Fig. 3: Exclusion limit ("+massbin+")")
   print(figure)
-  table.description = "95% CL upper limits on universal quark couplig $g_q$, Vector/Axial-vector mediator, $m_{DM}=1$ GeV, $g_{DM}=1$"
+  table.description = "The 95% CL upper limits on the universal quark coupling $g_{q}$ as a function of a vector or axial-vector mediator mass, with $g_{DM}=1.0$ and $m_{DM}=1$ GeV. The observed and expected limits and their variation at the 1 and 2 standard deviation levels are given."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -74,14 +74,14 @@ for massbin,figure,filename in paper_plots:
   print(expected1down)
   #print(nnlomainup)
 
-  m = Variable("$M_{Med}$", is_independent=True, is_binned=False, units="TeV")
+  m = Variable("$m_{Med}$", is_independent=True, is_binned=False, units="TeV")
   m.values = observed["x"]
 
   obs = Variable("Observed", is_independent=False, is_binned=False, units="")
   obs.values = observed['y']
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
  
-  exp = Variable("Expected 95% CL upper limit", is_independent=False, is_binned=False, units="")
+  exp = Variable("Expected 95% CL upper limit on $g_{q}$", is_independent=False, is_binned=False, units="")
   exp.values = expected['y']
   sd1 = Uncertainty("1 s.d.", is_symmetric=False)
   sd1.values = [(expected1down['y'][i]-expected['y'][i],expected1up['y'][i]-expected['y'][i]) for i in range(len(expected['y']))]
@@ -97,12 +97,15 @@ for massbin,figure,filename in paper_plots:
   submission.add_table(table)
 
  if "Figure 4" in figure:
-  table = Table("Exclusion limit ("+massbin+")")
+  if "ALP" in massbin:
+    table = Table("Fig. 4 left: Exclusion limit ("+massbin+")")
+  else:
+    table = Table("Fig. 4 right: Exclusion limit ("+massbin+")")
   print(figure)
   if "ALP" in massbin:
-    table.description = "95% CL upper limits on the ALP gluon coupling $c_g$, $m_a=1$ MeV"
+    table.description = "The 95% CL upper limits on the ALP gluon coupling, $c_{g}$, as a function of the characteristic energy scale, $f_{a}$, assuming $m_{a}=1$ MeV. Only dijet angular distributions with $m_{jj}<f_{a}$ are used to obtain the limits on $c_{g}$. The observed limits, expected limits and their variation at the 1 and 2 standard deviation levels are given."
   elif "SMEFT" in massbin:
-    table.description = "95% CL upper limits on the anomalous triple gluon coupling $C_G$"
+    table.description = "The 95% CL upper limits on the anomalous triple gluon coupling, $C_{G}$, in SMEFT as a function of the BSM physics energy scale, $\Lambda$. Only dijet angular distributions with $m_{jj}<\Lambda$ are used to obtain the limits on $C_{G}$. The observed limits, expected limits and their variation at the 1 and 2 standard deviation levels are given."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -122,14 +125,20 @@ for massbin,figure,filename in paper_plots:
   print(expected2)
   #print(nnlomainup)
 
-  m = Variable("$M_{Med}$", is_independent=True, is_binned=False, units="TeV")
+  if "ALP" in massbin:
+    m = Variable("$f_{a}$", is_independent=True, is_binned=False, units="TeV")
+  else:
+    m = Variable("$\Lambda$", is_independent=True, is_binned=False, units="TeV")
   m.values = observed["x"]
 
   obs = Variable("Observed", is_independent=False, is_binned=False, units="")
   obs.values = observed['y']
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
  
-  exp = Variable("Expected 95% CL upper limit", is_independent=False, is_binned=False, units="")
+  if "ALP" in massbin:
+    exp = Variable("Expected 95% CL upper limit on $c_{g}$", is_independent=False, is_binned=False, units="")
+  else:
+    exp = Variable("Expected 95% CL upper limit on $C_{G}$", is_independent=False, is_binned=False, units="")
   exp.values = expected['y']
   sd1 = Uncertainty("1 s.d.", is_symmetric=False)
   sd1.values = expected1['dy']
@@ -145,9 +154,9 @@ for massbin,figure,filename in paper_plots:
   submission.add_table(table)
 
  if "Figure 5" in figure:
-  table = Table("Dijet angular distribution ("+massbin+")")
+  table = Table("Fig. 5: Dijet angular distribution ("+massbin+")")
   print(figure)
-  table.description = "(1/SIG)*D(SIG)/DCHI, "+massbin+", |Y1+Y2|/2< 1.1"
+  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set, and a comparison with the NLO prediction used in the previous publication are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction without EW corrections applied."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -209,8 +218,8 @@ for massbin,figure,filename in paper_plots:
 if True:
    figure="Add. Fig. 1"
    table = Table("Correlation matrix")
-   table.description = "Correlation matrix. Correlation matrix of the maximum likelihood estimators of the signal strength modifiers."
-   table.location = "Data from "+figure
+   table.description = "Correlation matrix of the maximum likelihood estimators of the signal strength modifiers. The matrix is obtained after the fit to the data. The bin numbers correspond to 11 times the index (starting at 0) of the $m_{jj}$ (3.0,3.6,4.2,4.8,5.4,6.0,7.0) bin plus the index (starting at 0) of the CHI bin (1,2,3,4,5,6,7,8,9,10,12,14)."
+   table.location = ""#"Data from "+figure
    table.keywords["reactions"] = ["P P --> JET JET X"]
    table.keywords["cmenergies"] = [13000]
 
