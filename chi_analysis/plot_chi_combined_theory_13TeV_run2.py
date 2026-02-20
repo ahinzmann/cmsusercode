@@ -1248,7 +1248,7 @@ if __name__=="__main__":
           hcicDiv=hcic.Clone(hcic.GetName()+"_ratio")
         if massbin>5 and signalsBSM:
           hgrwDiv=hgrw.Clone(hgrw.GetName()+"_ratio")
-        if massbin>8 and signalsBSM:
+        if massbin>6 and signalsBSM:
           hqbhDiv=hqbh.Clone(hqbh.GetName()+"_ratio")
         if massbin>=3 and massbin <= 5 and signalsDM:
           hdmbDiv=hdmb.Clone(hdmb.GetName()+"_ratio")
@@ -1294,7 +1294,7 @@ if __name__=="__main__":
           hcicDiv.Divide(h0)
         if massbin>5 and signalsBSM:
           hgrwDiv.Divide(h0)
-        if massbin>8 and signalsBSM:
+        if massbin>6 and signalsBSM:
           hqbhDiv.Divide(h0)
         if massbin>=3 and massbin <= 5 and signalsDM:
           hdmbDiv.Divide(h0)
@@ -1363,7 +1363,7 @@ if __name__=="__main__":
           hcicDiv.Draw("histsame")
         if massbin>5 and signalsBSM:
           hgrwDiv.Draw("histsame")
-        if massbin>8 and signalsBSM:
+        if massbin>6 and signalsBSM:
           hqbhDiv.Draw("histsame")
         if massbin>=3 and massbin <= 5 and signalsDM:
           hdmbDiv.Draw("histsame")
@@ -1427,7 +1427,7 @@ if __name__=="__main__":
         if massbin>5 and signalsBSM:
             hgrw.Draw("histsame")
             hgrw.SetName("hgrw")
-        if massbin>8 and signalsBSM:
+        if massbin>6 and signalsBSM:
             hqbh.Draw("histsame")
             hqbh.SetName("hqbh")
         if massbin >= 3 and massbin<=3 and signalsDM:

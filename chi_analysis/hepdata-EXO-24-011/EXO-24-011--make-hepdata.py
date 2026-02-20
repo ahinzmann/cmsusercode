@@ -20,7 +20,7 @@ def round_value_to_decimals(cont, decimals=3):
             cont[i] = (round(val[0], decimals), round(val[1], decimals))
         else:
             cont[i] = round(val, decimals)
-
+    return cont
 
 submission = Submission()
 submission.read_abstract("abstract.txt")
@@ -97,16 +97,16 @@ for massbin,figure,filename in paper_plots:
   chi.values = [(round((([0.5]+data['x'])[i]+data['x'][i])/2.),round((data['x'][i]+(data['x']+[17])[i+1])/2.)) for i in range(len(data['x']))]
 
   obs = Variable("Measured detector level", is_independent=False, is_binned=False, units="")
-  obs.values = data['y']
+  obs.values = round_value_to_decimals(data['y'],5)
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
   total = Uncertainty("total", is_symmetric=False)
-  total.values = data['dy']
+  total.values = round_value_to_decimals(data['dy'],5)
   obs.add_uncertainty(total)
   
   thnnlomain = Variable("QCD NNLO + EW NLO", is_independent=False, is_binned=False, units="")
-  thnnlomain.values = nnlomain['y']
+  thnnlomain.values = round_value_to_decimals(nnlomain['y'],5)
   theory = Uncertainty("theory", is_symmetric=False)
-  theory.values = [(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))]
+  theory.values = round_value_to_decimals([(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))],4)
   thnnlomain.add_uncertainty(theory)
   table.add_variable(chi)
   table.add_variable(obs)
@@ -114,7 +114,7 @@ for massbin,figure,filename in paper_plots:
   for signame,label in signames:
     if signame in canvas.GetListOfPrimitives():
      sig = Variable(label, is_independent=False, is_binned=False, units="")
-     sig.values = hsigs[signame]['y']
+     sig.values = round_value_to_decimals(hsigs[signame]['y'],5)
      table.add_variable(sig)
   table.add_additional_resource("ROOT file", input_dir+input_dir2+filename+".root", copy_file=True)  # optional
   submission.add_table(table)
@@ -148,15 +148,15 @@ for massbin,figure,filename in paper_plots:
   m.values = observed["x"]
 
   obs = Variable("Observed", is_independent=False, is_binned=False, units="")
-  obs.values = observed['y']
+  obs.values = round_value_to_decimals(observed['y'],3)
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
  
   exp = Variable("Expected 95% CL upper limit on $g_{q}$", is_independent=False, is_binned=False, units="")
-  exp.values = expected['y']
+  exp.values = round_value_to_decimals(expected['y'],3)
   sd1 = Uncertainty("1 s.d.", is_symmetric=False)
-  sd1.values = [(expected1down['y'][i]-expected['y'][i],expected1up['y'][i]-expected['y'][i]) for i in range(len(expected['y']))]
+  sd1.values = round_value_to_decimals([(expected1down['y'][i]-expected['y'][i],expected1up['y'][i]-expected['y'][i]) for i in range(len(expected['y']))],3)
   sd2 = Uncertainty("2 s.d.", is_symmetric=False)
-  sd2.values = [(expected2down['y'][i]-expected['y'][i],expected2up['y'][i]-expected['y'][i]) for i in range(len(expected['y']))]
+  sd2.values = round_value_to_decimals([(expected2down['y'][i]-expected['y'][i],expected2up['y'][i]-expected['y'][i]) for i in range(len(expected['y']))])
   exp.add_uncertainty(sd1)
   exp.add_uncertainty(sd2)
   
@@ -202,18 +202,18 @@ for massbin,figure,filename in paper_plots:
   m.values = observed["x"]
 
   obs = Variable("Observed", is_independent=False, is_binned=False, units="")
-  obs.values = observed['y']
+  obs.values = round_value_to_decimals(observed['y'],(2 if "ALP" in massbin else 3))
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
  
   if "ALP" in massbin:
     exp = Variable("Expected 95% CL upper limit on $c_{g}$", is_independent=False, is_binned=False, units="")
   else:
     exp = Variable("Expected 95% CL upper limit on $C_{G}$", is_independent=False, is_binned=False, units="")
-  exp.values = expected['y']
+  exp.values = round_value_to_decimals(expected['y'],(2 if "ALP" in massbin else 3))
   sd1 = Uncertainty("1 s.d.", is_symmetric=False)
-  sd1.values = expected1['dy']
+  sd1.values = round_value_to_decimals(expected1['dy'],(2 if "ALP" in massbin else 3))
   sd2 = Uncertainty("2 s.d.", is_symmetric=False)
-  sd2.values = expected2['dy']
+  sd2.values = round_value_to_decimals(expected2['dy'],(2 if "ALP" in massbin else 3))
   exp.add_uncertainty(sd1)
   exp.add_uncertainty(sd2)
   
@@ -255,24 +255,24 @@ for massbin,figure,filename in paper_plots:
   chi.values = [(round((([0.5]+data['x'])[i]+data['x'][i])/2.),round((data['x'][i]+(data['x']+[17])[i+1])/2.)) for i in range(len(data['x']))]
 
   obs = Variable("Measured", is_independent=False, is_binned=False, units="")
-  obs.values = data['y']
+  obs.values = round_value_to_decimals(data['y'],5)
   obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
   total = Uncertainty("total", is_symmetric=False)
-  total.values = data['dy']
+  total.values = round_value_to_decimals(data['dy'],5)
   sys = Uncertainty("sys", is_symmetric=False)
-  sys.values = datasys['dy']
+  sys.values = round_value_to_decimals(datasys['dy'],5)
   obs.add_uncertainty(sys)
   obs.add_uncertainty(total)
   
   thnnlomain = Variable("QCD NNLO + EW NLO ($\mu=m_{jj}$)", is_independent=False, is_binned=False, units="")
-  thnnlomain.values = nnlomain['y']
+  thnnlomain.values = round_value_to_decimals(nnlomain['y'],5)
   theory = Uncertainty("theory", is_symmetric=False)
-  theory.values = [(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))]
+  theory.values = round_value_to_decimals([(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))],5)
   thnnlomain.add_uncertainty(theory)
   thnnloalt = Variable("QCD NNLO + EW NLO ($\mu=<p_{T}>$)", is_independent=False, is_binned=False, units="")
-  thnnloalt.values = nnloalt['y']
+  thnnloalt.values = round_value_to_decimals(nnloalt['y'],5)
   thnloold = Variable("QCD NLO + EW NLO ($\mu=<p_{T}>$)", is_independent=False, is_binned=False, units="")
-  thnloold.values = nloold['y']
+  thnloold.values = round_value_to_decimals(nloold['y'],5)
   thnoewk = Variable("QCD NNLO ($\mu=m_{jj}$)", is_independent=False, is_binned=False, units="")
   thnoewk.values = noewk['y']
   
@@ -302,7 +302,7 @@ if True:
    y = Variable("Correlation coefficient", is_independent=False, is_binned=False)
    x.values = data["x"]
    x2.values = data["y"]
-   y.values = data["z"]
+   y.values = round_value_to_decimals(data["z"],3)
    #print(x.values,x2.values,y.values)
    table.add_variable(x)
    table.add_variable(x2)
