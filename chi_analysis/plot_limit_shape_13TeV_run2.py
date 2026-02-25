@@ -43,6 +43,7 @@ if __name__=="__main__":
  asym="a" #asymptotic CLS
  runs="2" # "2" or "3" or "23"
  use_NNPDF3=True
+ preliminary=True
 
  if use_NNPDF3:
    pdfset="nn31nnlo"
@@ -410,8 +411,10 @@ if __name__=="__main__":
     l.Draw()
 
     # CMS
-    leg2=TLatex(min_x+0.05,ymax+0.03,"#bf{CMS}")
-    #leg2=TLatex(min_x,ymax+0.03,"#bf{CMS} #it{Preliminary}")
+    if preliminary:
+      leg2=TLatex(min_x+0.05,ymax+0.05,"#bf{CMS} #it{Preliminary}")
+    else:
+      leg2=TLatex(min_x+0.05,ymax+0.03,"#bf{CMS}")
     #cmsPos=min_x+220/1000.
     #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
     leg2.SetTextFont(42)
@@ -434,7 +437,7 @@ if __name__=="__main__":
     x2.SetTitleSize(0)
     x2.Draw()
 
-    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.pdf')
+    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling'+("_preliminary" if preliminary else "")+'_run'+runs+'.pdf')
 
     # For HepData
     g.SetName("Observed")   
@@ -446,4 +449,4 @@ if __name__=="__main__":
     g_band.Draw("same")
     g_band_2sigma.Draw("same")
 
-    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling_run'+runs+'.root')
+    canvas.SaveAs('limits'+testStat+asym+coupling+'_coupling'+("_preliminary" if preliminary else "")+'_run'+runs+'.root')

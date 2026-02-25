@@ -35,6 +35,7 @@ if __name__=="__main__":
   #testStat="LEP"
   #asym=""
   version="_v6b"
+  preliminary=True
 
   isGen=False
   isCB=False
@@ -642,9 +643,11 @@ if __name__=="__main__":
     l2.Draw()
 
     # CMS
-    #leg2=TLatex(min_x_new,ymax+0.03,"#bf{CMS} #it{Preliminary}")
     cmsPos=min_x_new #+220/1000.
-    leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS}")
+    if preliminary:
+      leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS} #it{Preliminary}")
+    else:
+      leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS}")
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.06)
     # lumi
@@ -660,5 +663,5 @@ if __name__=="__main__":
     if isInjection:
       canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+injectiontext+'_run2.pdf')
     else:
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_run2.pdf')
-      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+'_run2.root')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+("_preliminary" if preliminary else "")+'_run2.pdf')
+      canvas.SaveAs(prefix+testStat+asym+"_"+style+"_mdm"+mdm+version+("_preliminary" if preliminary else "")+'_run2.root')

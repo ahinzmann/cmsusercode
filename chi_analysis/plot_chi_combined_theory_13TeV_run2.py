@@ -204,19 +204,20 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
   compareRun3=False
-  oldTheory=False
-  signalsBSM=True
-  signalsDM=True
+  oldTheory=True
+  signalsBSM=False
+  signalsDM=False
   signalsBragg=False
-  compareScales=False
-  comparePDFs=False
+  compareScales=True
+  comparePDFs=True
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
   comparePostfit=False
+  preliminary=True
   
   lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
 
@@ -300,12 +301,13 @@ if __name__=="__main__":
 
   print("load CMS style")
   import CMS_lumi
-  CMS_lumi.writeExtraText=False
-  CMS_lumi.relPosX=0.13
+  CMS_lumi.writeExtraText=preliminary
+  CMS_lumi.relPosX=0.13+preliminary*0.04
   CMS_lumi.cmsTextSize=1.0
   #gROOT.LoadMacro("CMS_lumi.C");
   iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
   iPos = 33;
+  if preliminary: iPos=0
   #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
   #// iPos=11 : top-left, left-aligned
   #// iPos=33 : top-right, right-aligned
@@ -1659,6 +1661,8 @@ if __name__=="__main__":
       postfix+="_madgraph"
     if not normalize:
       postfix+="_nonorm"
+    if preliminary:
+      postfix+="_preliminary"
     c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
     c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.root")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")
