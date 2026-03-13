@@ -35,7 +35,7 @@ if __name__=="__main__":
   #testStat="LEP"
   #asym=""
   version="_v6b"
-  preliminary=True
+  preliminary=False
 
   isGen=False
   isCB=False
@@ -578,7 +578,7 @@ if __name__=="__main__":
     minwidth=medWidth(ymin)
     myFunc=TF1("myFunc","pow((x-1/(12*3.141592653))*(4*3.141592653)/6,0.5)",minwidth,1)
     y2=TGaxis(max_x_new, ymin, max_x_new, ymax,"myFunc",510,"+L")
-    y2.SetTitle("#Gamma/#font[52]{m}_{Med}")
+    y2.SetTitle("#Gamma / #font[52]{m}_{Med}")
     y2.SetLabelSize(0.04)
     y2.SetTitleSize(0.05)
     y2.SetTitleOffset(1.)
@@ -610,7 +610,7 @@ if __name__=="__main__":
     
     if style=="DMAxial":
       #lt=TLatex(signalMasses[0]+100,1.27,"#splitline{Vector/Axial-Vector Mediator}{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}")
-      lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector/Axial-Vector Mediator}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV, #font[72]{g}_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.13,1.15,"#splitline{#splitline{#splitline{#bf{vector/axial-vector}}{#bf{mediator}}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV}}}{#bf{#font[72]{g}_{DM} = 1.0}}")
       #lt=TLatex(signalMasses[0]+100,1.31,"m_{DM} = "+mdm+" GeV, g_{DM} = 1.0")
     else:
       lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector Mediator}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV, #font[72]{g}_{DM} = 1.0}}")
@@ -619,26 +619,26 @@ if __name__=="__main__":
     lt.Draw("same")
     
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
-    l=TLegend(0.14,0.14,0.4,0.23,"95% CL upper limits")
+    l=TLegend(0.19,0.14,0.4,0.25,"95% CL upper limits")
     l.SetFillColor(0)
     l.SetTextFont(42)
     l.SetFillStyle(0)
-    l.SetTextSize(0.04)
+    l.SetTextSize(0.037)
     l.SetShadowColor(0)
     l.AddEntry(g_q,"Observed","LP")
     l.AddEntry(g_q_exp,"Expected","LP")
     l.Draw()
     
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
-    l2=TLegend(0.42,0.14,0.8,0.28,"")
+    l2=TLegend(0.47,0.14,0.8,0.30,"")
     l2.SetFillColor(0)
     l2.SetTextFont(42)
     l2.SetFillStyle(0)
-    l2.SetTextSize(0.04)
+    l2.SetTextSize(0.037)
     l2.SetShadowColor(0)
-    l2.AddEntry(g_q_band,"Expected #pm 1 s.d.","F")
-    l2.AddEntry(g_q_band_2sigma,"Expected #pm 2 s.d.","F")
-    l2.AddEntry(g_q_old,"Eur. Phys. J. C 78 (2018)","L")
+    l2.AddEntry(g_q_band,"Expected 68% CL","F")
+    l2.AddEntry(g_q_band_2sigma,"Expected 95% CL","F")
+    l2.AddEntry(g_q_old,"EPJC 78 (2018) 789","L")
     l2.AddEntry(g_q_resonance,"JHEP 05 (2020) 033","L")
     l2.Draw()
 

@@ -217,7 +217,7 @@ if __name__=="__main__":
   compareMadgraph=False
   compareNoEWK=False
   comparePostfit=False
-  preliminary=True
+  preliminary=False
   
   lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
 
@@ -304,6 +304,7 @@ if __name__=="__main__":
   CMS_lumi.writeExtraText=preliminary
   CMS_lumi.relPosX=0.13+preliminary*0.04
   CMS_lumi.cmsTextSize=1.0
+  CMS_lumi.lumiTextSize=0.8
   #gROOT.LoadMacro("CMS_lumi.C");
   iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
   iPos = 33;
@@ -1332,7 +1333,7 @@ if __name__=="__main__":
             h0Div.GetYaxis().SetRangeUser(0.7,1.3)
         else:
             h0Div.GetYaxis().SetRangeUser(0.85,1.15)
-        h0Div.GetYaxis().SetTitle("#frac{Data}{NNLO QCD+EW}")
+        h0Div.GetYaxis().SetTitle("#frac{Data}{Prediction}")
         h0Div.GetXaxis().SetTitle("#chi_{dijet}")
         h0Div.GetYaxis().SetTitleOffset(0.65)
         h0Div.GetYaxis().SetTitleSize(0.125)
@@ -1486,8 +1487,8 @@ if __name__=="__main__":
         #elif offsets[massbin]<0: titleo="("+str(offsets[massbin])+")"
         #else: titleo="(+"+str(offsets[massbin])+")"
 
-        l=TLegend(0.61,ylabel,1.0,ylabel+0.005,title)
-        l.SetTextSize(0.044)
+        l=TLegend(0.54,ylabel,1.0,ylabel+0.005,title)
+        l.SetTextSize(0.05)
         l.SetFillStyle(0)
         l.Draw("same")
         new_hists+=[l]

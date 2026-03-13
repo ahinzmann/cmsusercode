@@ -12,7 +12,7 @@ gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
 gStyle.SetPadLeftMargin(0.18)
 gStyle.SetPadBottomMargin(0.15)
-gStyle.SetPadTopMargin(0.03)
+gStyle.SetPadTopMargin(0.075)
 gStyle.SetPadRightMargin(0.05)
 gStyle.SetMarkerSize(1.5)
 gStyle.SetHistLineWidth(1)
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     withUncertainties=True
     run="2"
     prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV"
+    preliminary=False
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
@@ -56,8 +57,6 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
 
-    canvas = TCanvas("","",0,0,600,600)
-    canvas.SetRightMargin(0.15)
     plots=[]
     legends=[]
     new_hists=[]
@@ -90,13 +89,44 @@ if __name__ == '__main__':
       for j in range(len(pois)):
         if i!=j:
           correlationMatrix[i][j]/=sqrt(correlationMatrix(i,i)*correlationMatrix(j,j))
+        #print(correlationMatrix[i][j])
     for i in range(len(pois)):
       correlationMatrix[i][i]=1.
+
+    canvas = TCanvas("corr","corr",0,0,600,600)
+    canvas.SetRightMargin(0.15)
     gStyle.SetNumberContours(200)
-    gStyle.SetPalette(104)
+    #gStyle.SetPalette(104)
+    TColor.CreateGradientColorTable(3,array.array('d', (0,0.5,1.0)),array.array('d', (1,1,0)),array.array('d', (0,1,0)),array.array('d', (0,1,1)),50)
     h=TH2D(correlationMatrix)
-    h.SetName("correlation")
-    h.Draw("colz2")
     h.GetZaxis().SetRangeUser(-1,1)
+    h.SetName("correlation")
+    h.GetXaxis().SetTitle("Bin number")
+    h.GetYaxis().SetTitle("Bin number")
+    h.Draw("")
+    h.Draw("colz2same")
+    #h.GetYaxis().SetTitle("Correlation coefficient")
+
+    # CMS
+    leg1=TLatex(0.05,78+0.05,"#bf{CMS}")
+    leg1.SetTextFont(42)
+    leg1.SetTextSize(0.055)
+    if preliminary:
+      leg2=TLatex(13+0.05,78+0.05,"#it{Preliminary}")
+    else:
+      leg2=TLatex(13+0.05,78+0.03,"#it{Supplementary}")
+    #cmsPos=min_x+220/1000.
+    #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
+    leg2.SetTextFont(42)
+    leg2.SetTextSize(0.042)
+    # lumi
+    lumiPos=78*0.6
+    leg3=TLatex(lumiPos,78+0.03,"138 fb^{-1} (13 TeV)")
+    leg3.SetTextFont(42)
+    leg3.SetTextSize(0.040)
+    leg1.Draw("same")
+    leg2.Draw("same")
+    leg3.Draw("same")
+
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".pdf")
     canvas.SaveAs(prefix + "_"+name+"_run"+run+".root")

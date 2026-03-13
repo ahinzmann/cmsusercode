@@ -43,7 +43,7 @@ if __name__=="__main__":
  asym="a" #asymptotic CLS
  runs="2" # "2" or "3" or "23"
  use_NNPDF3=True
- preliminary=True
+ preliminary=False
 
  if use_NNPDF3:
    pdfset="nn31nnlo"
@@ -386,18 +386,18 @@ if __name__=="__main__":
     mg.GetXaxis().SetTitleOffset(1.1)
    
     if coupling=="alp":
-      lt=TLatex(4.5,3.6,"#splitline{#bf{ALP linear EFT}}{#bf{#font[72]{m}_{a} = 1 MeV}}")
+      lt=TLatex(4.0,3.8,"#splitline{#bf{ALP linear EFT}}{#bf{#font[72]{m}_{a} = 1 MeV}}")
     if coupling=="tripleG":
-      lt=TLatex(10,0.09,"#splitline{#bf{SMEFT}}{}")
+      lt=TLatex(4.5,1.9,"#splitline{#bf{SMEFT}}{}")
     lt.SetTextSize(0.04)
     lt.SetTextFont(42)
     lt.Draw("same")
 
     #l=TLegend(0.13,0.5,0.43,0.72,"95% CL upper limits")
     if coupling=="alp":
-      l=TLegend(0.5,0.25,0.8,0.54,"95% CL upper limits")
+      l=TLegend(0.5,0.20,0.8,0.49,"95% CL upper limits")
     if coupling=="tripleG":
-      l=TLegend(0.2,0.61,0.5,0.90,"95% CL upper limits")
+      l=TLegend(0.2,0.51,0.5,0.80,"95% CL upper limits")
     l.SetFillColor(0)
     l.SetTextFont(42)
     l.SetFillStyle(0)
@@ -405,8 +405,8 @@ if __name__=="__main__":
     l.SetShadowColor(0)
     l.AddEntry(g,"Observed","LP")
     l.AddEntry(g_exp,"Expected","LP")
-    l.AddEntry(g_band,"Expected #pm 1 s.d.","F")
-    l.AddEntry(g_band_2sigma,"Expected #pm 2 s.d.","F")
+    l.AddEntry(g_band,"Expected 68% CL","F")
+    l.AddEntry(g_band_2sigma,"Expected 95% CL","F")
     #l.AddEntry(g_val,"Validity limit of EFT","LF")
     l.Draw()
 
