@@ -204,15 +204,15 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=True
+  unfoldedData=False
   oldMeasurements=False
   compareRun3=False
-  oldTheory=True
-  signalsBSM=False
-  signalsDM=False
+  oldTheory=False
+  signalsBSM=True
+  signalsDM=True
   signalsBragg=False
-  compareScales=True
-  comparePDFs=True
+  compareScales=False
+  comparePDFs=False
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
@@ -355,12 +355,12 @@ if __name__=="__main__":
             hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
             hNloQcd.SetLineColor(5)
             hNloQcd.SetLineStyle(3)
-            hNloQcd.SetLineWidth(2)
+            hNloQcd.SetLineWidth(3)
 
             hNloQcdNoEWK=hNloQcd.Clone(hNloQcd.GetName()+"noEWK")
             hNloQcdNoEWK.SetLineColor(8)
             hNloQcdNoEWK.SetLineStyle(4)
-            hNloQcdNoEWK.SetLineWidth(2)
+            hNloQcdNoEWK.SetLineWidth(3)
             if normalize:
               hNloQcdNoEWK.Scale(1./hNloQcdNoEWK.Integral())
             else:
@@ -433,7 +433,7 @@ if __name__=="__main__":
                 g30.SetPointError(g30.GetN()-1,0,0,(hnloQcd30.GetBinContent(b+1)-hnloQcd30down.GetBinContent(b+1)),(hnloQcd30up.GetBinContent(b+1)-hnloQcd30.GetBinContent(b+1)))
               g30.SetLineColor(6)
               g30.SetLineStyle(1)
-              g30.SetLineWidth(2)
+              g30.SetLineWidth(3)
 
             if oldTheory:
              filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
@@ -457,7 +457,7 @@ if __name__=="__main__":
              hNloQcdOld=smoothChi(hNloQcdOld) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdOld.SetLineColor(2)
              hNloQcdOld.SetLineStyle(4)
-             hNloQcdOld.SetLineWidth(2)
+             hNloQcdOld.SetLineWidth(3)
              hNloQcdOld.SetName("OldNLO")
     
              filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
@@ -509,7 +509,7 @@ if __name__=="__main__":
              hNloQcdAlt=smoothChi(hNloQcdAlt) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdAlt.SetLineColor(4)
              hNloQcdAlt.SetLineStyle(7)
-             hNloQcdAlt.SetLineWidth(2)
+             hNloQcdAlt.SetLineWidth(3)
              hNloQcdAlt.SetName("AltScale")
              
              filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
@@ -556,7 +556,7 @@ if __name__=="__main__":
              hNloQcdPdf=smoothChi(hNloQcdPdf) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdPdf.SetLineColor(6)
              hNloQcdPdf.SetLineStyle(5)
-             hNloQcdPdf.SetLineWidth(2)
+             hNloQcdPdf.SetLineWidth(3)
     
              filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
              print(filename)
@@ -594,7 +594,7 @@ if __name__=="__main__":
             hNloQcd=f.Get(histname)
             hNloQcd.SetLineColor(5)
             hNloQcd.SetLineStyle(5)
-            hNloQcd.SetLineWidth(2)
+            hNloQcd.SetLineWidth(3)
             if normalize:
               hNloQcd.Scale(1./hNloQcd.Integral())
             else:
@@ -641,7 +641,7 @@ if __name__=="__main__":
            hData2.SetMarkerSize(0.8)
            hData2.SetMarkerColor(fnum+6)
            hData2.SetLineColor(fnum+6)
-           hData2.SetLineWidth(1)
+           hData2.SetLineWidth(3)
           else:
            hData2=TGraphAsymmErrors() 
           hDatas+=[hData2]
@@ -670,7 +670,7 @@ if __name__=="__main__":
            hData2.SetMarkerSize(0.8)
            hData2.SetMarkerColor(fnum+6)
            hData2.SetLineColor(fnum+6)
-           hData2.SetLineWidth(1)
+           hData2.SetLineWidth(3)
            if normalize:
              hData2.Scale(1./hData2.Integral())
            hData2h=rebin2(hData2,len(chi_binnings[massbin])-1,chi_binnings[massbin])
@@ -691,7 +691,7 @@ if __name__=="__main__":
           hMC2.SetMarkerSize(0.8)
           hMC2.SetMarkerColor(6)
           hMC2.SetLineColor(6)
-          hMC2.SetLineWidth(1)
+          hMC2.SetLineWidth(3)
           if normalize:
             hMC2.Scale(1./hMC2.Integral())
           print(hMC2.Integral())
@@ -708,7 +708,7 @@ if __name__=="__main__":
         h0=hNloQcd
         h0.SetLineColor(1)
         h0.SetLineStyle(3)
-        h0.SetLineWidth(4)
+        h0.SetLineWidth(3)
 
         if unfoldedData:
             #filename="datacards/Unfolded_chiNtuple_dataReReco_v3_Coarse_PFHT900_fromCB_AK4SF_pythia8_Pt_170toInf_MatrixInvert.root"
@@ -883,7 +883,7 @@ if __name__=="__main__":
         new_hists+=[h3new]
         h2new.SetLineStyle(1)
         h3new.SetLineStyle(1)
-        bandcolor=(kGray if unfoldedData else kCyan)
+        bandcolor=kCyan #(kGray if unfoldedData else kCyan)
         h2new.SetLineColor(bandcolor)
         h2new.SetFillColor(10)
         h3new.SetLineColor(bandcolor)
@@ -906,7 +906,7 @@ if __name__=="__main__":
                 bfitParameters,bfitConstraints=getFitResults(fitFile, 'fit_b')
                 hbPostfit=hNloQcd.Clone("QCDPostfit"+str(massbins[massbin]))
                 applyFitResults(bfitParameters,bfitConstraints,uncertainties,hbPostfit,h14)
-                hbPostfit.SetLineWidth(2)
+                hbPostfit.SetLineWidth(3)
                 hbPostfit.SetLineStyle(2)
 
         if massbin>=0 and signalsBSM:
@@ -1056,7 +1056,7 @@ if __name__=="__main__":
           hgrw=f.Get(histname)
           hgrw.SetLineColor(kAzure+7)
           hgrw.SetLineStyle(7)
-          hgrw.SetLineWidth(4)
+          hgrw.SetLineWidth(3)
           if normalize:
             hgrw.Scale(1./hgrw.Integral())
           else:
@@ -1072,7 +1072,7 @@ if __name__=="__main__":
           new_hists+=[f7]
           print(histname)
           hdm=f7.Get(histname)
-          setUpDMHists(hdm,kBlue,4,2)
+          setUpDMHists(hdm,kBlue,4,3)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1081,7 +1081,7 @@ if __name__=="__main__":
           new_hists+=[f7a]
           print(histname)
           hdma=f7a.Get(histname)
-          setUpDMHists(hdma,kMagenta,7,2)
+          setUpDMHists(hdma,kMagenta,7,3)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1090,7 +1090,7 @@ if __name__=="__main__":
           new_hists+=[f7b]
           print(histname)
           hdmb=f7b.Get(histname)
-          setUpDMHists(hdmb,kTeal+4,10,2)
+          setUpDMHists(hdmb,kTeal+4,10,3)
 
           coupling="0p5"
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
@@ -1100,7 +1100,7 @@ if __name__=="__main__":
           new_hists+=[f7c]
           print(histname)
           hdmc=f7c.Get(histname)
-          setUpDMHists(hdmc,kOrange+7,1,2)
+          setUpDMHists(hdmc,kOrange+7,1,3)
 
           filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1109,7 +1109,7 @@ if __name__=="__main__":
           new_hists+=[f7d]
           print(histname)
           hdmd=f7d.Get(histname)
-          setUpDMHists(hdmd,kAzure+8,1,2)
+          setUpDMHists(hdmd,kAzure+8,1,3)
 
         if massbin>3 and signalsBSM:
          if True:
@@ -1123,7 +1123,7 @@ if __name__=="__main__":
           hqbh=hqbh.Rebin(len(chi_binnings[massbin])-1,hqbh.GetName()+"_rebin",chi_binnings[massbin])
           hqbh.SetLineColor(kGreen+3)
           hqbh.SetLineStyle(5)
-          hqbh.SetLineWidth(4)
+          hqbh.SetLineWidth(3)
           if normalize:
             hqbh.Scale(1./hqbh.Integral())
           else:
@@ -1211,7 +1211,7 @@ if __name__=="__main__":
           h0.GetYaxis().SetTitle("1/#sigma_{dijet} d#sigma_{dijet}/d#chi_{dijet}")
         else:
           h0.GetYaxis().SetTitle("1/N_{dijet} dN_{dijet}/d#chi_{dijet}")
-        h0.GetYaxis().SetTitleOffset(1.4)
+        h0.GetYaxis().SetTitleOffset(1.2)
         h0.GetXaxis().SetTitleOffset(0.8)
         h0.GetYaxis().SetTitleSize(0.0625)
         h0.GetYaxis().SetLabelSize(0.05)
@@ -1386,7 +1386,7 @@ if __name__=="__main__":
         c.cd()
 
         pad2=TPad("main","main",0,0.3,1,1)
-        pad2.SetBottomMargin(0.012)
+        pad2.SetBottomMargin(0.016)
         pad2.SetTopMargin(0.07)
         pad2.Draw()
         pad2.cd()
@@ -1525,7 +1525,7 @@ if __name__=="__main__":
     h3newnew=h3new.Clone()
     h3newnew.SetLineColor(1)
     h3newnew.SetLineStyle(3)
-    h3newnew.SetLineWidth(4)
+    h3newnew.SetLineWidth(3)
 
     if massbin>=7:
         l2=TLegend(0.25,0.45,0.5,0.91,"")
@@ -1533,7 +1533,7 @@ if __name__=="__main__":
         l2=TLegend(0.25,0.55,0.5,0.91,"")
     else:
         l2=TLegend(0.25,0.55,0.5,0.91,"")
-    l2.SetTextSize(0.044)
+    l2.SetTextSize(0.038)
     l2.SetMargin(0.33)
     if oldMeasurements or compareRun3:
       l2.AddEntry(h14G,"13 TeV 138/fb","ple")
@@ -1545,20 +1545,20 @@ if __name__=="__main__":
       l2.AddEntry(h14G,"Data","ple")
     if compareScales:
       if compareMu30:
-        l2.AddEntry(h3newnew,"NNLO QCD+EW (#mu=m_{jj}, 6)","fl")
-        l2.AddEntry(g30,"NNLO QCD+EW (#mu=m_{jj}, 30)","le")
+        l2.AddEntry(h3newnew,"NNLO QCD + NLO EW (#mu=m_{jj}, 6)","fl")
+        l2.AddEntry(g30,"NNLO QCD + NLO EW (#mu=m_{jj}, 30)","le")
       else:
-        l2.AddEntry(h3newnew,"NNLO QCD+EW (#mu=m_{jj}, NNPDF3.1)","fl")
-      l2.AddEntry(hNloQcdAlt,"NNLO QCD+EW (#mu=<p_{T}>, NNPDF3.1)","fl")
+        l2.AddEntry(h3newnew,"NNLO QCD + NLO EW (#mu=m_{jj}, NNPDF3.1)","fl")
+      l2.AddEntry(hNloQcdAlt,"NNLO QCD + NLO EW (#mu=<p_{T}>, NNPDF3.1)","fl")
     else:
       if useNNLO:
-        l2.AddEntry(h3newnew,"NNLO QCD+EW","fl")
+        l2.AddEntry(h3newnew,"NNLO QCD + NLO EW","fl")
       else:
-        l2.AddEntry(h3newnew,"NLO QCD+EW","fl")
+        l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
     if comparePDFs:
-      l2.AddEntry(hNloQcdPdf,"NNLO QCD+EW (#mu=m_{jj}, CT14)","fl")
+      l2.AddEntry(hNloQcdPdf,"NNLO QCD + NLO EW (#mu=m_{jj}, CT14)","fl")
     if oldTheory:
-      l2.AddEntry(hNloQcdOld,"NLO QCD+EW (#mu=<p_{T}>, CT14)","fl")
+      l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>, CT14)","fl")
     if compareMadgraph:
       l2.AddEntry(hMC2,"LO+MLM QCD (Madgraph)","l")
     if compareNoEWK:
@@ -1594,18 +1594,18 @@ if __name__=="__main__":
         pass
 
     if massbin >= 3 and massbin<=3 and signalsDM:
-        #l2.AddEntry(hdm,"m_{Med} = 2 TeV (g_{q} = 0.3)","l")
+        #l2.AddEntry(hdm,"m_{med} = 2 TeV (g_{q} = 0.3)","l")
         pass
     if massbin >= 3 and massbin<=4 and signalsDM:
-        #l2.AddEntry(hdma,"m_{Med} = 3 TeV (g_{q} = 0.3)","l")
+        #l2.AddEntry(hdma,"m_{med} = 3 TeV (g_{q} = 0.3)","l")
         pass
     if massbin >= 3 and massbin<=5 and signalsDM:
-        l2.AddEntry(hdmb,"#font[52]{m}_{Med} = 4 TeV (g_{q} = 0.3)","l")
+        l2.AddEntry(hdmb,"#font[52]{m}_{med} = 4 TeV (g_{q} = 0.3)","l")
     if massbin >=3 and massbin<=8 and signalsDM:
-        #l2.AddEntry(hdmc,"m_{Med} = 5 TeV (g_{q} = 0.5)","l")
+        #l2.AddEntry(hdmc,"m_{med} = 5 TeV (g_{q} = 0.5)","l")
         pass
     if massbin >= 4 and massbin<=9 and signalsDM:
-        #l2.AddEntry(hdmd,"m_{Med} = 6 TeV (g_{q} = 0.5)","l")
+        #l2.AddEntry(hdmd,"m_{med} = 6 TeV (g_{q} = 0.5)","l")
         pass
     if massbin > 2 and signalsBSM:
         l2.AddEntry(halp,"#font[52]{f}_{a} / #font[52]{c}_{g} (ALP) = 2.5 TeV","l")

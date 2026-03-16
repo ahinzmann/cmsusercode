@@ -12,7 +12,7 @@ gStyle.SetTitleOffset(0.9,"XY")
 gStyle.SetPadLeftMargin(0.12)
 gStyle.SetPadBottomMargin(0.12)
 gStyle.SetPadTopMargin(0.075)
-gStyle.SetPadRightMargin(0.12)
+gStyle.SetPadRightMargin(0.05)
 gStyle.SetMarkerSize(1.5)
 gStyle.SetHistLineWidth(1)
 gStyle.SetStatFontSize(0.020)
@@ -286,7 +286,7 @@ if __name__=="__main__":
     
  for coupling in ["alp","tripleG"]:
 
-    canvas = TCanvas("main","main",0,0,1800,1550)
+    canvas = TCanvas("main","main",0,0,1550,1550)
     #canvas.GetPad(0).SetLogy()
     mg=TMultiGraph("mg","mg")
 
@@ -375,7 +375,7 @@ if __name__=="__main__":
     mg.GetYaxis().SetRangeUser(ymin,ymax)
     mg.GetYaxis().SetLabelSize(0.04)
     mg.GetYaxis().SetTitleSize(0.05)
-    mg.GetYaxis().SetTitleOffset(0.95)
+    mg.GetYaxis().SetTitleOffset(0.95 if coupling=="alp" else 1.15)
     mg.GetXaxis().SetLimits(min_x,max_x)
     #mg.GetXaxis().SetRangeUser(min_x_new,max_x_new)
     mg.GetYaxis().SetNdivisions(510)
@@ -412,21 +412,26 @@ if __name__=="__main__":
 
     # CMS
     if preliminary:
-      leg2=TLatex(min_x+0.05,ymax+0.05,"#bf{CMS} #it{Preliminary}")
+      leg2=TLatex(min_x,ymax+(0.04 if coupling=="alp" else 0.02),"#bf{CMS} #it{Preliminary}")
     else:
-      leg2=TLatex(min_x+0.05,ymax+0.03,"#bf{CMS}")
+      leg2=TLatex(min_x,ymax+(0.04 if coupling=="alp" else 0.02),"#bf{CMS}")
     #cmsPos=min_x+220/1000.
     #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
     leg2.SetTextFont(42)
-    leg2.SetTextSize(0.055)
+    leg2.SetTextSize(0.06)
     # lumi
-    lumiPos=max_x*(0.775 if coupling=="alp" else 0.735)
-    leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
+    lumiPos=max_x*(0.79 if coupling=="alp" else 0.755)
+    leg3=TLatex(lumiPos,ymax+(0.06 if coupling=="alp" else 0.03),"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
-    leg3.SetTextSize(0.045)
+    leg3.SetTextSize(0.04)
     leg2.Draw("same")
     leg3.Draw("same")
     
+    y1=TGaxis(min_x, ymin, min_x, ymax, ymin, ymax, 510, "")
+    y1.SetLabelSize(0)
+    y1.SetTitleSize(0)
+    y1.Draw()
+
     y2=TGaxis(max_x, ymin, max_x, ymax, ymin, ymax, 510, "+L")
     y2.SetLabelSize(0)
     y2.SetTitleSize(0)

@@ -5,8 +5,9 @@ from math import *
 
 #gROOT.Macro( os.path.expanduser( '~/rootlogon.C' ) )
 #gROOT.Reset()
-gROOT.SetStyle("Plain")
+#gROOT.SetStyle("Plain")
 gROOT.SetBatch(True)
+gROOT.ForceStyle()
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(0)
 gStyle.SetTitleOffset(1.2,"Y")
@@ -21,6 +22,8 @@ gStyle.SetTitleSize(0.06, "XYZ")
 gStyle.SetLabelSize(0.05, "XYZ")
 gStyle.SetNdivisions(510, "XYZ")
 gStyle.SetLegendBorderSize(0)
+gStyle.SetPadTickX(1)
+gStyle.SetPadTickY(1)
 
 if __name__ == '__main__':
 
@@ -103,6 +106,8 @@ if __name__ == '__main__':
     h.SetName("correlation")
     h.GetXaxis().SetTitle("Bin number")
     h.GetYaxis().SetTitle("Bin number")
+    h.GetXaxis().SetLabelOffset(0.014)
+    h.GetYaxis().SetLabelOffset(0.014)
     h.Draw("")
     h.Draw("colz2same")
     #h.GetYaxis().SetTitle("Correlation coefficient")
@@ -114,7 +119,8 @@ if __name__ == '__main__':
     if preliminary:
       leg2=TLatex(13+0.05,78+0.05,"#it{Preliminary}")
     else:
-      leg2=TLatex(13+0.05,78+0.03,"#it{Supplementary}")
+      leg2=TLatex(13+0.05,78+0.03,"")
+      #leg2=TLatex(13+0.05,78+0.03,"#it{Supplementary}")
     #cmsPos=min_x+220/1000.
     #leg2=TLatex(cmsPos,ymax-0.17,"#bf{CMS}")
     leg2.SetTextFont(42)

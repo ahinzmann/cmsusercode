@@ -481,12 +481,12 @@ if __name__=="__main__":
 
     #mg.Add(g_q_old,"l")
     g_q_old.SetLineColor(4)
-    g_q_old.SetLineWidth(2)
+    g_q_old.SetLineWidth(3)
     g_q_old.SetLineStyle(kDotted)
 
     #mg.Add(g_q_resonance,"l")
     g_q_resonance.SetLineColor(2)
-    g_q_resonance.SetLineWidth(2)
+    g_q_resonance.SetLineWidth(3)
     g_q_resonance.SetLineStyle(kDotted)
 
     #mg.Add(g_q_exp,"l")
@@ -515,7 +515,7 @@ if __name__=="__main__":
     mg=g_q
     mg.Draw("apl")
     mg.SetTitle("")
-    mg.GetXaxis().SetTitle("#font[52]{m}_{Med} [TeV]")
+    mg.GetXaxis().SetTitle("#font[52]{m}_{med} [TeV]")
     mg.GetYaxis().SetTitle("#font[52]{g}_{q}")
     mg.GetYaxis().SetLabelSize(0.04)
     mg.GetYaxis().SetTitleSize(0.05)
@@ -555,8 +555,8 @@ if __name__=="__main__":
     h_band_low2.SetLineWidth(0)
     h_band_low2.Draw("lf2same")
 
-    g_q_old.Draw("plsame")
-    g_q_resonance.Draw("plsame")
+    g_q_old.Draw("lsame")
+    g_q_resonance.Draw("lsame")
     g_q_exp.Draw("plsame")
     g_q.Draw("plsame")
 
@@ -578,7 +578,7 @@ if __name__=="__main__":
     minwidth=medWidth(ymin)
     myFunc=TF1("myFunc","pow((x-1/(12*3.141592653))*(4*3.141592653)/6,0.5)",minwidth,1)
     y2=TGaxis(max_x_new, ymin, max_x_new, ymax,"myFunc",510,"+L")
-    y2.SetTitle("#Gamma / #font[52]{m}_{Med}")
+    y2.SetTitle("#Gamma / #font[52]{m}_{med}")
     y2.SetLabelSize(0.04)
     y2.SetTitleSize(0.05)
     y2.SetTitleOffset(1.)
@@ -602,7 +602,7 @@ if __name__=="__main__":
     l1p0.SetLineStyle(7)
     l1p0.Draw("same")
       
-    l1p0T=TLatex(max_x_new-0.6,1.0-0.07,"#font[52]{g}_{q}=1.0")
+    l1p0T=TLatex(min_x_new+0.13,1.0-0.07,"#font[52]{g}_{q}=1.0")
     l1p0T.SetTextSize(0.04)
     l1p0T.SetTextFont(42)
     l1p0T.SetTextColor(kGray+3)
@@ -610,7 +610,7 @@ if __name__=="__main__":
     
     if style=="DMAxial":
       #lt=TLatex(signalMasses[0]+100,1.27,"#splitline{Vector/Axial-Vector Mediator}{m_{DM} = "+mdm+" GeV, g_{DM} = 1.0}")
-      lt=TLatex(min_x_new+0.13,1.15,"#splitline{#splitline{#splitline{#bf{vector/axial-vector}}{#bf{mediator}}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV}}}{#bf{#font[72]{g}_{DM} = 1.0}}")
+      lt=TLatex(min_x_new+0.13,1.15,"#splitline{#splitline{#splitline{#bf{Vector/axial-vector}}{#bf{mediator}}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV}}}{#bf{#font[72]{g}_{DM} = 1.0}}")
       #lt=TLatex(signalMasses[0]+100,1.31,"m_{DM} = "+mdm+" GeV, g_{DM} = 1.0")
     else:
       lt=TLatex(min_x_new+0.15,1.26,"#splitline{#bf{Vector Mediator}}{#bf{#font[72]{m}_{DM} = "+mdm+" GeV, #font[72]{g}_{DM} = 1.0}}")
@@ -645,17 +645,17 @@ if __name__=="__main__":
     # CMS
     cmsPos=min_x_new #+220/1000.
     if preliminary:
-      leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS} #it{Preliminary}")
+      leg2=TLatex(cmsPos,ymax+0.01,"#bf{CMS} #it{Preliminary}")
     else:
-      leg2=TLatex(cmsPos,ymax+0.04,"#bf{CMS}")
+      leg2=TLatex(cmsPos,ymax+0.01,"#bf{CMS}")
     leg2.SetTextFont(42)
     leg2.SetTextSize(0.06)
     # lumi
     #lumiPos=max_x_new-1700/1000.
-    lumiPos=max_x_new-1200/1000.
-    leg3=TLatex(lumiPos,ymax+0.03,"138 fb^{-1} (13 TeV)")
+    lumiPos=max_x_new-1.08
+    leg3=TLatex(lumiPos,ymax+0.02,"138 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
-    leg3.SetTextSize(0.045)
+    leg3.SetTextSize(0.04)
     leg2.Draw("same")
     leg3.Draw("same")
     
