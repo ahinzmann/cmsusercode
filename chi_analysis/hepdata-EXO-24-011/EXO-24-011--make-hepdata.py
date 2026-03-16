@@ -33,23 +33,23 @@ input_dir2="versions/run2ULNNLO_m2_NNPDF3/"
 
 paper_plots=[]
 paper_plots+=[("2.4 < M(JJ) < 3.0 TeV","Figure 2 upper left","datacard_shapelimit13TeV_combined_theory3_detector_run2")]
-paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Figure 2 upper middle","datacard_shapelimit13TeV_combined_theory4_detector_run2")]
-paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Figure 2 upper right","datacard_shapelimit13TeV_combined_theory5_detector_run2")]
-paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Figure 2 middle left","datacard_shapelimit13TeV_combined_theory6_detector_run2")]
-paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Figure 2 middle center","datacard_shapelimit13TeV_combined_theory7_detector_run2")]
-paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Figure 2 middle right","datacard_shapelimit13TeV_combined_theory8_detector_run2")]
-paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Figure 2 lower left","datacard_shapelimit13TeV_combined_theory9_detector_run2")]
-paper_plots+=[("M(JJ) > 7.0 TeV","Figure 2 lower right","datacard_shapelimit13TeV_combined_theory10_detector_run2")]
-paper_plots+=[("DM mediator","Figure 3","limitsDetLHCa_DMAxial_mdm1_v6b_run2")]
-paper_plots+=[("ALP liniar EFT","Figure 4 left","limitsLHCaalp_coupling_run2")]
-paper_plots+=[("SMEFT","Figure 4 right","limitsLHCatripleG_coupling_run2")]
-paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Figure 5 upper left","datacard_shapelimit13TeV_combined_theory4_scales_pdfs_run2")]
-paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Figure 5 upper right","datacard_shapelimit13TeV_combined_theory5_scales_pdfs_run2")]
-paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Figure 5 middle left","datacard_shapelimit13TeV_combined_theory6_scales_pdfs_run2")]
-paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Figure 5 middle center","datacard_shapelimit13TeV_combined_theory7_scales_pdfs_run2")]
-paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Figure 5 middle right","datacard_shapelimit13TeV_combined_theory8_scales_pdfs_run2")]
-paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Figure 5 lower left","datacard_shapelimit13TeV_combined_theory9_scales_pdfs_run2")]
-paper_plots+=[("M(JJ) > 7.0 TeV","Figure 5 lower right","datacard_shapelimit13TeV_combined_theory10_scales_pdfs_run2")]
+paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Figure 2 upper right","datacard_shapelimit13TeV_combined_theory4_detector_run2")]
+paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Figure 2 lower left","datacard_shapelimit13TeV_combined_theory5_detector_run2")]
+paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Figure 2 lower right","datacard_shapelimit13TeV_combined_theory6_detector_run2")]
+paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Figure 3 upper left","datacard_shapelimit13TeV_combined_theory7_detector_run2")]
+paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Figure 3 upper right","datacard_shapelimit13TeV_combined_theory8_detector_run2")]
+paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Figure 3 lower left","datacard_shapelimit13TeV_combined_theory9_detector_run2")]
+paper_plots+=[("M(JJ) > 7.0 TeV","Figure 3 lower right","datacard_shapelimit13TeV_combined_theory10_detector_run2")]
+paper_plots+=[("DM mediator","Figure 4","limitsDetLHCa_DMAxial_mdm1_v6b_run2")]
+paper_plots+=[("ALP liniar EFT","Figure 5 left","limitsLHCaalp_coupling_run2")]
+paper_plots+=[("SMEFT","Figure 5 right","limitsLHCatripleG_coupling_run2")]
+paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Figure 6 upper left","datacard_shapelimit13TeV_combined_theory4_scales_pdfs_run2")]
+paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Figure 6 upper right","datacard_shapelimit13TeV_combined_theory5_scales_pdfs_run2")]
+paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Figure 6 lower left","datacard_shapelimit13TeV_combined_theory6_scales_pdfs_run2")]
+paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Figure 6 lower right","datacard_shapelimit13TeV_combined_theory7_scales_pdfs_run2")]
+paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Figure 7 upper left","datacard_shapelimit13TeV_combined_theory8_scales_pdfs_run2")]
+paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Figure 7 upper right","datacard_shapelimit13TeV_combined_theory9_scales_pdfs_run2")]
+paper_plots+=[("M(JJ) > 7.0 TeV","Figure 7 lower","datacard_shapelimit13TeV_combined_theory10_scales_pdfs_run2")]
 #print(paper_plots)
 
 from hepdata_lib import Table
@@ -57,10 +57,10 @@ from hepdata_lib import RootFileReader
 from hepdata_lib import Variable, Uncertainty
 for massbin,figure,filename in paper_plots:
  
- if "Figure 2" in figure:
-  table = Table("Fig. 2: Detector level CHI distribution ("+massbin+")")
+ if "Figure 2" in figure or "Figure 3" in figure:
+  table = Table("Fig. "+("2" if "Figure 2" in figure else "3")+": Detector level CHI distribution ("+massbin+")")
   print(figure)
-  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1. The data distributions at detector-level are compared to NNLO predictions, corrected for the detector response. The error bars represent statistical and experimental systematic uncertainties combined in quadrature. Theoretical uncertainties are provided as well. Also given are the predictions for various BSM scenarios."
+  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1. The data distributions at detector-level are compared to NNLO QCD + NLO EW predictions, corrected for the detector response. The horizontal bars represent statistical and experimental systematic uncertainties combined in quadrature. Theoretical uncertainties are provided as well. Also given are the predictions for various BSM scenarios."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -119,10 +119,10 @@ for massbin,figure,filename in paper_plots:
   table.add_additional_resource("ROOT file", input_dir+input_dir2+filename+".root", copy_file=True)  # optional
   submission.add_table(table)
 
- if "Figure 3" in figure:
-  table = Table("Fig. 3: Exclusion limit ("+massbin+")")
+ if "Figure 4" in figure:
+  table = Table("Fig. 4: Exclusion limit ("+massbin+")")
   print(figure)
-  table.description = "The 95% CL upper limits on the universal quark coupling $g_{q}$ as a function of a vector or axial-vector mediator mass, with $g_{DM}=1.0$ and $m_{DM}=1$ GeV. The observed and expected limits and their variation at the 1 and 2 standard deviation levels are given."
+  table.description = "The 95% CL upper limits on the universal quark coupling $g_{q}$ as a function of a vector or axial-vector mediator mass, with $g_{DM}=1.0$ and $m_{DM}=1$ GeV. The observed and expected limits and their 68% and 95% confidence intervals are given."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -166,16 +166,16 @@ for massbin,figure,filename in paper_plots:
   table.add_additional_resource("ROOT file", input_dir+filename+".root", copy_file=True)  # optional
   submission.add_table(table)
 
- if "Figure 4" in figure:
+ if "Figure 5" in figure:
   if "ALP" in massbin:
-    table = Table("Fig. 4 left: Exclusion limit ("+massbin+")")
+    table = Table("Fig. 5 left: Exclusion limit ("+massbin+")")
   else:
-    table = Table("Fig. 4 right: Exclusion limit ("+massbin+")")
+    table = Table("Fig. 5 right: Exclusion limit ("+massbin+")")
   print(figure)
   if "ALP" in massbin:
-    table.description = "The 95% CL upper limits on the ALP gluon coupling, $c_{g}$, as a function of the characteristic energy scale, $f_{a}$, assuming $m_{a}=1$ MeV. Only dijet angular distributions with $m_{jj}<f_{a}$ are used to obtain the limits on $c_{g}$. The observed limits, expected limits and their variation at the 1 and 2 standard deviation levels are given."
+    table.description = "The 95% CL upper limits on the ALP gluon coupling, $c_{g}$, as a function of the characteristic energy scale, $f_{a}$, assuming $m_{a}=1$ MeV. Only dijet angular distributions with $m_{jj}<f_{a}$ are used to obtain the limits on $c_{g}$. The observed limits, expected limits and their 68% and 95% confidence intervals are given."
   elif "SMEFT" in massbin:
-    table.description = "The 95% CL upper limits on the anomalous triple gluon coupling, $C_{G}$, in SMEFT as a function of the BSM physics energy scale, $\Lambda$. Only dijet angular distributions with $m_{jj}<\Lambda$ are used to obtain the limits on $C_{G}$. The observed limits, expected limits and their variation at the 1 and 2 standard deviation levels are given."
+    table.description = "The 95% CL upper limits on the anomalous triple gluon coupling, $C_{G}$, in SMEFT as a function of the BSM physics energy scale, $\Lambda$. Only dijet angular distributions with $m_{jj}<\Lambda$ are used to obtain the limits on $C_{G}$. The observed limits, expected limits and their 68% and 95% confidence intervals are given."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
@@ -223,8 +223,8 @@ for massbin,figure,filename in paper_plots:
   table.add_additional_resource("ROOT file", input_dir+filename+".root", copy_file=True)  # optional
   submission.add_table(table)
 
- if "Figure 5" in figure:
-  table = Table("Fig. 5: Particle level CHI distribution ("+massbin+")")
+ if "Figure 6" in figure or "Figure 7" in figure:
+  table = Table("Fig. "+("6" if "Figure 6" in figure else "7")+": Particle level CHI distribution ("+massbin+")")
   print(figure)
   table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set, and a comparison with the NLO prediction used in the previous publication are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction without EW corrections applied."
   table.location = "Data from "+figure
@@ -286,16 +286,16 @@ for massbin,figure,filename in paper_plots:
   submission.add_table(table)
 
 if True:
-   figure="Add. Fig. 1"
-   table = Table("Correlation matrix")
-   table.description = "Correlation matrix of the maximum likelihood estimators of the signal strength modifiers. The matrix is obtained after the fit to the data. The bin numbers correspond to 11 times the index (starting at 0) of the $m_{jj}$ (3.0,3.6,4.2,4.8,5.4,6.0,7.0) bin plus the index (starting at 0) of the CHI bin (1,2,3,4,5,6,7,8,9,10,12,14)."
+   figure="Figure 8"
+   table = Table("Fig. 8: Correlation matrix")
+   table.description = "Correlation matrix of the maximum likelihood estimators of the signal strength modifiers. The matrix is obtained after the fit to the data. The bin numbers correspond to 11 times the index (starting at 0) of the $m_{jj}$ bin (3.0,3.6,4.2,4.8,5.4,6.0,7.0) GeV plus the index (starting at 0) of the CHI bin (1,2,3,4,5,6,7,8,9,10,12,14)."
    table.location = ""#"Data from "+figure
    table.keywords["reactions"] = ["P P --> JET JET X"]
    table.keywords["cmenergies"] = [13000]
 
    corr_file="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV_unfold_withUncertainties_correlationMatrix_run2.root"
    reader = RootFileReader(corr_file)
-   data = reader.read_hist_2d("c1/correlation")
+   data = reader.read_hist_2d("corr/correlation")
    from hepdata_lib import Variable
    x = Variable("Bin number 1 (11 m$_{jj}$-bin + $\chi$-bin)", is_independent=True, is_binned=False)
    x2 = Variable("Bin number 2 (11 m$_{jj}$-bin + $\chi$-bin)", is_independent=True, is_binned=False)

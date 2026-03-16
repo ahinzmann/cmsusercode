@@ -204,15 +204,15 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
   compareRun3=False
-  oldTheory=False
-  signalsBSM=True
-  signalsDM=True
+  oldTheory=True
+  signalsBSM=False
+  signalsDM=False
   signalsBragg=False
-  compareScales=False
-  comparePDFs=False
+  compareScales=True
+  comparePDFs=True
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
@@ -1527,7 +1527,9 @@ if __name__=="__main__":
     h3newnew.SetLineStyle(3)
     h3newnew.SetLineWidth(3)
 
-    if massbin>=7:
+    if unfoldedData:
+        l2=TLegend(0.25,0.55,0.5,0.89,"")
+    elif massbin>=7:
         l2=TLegend(0.25,0.45,0.5,0.91,"")
     elif massbin>=4:
         l2=TLegend(0.25,0.55,0.5,0.91,"")
