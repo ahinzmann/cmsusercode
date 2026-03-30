@@ -1,0 +1,41 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjja_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : NNPDF31_nnlo_as_0118
+ # [fnlo-tk-yodaout] Showing statistical uncertainty from rel. x section share.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Preparing unnormalized cross sections.
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using newEcms = 13600
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+ # WARNING! [fastNLOReader::SetNewSqrtS] Be careful! New center-of-mass energy is higher than that of the file. Some phase space is missing!
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative statistical uncertainties from rel. shares (SR NNPDF31_nnlo_as_0118 NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       9.00628132771E-09      -1.12240578239E-02       1.12240578239E-02
+    2       7.79357302326E-09      -6.88860412608E-02       6.88860412608E-02
+    3       7.69326212384E-09      -8.52954829147E-03       8.52954829147E-03
+    4       7.85207307767E-09      -1.02658442199E-02       1.02658442199E-02
+    5       8.10082967173E-09      -1.34006938546E-02       1.34006938546E-02
+    6       8.00498440685E-09      -9.14846996387E-03       9.14846996387E-03
+    7       8.26039847374E-09      -1.12408447575E-02       1.12408447575E-02
+    8       8.26360625073E-09      -1.32380487253E-02       1.32380487253E-02
+    9       8.51087452547E-09      -2.16927594665E-02       2.16927594665E-02
+   10       8.63714441102E-09      -1.32707855730E-02       1.32707855730E-02
+   11       8.50826202153E-09      -1.57786658255E-02       1.57786658255E-02
+   12       8.35799772396E-09      -2.20457161908E-02       2.20457161908E-02
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

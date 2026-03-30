@@ -1,0 +1,41 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj6_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : NNPDF31_nnlo_as_0118
+ # [fnlo-tk-yodaout] Showing uncertainty from asymmetric 6-point scale factor variation.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Normalizing cross sections. 
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using newEcms = 13600
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/NNPDF31_nnlo_as_0118/NNPDF31_nnlo_as_0118_0000.dat
+NNPDF31_nnlo_as_0118 PDF set, member #0, version 1; LHAPDF ID = 303600
+ # WARNING! [fastNLOReader::SetNewSqrtS] Be careful! New center-of-mass energy is higher than that of the file. Some phase space is missing!
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative scale uncertainties (6P NNPDF31_nnlo_as_0118 NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       7.30130210120E-02      -8.69197943134E-04       1.62735133834E-03
+    2       6.20609842690E-02      -8.83977529902E-04       1.79183819672E-03
+    3       6.19238533770E-02      -6.95564937956E-04       4.12778574243E-03
+    4       6.13747539530E-02      -4.32108211306E-03       4.36891760876E-03
+    5       6.34397264688E-02      -4.37752990693E-04       6.27022143625E-04
+    6       6.43400889487E-02      -2.17421161618E-03       1.66632223965E-03
+    7       6.48823848748E-02      -3.95883380332E-04       2.09512335510E-03
+    8       6.69404706594E-02      -3.13104040132E-03       7.42244715572E-04
+    9       6.69550664448E-02      -1.35335561015E-03       2.11416451959E-03
+   10       6.75528479123E-02      -2.75388598794E-03       7.52004014696E-04
+   11       6.79964418905E-02      -8.05617832197E-03       3.48739574098E-03
+   12       7.19855351934E-02      -7.64431296271E-03       1.00121022179E-02
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

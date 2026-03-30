@@ -9,7 +9,7 @@ only6000=False
 allmassbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
 models=[]
-#models+=[3] #ADD
+models+=[3] #ADD
 #models+=[10] #QBH ADD6
 #models+=[11] #QBH RS1
 #models+=[12] #QBH Blackmax n=6
@@ -20,7 +20,7 @@ models=[]
 #models+=[30,31,32,33,34,35,36,37,38,39,40] #pvalues (CI-LO)
 #models+=[41,42,43,44] #pvalues (CI-NLO)
 #models+=[45,46,47,48,49,50,51,52,53,54,55] #pvalues (Anti-CI-LO)
-models+=[56] #pvalues (Bragg)
+#models+=[56] #pvalues (Bragg)
 #models+=[57,58] #pvalues mjj,ptave
 #models+=[47]
 #models+=[88,89]
@@ -45,11 +45,11 @@ uncorrelatedScaleUncertainties=False
 scaleUncertainty=True
 theoryStatUncertainties=True
 useNNLO=True # choice for QCD
-useM2=False # choice of mu-scale for QCD
+useM2=True # choice of mu-scale for QCD
 runs="2" # "2" or "3" or "23"
 run=runs[-1]
 use_NNPDF3=True
-use_CP2=True
+use_CP2=False
 
 isGen=False
 
@@ -659,7 +659,7 @@ for model in models:
     elif model==3 and run=="3":
         fname=prefix + "_GENnp-run-"+run+"-" + signalWithMass + '_chi.root'
     elif (model==3 or model==10 or model==11) and use_NNPDF3:
-        fname=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + signalWithMass + '_chi.root'
+        fname=prefix + "_GENnp-"+("CP2" if use_CP2 else "CP5")+"-run"+run+"-" + ("QCD" if model==3 else "") +signalWithMass + '_chi.root'
     elif signalWithMass=="ADD6000":
         fname=prefix + '_GENnp-18-run'+run+'_chi.root'
     elif signalWithMass=="ADD7000":

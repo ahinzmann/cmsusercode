@@ -77,7 +77,7 @@ if __name__ == '__main__':
     useM2=True # choice of mu-scale for QCD
     use_UL=True
     responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="2" # "2" for Run2 or "3" for 13.6 TeV projection
+    run="3" # "2" for Run2 or "3" for 13.6 TeV projection
     use_NNPDF3=True
     use_CP2=True # for ADD
     normalize=True
@@ -86,6 +86,7 @@ if __name__ == '__main__':
       years=["UL16preVFP","UL16postVFP","UL17","UL18"]
     else:
       years=["2016","2017","2018"]
+    # FIX ME use UL years for Run3 JES uncertainty for the moment
 
     if useNNLO:
       if use_NNPDF3:
@@ -114,7 +115,7 @@ if __name__ == '__main__':
       else:
         prefixs=["versions/run2ULNLO_pt12/datacard_shapelimit13TeV"]
     elif run=="3":
-      prefixs=["versions/run3NNLO_m2/datacard_shapelimit13TeV"]
+      prefixs=["versions/run3NNLO_m2_NNPDF3/datacard_shapelimit13TeV"]
     else:
       whatprefix
     input_prefix1="datacards/datacard_shapelimit13TeV" # GEN signals
@@ -148,8 +149,8 @@ if __name__ == '__main__':
     if run=="2":
       lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
     if run=="3":
-      years=["2024"]
-      lumi=320000
+      years=["2024-21Dec2025","2025-21Dec2025"]
+      lumi=109080+115650
 
     colors=[1,2,3,4,6,7,8,9,12,28,34,38,40,41,42,43,44,45,46,47,48,49] #11,20
  
@@ -580,13 +581,16 @@ if __name__ == '__main__':
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
       if run=="3":
-        insample="data/datacard_shapelimit13TeV_run2_2024_chi.root" # ultra legacy reco
+        insample="data/datacard_shapelimit13TeV_run2_2024-21Dec2025_chi.root"
       elif use_UL:
         insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
       else:
         insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
       print(insample)
       infile=TFile(insample,'READ')
+      insample2025="data/datacard_shapelimit13TeV_run2_2025-21Dec2025_chi.root"
+      print(insample2025)
+      infile2025=TFile(insample2025,'READ')
       insample16postVFP="datacards/datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
       print(insample16postVFP)
       infile16postVFP=TFile(insample16postVFP,'READ')
@@ -615,7 +619,7 @@ if __name__ == '__main__':
       #filename1nu2="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
       if useNNLO:
         #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
-        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+".root"
+        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_13600" if run=="3" else "")+".root"
       else:
         filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_"+pdfset+"_cppread_mu_pt12.root"
       print(filename1nu2)
@@ -805,15 +809,15 @@ if __name__ == '__main__':
            qcdnorm[j]=qcd.Integral()
         
         # Calculate ratio of 13.6 TeV and 13 TeV QCD LO cross section
-        qcd13TeV=in13TeV.Get(histname)
-        qcd13TeV=qcd13TeV.Rebin(len(chi_binnings[j])-1,histname,chi_binnings[j])
-        qcd13TeV.Scale(1e10*1e9) #mb -> pb and factor 1e-10 for backup
-        if j in qcd13TeVnorm.keys():
-           qcd13TeV.Scale(qcd13TeVnorm[j]/qcd13TeV.Integral())
-        else:
-           qcd13TeVnorm[j]=qcd13TeV.Integral()
-        factor13p6=qcd.Integral()/qcd13TeV.Integral()
-        print("k-factor LO 13.6 TeV / 13 TeV", factor13p6)
+        #qcd13TeV=in13TeV.Get(histname)
+        #qcd13TeV=qcd13TeV.Rebin(len(chi_binnings[j])-1,histname,chi_binnings[j])
+        #qcd13TeV.Scale(1e10*1e9) #mb -> pb and factor 1e-10 for backup
+        #if j in qcd13TeVnorm.keys():
+        #   qcd13TeV.Scale(qcd13TeVnorm[j]/qcd13TeV.Integral())
+        #else:
+        #   qcd13TeVnorm[j]=qcd13TeV.Integral()
+        #factor13p6=qcd.Integral()/qcd13TeV.Integral()
+        #print("k-factor LO 13.6 TeV / 13 TeV", factor13p6)
 
         # NLO
         nloqcd=None
@@ -834,8 +838,8 @@ if __name__ == '__main__':
         #if not useUnfoldedData:
         nloqcdbackup=nloqcd.Clone(nloqcd.GetName()+"_backup")
         nloqcd=smoothChi(nloqcd) # SMOOTH NNLO PREDICTION (FIX ME)
-        if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
-           nloqcdbackup.Scale(factor13p6)
+        #if run=="3": # APPLY A SCALE FACTOR TO EXTRAPOLATE DATA AND PREDICTION TO 13.6 TEV
+        #   nloqcdbackup.Scale(factor13p6)
         print("theory integral (pb):", nloqcdbackup.Integral())
         print("k-factor NNLO / LO", nloqcdbackup.Integral()/qcd.Integral())
 
@@ -891,6 +895,8 @@ if __name__ == '__main__':
         else:
           #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi"
           histname2="datacard_shapelimit13TeV_run2_"+years[0]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+          if run=="3":
+            histname2=histname2.replace("7000_13000","7000_13600")
           print(histname2)
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
@@ -898,7 +904,16 @@ if __name__ == '__main__':
             datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
             datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
-          if run=="2":
+          if run=="3":
+            histname2025="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("7000_13000","7000_13600")+"_rebin1"
+            print(histname2025)
+            data2025 = TH1F(infile2025.Get(histname2025))
+            for b in range(data.GetXaxis().GetNbins()):
+              datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data2025.GetBinContent(b+1))
+              datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data2025.GetBinContent(b+1))
+            data2025=data2025.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+            data.Add(data2025)
+          elif run=="2":
            if use_UL:
             histname16postVFP="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print(histname16postVFP)

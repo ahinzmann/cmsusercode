@@ -4,10 +4,12 @@ import subprocess,os
 
 order="NNLO"
 newci=True
+fullColor=False
+com=13600 #None for Run2 NNLO, 13600 for Run3
 
 if order=="NNLO":
-  PDF="ct14nnlo"
-  #PDF="nn31nnlo"
+  #PDF="ct14nnlo"
+  PDF="nn31nnlo"
   mscale="m2"
   #mscale="pt12"
 else:
@@ -34,19 +36,20 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         # Defualt path for NLOJET++ cross section output files is ./
         # Default path for CIJET++ cross section input (.xsc) files is ./cixsecDir+style
         # Default path for CIJET++ cross section output files is ./cixsecDir
-        self.version="j"
+        self.version=("j","v25")
+        if fullColor: self.version=("k","v26")
         self.BaseDir=os.getcwd()
         # other initiation
         self.bins=array('d',[1,2,3,4,5,6,7,8,9,10,12,14,16])
         self.styles=["LL-","LL+","RR-","RR+","VV-","VV+","AA-","AA+","V-A-","V-A+"]
         #self.styles=["AA-","AA+"]
-        self.cixsecDir=("NEWCI" if newci else "CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_")
+        self.cixsecDir=("NEWCI" if newci else ("FullColor" if fullColor else ("13p6" if com==13600 else ("CIJET_fnl5662"+self.version[0]+"_cs_001_"+PDF+"_0_"+str(PDFmembers)+"_"))))
 
     def getqcdallmu(self):
       allmulist=[]
       for m in range(len(massbins)):
         #fileallmu=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_7_"+mscale+".log"
-        fileallmu=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_allmu_"+mscale.replace("m2","m12")+".log"
+        fileallmu=self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj"+str(m).replace("10","a")+"_chi_norm_"+self.version[1]+"_"+PDF+"_allmu_"+mscale.replace("m2","m12")+("_"+str(com) if com!=None else "")+".log"
         print("load",fileallmu)
         mu=["start"]
         muxsecs=["start"]
@@ -75,7 +78,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
     def getqcdmup(self,points):
       muplist=[]
       for m in range(len(massbins)):
-        filemup=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_"+points+"-norm_"+mscale.replace("m2","m12")+".log"
+        filemup=self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj"+str(m).replace("10","a")+"_chi_norm_"+self.version[1]+"_"+PDF+"_"+points+"-norm_"+mscale.replace("m2","m12")+("_"+str(com) if com!=None else "")+".log"
         print("load",filemup)
         muxsecscentral=[]
         muxsecsdown=[]
@@ -107,7 +110,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
       allmemlist=[]
       for m in range(len(massbins)):
         #fileallmem=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_"+PDF+"_cppread_0_"+mscale+".log"
-        fileallmem=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_allmem_"+mscale.replace("m2","m12")+".log"
+        fileallmem=self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj"+str(m).replace("10","a")+"_chi_norm_"+self.version[1]+"_"+PDF+"_allmem_"+mscale.replace("m2","m12")+("_"+str(com) if com!=None else "")+".log"
         print("load",fileallmem)
         mem=["start"]
         memxsecs=["start"]
@@ -135,7 +138,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
     def getqcdstat(self):
       statlist=[]
       for m in range(len(massbins)):
-        filestat=self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj"+str(m).replace("10","a")+"_chi_norm_v25_"+PDF+"_stat_"+mscale.replace("m2","m12")+".log"
+        filestat=self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj"+str(m).replace("10","a")+"_chi_norm_"+self.version[1]+"_"+PDF+"_stat_"+mscale.replace("m2","m12")+("_"+str(com) if com!=None else "")+".log"
         print("load",filestat)
         stat=["start"]
         statxsecs=["start"]
@@ -185,13 +188,13 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         cimudict={}
         for style in self.styles:
             for m in ciscales:
-                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                name="CIJET_fnl5662"+self.version[0]+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimudict[name]=[]
 ##                 for j in range(0,PDFmembers+1):
                 if newci and mscale=="m2":
-                  filename="CIJET_cs_fnl5662"+self.version+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
+                  filename="CIJET_cs_fnl5662"+self.version[0]+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
                 elif newci:
-                  filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
+                  filename="CIJET_fnl5662"+self.version[0]+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_0_"+str(m*1000)+"_"+style+".xsc"
                 else:
                   filename=name.replace("_0_"+str(PDFmembers)+"_","_0_")+".xsc"
                 muxsecs=[]
@@ -230,13 +233,13 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
         cimemdict={}
         for style in self.styles:
             for m in ciscales:
-                name="CIJET_fnl5662"+self.version+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
+                name="CIJET_fnl5662"+self.version[0]+"_cs_001_"+PDF+"_"+mscale+"_0_"+str(PDFmembers)+"_"+str(m*1000)+"_"+style
                 cimemdict[name]=[]
                 for j in range(0,PDFmembers+1):
                     if newci and mscale=="m2":
-                      filename="CIJET_cs_fnl5662"+self.version+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+                      filename="CIJET_cs_fnl5662"+self.version[0]+"_mjj5-a_mu0mjj_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
                     elif newci:
-                      filename="CIJET_fnl5662"+self.version+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
+                      filename="CIJET_fnl5662"+self.version[0]+"_mjj5-a_cs_"+PDF.replace("ct14nnlo","ct14-nlo").replace("nn31nnlo","nn31-nnlo-as-0118")+"_"+str(j)+"_"+str(m*1000)+"_"+style+".xsc"
                     else:
                       filename=name.replace('_0_'+str(PDFmembers)+'_','_'+str(j)+'_')+".xsc"
                     memxsecs=[]
@@ -281,7 +284,7 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
             print(list)
             
     def listFill(self,mylist,uncerttype):
-        myfile=TFile(self.BaseDir+"/2jet.NNLO.fnl5662"+self.version+"_mjj_chi_norm_v25_"+PDF+"_cppread_"+uncerttype+"_"+mscale+".root","RECREATE")
+        myfile=TFile(self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj_chi_norm_"+self.version[1]+"_"+PDF+"_cppread_"+uncerttype+"_"+mscale+("_"+str(com) if com!=None else "")+".root","RECREATE")
         for list in mylist:
             if uncerttype=="mu" or uncerttype=="mu6" or uncerttype=="mu30":
                 mur=str(list[0][0])
@@ -377,23 +380,23 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
 if __name__ == "__main__":
     myVariations=getVariations()
 
-    #qcdallmu=myVariations.getqcdallmu()
-    #myVariations.listFill(qcdallmu,"mu")
+    qcdallmu=myVariations.getqcdallmu()
+    myVariations.listFill(qcdallmu,"mu")
     
-    #qcdmu6p=myVariations.getqcdmup("6P")
-    #myVariations.listFill(qcdmu6p,"mu6")
+    qcdmu6p=myVariations.getqcdmup("6P")
+    myVariations.listFill(qcdmu6p,"mu6")
     
-    #qcdmu30=myVariations.getqcdmup("30")
-    #myVariations.listFill(qcdmu30,"mu30")
+    qcdmu30=myVariations.getqcdmup("30")
+    myVariations.listFill(qcdmu30,"mu30")
     
-    #qcdallmem=myVariations.getqcdallmem()
-    #myVariations.listFill(qcdallmem,"mem")
+    qcdallmem=myVariations.getqcdallmem()
+    myVariations.listFill(qcdallmem,"mem")
 
-    #qcdstat=myVariations.getqcdstat()
-    #myVariations.listFill(qcdstat,"stat")
+    qcdstat=myVariations.getqcdstat()
+    myVariations.listFill(qcdstat,"stat")
 
-    ciallmu=myVariations.getciallmu()
-    myVariations.dictFill(ciallmu,"mu")
+    #ciallmu=myVariations.getciallmu()
+    #myVariations.dictFill(ciallmu,"mu")
     
-    ciallmem=myVariations.getciallmem()
-    myVariations.dictFill(ciallmem,"mem")    
+    #ciallmem=myVariations.getciallmem()
+    #myVariations.dictFill(ciallmem,"mem")    
