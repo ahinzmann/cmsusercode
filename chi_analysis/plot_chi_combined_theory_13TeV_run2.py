@@ -189,8 +189,9 @@ if __name__=="__main__":
   useNNLO=True # choice for QCD
   useM2=True # choice of mu-scale for QCD
   use_NNPDF3=True
+  useFullColor=True
   normalize=True
-  run="3"
+  run="2"
   
   if use_NNPDF3:
     pdfset="nn31nnlo"
@@ -205,29 +206,30 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
   compareRun3=False
-  oldTheory=False
+  oldTheory=True
   signalsBSM=False
   signalsDM=False
   signalsBragg=False
-  compareScales=False
-  compareFullColor=False
-  compareNosmooth=True
+  compareScales=True
+  compareFullColor=True
+  compareNosmooth=False
   comparePDFs=False
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
   comparePostfit=False
   preliminary=False
+  supplementary=True
   
   if run=="3":
     lumi=109950+110630+28060 # Run3
     com="13600"
   else:
     lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
-    com=""
+    com="13000"
 
   massbins=[(1200,1500),
         (1500,1900),
@@ -343,17 +345,19 @@ if __name__=="__main__":
 
   print("load CMS style")
   import CMS_lumi
-  CMS_lumi.writeExtraText=preliminary
-  CMS_lumi.relPosX=0.13+preliminary*0.04
+  CMS_lumi.writeExtraText=preliminary or supplementary
+  CMS_lumi.relPosX=0.13+(preliminary or supplementary)*0.04
   CMS_lumi.cmsTextSize=1.0
   CMS_lumi.lumiTextSize=0.8
+  if supplementary:
+    CMS_lumi.extraText="Supplementary"
   #gROOT.LoadMacro("CMS_lumi.C");
   if run=="3":
     iPeriod = 6;
   else:
     iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
   iPos = 33;
-  if preliminary: iPos=0
+  if preliminary or supplementary: iPos=0
   #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
   #// iPos=11 : top-left, left-aligned
   #// iPos=33 : top-right, right-aligned
@@ -377,7 +381,10 @@ if __name__=="__main__":
         if unfoldedData:  
             if useNNLO:
               #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
-              filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_"+com if run=="3" else "")+".root"
+              if useFullColor:
+                filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+"_"+com+".root"
+              else:
+                filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_"+com if run=="3" else "")+".root"
             else:
               filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
               #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nlo_cppread_mu_pt12.root"
@@ -397,7 +404,8 @@ if __name__=="__main__":
                 hNloQcd.Add(hnlo)
              else:
                 hNloQcd=hnlo
-            hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
+            if not useFullColor:
+              hNloQcd=smoothChi(hNloQcd) # SMOOTH NNLO PREDICTION (FIX ME)
             hNloQcd.SetLineColor(5)
             hNloQcd.SetLineStyle(3)
             hNloQcd.SetLineWidth(3)
@@ -627,7 +635,7 @@ if __name__=="__main__":
                  hNloQcdPdf.SetBinContent(b+1,hNloQcdPdf.GetBinContent(b+1)/hNloQcdPdf.GetBinWidth(b+1))
 
         else:
-            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
+            filename=fdir.replace("NLO","NLO"+("fc" if useFullColor else""))+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
             print(filename)
             f = TFile.Open(filename)
             new_hists+=[f]
@@ -670,7 +678,10 @@ if __name__=="__main__":
               hNloQcdRun3.SetName("MainScale")
             
         if compareFullColor:
-             filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+"_13000.root"
+             if useFullColor:
+               filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+".root"
+             else:
+               filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+"_13000.root"
              print(filename1nu2)
              nlofile2 = TFile.Open(filename1nu2)
              new_hists+=[nlofile2]
@@ -687,7 +698,8 @@ if __name__=="__main__":
                  hNloQcdFC.Add(hnlo)
               else:
                  hNloQcdFC=hnlo
-             #hNloQcdFC=smoothChi(hNloQcdFC) # SMOOTH NNLO PREDICTION (FIX ME)
+             if useFullColor:
+               hNloQcdFC=smoothChi(hNloQcdFC) # SMOOTH NNLO PREDICTION (FIX ME)
              hNloQcdFC.SetLineColor(6)
              hNloQcdFC.SetLineStyle(7)
              hNloQcdFC.SetLineWidth(3)
@@ -879,7 +891,7 @@ if __name__=="__main__":
             histname="QCD_ALT#chi"+massbintext.replace("7000_13600","7000_13000").replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit"
             filenamestat='datacards/datacard_shapelimit13TeV_unfold_run2.root'
         else:
-            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
+            filename=fdir.replace("NLO","NLO"+("fc" if useFullColor else""))+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
             histname="data_obs#chi"+massbintext+"_rebin1"
         print(filename)
         fData = TFile.Open(filename)
@@ -956,7 +968,7 @@ if __name__=="__main__":
         h14Gsysstat.SetName("DataSysStat")
         new_hists+=[h14Gsysstat]
 
-        filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
+        filename=fdir.replace("NLO","NLO"+("fc" if useFullColor else""))+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
         print(filename)
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
@@ -1721,16 +1733,24 @@ if __name__=="__main__":
       if compareMu30:
         l2.AddEntry(h3newnew,"NNLO QCD + NLO EW (#mu=m_{jj}, 6)","fl")
         l2.AddEntry(g30,"NNLO QCD + NLO EW (#mu=m_{jj}, 30)","le")
+        l2.AddEntry(hNloQcdAlt,"NNLO QCD + NLO EW (#mu=<p_{T}>, NNPDF3.1)","fl")
+      elif useFullColor:
+        l2.AddEntry(h3newnew,"NNLO QCD + NLO EW (#mu=m_{jj}, full color)","fl")
       else:
         l2.AddEntry(h3newnew,"NNLO QCD + NLO EW (#mu=m_{jj}, NNPDF3.1)","fl")
-      l2.AddEntry(hNloQcdAlt,"NNLO QCD + NLO EW (#mu=<p_{T}>, NNPDF3.1)","fl")
+        l2.AddEntry(hNloQcdAlt,"NNLO QCD + NLO EW (#mu=<p_{T}>, NNPDF3.1)","fl")
     else:
       if useNNLO:
         l2.AddEntry(h3newnew,"NNLO QCD + NLO EW","fl")
       else:
         l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
     if compareFullColor:
-      l2.AddEntry(hNloQcdFC,"NNLO QCD + NLO EW (full color)","fl")
+      if useFullColor:
+        l2.AddEntry(hNloQcdFC,"NNLO QCD + NLO EW (#mu=m_{jj}, lead. color)","fl")
+        if compareScales:
+          l2.AddEntry(hNloQcdAlt,"NNLO QCD + NLO EW (#mu=<p_{T}>, lead. color)","fl")
+      else: 
+        l2.AddEntry(hNloQcdFC,"NNLO QCD + NLO EW (full color)","fl")
     if compareNosmooth:
       l2.AddEntry(hNloQcdNosmooth,"NNLO QCD + NLO EW ("+("no smoothing" if unfoldedData else "no smearing")+")","fl")
     if compareRun3:
@@ -1738,7 +1758,10 @@ if __name__=="__main__":
     if comparePDFs:
       l2.AddEntry(hNloQcdPdf,"NNLO QCD + NLO EW (#mu=m_{jj}, CT14)","fl")
     if oldTheory:
-      l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>, CT14)","fl")
+      if useFullColor:
+        l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>)","fl")
+      else:
+        l2.AddEntry(hNloQcdOld,"NLO QCD + EW (#mu=<p_{T}>, CT14)","fl")
     if compareMadgraph:
       l2.AddEntry(hMC2,"LO+MLM QCD (Madgraph)","l")
     if compareNoEWK:
@@ -1830,6 +1853,8 @@ if __name__=="__main__":
       postfix+="_scales"
     if compareFullColor:
       postfix+="_fullcolor"
+    if useFullColor:
+      postfix+="_fc"
     if compareNosmooth:
       postfix+="_nosmooth"
     if comparePDFs:
@@ -1848,6 +1873,8 @@ if __name__=="__main__":
       postfix+="_nonorm"
     if preliminary:
       postfix+="_preliminary"
-    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".pdf")
-    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".root")
+    if supplementary:
+      postfix+="_supplementary"
+    c.SaveAs(fdir.replace("NLO","NLO"+("fc" if useFullColor else""))+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".pdf")
+    c.SaveAs(fdir.replace("NLO","NLO"+("fc" if useFullColor else""))+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".root")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")

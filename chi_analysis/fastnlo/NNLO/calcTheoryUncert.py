@@ -69,7 +69,8 @@ def multiplyBinWidth(myhist):
 
 order="NNLO"
 newci=True
-normalize=False
+normalize=True
+useFullColor=True
 
 #### Hack factor 2*pi for CI
 #import math
@@ -112,9 +113,14 @@ if calcUncert:
     
     scales=[[1.0,1.0],[0.5,0.5],[2.0,2.0],[0.5,1.0],[1.0,0.5],[1.0,2.0],[2.0,1.0]]
     
-    qcdmufile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_mu_"+mscale+".root")
-    qcdmemfile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_mem_"+mscale+".root")
-    qcdstatfile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_stat_"+mscale+".root")
+    if useFullColor:
+      qcdmufile=TFile.Open("2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+PDF+"_cppread_mu_"+mscale+"_13000.root")
+      qcdmemfile=TFile.Open("2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+PDF+"_cppread_mem_"+mscale+"_13000.root")
+      qcdstatfile=TFile.Open("2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+PDF+"_cppread_stat_"+mscale+"_13000.root")
+    else:
+      qcdmufile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_mu_"+mscale+".root")
+      qcdmemfile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_mem_"+mscale+".root")
+      qcdstatfile=TFile.Open("2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+PDF+"_cppread_stat_"+mscale+".root")
 
     cimufiles=[]
     cimemfiles=[]
@@ -134,7 +140,7 @@ if calcUncert:
         print("read",f)
         scaleFactorsmu[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("fc" if useFullColor else "")+("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         newfile=TFile(fname,"RECREATE")
         for massbin in massbins:
@@ -171,7 +177,7 @@ if calcUncert:
         print("read",f)
         scaleFactorsmem[f.replace(".root","")]=[]
         file=TFile(ciDir+f)
-        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("fc" if useFullColor else "")+("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
@@ -202,7 +208,7 @@ if calcUncert:
                     qcdhistadd.Write()
                         
     for f in cimufiles:
-        fname=f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
+        fname=f.replace("CIJET_",("fc" if useFullColor else "")+("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mu","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_","")
         print("write",fname)
         myfile=TFile(fname,"UPDATE")
         for massbin in massbins:
@@ -237,7 +243,7 @@ if calcUncert:
             histscaledown.Write()
     
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("fc" if useFullColor else "")+("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]
@@ -279,7 +285,7 @@ if calcUncert:
             histscaledown.Write()
 
     for f in cimemfiles:
-        myfile=TFile(f.replace("CIJET_",("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
+        myfile=TFile(f.replace("CIJET_",("fc" if useFullColor else "")+("nonorm" if not normalize else "")+("newci" if newci else "")).replace("_mem","").replace("_0_56_","_").replace("_0_100_","_").replace("001_ct14nlo",PDF+"_"+mscale).replace("001_",""),"UPDATE")
         print("read",f)
         for massbin in massbins:
             #print massbin[0],massbin[1]

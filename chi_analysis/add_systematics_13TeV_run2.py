@@ -75,9 +75,10 @@ if __name__ == '__main__':
     only6000=False # mass binning
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
+    useFullColor=True
     use_UL=True
     responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="3" # "2" for Run2 or "3" for 13.6 TeV
+    run="2" # "2" for Run2 or "3" for 13.6 TeV
     use_NNPDF3=True
     use_CP2=True # for ADD
     normalize=True
@@ -108,7 +109,9 @@ if __name__ == '__main__':
       PDFmembers=100
 
     if run=="2":
-      if useM2:
+      if useFullColor:
+        prefixs=["versions/run2ULNNLOfc_m2"+("_NNPDF3" if use_NNPDF3 else "")+("_nonorm" if not normalize else "")+"/datacard_shapelimit13TeV"]
+      elif useM2:
         prefixs=["versions/run2ULNNLO_m2"+("_NNPDF3" if use_NNPDF3 else "")+("_nonorm" if not normalize else "")+"/datacard_shapelimit13TeV"]
       elif useNNLO:
         prefixs=["versions/run2ULNNLO_pt12"+("_NNPDF3" if use_NNPDF3 else "")+("_nonorm" if not normalize else "")+"/datacard_shapelimit13TeV"]
@@ -652,7 +655,10 @@ if __name__ == '__main__':
       #filename1nu2="fastnlo/RunII/fnl5662j_v23_fix_CT14nlo_allmu_ak4.root"
       if useNNLO:
         #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
-        filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_13600" if run=="3" else "")+".root"
+        if useFullColor:
+          filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+("_13600" if run=="3" else "_13000")+".root"
+        else:
+          filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_13600" if run=="3" else "")+".root"
       else:
         filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_"+pdfset+"_cppread_mu_pt12.root"
       print(filename1nu2)
@@ -660,7 +666,10 @@ if __name__ == '__main__':
       closefiles+=[nlofile2]
 
       # (N)NLO uncertainties
-      filename1nusys="fastnlo/NNLO/"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
+      if useFullColor:
+        filename1nusys="fastnlo/NNLO/fc"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
+      else:
+        filename1nusys="fastnlo/NNLO/"+("nonorm" if not normalize else "")+"newcifnl5662j_cs_"+pdfset+("_"+muScale if useNNLO else "")+"_70000_V-A-.root"
       print(filename1nusys)
       nlofilesys = TFile.Open(filename1nusys)
       closefiles+=[nlofilesys]
@@ -1026,7 +1035,10 @@ if __name__ == '__main__':
           if normalize:
             ci.Scale(1./ci.Integral())
         elif "lo" in samples[i][0] or "cteq66" in samples[i][0] or "cteq6ll" in samples[i][0]:
-          filenamecinlo="fastnlo/NNLO/"+("nonorm" if not normalize else "")+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          if useFullColor:
+            filenamecinlo="fastnlo/NNLO/fc"+("nonorm" if not normalize else "")+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
+          else:
+            filenamecinlo="fastnlo/NNLO/"+("nonorm" if not normalize else "")+("newci" if massbins[j][0]>=3600 else "")+"fnl5662j_"+samples[i][0].replace("QCD","").replace("nnlo","nnlo_"+muScale)+".root" # calcTheoryUncert.py from Jingyu already gives normalized signals
           if massbins[j][0]<3600: # No CI calculation available
             filenamecinlo=filenamecinlo.replace("35000","30000").replace("40000","30000").replace("45000","30000").replace("50000","30000").replace("55000","30000").replace("60000","30000").replace("65000","30000").replace("70000","30000")
           print(filenamecinlo)

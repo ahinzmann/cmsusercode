@@ -4,7 +4,7 @@ import subprocess,os
 
 order="NNLO"
 newci=False
-fullColor=False
+fullColor=True
 com=13000 #13600 #None for Run2 NNLO, 13600 for Run3 or FullColor
 
 if order=="NNLO":
