@@ -1,0 +1,40 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjja_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : CT14nnlo
+ # [fnlo-tk-yodaout] Showing uncertainty from asymmetric 6-point scale factor variation.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Normalizing cross sections. 
+ # [fnlo-tk-yodaout] Using scale definition kScale1.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using newEcms = 13000
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative scale uncertainties (6P CT14nnlo NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       8.20295732427E-02      -6.59551061919E-02       6.44550469972E-02
+    2       6.93082825841E-02      -5.20819661964E-02       4.34228497638E-02
+    3       6.71421643638E-02      -4.51129983726E-02       4.76994912221E-02
+    4       6.65429332869E-02      -2.82342167434E-02       2.07897971439E-02
+    5       6.74240933408E-02      -2.31337587969E-02       1.79544790416E-02
+    6       6.58494011269E-02      -9.13335006865E-03       6.67749113995E-03
+    7       6.82945233839E-02      -2.14070022020E-02       4.40287462144E-02
+    8       6.51187218458E-02      -3.83235194350E-02       1.77311754924E-02
+    9       6.49636843381E-02      -6.37605849022E-02       2.95925153673E-02
+   10       6.63780020816E-02      -3.30716689433E-02       2.65233356315E-02
+   11       6.56983016166E-02      -1.08621310908E-02       2.20742319676E-02
+   12       5.95870075454E-02      -5.46918248741E-02       6.75671679071E-02
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -52,7 +52,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
             N=h14.GetBinContent(b+1)
         else:
             N=1./pow(h14.GetBinError(b+1)/h14.GetBinContent(b+1),2)
-        print N
+        print(N)
         nevents+=N
         L=0
         if N>0:
@@ -60,7 +60,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
         U=ROOT.Math.gamma_quantile_c(alpha/2.,N+1,1.)
         hdataG.SetPointEYlow(b,(N-L)/N*hdata.GetBinContent(b+1))
         hdataG.SetPointEYhigh(b,(U-N)/N*hdata.GetBinContent(b+1))
-    print "data events:", nevents
+    print("data events:", nevents)
 
     hdataGsysstat=hdataG.Clone(hdataG.GetName()+"_sysstat")
     
@@ -69,12 +69,12 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
       for nn in range(len(fitParameters)):
         for b in range(hist.GetXaxis().GetNbins()):
             if fitParameters[nn]>0:
-        	hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
-        	histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1+fitParameters[nn]*(uncertainties[nn][0].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
             else:
-        	hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
-        	histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
-        	    
+                hist.SetBinContent(b+1,hist.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+                histbackup.SetBinContent(b+1,histbackup.GetBinContent(b+1)*(1-fitParameters[nn]*(uncertainties[nn][1].GetBinContent(b+1)-uncertainties[nn][2].GetBinContent(b+1))/uncertainties[nn][2].GetBinContent(b+1)))
+        
     h2new=histbackup.Clone("down"+str(massbins[massbin]))
     h3new=histbackup.Clone("up"+str(massbins[massbin]))
     for b in range(histbackup.GetXaxis().GetNbins()):
@@ -82,17 +82,17 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
         theory_sumup=0
         exp_sumdown=0
         exp_sumup=0
-	total_sumdown=0
-	total_sumup=0
+        total_sumdown=0
+        total_sumup=0
         nn=0
         for up,down,central in uncertainties:
             addup=pow(max(0,up.GetBinContent(b+1)-central.GetBinContent(b+1),down.GetBinContent(b+1)-central.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
             adddown=pow(max(0,central.GetBinContent(b+1)-up.GetBinContent(b+1),central.GetBinContent(b+1)-down.GetBinContent(b+1)),2)/pow(central.GetBinContent(b+1),2)
             if constrain:
-	     addup*=fitConstraints[nn]
+             addup*=fitConstraints[nn]
              adddown*=fitConstraints[nn]
             if "jer" in uncertaintynames[uncertainties.index([up,down,central])] or "jes" in uncertaintynames[uncertainties.index([up,down,central])] or "model" in uncertaintynames[uncertainties.index([up,down,central])] or "JERtail" in uncertaintynames[uncertainties.index([up,down,central])] or "sim" in uncertaintynames[uncertainties.index([up,down,central])] or "prefire" in uncertaintynames[uncertainties.index([up,down,central])] or "trigger" in uncertaintynames[uncertainties.index([up,down,central])]:
-		exp_sumup+=addup
+                exp_sumup+=addup
                 exp_sumdown+=adddown
                 #print uncertaintynames[uncertainties.index([up,down,central])]
             else:
@@ -100,7 +100,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
                 theory_sumdown+=adddown
             total_sumup+=addup
             total_sumdown+=adddown
-	    nn+=1
+            nn+=1
         theory_sumdown=sqrt(theory_sumdown)
         theory_sumup=sqrt(theory_sumup)
         exp_sumdown=sqrt(exp_sumdown)
@@ -121,7 +121,7 @@ def applyFitResults(fitParameters,fitConstraints,uncertainties,hist,hdata,constr
 def getUncertainties(fsys,basename,pname,masstext):
     uncertainties=[]
     for u in uncertaintynames:
-        print basename+"_"+u+"Up"
+        print(basename+"_"+u+"Up")
         hup_orig=fsys.Get(basename+"_"+u+"Up")
         up=hup_orig.Clone(pname+'#chi'+masstext+"_rebin1_"+u+"Up")
         divBinWidth(up)
@@ -164,7 +164,7 @@ if __name__=="__main__":
                (1,3,6,9,12,16),
               ]
 
-    print "start ROOT"
+    print("start ROOT")
     #gROOT.Reset()
     gROOT.SetStyle("Plain")
     gROOT.SetBatch(True)
@@ -208,7 +208,7 @@ if __name__=="__main__":
             signalExtraName[counter]="_"+mdm+"_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_"+ga
             GA[counter]=ga
             counter+=1
-    print (counter-1)
+    print(counter-1)
     #print signalName,signalExtraName
 
     prefix="versions/run2ULNNLO_m2/datacard_shapelimit13TeV"
@@ -219,57 +219,57 @@ if __name__=="__main__":
     #for j in [1102,1103,1104,1105,1106,1107,1108]:
     for j in [1108]:
         for signalMass in signalMasses:
-	    if version=="v6":
+            if version=="v6":
               if signalMass<=2500:
-            	  massbins=[(2400,3000)]
+                  massbins=[(2400,3000)]
               elif signalMass<=3000:
-            	  massbins=[(2400,3000),(3000,3600)]
+                  massbins=[(2400,3000),(3000,3600)]
               elif signalMass<=3500:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200)]
               elif signalMass<=4000:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200)]
               elif signalMass<=4500:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
               elif signalMass<=5000:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
               elif signalMass<=6000:
-            	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+                  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
               else:
-            	  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+                  massbins=[(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
             elif version=="v6b":
               if signalMass<=2500:
-            	  massbins=[(2400,3000)]
+                  massbins=[(2400,3000)]
               elif signalMass<=3000:
-            	  massbins=[(2400,3000),(3000,3600)]
+                  massbins=[(2400,3000),(3000,3600)]
               elif signalMass<=3500:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200)]
               elif signalMass<=4000:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200)]
               elif signalMass<=4500:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800)]  
               elif signalMass<=5000:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
               elif signalMass<=6000:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
               else:
-            	  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+                  massbins=[(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
             elif version=="v9":
-  	      if signalMass<=2500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
-  	      elif signalMass<=3000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
-  	      elif signalMass<=3500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
-  	      elif signalMass<=4000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
-  	      elif signalMass<=4500:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
-  	      elif signalMass<=5000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
-  	      elif signalMass<=6000:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
-  	      else:
-  	    	massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
+              if signalMass<=2500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000)]
+              elif signalMass<=3000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600)]
+              elif signalMass<=3500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200)]
+              elif signalMass<=4500:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800)]
+              elif signalMass<=5000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000)]
+              elif signalMass<=6000:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000)]
+              else:
+                massbins=[(1200,1500),(1500,1900),(1900,2400),(2400,3000),(3000,3600),(3600,4200),(4200,4800),(4800,5400),(5400,6000),(6000,7000),(7000,13000)]
 
             histnameprefix=("DMAxial_Dijet_LO_Mphi_"+str(signalMass)+signalExtraName[j]).replace("7000_1","7000_4000") # FIX produce 7000 mdm=1 sample
             filenameprefix=prefix+"_"+histnameprefix
@@ -295,7 +295,7 @@ if __name__=="__main__":
                 #masstext=str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")
                 #if unfoldedData:
                 #    histname="dijet_mass_"+masstext+"_chi_unfolded"
-    	        #else:
+                #else:
                 #    histname="dijet_mass_"+masstext+"_chi"
               
                 #print filename
@@ -303,7 +303,7 @@ if __name__=="__main__":
                 #new_hists+=[fData]
                 #print histname
                 #h14=fData.Get(histname)
-    	        #divBinWidth(h14)
+                #divBinWidth(h14)
                 #h14.SetLineColor(4)
                 #new_hists+=[h14]
 
@@ -322,22 +322,22 @@ if __name__=="__main__":
                 else:
                     fitFile=TFile("limitsDetLHCa"+str(j)+"_DMAxial_Dijet_LO_Mphi_"+version+"/fitDiagnostics"+histnameprefix+".root")
 
-                print "Fit Parameters from:", fitFile.GetName()
+                print("Fit Parameters from:", fitFile.GetName())
 
                 f=TFile.Open(filename)
-                print "File:",filename
+                print("File:",filename)
                 new_hists+=[f]
 
-		dataname="data_obs#chi"+masstext+"_rebin1"
-                print "Data Hist Name:",dataname
-		
+                dataname="data_obs#chi"+masstext+"_rebin1"
+                print("Data Hist Name:",dataname)
+      
                 h14=f.Get(dataname)
-		divBinWidth(h14)
+                divBinWidth(h14)
                 h14.SetLineColor(1)
                 new_hists+=[h14]
                 
-		basename=histnameprefix+"_ALT#chi"+masstext+"_rebin1"
-                print "Background Hist Name:",basename
+                basename=histnameprefix+"_ALT#chi"+masstext+"_rebin1"
+                print("Background Hist Name:",basename)
 
                 # NLO OCD plot (with EWK correction)
                 
@@ -347,7 +347,7 @@ if __name__=="__main__":
                 new_hists+=[hNloQcd]
     
                 for b in range(hNloQcd.GetXaxis().GetNbins()):
-    	            hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
+                    hNloQcd.SetBinContent(b+1,hNloQcd.GetBinContent(b+1)/hNloQcd.GetBinWidth(b+1))
     
                 hNloQcd.SetLineColor(1)
                 hNloQcd.SetLineStyle(2)
@@ -376,13 +376,13 @@ if __name__=="__main__":
                 # Shift theory predictions according to fitted nuisance parameters
                 
                 #bfitParameters,bfitConstraints=getFitResults(fitFile, 'fit_b')
-		bfitParameters,bfitConstraints=None,None
+                bfitParameters,bfitConstraints=None,None
 
                 h2bnew,h3bnew,h14Gsysstat=applyFitResults(bfitParameters,bfitConstraints,uncertainties,hNloQcd,h14,False)
 
                 # DM plot
                 basename=histnameprefix+"#chi"+masstext+"_rebin1"
-                print "Signal Hist Name:",basename
+                print("Signal Hist Name:",basename)
                 
                 hDm_orig=f.Get(basename)
                 new_hists+=[hDm_orig]
@@ -390,7 +390,7 @@ if __name__=="__main__":
                 new_hists+=[hDm]
     
                 for b in range(hDm.GetXaxis().GetNbins()):
-    	            hDm.SetBinContent(b+1,hDm.GetBinContent(b+1)/hDm.GetBinWidth(b+1))
+                     hDm.SetBinContent(b+1,hDm.GetBinContent(b+1)/hDm.GetBinWidth(b+1))
     
                 hDm.SetLineColor(2)
                 hDm.SetLineStyle(5)
@@ -418,7 +418,7 @@ if __name__=="__main__":
                 # Shift theory prediction according to fitted nuisance parameters
                 
                 #sfitParameters,sfitConstraints=getFitResults(fitFile, 'fit_s')
-		sfitParameters,sfitConstraints=None,None
+                sfitParameters,sfitConstraints=None,None
 
                 h2snew,h3snew,h14Gsysstat_sb=applyFitResults(sfitParameters,sfitConstraints,suncertainties,hDm,h14,False)
         
@@ -441,36 +441,36 @@ if __name__=="__main__":
                 canvas=TCanvas("post-fit", "post-fit", 0, 0, 300, 350)
                 canvas.cd()
 
-   	        if massbins[massbin][0]>=6000:
-   	   	    hNloQcd.SetMinimum(0.8)
-   	   	    hNloQcd.SetMaximum(1.2)
-   	        elif massbins[massbin][0]>=4800:
-   	   	    hNloQcd.SetMinimum(0.9)
-   	   	    hNloQcd.SetMaximum(1.1)
-   	        else:
-   	   	    hNloQcd.SetMinimum(0.95)
-   	   	    hNloQcd.SetMaximum(1.05)
+                if massbins[massbin][0]>=6000:
+                    hNloQcd.SetMinimum(0.8)
+                    hNloQcd.SetMaximum(1.2)
+                elif massbins[massbin][0]>=4800:
+                    hNloQcd.SetMinimum(0.9)
+                    hNloQcd.SetMaximum(1.1)
+                else:
+                    hNloQcd.SetMinimum(0.95)
+                    hNloQcd.SetMaximum(1.05)
 
                 h3bnew.Divide(h3bnew,hNloQcd)
                 h2bnew.Divide(h2bnew,hNloQcd)
                 for b in range(hNloQcd.GetXaxis().GetNbins()):
-    	            h14Gsysstat.SetPoint(b,h14.GetBinCenter(b+1),1)
+                    h14Gsysstat.SetPoint(b,h14.GetBinCenter(b+1),1)
                     h14Gsysstat.SetPointEYlow(b,h14Gsysstat.GetErrorYlow(b)/h14.GetBinContent(b+1))
                     h14Gsysstat.SetPointEYhigh(b,h14Gsysstat.GetErrorYhigh(b)/h14.GetBinContent(b+1))
-		
+       
                 hNloQcd.Draw("axissame")
                 h3bnew.Draw("histsame")
                 h2bnew.Draw("histsame")
                 #h14.Draw("zesame")
-		for unc in uncertainties:
-		  unc[0].Divide(unc[0],unc[2])
-		  unc[1].Divide(unc[1],unc[2])
-		  unc[0].SetLineWidth(uncertainties.index(unc)%2+1)
-		  unc[1].SetLineWidth(uncertainties.index(unc)%2+1)
-		  unc[0].SetLineStyle(uncertainties.index(unc)%10+1)
-		  unc[1].SetLineStyle(uncertainties.index(unc)%10+1)
-		  unc[0].Draw("histsame")
-		  unc[1].Draw("histsame")
+                for unc in uncertainties:
+                  unc[0].Divide(unc[0],unc[2])
+                  unc[1].Divide(unc[1],unc[2])
+                  unc[0].SetLineWidth(uncertainties.index(unc)%2+1)
+                  unc[1].SetLineWidth(uncertainties.index(unc)%2+1)
+                  unc[0].SetLineStyle(uncertainties.index(unc)%10+1)
+                  unc[1].SetLineStyle(uncertainties.index(unc)%10+1)
+                  unc[0].Draw("histsame")
+                  unc[1].Draw("histsame")
                 h14Gsysstat.Draw("zesame")
                 #hNloQcd.Draw("histsame")
                 #hbPrefit.Draw("histsame")
@@ -493,8 +493,8 @@ if __name__=="__main__":
                 l2.SetTextSize(0.035)
                 l2.AddEntry(h14,"Statistical","ple")
                 l2.AddEntry(h3newnew,"Exp. systematic","fl")
-		for unc in uncertainties:
-		  l2.AddEntry(unc[0],uncertaintynames[uncertainties.index(unc)],"fl")
+                for unc in uncertainties:
+                  l2.AddEntry(unc[0],uncertaintynames[uncertainties.index(unc)],"fl")
                 #l2.AddEntry(hbPrefit,"Background pre-fit","l")
                 #l2.AddEntry(hDm,"Background+Signal post-fit","fl")
                 #l2.AddEntry(hsPrefit,"Background+Signal pre-fit","l")
@@ -509,7 +509,7 @@ if __name__=="__main__":
                 h3bnew.SetLineColor(17)
                 h3bnew.SetFillColor(17)
 
-                print "systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1)
+                print("systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1))
         
                 canvas.SaveAs(SaveDir + prefix + "_uncertainties_"+histnameprefix+"_"+masstext+"_run2.pdf")
 

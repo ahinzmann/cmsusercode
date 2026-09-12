@@ -1,0 +1,40 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj4_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : CT14nnlo
+ # [fnlo-tk-yodaout] Showing statistical uncertainty from rel. x section share.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Preparing unnormalized cross sections.
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using newEcms = 13000
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative statistical uncertainties from rel. shares (SR CT14nnlo NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       2.91553242331E-04      -6.76786584502E-04       6.76786584502E-04
+    2       2.48652587775E-04      -6.48570190836E-04       6.48570190836E-04
+    3       2.43992713022E-04      -1.05119022115E-03       1.05119022115E-03
+    4       2.46753275294E-04      -1.45866904971E-03       1.45866904971E-03
+    5       2.49254526891E-04      -2.14968311738E-03       2.14968311738E-03
+    6       2.57435875951E-04      -2.48243328329E-03       2.48243328329E-03
+    7       2.60929031904E-04      -3.10719319227E-03       3.10719319227E-03
+    8       2.59366072091E-04      -4.28240338747E-03       4.28240338747E-03
+    9       2.64794988832E-04      -5.00695589811E-03       5.00695589811E-03
+   10       2.71861099714E-04      -3.93608077959E-03       3.93608077959E-03
+   11       2.74088197078E-04      -5.16967447394E-03       5.16967447394E-03
+   12       2.78466657322E-04      -6.32575616659E-03       6.32575616659E-03
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

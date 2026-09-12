@@ -182,7 +182,12 @@ if __name__=="__main__":
     gStyle.SetEndErrorSize(8)
 
     print("load CMS style")
-    gROOT.LoadMacro("CMS_lumi.C");
+    import CMS_lumi
+    CMS_lumi.writeExtraText=""
+    CMS_lumi.relPosX=0.13
+    CMS_lumi.cmsTextSize=1.0
+    CMS_lumi.lumiTextSize=0.8
+    #gROOT.LoadMacro("CMS_lumi.C");
     iPeriod = 5;	#// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
     iPos = 33;
     #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
@@ -575,7 +580,7 @@ if __name__=="__main__":
 
                 print("systematic uncertainty:", (h3bnew.GetBinContent(1)-hNloQcd.GetBinContent(1))/hNloQcd.GetBinContent(1))
 
-                CMS_lumi( canvas, iPeriod, iPos );
+                CMS_lumi.CMS_lumi( canvas, iPeriod, iPos );
         
                 canvas.SaveAs(SaveDir + prefix + "_combined_fit_"+("lowest_bins_fit" if lowestBinsCheck else ("control_region_fit" if controlRegionCheck else ("signal_region_fit" if backgroundOnlyCheck else histnameprefix)))+"_"+masstext+"_run"+run+".pdf")
 

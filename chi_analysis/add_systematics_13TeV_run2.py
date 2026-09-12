@@ -77,7 +77,7 @@ if __name__ == '__main__':
     useM2=True # choice of mu-scale for QCD
     use_UL=True
     responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="3" # "2" for Run2 or "3" for 13.6 TeV projection
+    run="3" # "2" for Run2 or "3" for 13.6 TeV
     use_NNPDF3=True
     use_CP2=True # for ADD
     normalize=True
@@ -149,8 +149,8 @@ if __name__ == '__main__':
     if run=="2":
       lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
     if run=="3":
-      years=["2024-21Dec2025","2025-21Dec2025"]
-      lumi=109080+115650
+      years=["2024-2026Sep10","2025-2026Sep10","2026-2026Sep10"]
+      lumi=109950+110630+28060
 
     colors=[1,2,3,4,6,7,8,9,12,28,34,38,40,41,42,43,44,45,46,47,48,49] #11,20
  
@@ -235,6 +235,36 @@ if __name__ == '__main__':
               (8,),
               (9,10,)
                  ]
+    if run=="3":
+      chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,3,6,9,12,16),
+              ]
+      mass_bins_nlo_list=[(2,),
+                  (3,),
+                  (4,),
+                  (5,),
+                  (6,),
+              (7,),
+              (8,),
+              (9,),
+              (10,)
+                 ]
+      massbins=[(1900,2400),
+              (2400,3000),
+              (3000,3600),
+              (3600,4200),
+              (4200,4800),
+              (4800,5400),
+              (5400,6000),
+              (6000,7000),
+              (7000,13600)]
                  
     if useUnfoldedData:
        massbins=massbins[1:]
@@ -581,16 +611,19 @@ if __name__ == '__main__':
       #insample='datacards/chiHist_dataReReco_v3_PFHT900.root' #2016
       #insample='datacards/datacard_shapelimit13TeV_25nsData13combi_chi.root' # buggy data
       if run=="3":
-        insample="data/datacard_shapelimit13TeV_run2_2024-21Dec2025_chi.root"
+        insample="data/datacard_shapelimit13TeV_run2_2024-2026Sep10_chi.root"
       elif use_UL:
         insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
       else:
         insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
       print(insample)
       infile=TFile(insample,'READ')
-      insample2025="data/datacard_shapelimit13TeV_run2_2025-21Dec2025_chi.root"
+      insample2025="data/datacard_shapelimit13TeV_run2_2025-2026Sep10_chi.root"
       print(insample2025)
       infile2025=TFile(insample2025,'READ')
+      insample2026="data/datacard_shapelimit13TeV_run2_2026-2026Sep10_chi.root"
+      print(insample2026)
+      infile2026=TFile(insample2026,'READ')
       insample16postVFP="datacards/datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
       print(insample16postVFP)
       infile16postVFP=TFile(insample16postVFP,'READ')
@@ -798,7 +831,7 @@ if __name__ == '__main__':
         if only6000:
           qcd=in2.Get(histname.replace("6000_13000","6000_7000"))
         else:
-          qcd=in2.Get(histname)
+          qcd=in2.Get(histname.replace("7000_13600","7000_13000"))
         out.cd()
         qcd.Write(histname.replace("_backup",""))
         qcd=qcd.Rebin(len(chi_binnings[j])-1,histname,chi_binnings[j])
@@ -857,7 +890,7 @@ if __name__ == '__main__':
             nloqcdnormd=hnlo
 
         # EWK corrections
-        histname='chi-'+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000") # FIX compute lower and higher mass bins
+        histname='chi-'+str(massbins[j]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000") # FIX compute lower and higher mass bins
         print(histname)
         ewk=ewkfile.Get(histname)
         for b in range(nloqcd.GetXaxis().GetNbins()):
@@ -896,7 +929,7 @@ if __name__ == '__main__':
           #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi"
           histname2="datacard_shapelimit13TeV_run2_"+years[0]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           if run=="3":
-            histname2=histname2.replace("7000_13000","7000_13600")
+            histname2=histname2
           print(histname2)
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
@@ -905,7 +938,7 @@ if __name__ == '__main__':
             datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data.GetBinContent(b+1))
           data=data.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
           if run=="3":
-            histname2025="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("7000_13000","7000_13600")+"_rebin1"
+            histname2025="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
             print(histname2025)
             data2025 = TH1F(infile2025.Get(histname2025))
             for b in range(data.GetXaxis().GetNbins()):
@@ -913,6 +946,14 @@ if __name__ == '__main__':
               datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data2025.GetBinContent(b+1))
             data2025=data2025.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
             data.Add(data2025)
+            histname2026="datacard_shapelimit13TeV_run2_"+years[2]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
+            print(histname2026)
+            data2026 = TH1F(infile2026.Get(histname2026))
+            for b in range(data.GetXaxis().GetNbins()):
+              datahist2d_chiBins2.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data2026.GetBinContent(b+1))
+              datahist2d_chiBins3.Fill(massbins[j][0]+0.1,data.GetXaxis().GetBinCenter(b+1),data2026.GetBinContent(b+1))
+            data2026=data2026.Rebin(len(chi_binnings[j])-1,data.GetName()+"_rebin1",chi_binnings[j])
+            data.Add(data2026)
           elif run=="2":
            if use_UL:
             histname16postVFP="datacard_shapelimit13TeV_run2_"+years[1]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
@@ -1201,7 +1242,7 @@ if __name__ == '__main__':
           if only6000:
             cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
           else:  
-            cibackup=insignalfile.Get(histname)
+            cibackup=insignalfile.Get(histname.replace("7000_13600","7000_13000"))
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1212,7 +1253,7 @@ if __name__ == '__main__':
           if only6000:
             cibackup=insignalfile.Get(histname.replace("6000_13000","6000_7000"))
           else:  
-            cibackup=insignalfile.Get(histname)
+            cibackup=insignalfile.Get(histname.replace("7000_13600","7000_13000"))
           histname=histname.replace("_backup","")
           ci=cibackup.Clone(histname)
           ci=ci.Rebin(len(chi_binnings[j])-1,ci.GetName(),chi_binnings[j])
@@ -1452,7 +1493,8 @@ if __name__ == '__main__':
         clone=clone.Rebin(len(chi_binnings[j])-1,clone.GetName(),chi_binnings[j])
         ciprefireup=clone.Clone(histname+"_prefireUp")
         ciprefiredown=clone.Clone(histname+"_prefireDown")
-        for b in range(clone.GetNbinsX()):
+        if run=="2":
+          for b in range(clone.GetNbinsX()):
             ciprefireup.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][0].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
             ciprefiredown.SetBinContent(b+1,clone.GetBinContent(b+1)*((prefirehists[str(j)][1].Eval(clone.GetXaxis().GetBinCenter(b+1))-1.)*0.5+1.))
         ciprefireup.SetLineColor(colors[col])
@@ -2124,18 +2166,21 @@ if __name__ == '__main__':
         #matrix1.Print()
         #print (len(matrixMassBins)-1)*(len(chi_bins[-1])-1)
         #matrix2.Print()
-        if "herwigp" in responsePostfix:
-          responses=TFile("datacards/Response_"+responsePostfix+"_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
-        elif "madgraphMLM" in responsePostfix:
-          responses=TFile("datacards/Response_"+responsePostfix+"_HT_200toInf_CB2_AK4SF_March24.root",'READ')
-        elif "T" in responsePostfix:
-          responses=TFile("datacards/Response_pythia8_Pt_170toInf_CB2_AK4SF_March24_"+responsePostfix+".root",'READ')
-        elif "Sys" in responsePostfix:
-          responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_"+responsePostfix+"_March24.root",'READ')
-        elif "GS" in responsePostfix:
-          responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_March24.root",'READ')
-        elif responsePostfix=="" or responsePostfix=="RECO":
-          responses=TFile("datacards/Response_pythia8_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
+        if run=="3":
+          responses=TFile("datacards/Response_2024_combine_runII_Sep2026.root",'READ')
+        else:
+          if "herwigp" in responsePostfix:
+            responses=TFile("datacards/Response_"+responsePostfix+"_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
+          elif "madgraphMLM" in responsePostfix:
+            responses=TFile("datacards/Response_"+responsePostfix+"_HT_200toInf_CB2_AK4SF_March24.root",'READ')
+          elif "T" in responsePostfix:
+            responses=TFile("datacards/Response_pythia8_Pt_170toInf_CB2_AK4SF_March24_"+responsePostfix+".root",'READ')
+          elif "Sys" in responsePostfix:
+            responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_"+responsePostfix+"_March24.root",'READ')
+          elif "GS" in responsePostfix:
+            responses=TFile("datacards/Response_pythia8_Pt_170toInf_GS_AK4SF_March24.root",'READ')
+          elif responsePostfix=="" or responsePostfix=="RECO":
+            responses=TFile("datacards/Response_pythia8_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
 
         # modify histograms
         histogram_names=[
@@ -2163,7 +2208,9 @@ if __name__ == '__main__':
               for j2 in range(len(massbins)):
                 for b2 in range(althists[j2].GetNbinsX()):
                   response=0
-                  response_name="QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_"
+                  response_name=("QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_")
+                  if run=="3":
+                    response_name=response_name.replace("7000_13600","7000_13000")
                   if j2==(len(massbins)-1):
                     # highest reco mass has coarse gen-chi-binning in Jingyu's files
                     bin1=althists[j2].GetXaxis().FindBin(althists[j1].GetBinCenter(b1+1))-1
@@ -2217,6 +2264,8 @@ if __name__ == '__main__':
                   #      response+=matrix1[j2m+bin2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
                   response=0
                   response_name="QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_"
+                  if run=="3":
+                    response_name=response_name.replace("7000_13600","7000_13000")
                   if j2==(len(massbins)-1):
                     # highest reco mass has coarse gen-chi-binning in Jingyu's files
                     bin1=althists[j2].GetXaxis().FindBin(althists[j1].GetBinCenter(b1+1))-1
@@ -2336,7 +2385,8 @@ if __name__ == '__main__':
                 #if j==3:
                 #  print "norm", sys, shift, althistsclones[j].Integral(), althists[j].Integral(), sysHist.Integral()
                 #if "model2400" in sys and j==3:
-                #  print "shape", sys, shift, sysHist.GetBinContent(1), sysHist.GetBinContent(sysHist.GetNbinsX())
+                #    print("shape", sys, shift, sysHist.GetBinContent(1), sysHist.GetBinContent(sysHist.GetNbinsX()))
+                print("shape", sys, shift, (sysHist.GetBinContent(1)-althists[j].GetBinContent(1))/althists[j].GetBinContent(1))
                 #sysHist.Scale(dataevents[j]/sysHist.Integral())
                 sysHist.Write()
                 syshists[sys+shift]=sysHist

@@ -190,6 +190,7 @@ if __name__=="__main__":
   useM2=True # choice of mu-scale for QCD
   use_NNPDF3=True
   normalize=True
+  run="3"
   
   if use_NNPDF3:
     pdfset="nn31nnlo"
@@ -206,13 +207,14 @@ if __name__=="__main__":
 
   unfoldedData=False
   oldMeasurements=False
-  compareRun3=True
+  compareRun3=False
   oldTheory=False
   signalsBSM=False
   signalsDM=False
   signalsBragg=False
   compareScales=False
   compareFullColor=False
+  compareNosmooth=True
   comparePDFs=False
   compareMu30=False
   compareMadgraph=False
@@ -220,8 +222,12 @@ if __name__=="__main__":
   comparePostfit=False
   preliminary=False
   
-  lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
-  #lumi=109080+115650 # Run3
+  if run=="3":
+    lumi=109950+110630+28060 # Run3
+    com="13600"
+  else:
+    lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
+    com=""
 
   massbins=[(1200,1500),
         (1500,1900),
@@ -274,6 +280,40 @@ if __name__=="__main__":
       (1,2,3,4,5,6,7,8,9,10,12,14,16),
       (1,3,6,9,12,16),
   ]
+
+  if run=="3":
+    massbins=[(1900,2400),
+          (2400,3000),
+          (3000,3600),
+          (3600,4200),
+          (4200,4800),
+          (4800,5400),
+          (5400,6000),
+          (6000,7000),
+          (7000,13600),
+    ]
+    mass_bins_nlo_list=[(2,),
+                  (3,),
+                  (4,),
+                  (5,),
+                  (6,),
+              (7,),
+              (8,),
+              (9,),
+              (10,)
+                 ]
+    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,2,3,4,5,6,7,8,9,10,12,14,16),
+        (1,3,6,9,12,16),
+    ]
+
+
   chi_binnings=[]
   for mass_bin in chi_bins:
       chi_binnings+=[array.array('d')]
@@ -308,7 +348,10 @@ if __name__=="__main__":
   CMS_lumi.cmsTextSize=1.0
   CMS_lumi.lumiTextSize=0.8
   #gROOT.LoadMacro("CMS_lumi.C");
-  iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
+  if run=="3":
+    iPeriod = 6;
+  else:
+    iPeriod = 5;        #// 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
   iPos = 33;
   if preliminary: iPos=0
   #// second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
@@ -329,12 +372,12 @@ if __name__=="__main__":
     c.Divide(1,1)
     new_hists=[]
     if True:
-        fdir='versions/run2UL'+('NNLO' if useNNLO else 'NLO')+'_'+muScale+("_NNPDF3" if use_NNPDF3 else "")+'/'
+        fdir='versions/run'+run+('UL'if run=="2" else "")+('NNLO' if useNNLO else 'NLO')+'_'+muScale+("_NNPDF3" if use_NNPDF3 else "")+'/'
             
         if unfoldedData:  
             if useNNLO:
               #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muScale+".root"
-              filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+".root"
+              filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_"+com if run=="3" else "")+".root"
             else:
               filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
               #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nlo_cppread_mu_pt12.root"
@@ -375,7 +418,7 @@ if __name__=="__main__":
             print(filename)
             fEWK = TFile.Open(filename)
             new_hists+=[fEWK]
-            histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+            histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
             print(histname)
             hEWK=fEWK.Get(histname)
             print("EWK hist: ")
@@ -466,7 +509,7 @@ if __name__=="__main__":
              print(filename)
              fEWK = TFile.Open(filename)
              new_hists+=[fEWK]
-             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
              print(histname)
              hEWK=fEWK.Get(histname)
              print("EWK hist: ")
@@ -488,7 +531,7 @@ if __name__=="__main__":
             if compareScales:
              if useNNLO:
                #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nnlo_cppread_mu_"+muAltScale+".root"
-               filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muAltScale+".root"
+               filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muAltScale+("_"+com if run=="3" else "")+".root"
              else:
                filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_ct14nlo_cppread_mu_pt12.root"
                #filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nlo_cppread_mu_pt12.root"
@@ -518,7 +561,7 @@ if __name__=="__main__":
              print(filename)
              fEWK = TFile.Open(filename)
              new_hists+=[fEWK]
-             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
              print(histname)
              hEWK=fEWK.Get(histname)
              print("EWK hist: ")
@@ -536,53 +579,6 @@ if __name__=="__main__":
                hNloQcdAlt.Scale(lumi)
              for b in range(hNloQcdAlt.GetXaxis().GetNbins()):
                  hNloQcdAlt.SetBinContent(b+1,hNloQcdAlt.GetBinContent(b+1)/hNloQcdAlt.GetBinWidth(b+1))
-
-            if compareFullColor:
-             filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+"_13000.root"
-             print(filename1nu2)
-             nlofile2 = TFile.Open(filename1nu2)
-             new_hists+=[nlofile2]
-             hNloQcdFC=None
-             for k in mass_bins_nlo_list[massbin]:
-              #histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
-              histname='qcd_chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0"
-              print(histname)
-              hnlo = TH1F(nlofile2.Get(histname))
-              #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
-              hnlo=hnlo.Rebin(len(chi_binnings[massbin])-1,hnlo.GetName()+"_rebin1",chi_binnings[massbin])
-              #hnlo=rebin(hnlo,len(chi_binnings[j])-1,chi_binnings[j])
-              if hNloQcdFC:
-                 hNloQcdFC.Add(hnlo)
-              else:
-                 hNloQcdFC=hnlo
-             #hNloQcdFC=smoothChi(hNloQcdFC) # SMOOTH NNLO PREDICTION (FIX ME)
-             hNloQcdFC.SetLineColor(6)
-             hNloQcdFC.SetLineStyle(7)
-             hNloQcdFC.SetLineWidth(3)
-             hNloQcdFC.SetName("FullColor")
-             
-             filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
-             print(filename)
-             fEWK = TFile.Open(filename)
-             new_hists+=[fEWK]
-             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
-             print(histname)
-             hEWK=fEWK.Get(histname)
-             print("EWK hist: ")
-             print(hEWK)
-             for b in range(hNloQcdFC.GetXaxis().GetNbins()):
-                 low_bin=hEWK.FindBin(hNloQcdFC.GetXaxis().GetBinLowEdge(b+1))
-                 up_bin=hEWK.FindBin(hNloQcdFC.GetXaxis().GetBinUpEdge(b+1))
-                 correction=hEWK.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
-                 print("correction: ")
-                 print(correction)
-                 hNloQcdFC.SetBinContent(b+1,hNloQcdFC.GetBinContent(b+1)*correction)
-             if normalize:
-               hNloQcdFC.Scale(1./hNloQcdFC.Integral())
-             else:
-               hNloQcdFC.Scale(lumi)
-             for b in range(hNloQcdFC.GetXaxis().GetNbins()):
-                 hNloQcdFC.SetBinContent(b+1,hNloQcdFC.GetBinContent(b+1)/hNloQcdFC.GetBinWidth(b+1))
 
             if comparePDFs:
              filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_ct14nnlo_cppread_mu_"+muScale+".root"
@@ -611,7 +607,7 @@ if __name__=="__main__":
              print(filename)
              fEWK = TFile.Open(filename)
              new_hists+=[fEWK]
-             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
              print(histname)
              hEWK=fEWK.Get(histname)
              print("EWK hist: ")
@@ -631,7 +627,7 @@ if __name__=="__main__":
                  hNloQcdPdf.SetBinContent(b+1,hNloQcdPdf.GetBinContent(b+1)/hNloQcdPdf.GetBinWidth(b+1))
 
         else:
-            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
+            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
             print(filename)
             f = TFile.Open(filename)
             new_hists+=[f]
@@ -673,6 +669,101 @@ if __name__=="__main__":
                   hNloQcdRun3.SetBinContent(b+1,hNloQcdRun3.GetBinContent(b+1)/hNloQcdRun3.GetBinWidth(b+1))
               hNloQcdRun3.SetName("MainScale")
             
+        if compareFullColor:
+             filename1nu2="fastnlo/NNLO/2jetfc.NNLO.fnl5662k_mjj_chi_norm_v26_"+pdfset+"_cppread_mu_"+muScale+"_13000.root"
+             print(filename1nu2)
+             nlofile2 = TFile.Open(filename1nu2)
+             new_hists+=[nlofile2]
+             hNloQcdFC=None
+             for k in mass_bins_nlo_list[massbin]:
+              #histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
+              histname='qcd_chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0"
+              print(histname)
+              hnlo = TH1F(nlofile2.Get(histname))
+              #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
+              hnlo=hnlo.Rebin(len(chi_binnings[massbin])-1,hnlo.GetName()+"_rebin1",chi_binnings[massbin])
+              #hnlo=rebin(hnlo,len(chi_binnings[j])-1,chi_binnings[j])
+              if hNloQcdFC:
+                 hNloQcdFC.Add(hnlo)
+              else:
+                 hNloQcdFC=hnlo
+             #hNloQcdFC=smoothChi(hNloQcdFC) # SMOOTH NNLO PREDICTION (FIX ME)
+             hNloQcdFC.SetLineColor(6)
+             hNloQcdFC.SetLineStyle(7)
+             hNloQcdFC.SetLineWidth(3)
+             hNloQcdFC.SetName("FullColor")
+             
+             filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
+             print(filename)
+             fEWK = TFile.Open(filename)
+             new_hists+=[fEWK]
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             print(histname)
+             hEWK=fEWK.Get(histname)
+             print("EWK hist: ")
+             print(hEWK)
+             for b in range(hNloQcdFC.GetXaxis().GetNbins()):
+                 low_bin=hEWK.FindBin(hNloQcdFC.GetXaxis().GetBinLowEdge(b+1))
+                 up_bin=hEWK.FindBin(hNloQcdFC.GetXaxis().GetBinUpEdge(b+1))
+                 correction=hEWK.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
+                 print("correction: ")
+                 print(correction)
+                 hNloQcdFC.SetBinContent(b+1,hNloQcdFC.GetBinContent(b+1)*correction)
+             if normalize:
+               hNloQcdFC.Scale(1./hNloQcdFC.Integral())
+             else:
+               hNloQcdFC.Scale(lumi)
+             for b in range(hNloQcdFC.GetXaxis().GetNbins()):
+                 hNloQcdFC.SetBinContent(b+1,hNloQcdFC.GetBinContent(b+1)/hNloQcdFC.GetBinWidth(b+1))
+
+        if compareNosmooth:
+             filename1nu2="fastnlo/NNLO/2jet.NNLO.fnl5662j_mjj_chi_norm_v25_"+pdfset+"_cppread_mu_"+muScale+("_"+com if run=="3" else "")+".root"
+             print(filename1nu2)
+             nlofile2 = TFile.Open(filename1nu2)
+             new_hists+=[nlofile2]
+             hNloQcdNosmooth=None
+             for k in mass_bins_nlo_list[massbin]:
+              #histname='chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])
+              histname='qcd_chi-'+str(mass_bins_nlo3[k])+"-"+str(mass_bins_nlo3[k+1])+"scale-1.0-1.0"
+              print(histname)
+              hnlo = TH1F(nlofile2.Get(histname))
+              #hnlo.Scale(float(mass_bins_nlo3[k+1]-mass_bins_nlo3[k]))
+              hnlo=hnlo.Rebin(len(chi_binnings[massbin])-1,hnlo.GetName()+"_rebin1",chi_binnings[massbin])
+              #hnlo=rebin(hnlo,len(chi_binnings[j])-1,chi_binnings[j])
+              if hNloQcdNosmooth:
+                 hNloQcdNosmooth.Add(hnlo)
+              else:
+                 hNloQcdNosmooth=hnlo
+             if unfoldedData==False:
+                hNloQcdNosmooth=smoothChi(hNloQcdNosmooth) # SMOOTH NNLO PREDICTION (FIX ME)
+             hNloQcdNosmooth.SetLineColor(2)
+             hNloQcdNosmooth.SetLineStyle(2)
+             hNloQcdNosmooth.SetLineWidth(3)
+             hNloQcdNosmooth.SetName("NoSmooth")
+             
+             filename="fastnlo/RunII/DijetAngularCMS13_ewk.root"
+             print(filename)
+             fEWK = TFile.Open(filename)
+             new_hists+=[fEWK]
+             histname='chi-'+str(massbins[massbin]).strip("()").replace(',',"-").replace(' ',"").replace("7000-13600","7000-13000").replace("1200-1500","1900-2400").replace("1500-1900","1900-2400").replace("6000-7000","6000-6600").replace("6000-13000","6000-6600").replace("7000-13000","6600-13000")
+             print(histname)
+             hEWK=fEWK.Get(histname)
+             print("EWK hist: ")
+             print(hEWK)
+             for b in range(hNloQcdNosmooth.GetXaxis().GetNbins()):
+                 low_bin=hEWK.FindBin(hNloQcdNosmooth.GetXaxis().GetBinLowEdge(b+1))
+                 up_bin=hEWK.FindBin(hNloQcdNosmooth.GetXaxis().GetBinUpEdge(b+1))
+                 correction=hEWK.Integral(low_bin,up_bin-1)/(up_bin-low_bin)
+                 print("correction: ")
+                 print(correction)
+                 hNloQcdNosmooth.SetBinContent(b+1,hNloQcdNosmooth.GetBinContent(b+1)*correction)
+             if normalize:
+               hNloQcdNosmooth.Scale(1./hNloQcdNosmooth.Integral())
+             else:
+               hNloQcdNosmooth.Scale(lumi)
+             for b in range(hNloQcdNosmooth.GetXaxis().GetNbins()):
+                 hNloQcdNosmooth.SetBinContent(b+1,hNloQcdNosmooth.GetBinContent(b+1)/hNloQcdNosmooth.GetBinWidth(b+1))
+
         hNloQcdbackup=hNloQcd.Clone(hNloQcd.GetName()+"backup")    
 
         if oldMeasurements:
@@ -785,10 +876,10 @@ if __name__=="__main__":
             #filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
             #histname="data_obs#chi"+massbintext+"_rebin1" # TODO UNFOLD
             filename='datacards/datacard_shapelimit13TeV_unfold_withUncertainties_run2.root'
-            histname="QCD_ALT#chi"+massbintext.replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit"
+            histname="QCD_ALT#chi"+massbintext.replace("7000_13600","7000_13000").replace("1200_1500","2400_3000").replace("1500_1900","2400_3000").replace("1900_2400","2400_3000")+"_rebin1_nosmearpostfit"
             filenamestat='datacards/datacard_shapelimit13TeV_unfold_run2.root'
         else:
-            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
+            filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
             histname="data_obs#chi"+massbintext+"_rebin1"
         print(filename)
         fData = TFile.Open(filename)
@@ -865,7 +956,7 @@ if __name__=="__main__":
         h14Gsysstat.SetName("DataSysStat")
         new_hists+=[h14Gsysstat]
 
-        filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run2_chi.root'
+        filename=fdir+'datacard_shapelimit13TeV_GEN-QCD-run'+run+'_chi.root'
         print(filename)
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
@@ -966,7 +1057,7 @@ if __name__=="__main__":
                 pname='QCD'
                 histnameprefix="DMAxial_Dijet_LO_Mphi_7000_4000_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_1"
                 filenameprefix=fdir+prefix+"_"+histnameprefix
-                fpostfit=TFile.Open(filenameprefix+"-run2_chi.root")
+                fpostfit=TFile.Open(filenameprefix+"-run"+run+"_chi.root")
                 masstext=str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")
                 basename=histnameprefix+"_ALT#chi"+masstext+"_rebin1"
                 uncertainties=getUncertainties(fpostfit,basename,pname,masstext)
@@ -980,7 +1071,7 @@ if __name__=="__main__":
 
         if massbin>=0 and signalsBSM:
          if True: #FIX
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_LL+-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_LL+-run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_LL+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -997,7 +1088,7 @@ if __name__=="__main__":
           for b in range(hci.GetNbinsX()):
                hci.SetBinContent(b+1,hci.GetBinContent(b+1)/hci.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_LL--run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_LL--run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_LL-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1014,7 +1105,7 @@ if __name__=="__main__":
           for b in range(hcib.GetNbinsX()):
                hcib.SetBinContent(b+1,hcib.GetBinContent(b+1)/hcib.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_VV+-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_VV+-run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_VV+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1031,7 +1122,7 @@ if __name__=="__main__":
           for b in range(hcic.GetNbinsX()):
                hcic.SetBinContent(b+1,hcic.GetBinContent(b+1)/hcic.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_VV--run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_VV--run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_VV-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1048,7 +1139,7 @@ if __name__=="__main__":
           for b in range(hcid.GetNbinsX()):
                hcid.SetBinContent(b+1,hcid.GetBinContent(b+1)/hcid.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_AA+-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_AA+-run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_AA+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1065,7 +1156,7 @@ if __name__=="__main__":
           for b in range(hcie.GetNbinsX()):
                hcie.SetBinContent(b+1,hcie.GetBinContent(b+1)/hcie.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_AA--run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_AA--run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_AA-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1082,7 +1173,7 @@ if __name__=="__main__":
           for b in range(hcif.GetNbinsX()):
                hcif.SetBinContent(b+1,hcif.GetBinContent(b+1)/hcif.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_V-A+-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_V-A+-run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_V-A+#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1099,7 +1190,7 @@ if __name__=="__main__":
           for b in range(hcig.GetNbinsX()):
                hcig.SetBinContent(b+1,hcig.GetBinContent(b+1)/hcig.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_V-A--run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_cs_"+pdfset+"_30000_V-A--run"+run+"_chi.root"
           histname='cs_'+pdfset+'_30000_V-A-#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1134,7 +1225,7 @@ if __name__=="__main__":
                hgrw.SetBinContent(b+1,hgrw.GetBinContent(b+1)/hgrw.GetBinWidth(b+1))
             
           coupling="0p3"
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run'+run+'_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_2000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f7 = TFile.Open(filename)
@@ -1143,7 +1234,7 @@ if __name__=="__main__":
           hdm=f7.Get(histname)
           setUpDMHists(hdm,kBlue,4,3)
 
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run'+run+'_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_3000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f7a = TFile.Open(filename)
@@ -1152,7 +1243,7 @@ if __name__=="__main__":
           hdma=f7a.Get(histname)
           setUpDMHists(hdma,kMagenta,7,3)
 
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run'+run+'_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_4000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f7b = TFile.Open(filename)
@@ -1162,7 +1253,7 @@ if __name__=="__main__":
           setUpDMHists(hdmb,kTeal+4,10,3)
 
           coupling="0p5"
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run'+run+'_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_5000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f7c = TFile.Open(filename)
@@ -1171,7 +1262,7 @@ if __name__=="__main__":
           hdmc=f7c.Get(histname)
           setUpDMHists(hdmc,kOrange+7,1,3)
 
-          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run2_chi.root'
+          filename=fdir+'datacard_shapelimit13TeV_DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'-run'+run+'_chi.root'
           histname='DMAxial_Dijet_LO_Mphi_6000_1_1p0_1p0_Mar5_gdmv_0_gdma_1p0_gv_0_ga_'+coupling+'#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f7d = TFile.Open(filename)
@@ -1182,7 +1273,7 @@ if __name__=="__main__":
 
         if massbin>3 and signalsBSM:
          if True:
-          filename=fdir+"datacard_shapelimit13TeV_GENnp-CP5-run2-QBH_ADD6_9000_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_GENnp-CP5-run"+run+"-QBH_ADD6_9000_chi.root"
           print(filename)
           f = TFile.Open(filename)
           new_hists+=[f]
@@ -1201,7 +1292,7 @@ if __name__=="__main__":
               hqbh.SetBinContent(b+1,hqbh.GetBinContent(b+1)/hqbh.GetBinWidth(b+1))
 
         if signalsBSM:
-          filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2500-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_alp_QCD_fa2500-run"+run+"_chi.root"
           histname='alp_QCD_fa2500#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1218,7 +1309,7 @@ if __name__=="__main__":
           for b in range(halp.GetNbinsX()):
                halp.SetBinContent(b+1,halp.GetBinContent(b+1)/halp.GetBinWidth(b+1))
 
-          filename=fdir+"datacard_shapelimit13TeV_tripleG_QCD_CG0p01-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_tripleG_QCD_CG0p01-run"+run+"_chi.root"
           histname='tripleG_QCD_CG0p01#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1236,7 +1327,7 @@ if __name__=="__main__":
                htripleG.SetBinContent(b+1,htripleG.GetBinContent(b+1)/htripleG.GetBinWidth(b+1))
 
         if signalsBragg:
-          filename=fdir+"datacard_shapelimit13TeV_bragg_G1p9_D0p3_A0p05-run2_chi.root"
+          filename=fdir+"datacard_shapelimit13TeV_bragg_G1p9_D0p3_A0p05-run"+run+"_chi.root"
           histname='bragg_G1p9_D0p3_A0p05#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
           print(filename)
           f = TFile.Open(filename)
@@ -1262,15 +1353,15 @@ if __name__=="__main__":
 #        else:
 #            h0.GetYaxis().SetRangeUser(0.055,0.105)
 
-        if massbin>9:
+        if massbin>9-(run=="3")*2:
             h0.GetYaxis().SetRangeUser(0.0,0.8*h14.Integral())
-        elif massbin>8:
+        elif massbin>8-(run=="3")*2:
             h0.GetYaxis().SetRangeUser(0.03*h14.Integral(),0.26*h14.Integral())
-        elif massbin>7:
+        elif massbin>7-(run=="3")*2:
             h0.GetYaxis().SetRangeUser(0.04*h14.Integral(),0.18*h14.Integral())
-        elif massbin>6:
+        elif massbin>6-(run=="3")*2:
             h0.GetYaxis().SetRangeUser(0.055*h14.Integral(),0.15*h14.Integral())
-        elif massbin>4:
+        elif massbin>4-(run=="3")*2:
             h0.GetYaxis().SetRangeUser(0.065*h14.Integral(),0.12*h14.Integral())
         else:
             h0.GetYaxis().SetRangeUser(0.065*h14.Integral(),0.12*h14.Integral())
@@ -1306,6 +1397,8 @@ if __name__=="__main__":
           hNloQcdAltDiv=hNloQcdAlt.Clone(hNloQcdAlt.GetName()+"_ratio")
         if compareFullColor:
           hNloQcdFCDiv=hNloQcdFC.Clone(hNloQcdFC.GetName()+"_ratio")
+        if compareNosmooth:
+          hNloQcdNosmoothDiv=hNloQcdNosmooth.Clone(hNloQcdNosmooth.GetName()+"_ratio")
         if compareRun3:
           hNloQcdRun3Div=hNloQcdRun3.Clone(hNloQcdRun3.GetName()+"_ratio")
         if comparePDFs:
@@ -1354,6 +1447,8 @@ if __name__=="__main__":
           hNloQcdRun3Div.Divide(h0)
         if compareFullColor:
           hNloQcdFCDiv.Divide(h0)
+        if compareNosmooth:
+          hNloQcdNosmoothDiv.Divide(h0)
         if comparePDFs:
           hNloQcdPdfDiv.Divide(h0)
         if oldMeasurements or compareRun3:
@@ -1433,6 +1528,8 @@ if __name__=="__main__":
          hNloQcdRun3Div.Draw("histsame")
         if compareFullColor:
          hNloQcdFCDiv.Draw("histsame")
+        if compareNosmooth:
+         hNloQcdNosmoothDiv.Draw("histsame")
         if comparePDFs:
          hNloQcdPdfDiv.Draw("histsame")
         if oldMeasurements or compareRun3:
@@ -1489,6 +1586,8 @@ if __name__=="__main__":
          hNloQcdRun3.Draw("histsame")
         if compareFullColor:
          hNloQcdFC.Draw("histsame")
+        if compareNosmooth:
+         hNloQcdNosmooth.Draw("histsame")
         if comparePDFs:
          hNloQcdPdf.Draw("histsame")
         if oldMeasurements or compareRun3:
@@ -1555,17 +1654,28 @@ if __name__=="__main__":
         else:
             ylabel=0.10
         
-        if massbin==0: title="1.2 < #font[52]{M}_{#font[42]{jj}} < 1.5 TeV"
-        if massbin==1: title="1.5 < #font[52]{M}_{#font[42]{jj}} < 1.9 TeV"
-        if massbin==2: title="1.9 < #font[52]{M}_{#font[42]{jj}} < 2.4 TeV"
-        if massbin==3: title="2.4 < #font[52]{M}_{#font[42]{jj}} < 3.0 TeV"
-        if massbin==4: title="3.0 < #font[52]{M}_{#font[42]{jj}} < 3.6 TeV"
-        if massbin==5: title="3.6 < #font[52]{M}_{#font[42]{jj}} < 4.2 TeV"
-        if massbin==6: title="4.2 < #font[52]{M}_{#font[42]{jj}} < 4.8 TeV"
-        if massbin==7: title="4.8 < #font[52]{M}_{#font[42]{jj}} < 5.4 TeV"
-        if massbin==8: title="5.4 < #font[52]{M}_{#font[42]{jj}} < 6.0 TeV"
-        if massbin==9: title="6.0 < #font[52]{M}_{#font[42]{jj}} < 7.0 TeV"
-        if massbin==10: title=" #font[52]{M}_{#font[42]{jj}} > 7.0 TeV"
+        if run=="3":
+          if massbin==0: title="1.9 < #font[52]{M}_{#font[42]{jj}} < 2.4 TeV"
+          if massbin==1: title="2.4 < #font[52]{M}_{#font[42]{jj}} < 3.0 TeV"
+          if massbin==2: title="3.0 < #font[52]{M}_{#font[42]{jj}} < 3.6 TeV"
+          if massbin==3: title="3.6 < #font[52]{M}_{#font[42]{jj}} < 4.2 TeV"
+          if massbin==4: title="4.2 < #font[52]{M}_{#font[42]{jj}} < 4.8 TeV"
+          if massbin==5: title="4.8 < #font[52]{M}_{#font[42]{jj}} < 5.4 TeV"
+          if massbin==6: title="5.4 < #font[52]{M}_{#font[42]{jj}} < 6.0 TeV"
+          if massbin==7: title="6.0 < #font[52]{M}_{#font[42]{jj}} < 7.0 TeV"
+          if massbin==8: title=" #font[52]{M}_{#font[42]{jj}} > 7.0 TeV"
+        else:
+          if massbin==0: title="1.2 < #font[52]{M}_{#font[42]{jj}} < 1.5 TeV"
+          if massbin==1: title="1.5 < #font[52]{M}_{#font[42]{jj}} < 1.9 TeV"
+          if massbin==2: title="1.9 < #font[52]{M}_{#font[42]{jj}} < 2.4 TeV"
+          if massbin==3: title="2.4 < #font[52]{M}_{#font[42]{jj}} < 3.0 TeV"
+          if massbin==4: title="3.0 < #font[52]{M}_{#font[42]{jj}} < 3.6 TeV"
+          if massbin==5: title="3.6 < #font[52]{M}_{#font[42]{jj}} < 4.2 TeV"
+          if massbin==6: title="4.2 < #font[52]{M}_{#font[42]{jj}} < 4.8 TeV"
+          if massbin==7: title="4.8 < #font[52]{M}_{#font[42]{jj}} < 5.4 TeV"
+          if massbin==8: title="5.4 < #font[52]{M}_{#font[42]{jj}} < 6.0 TeV"
+          if massbin==9: title="6.0 < #font[52]{M}_{#font[42]{jj}} < 7.0 TeV"
+          if massbin==10: title=" #font[52]{M}_{#font[42]{jj}} > 7.0 TeV"
 
         #title+=" TeV"
         #if offsets[massbin]==0: titleo=""
@@ -1583,29 +1693,6 @@ if __name__=="__main__":
         #lo.SetFillStyle(0)
         #lo.Draw("same")
         #new_hists+=[lo]
-
-    l5=TLegend(0.74,0.92,1.0,0.92,"CMS")
-    l5.SetTextSize(0.044)
-    l5.SetFillStyle(0)
-    #l5.Draw("same")
-    new_hists+=[l5]
-     
-    l5=TLegend(0.7,0.88,1.0,0.88,"#sqrt{s} = 13 TeV")
-    l5.SetTextSize(0.044)
-    l5.SetFillStyle(0)
-    #l5.Draw("same")
-    new_hists+=[l5]
-     
-    l=TLegend(0.7,0.82,1.0,0.82,"L = 138 fb^{-1}")
-    l.SetTextSize(0.044)
-    l.SetFillStyle(0)
-    #l.Draw("same")
-    new_hists+=[l]
-    
-    banner=TLatex(0.33,0.96,"CMS,   L = 138 fb^{-1},   #sqrt{s} = 13 TeV")
-    banner.SetNDC()
-    banner.SetTextSize(0.044)
-    #banner.Draw()
 
     h3newnew=h3new.Clone()
     h3newnew.SetLineColor(1)
@@ -1643,7 +1730,9 @@ if __name__=="__main__":
       else:
         l2.AddEntry(h3newnew,"NLO QCD + EW","fl")
     if compareFullColor:
-      l2.AddEntry(hNloQcdFC,"NNLO QCD + NLO EW (#mu=m_{jj}, NNPDF3.1, full color)","fl")
+      l2.AddEntry(hNloQcdFC,"NNLO QCD + NLO EW (full color)","fl")
+    if compareNosmooth:
+      l2.AddEntry(hNloQcdNosmooth,"NNLO QCD + NLO EW ("+("no smoothing" if unfoldedData else "no smearing")+")","fl")
     if compareRun3:
       l2.AddEntry(hNloQcdRun3,"NNLO QCD + NLO EW (13.6 TeV)","fl")
     if comparePDFs:
@@ -1741,6 +1830,8 @@ if __name__=="__main__":
       postfix+="_scales"
     if compareFullColor:
       postfix+="_fullcolor"
+    if compareNosmooth:
+      postfix+="_nosmooth"
     if comparePDFs:
       postfix+="_pdfs"
     if compareNoEWK:
@@ -1757,6 +1848,6 @@ if __name__=="__main__":
       postfix+="_nonorm"
     if preliminary:
       postfix+="_preliminary"
-    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.pdf")
-    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.root")
+    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".pdf")
+    c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run"+run+".root")
     #c.SaveAs(fdir+prefix + "_combined_theory"+str(massbin)+postfix+"_run2.eps")

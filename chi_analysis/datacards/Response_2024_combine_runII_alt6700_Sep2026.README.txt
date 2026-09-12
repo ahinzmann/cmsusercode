@@ -1,0 +1,39 @@
+Response_2024_combine_runII_Sep2026.root
+Response_2024_combine_alt6700_Sep2026.root
+==========================================
+Two alternative mass binnings, same format and same parametrisation as
+Response_2024_combine_Sep2026.root (see its README for naming, samples, caveats).
+Generated 2026-09-11.
+
+  runII   : 1900-2400, 2400-3000, 3000-3600, 3600-4200, 4200-4800, 4800-5400,
+            5400-6000, 6000-7000, 7000-13000                       (9 channels)
+  alt6700 : 1900-2400, ..., 5400-6000, 6000-6700, 6700-7500, 7500-13000
+                                                                    (10 channels)
+
+  chi binning: 12 bins [1..10,12,14,16] below 7 TeV, 5 bins [1,3,6,9,12,16] for
+  channels whose lower edge is >= 7000.  So in alt6700 only 7500-13000 is coarse;
+  6700-7500 keeps 12 chi bins.  (Can switch to coarse-from-6700 on request.)
+  "runII" means the Run 2 TOP END; the floor stays at 1900 (the Run 2 file went
+  down to 1200 -- that would need the skimmed low-HT samples).
+
+TOP-CHANNEL STATISTICS  (reco yield; N_eff = (sum w)^2/sum w^2 of the MC)
+                            reco [pb]   N_eff   MC stat   smr/reco
+  runII   6000-7000         0.01176    29389    0.58%     0.9995
+          7000-13000        0.00220     2599    1.96%     0.979
+  alt6700 6000-6700         0.01019    27806    0.60%     0.998
+          6700-7500         0.00288     5807    1.31%     0.994
+          7500-13000        0.00089      562    4.22%     0.984
+  (previous) 7700-8500      0.00046      302    5.76%
+             8500-13000     0.00015      203    7.02%
+
+  The smeared templates carry smearing random-number noise at the level of
+  the MC stat error: e.g. 8500-13000 gave smr/reco 1.02 in one generation and
+  1.12 in another (RECO identical) -- consistent with ~7% per realisation.
+
+VALIDATION
+  Both files are merged from ONE migration built on a 100 GeV mass grid
+  (1900-10000 + 10000-13000) x fine chi.  Regenerating the previous binning
+  this way reproduces Response_2024_combine_Sep2026.root EXACTLY for all RECO
+  templates (13497 bins, zero difference); SMR templates agree within smearing
+  RNG (pull RMS 0.95).  Any further binning with edges on the 100 GeV grid can
+  be produced in seconds -- just send the edges.

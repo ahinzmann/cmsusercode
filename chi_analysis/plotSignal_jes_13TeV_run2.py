@@ -4,7 +4,7 @@ from DataFormats.FWLite import Events,Handle
 import array
 from math import *
 
-print "root"
+print("root")
 
 gSystem.Load("libFWCoreFWLite.so");
 FWLiteEnabler.enable();
@@ -30,6 +30,8 @@ colors=[1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,10,11,12,13,1,2,3,4,6,7,8,9,
 
 doJES=True
 use_UL=True
+etaDependentCheck=False
+check3rdJet=False
 
 if doJES:
   JECsources = ["AbsoluteStat", "AbsoluteScale", "AbsoluteMPFBias", "Fragmentation",
@@ -42,61 +44,64 @@ if doJES:
   
   JESuncertainties={}
   JESparameters={}
-  print "load 2016 uncertainties"
+  print("load 2016 uncertainties")
   for source in JECsources:
-    JESparameters[source+"2016"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Summer16_07Aug2017_V11_MC/Summer16_07Aug2017_V11_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2016"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Summer16_07Aug2017_V11_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2016"] = JetCorrectionUncertainty(JESparameters[source+"2016"])
-  print "load 2017 uncertainties"
+  print("load 2017 uncertainties")
   for source in JECsources:
-    JESparameters[source+"2017"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Fall17_17Nov2017_V32_MC/Fall17_17Nov2017_V32_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2017"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Fall17_17Nov2017_V32_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2017"] = JetCorrectionUncertainty(JESparameters[source+"2017"])
-  print "load 2018 uncertainties"
+  print("load 2018 uncertainties")
   for source in JECsources:
-    JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh102/CMSSW_10_2_10/src/UHH2/JECDatabase/textFiles/Autumn18_V19_MC/Autumn18_V19_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"2018"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Autumn18_V19_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"2018"] = JetCorrectionUncertainty(JESparameters[source+"2018"])
-  print "load UL16preVFP uncertainties"
+  print("load UL16preVFP uncertainties")
   for source in JECsources:
-    JESparameters[source+"UL16preVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL16APV_V7_MC/Summer19UL16APV_V7_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"UL16preVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Summer19UL16APV_V7_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"UL16preVFP"] = JetCorrectionUncertainty(JESparameters[source+"UL16preVFP"])
-  print "load UL16postVFP uncertainties"
+  print("load UL16postVFP uncertainties")
   for source in JECsources:
-    JESparameters[source+"UL16postVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL16_V7_MC/Summer19UL16_V7_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"UL16postVFP"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Summer19UL16_V7_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"UL16postVFP"] = JetCorrectionUncertainty(JESparameters[source+"UL16postVFP"])
-  print "load UL17 uncertainties"
+  print("load UL17 uncertainties")
   for source in JECsources:
-    JESparameters[source+"UL17"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL17_V5_MC/Summer19UL17_V5_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"UL17"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Summer19UL17_V5_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"UL17"] = JetCorrectionUncertainty(JESparameters[source+"UL17"])
-  print "load UL18 uncertainties"
+  print("load UL18 uncertainties")
   for source in JECsources:
-    JESparameters[source+"UL18"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/uhh106/CMSSW_10_6_26/src/UHH2/JECDatabase/textFiles/Summer19UL18_V5_MC/Summer19UL18_V5_MC_UncertaintySources_AK4PFchs.txt", source)
+    JESparameters[source+"UL18"] = JetCorrectorParameters("/afs/desy.de/user/h/hinzmann/run2023/Summer19UL18_V5_MC_UncertaintySources_AK4PFchs.txt", source)
     JESuncertainties[source+"UL18"] = JetCorrectionUncertainty(JESparameters[source+"UL18"])
+
+if doJES and etaDependentCheck:
+  JECsources=JECsources[:-1]+["EtaResidual_0_1p3","EtaResidual_1p3_1p5","EtaResidual_1p5_2p5","Total"]
 
 def createPlots(sample,prefix,xsec,massbins,year):
     files=[]
     if sample.endswith(".txt"):
         filelist=open(sample)
-	for line in filelist.readlines():
-	    if ".root" in line:
-	        files+=[line.strip()]
+        for line in filelist.readlines():
+           if ".root" in line:
+               files+=[line.strip()]
     elif "HT" in sample:
-        print "/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/"
+        print("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/")
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/")
-	for folder in folders:
-	  if sample in folder:
+        for folder in folders:
+          if sample in folder:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd"+year+"feb2023/"+folder]
     elif "UL" in sample:
-        print "/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/"
+        print("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/")
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/")
-	for folder in folders:
+        for folder in folders:
             files+=["dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data"+year+"-12Feb2024/"+folder]
     else:
         folders=os.listdir("/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/")
-	for folder in folders:
-	  if sample in folder:
+        for folder in folders:
+          if sample in folder:
             files+=["/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/dijet_angular/"+folder+"/GEN.root"]
-	    #break
+            #break
 
-    print files
+    print(files)
     
     prunedgenjets_handle=Handle("std::vector<reco::GenJet>")
     prunedgenjets_label="ak4GenJets"
@@ -116,7 +121,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
     
     for plot in plots:
         plot.Sumw2()
-	print plot.GetName()
+        print(plot.GetName())
 
     event_count=0
     tree='Events'
@@ -126,7 +131,7 @@ def createPlots(sample,prefix,xsec,massbins,year):
       events.Add(f)
     
     nevents=events.GetEntries()
-    print sample,nevents,xsec
+    print(sample,nevents,xsec)
 
     scales=[1]
     if doJES:
@@ -139,22 +144,29 @@ def createPlots(sample,prefix,xsec,massbins,year):
        #if event_count>100000:break
       
        event_count+=1
-       if event_count%10000==1: print "event",event_count
+       if event_count%10000==1: print("event",event_count)
 
        jet1=TLorentzVector()
        jet2=TLorentzVector()
+       jet3=TLorentzVector()
        if "NANOAOD" in f:
          if event.jetAK4_pt2_nom<30: continue
          jet1.SetPtEtaPhiM(event.jetAK4_pt1_nom,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1*event.jetAK4_pt1_nom/event.jetAK4_pt1)
          jet2.SetPtEtaPhiM(event.jetAK4_pt2_nom,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2*event.jetAK4_pt2_nom/event.jetAK4_pt2)
+         if check3rdJet and event.jetAK4_pt3_nom>30:
+           jet3.SetPtEtaPhiM(event.jetAK4_pt3_nom,event.jetAK4_eta3,event.jetAK4_phi3,event.jetAK4_mass3*event.jetAK4_pt3_nom/event.jetAK4_pt3)
        elif "HT" in sample:
          if event.jetAK4_pt2<30: continue
          jet1.SetPtEtaPhiM(event.jetAK4_pt1,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1)
          jet2.SetPtEtaPhiM(event.jetAK4_pt2,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2)
+         if check3rdJet and event.jetAK4_pt3>30:
+           jet3.SetPtEtaPhiM(event.jetAK4_pt3,event.jetAK4_eta3,event.jetAK4_phi3,event.jetAK4_mass3)
        else:
          if len(event.recoGenJets_ak4GenJets__GEN.product())<2: continue
          jet1.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[0].pt(),event.recoGenJets_ak4GenJets__GEN.product()[0].eta(),event.recoGenJets_ak4GenJets__GEN.product()[0].phi(),event.recoGenJets_ak4GenJets__GEN.product()[0].mass())
          jet2.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[1].pt(),event.recoGenJets_ak4GenJets__GEN.product()[1].eta(),event.recoGenJets_ak4GenJets__GEN.product()[1].phi(),event.recoGenJets_ak4GenJets__GEN.product()[1].mass())
+         if check3rdJet and len(event.recoGenJets_ak4GenJets__GEN.product())>2:
+           jet3.SetPtEtaPhiM(event.recoGenJets_ak4GenJets__GEN.product()[2].pt(),event.recoGenJets_ak4GenJets__GEN.product()[2].eta(),event.recoGenJets_ak4GenJets__GEN.product()[2].phi(),event.recoGenJets_ak4GenJets__GEN.product()[2].mass())
        if jet1.Pt()<100 or jet2.Pt()<100 or abs(jet1.Eta())>3 or abs(jet2.Eta())>3: continue
        
        irec=0
@@ -165,27 +177,79 @@ def createPlots(sample,prefix,xsec,massbins,year):
          if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
        for scale in scales:
          try:
-	  if mjj>1000 and chi<16. and yboost<1.11 and scale!=1:
-           jes=JESuncertainties[scale.replace("_Up","")+year]
-           jes.setJetPt(jet1.Pt())
-           jes.setJetEta(jet1.Eta())
-	   factor1=1.
-	   if scale[-1]=="p":
-	     factor1+=jes.getUncertainty(True)
-	   else:
-             factor1-=jes.getUncertainty(False)
-	   jes.setJetPt(jet2.Pt())
-           jes.setJetEta(jet2.Eta())
-	   factor2=1.
-	   if scale[-1]=="p":
-             factor2+=jes.getUncertainty(True)
-	   else:
-             factor2-=jes.getUncertainty(False)
+          if ((mjj>1000 and chi<16. and yboost<1.11) or check3rdJet) and scale!=1:
+           if "EtaResidual" in scale:
+             factor1=1.
+             if "Residual_0_1p3" in scale and abs(jet1.Eta())<1.3:
+               if scale[-1]=="p":
+                 factor1=1.02
+               else:
+                 factor1=1./1.02
+             if "Residual_1p3_1p5" in scale and abs(jet1.Eta())>1.3 and abs(jet1.Eta())<1.5:
+               if scale[-1]=="p":
+                 factor1=1.02
+               else:
+                 factor1=1./1.02
+             if "Residual_1p5_2p5" in scale and abs(jet1.Eta())>1.5 and abs(jet1.Eta())<2.5:
+               if scale[-1]=="p":
+                 factor1=1.02
+               else:
+                 factor1=1./1.02
+             factor2=1.
+             if "Residual_0_1p3" in scale and abs(jet2.Eta())<1.3:
+               if scale[-1]=="p":
+                 factor2=1.02
+               else:
+                 factor2=1./1.02
+             if "Residual_1p3_1p5" in scale and abs(jet2.Eta())>1.3 and abs(jet2.Eta())<1.5:
+               if scale[-1]=="p":
+                 factor2=1.02
+               else:
+                 factor2=1./1.02
+             if "Residual_1p5_2p5" in scale and abs(jet2.Eta())>1.5 and abs(jet2.Eta())<2.5:
+               if scale[-1]=="p":
+                 factor2=1.02
+               else:
+                 factor2=1./1.02
+             #print(scale,jet1.Eta(),factor1,jet2.Eta(),factor2)
+           else:
+             jes=JESuncertainties[scale.replace("_Up","")+year]
+             jes.setJetPt(jet1.Pt())
+             jes.setJetEta(jet1.Eta())
+             factor1=1.
+             if scale[-1]=="p":
+               factor1+=jes.getUncertainty(True)
+             else:
+               factor1-=jes.getUncertainty(False)
+             jes.setJetPt(jet2.Pt())
+             jes.setJetEta(jet2.Eta())
+             factor2=1.
+             if scale[-1]=="p":
+               factor2+=jes.getUncertainty(True)
+             else:
+               factor2-=jes.getUncertainty(False)
+             if check3rdJet:
+               jes.setJetPt(jet3.Pt())
+               jes.setJetEta(jet3.Eta())
+               factor3=1.
+               if scale[-1]=="p":
+                 factor3+=jes.getUncertainty(True)
+               else:
+                 factor3-=jes.getUncertainty(False)
+               if jet3.Pt()*factor3>jet2.Pt()*factor2:
+                 #if mjj>1000 and chi<16. and yboost<1.11:
+                 #  print("switch",mjj,chi)
+                 jet2=jet3
+                 factor2=factor3
+                 chi=exp(abs(jet1.Rapidity()-jet2.Rapidity()))
+                 yboost=abs(jet1.Rapidity()+jet2.Rapidity())/2.
+                 #if mjj>1000 and chi<16. and yboost<1.11:
+                 #  print("to",mjj,chi)
            mjj=(jet1*factor1+jet2*factor2).M()
-	   #if mjj>4800 and mjj<5400: print scale, factor1, factor2
+           #if mjj>4800 and mjj<5400: print scale, factor1, factor2
          except:
-	   print "WARNING: JEC extraction failed", jet1.Pt(), jet1.Eta(), jet2.Pt(), jet2.Eta()
-	 for massbin in massbins:
+           print("WARNING: JEC extraction failed", jet1.Pt(), jet1.Eta(), jet2.Pt(), jet2.Eta())
+         for massbin in massbins:
            if yboost<1.11 and mjj>=massbin[0] and mjj<massbin[1]:
              plots[irec].Fill(chi)
            irec+=1
@@ -217,13 +281,13 @@ if __name__ == '__main__':
     for name in ["QCD","QCDCIplusLL10000","QCDmadgraph"]:
       for year in years:
         for bin in [1,2,3,4,5,6,7]:
-	   print i,name,bin,year
-	   sets+=[(name,bin,year)]
-	   i+=1
+           print(i,name,bin,year)
+           sets+=[(name,bin,year)]
+           i+=1
     for year in years:
-      print "data",1,year
+      print("data",1,year)
       sets+=[("data",1,year)]
-    print "sets",len(sets)
+    print("sets",len(sets))
     wait=False
     #name="QCD"
     #name="QCDmadgraph"
@@ -267,292 +331,292 @@ if __name__ == '__main__':
               (4200,4800),
               (4800,5400),
               (5400,6000),
-	      (6000,13000),
+              (6000,13000),
               (6000,6600),
-	      (6600,13000),
-	      (6000,7000),
+              (6600,13000),
+              (6000,7000),
               (7000,13000),
               ]
 
     if bin==1 and name=="QCD": 
       samples=[("QCD",[("pythia8_ci_m4300_13000_50000_1_0_0_13TeV_Nov14",3.507e-09),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==2 and name=="QCD":
       samples=[("QCD",[("pythia8_ci_m3800_4300_50000_1_0_0_13TeV_Nov14",5.867e-09),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==3 and name=="QCD":
       samples=[("QCD",[("pythia8_ci_m3300_3800_50000_1_0_0_13TeV_Nov14",1.863e-08),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==4 and name=="QCD":
       samples=[("QCD",[("pythia8_ci_m2800_3300_50000_1_0_0_13TeV_Nov14",6.446e-08),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==5 and name=="QCD":
       samples=[("QCD",[("pythia8_ci_m2400_2800_50000_1_0_0_13TeV_Nov14",1.649e-07),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==6 and name=="QCD":
       samples=[("QCD",[("pythia8_ci_m1900_2400_50000_1_0_0_13TeV_Nov14",8.836e-07),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==7 and name=="QCD": 
       samples=[("QCD",[("pythia8_ci_m1500_1900_50000_1_0_0_13TeV_Nov14",3.307e-06),
-		       ]),
-	    ]
+              ]),
+              ]
 
     if bin==1 and name=="QCDCIplusLL10000": 
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m4300_13000_10000_1_0_0_13TeV_Nov14",3.507e-09),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==2 and name=="QCDCIplusLL10000":
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m3800_4300_10000_1_0_0_13TeV_Nov14",5.867e-09),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==3 and name=="QCDCIplusLL10000":
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m3300_3800_10000_1_0_0_13TeV_Nov14",1.863e-08),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==4 and name=="QCDCIplusLL10000":
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m2800_3300_10000_1_0_0_13TeV_Nov14",6.446e-08),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==5 and name=="QCDCIplusLL10000":
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m2400_2800_10000_1_0_0_13TeV_Nov14",1.649e-07),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==6 and name=="QCDCIplusLL10000":
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m1900_2400_10000_1_0_0_13TeV_Nov14",8.836e-07),
-		       ]),
-	    ]
+               ]),
+              ]
     if bin==7 and name=="QCDCIplusLL10000": 
       samples=[("QCDCIplusLL10000",[("pythia8_ci_m1500_1900_10000_1_0_0_13TeV_Nov14",3.307e-06),
-		       ]),
-	    ]
+               ]),
+              ]
 
     if str(year)=="2016":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_2016v3",1712000./56709875),
-  	  		 ]),
-  	      ]
+       samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_2016v3",1712000./56709875),
+                ]),
+              ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_2016v3",347700./53096517),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_2016v3",347700./53096517),
+                ]),
+              ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_2016v3",32100./52906552),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_2016v3",32100./52906552),
+                ]),
+              ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_2016v3",6831./36741540),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_2016v3",6831./36741540),
+                ]),
+              ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_2016v3",1207./15210939),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_2016v3",1207./15210939),
+                ]),
+              ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_2016v3",119.9/11839357),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_2016v3",119.9/11839357),
+                ]),
+              ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_2016v3",25.24/5947849),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_2016v3",25.24/5947849),
+                 ]),
+            ]
     if str(year)=="2017":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_94X_v2",1545000./58990434),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_94X_v2",1545000./58990434),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_94X_v2",323300./58748739),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_94X_v2",323300./58748739),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_94X_v2",30000./54366431),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_94X_v2",30000./54366431),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_94X_v2",6324./46924322),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_94X_v2",6324./46924322),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_94X_v2",1090./16495598),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_94X_v2",1090./16495598),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_94X_v2",101./11196479),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_94X_v2",101./11196479),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_94X_v2",20.43/5362513),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_94X_v2",20.43/5362513),
+                 ]),
+            ]
     if str(year)=="2018":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_102X_v1",1461000./54289442),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT200to300_RunII_102X_v1",1461000./54289442),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_102X_v1",311900./54512704),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT300to500_RunII_102X_v1",311900./54512704),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_102X_v1",29070./53919811),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT500to700_RunII_102X_v1",29070./53919811),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_102X_v1",5962./48158738),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT700to1000_RunII_102X_v1",5962./48158738),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_102X_v1",1005./14945819),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1000to1500_RunII_102X_v1",1005./14945819),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_102X_v1",101.8/10707847),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT1500to2000_RunII_102X_v1",101.8/10707847),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_102X_v1",20.54/5329144),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("dijetChiQCD_HT2000toInf_RunII_102X_v1",20.54/5329144),
+                 ]),
+            ]
 
     if str(year)=="UL16preVFP":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./17969592),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./17969592),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./13586390),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./13586390),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/55497082),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/55497082),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/15242034),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/15242034),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/13559959),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/13559959),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9661950),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9661950),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4827641),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4827641),
+                 ]),
+            ]
     if str(year)=="UL16postVFP":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42723038),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42723038),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./45502889),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./45502889),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/15066884),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/15066884),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/13714842),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/13714842),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/12416669),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/12416669),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9244228),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/9244228),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4843949),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4843949),
+                 ]),
+            ]
     if str(year)=="UL17":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42316128),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./42316128),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./42914024),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./42914024),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/35745565),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/35745565),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/33646855),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/33646855),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/10136610),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/10136610),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/7528926),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/7528926),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4089387),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/4089387),
+                 ]),
+            ]
     if str(year)=="UL18":
       if bin==1 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./56298746),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT200to300_RunII_106X",1710000./56298746),
+                 ]),
+            ]
       if bin==2 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./60991701),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT300to500_RunII_106X",347500./60991701),
+                 ]),
+            ]
       if bin==3 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/48640047),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT500to700_RunII_106X",30363.051/48640047),
+                 ]),
+            ]
       if bin==4 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/47925782),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT700to1000_RunII_106X",6428.869/47925782),
+                 ]),
+            ]
       if bin==5 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/14244456),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1000to1500_RunII_106X",1122.659/14244456),
+                 ]),
+            ]
       if bin==6 and name=="QCDmadgraph":
-    	samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/10751607),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT1500to2000_RunII_106X",108.163/10751607),
+                 ]),
+            ]
       if bin==7 and name=="QCDmadgraph": 
-    	samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/5278880),
-  	  		 ]),
-  	      ]
+        samples=[("QCDmadgraph",[("QCD_HT2000toInf_RunII_106X",22.008/5278880),
+                 ]),
+            ]
 
     if str(year)=="UL16preVFP" and name=="data": 
-    	samples=[("data",[("UL16preVFP",1),
-  	  		 ]),
-  	      ]
+        samples=[("data",[("UL16preVFP",1),
+                 ]),
+            ]
     if str(year)=="UL16postVFP" and name=="data": 
-    	samples=[("data",[("UL16postVFP",1),
-  	  		 ]),
-  	      ]
+        samples=[("data",[("UL16postVFP",1),
+                 ]),
+            ]
     if str(year)=="UL17" and name=="data": 
-    	samples=[("data",[("UL17",1),
-  	  		 ]),
-  	      ]
+        samples=[("data",[("UL17",1),
+                 ]),
+            ]
     if str(year)=="UL18" and name=="data": 
-    	samples=[("data",[("UL18",1),
-  	  		 ]),
-  	      ]
+        samples=[("data",[("UL18",1),
+                 ]),
+            ]
 
     #xsecs=eval(open("xsecs_13TeV.txt").readline())
     #print xsecs
@@ -563,7 +627,7 @@ if __name__ == '__main__':
         for chi_bin in mass_bin:
             chi_binnings[-1].append(chi_bin)
   
-    print prefix, samples
+    print(prefix, samples)
 
     plots=[]
     for name,files in samples:
@@ -574,11 +638,11 @@ if __name__ == '__main__':
         ps=createPlots(filename,name,xsec,massbins,str(year))
         if i==1:
           plots[-1]+=ps
-	else:
-	  for j in range(len(plots[-1])):
+        else:
+          for j in range(len(plots[-1])):
             plots[-1][j].Add(ps[j])
 
-    out=TFile(prefix + '_chi.root','RECREATE')
+    out=TFile(prefix + ("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "") + '_chi.root','RECREATE')
     for j in range(len(massbins)+1):
       for i in range(len(samples)):
        if j==len(massbins): # mass histogram
@@ -587,25 +651,25 @@ if __name__ == '__main__':
         #if plots[i][j].Integral()>0:
         #  plots[i][j].Scale(expectedevents[j]/plots[i][j].Integral())
         plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j])
-	if samples[i][0]=="QCD":
-	   # data
-	   plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
-	   # ALT
-	   clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
-	   clone.Write()
-	   # QCD
+        if samples[i][0]=="QCD":
+           # data
+           plots[i][j].Write(plots[i][j].GetName().replace("QCD","data_obs"))
+           # ALT
+           clone=plots[i][j].Clone(plots[i][j].GetName().replace("QCD",samples[-1][0]+"_ALT"))
+           clone.Write()
+           # QCD
            plots[i][j].Scale(1e-10)
            plots[i][j].Write()
-	   # QCD backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
-	else:
-	   # signal
-	   clone=plots[i][j]
-	   clone.Write()
-	   # signal backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
+           # QCD backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
+        else:
+           # signal
+           clone=plots[i][j]
+           clone.Write()
+           # signal backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
     if doJES:
      for j in range((len(massbins)+1),(len(massbins)+1)+2*(len(massbins)+1)*len(JECsources)):
       for i in range(len(samples)):
@@ -613,26 +677,26 @@ if __name__ == '__main__':
          plots[i][j].Write()
        else: 
         plots[i][j]=plots[i][j].Rebin(len(chi_binnings[j%len(massbins)])-1,plots[i][j].GetName()+"_rebin1",chi_binnings[j%len(massbins)])
-	if samples[i][0]=="QCD":
-	   # QCD
-	   clone=plots[i][j]
-	   clone.Write()
-	   # QCD backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
-	else:
-	   # signal
-	   clone=plots[i][j]
-	   clone.Write()
-	   # signal backup
-	   clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
-	   clonebackup.Write()
+        if samples[i][0]=="QCD":
+           # QCD
+           clone=plots[i][j]
+           clone.Write()
+           # QCD backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
+        else:
+           # signal
+           clone=plots[i][j]
+           clone.Write()
+           # signal backup
+           clonebackup=plots[i][j].Clone(plots[i][j].GetName()+"_backup")
+           clonebackup.Write()
 
     for j in range((len(massbins)+1)+doJES*2*(len(massbins)+1)*len(JECsources)):
       for i in range(len(samples)):
-	if plots[i][j].Integral()>0:
+        if plots[i][j].Integral()>0:
           plots[i][j].Scale(1./plots[i][j].Integral())
-	for b in range(plots[i][j].GetXaxis().GetNbins()):
+        for b in range(plots[i][j].GetXaxis().GetNbins()):
           plots[i][j].SetBinContent(b+1,plots[i][j].GetBinContent(b+1)/plots[i][j].GetBinWidth(b+1))
           plots[i][j].SetBinError(b+1,plots[i][j].GetBinError(b+1)/plots[i][j].GetBinWidth(b+1))
 
@@ -649,9 +713,9 @@ if __name__ == '__main__':
       ratio.Divide(plots[0][j],plots[0][j])
       ratio.GetYaxis().SetRangeUser(0.95,1.1)
       for b in range(ratio.GetNbinsX()):
-	  ratio.SetBinError(b+1,0)
+          ratio.SetBinError(b+1,0)
       ratio.Draw("he")
-      print "number of events passed:",plots[0][j].GetEntries()
+      print("number of events passed:",plots[0][j].GetEntries())
       legend1=TLegend(0.6,0.6,0.9,0.9,(str(massbins[j][0])+"<m_{jj}<"+str(massbins[j][1])+" GeV"))
       legends+=[legend1]
       legend1.AddEntry(plots[0][j],samples[0][0],"l")
@@ -663,23 +727,23 @@ if __name__ == '__main__':
        for k in range(len(JECsources)):
         plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineColor(colors[k+1])
         plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineStyle(2)
-	plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
+        plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
         for b in range(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].GetNbinsX()):
-	    plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
+            plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
         plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].Draw("hesame")
         legend1.AddEntry(plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j+(len(massbins)+1)+2*(len(massbins)+1)*k].GetName().split("_")[-2],"l")
         plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineColor(colors[k+1])
         plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetLineStyle(3)
-	plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
+        plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].Divide(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j])
         for b in range(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].GetNbinsX()):
-	    plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
+            plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].SetBinError(b+1,0)
         plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].Draw("hesame")
         legend1.AddEntry(plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k],plots[0][j+2*(len(massbins)+1)+2*(len(massbins)+1)*k].GetName().split("_")[-2],"l")
       legend1.SetTextSize(0.04)
       legend1.SetFillStyle(0)
       legend1.Draw("same")
 
-    canvas.SaveAs(prefix + '_chi.pdf')
+    canvas.SaveAs(prefix + ("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "") + '_chi.pdf')
     #canvas.SaveAs(prefix + '_chi.eps')
     #if wait:
     #    os.system("ghostview "+prefix + '_chi.eps')

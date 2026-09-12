@@ -27,7 +27,9 @@ if __name__ == '__main__':
    label="#chi"
    use_UL=True
    only2016=False
-   normalize=False
+   normalize=True
+   etaDependentCheck=True
+   check3rdJet=True
    
    if only2016 and use_UL:
      years=["UL16preVFP","UL16postVFP"]
@@ -107,6 +109,10 @@ if __name__ == '__main__':
 		("RelativeJERHF",""),
 		("PileUpPtEC2",""),],
                 ]
+   if etaDependentCheck:
+      sourcesets+=[[("EtaResidual_0_1p3",""),
+                   ("EtaResidual_1p3_1p5",""),
+                   ("EtaResidual_1p5_2p5","")]]
    print(sourcesets)
    chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -127,6 +133,7 @@ if __name__ == '__main__':
             chi_binnings[-1].append(chi_bin)
    
    for prefix in ["QCD","QCDCIplusLL10000","QCDmadgraph","data"]:
+     if etaDependentCheck and prefix!="QCDmadgraph": continue
      sum_in_quadrature_up=[]
      sum_in_quadrature_down=[]
      for mass in range(len(massbins)):
@@ -154,8 +161,8 @@ if __name__ == '__main__':
         scalexsec={}
         for year in years:
          for b in bins:
-          print("datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
-          f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+"_chi.root")
+          print("datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "")+"_chi.root")
+          f_refmc[year+b]=TFile.Open("data/datacard_shapelimit13TeV_"+prefix+"_JES"+("feb2023" if "madgraph" in prefix or "data" in prefix else "")+"_"+str(year)+"_"+b+("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "")+"_chi.root")
           h=f_refmc[year+b].Get(prefix+"#chi"+str(massbins[mass][0])+"_"+str(massbins[mass][1])+"_rebin1_backup")
           scalexsec[b]=samples[int(b)-1][1]
           files+=[f_refmc[year+b]]
@@ -341,5 +348,5 @@ if __name__ == '__main__':
         legend.SetFillStyle(0)
         legend.Draw("same")
 
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".root")
-      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+("" if normalize else "_nonorm")+".pdf")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+ ("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "")+("" if normalize else "_nonorm")+".root")
+      canvas.SaveAs("plots/chi_systematic_plots"+var+"_"+prefix+"JES_"+str(sourcesets.index(sourceset))+"_13TeV"+("_UL" if use_UL else "")+("_2016" if only2016 else "")+"_run2_PileUpPtEC1uncorrelated"+ ("_EtaDep" if etaDependentCheck else "") + ("_3jet" if check3rdJet else "")+("" if normalize else "_nonorm")+".pdf")

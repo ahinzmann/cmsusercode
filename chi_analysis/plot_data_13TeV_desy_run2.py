@@ -131,7 +131,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
      try:
        fil=TFile.Open(f)
        
-       if "NANOAOD" in f:
+       if "NANOAOD" in f or usePepper:
          events=fil.Get("Events")
        else:
          events=fil.Get("tree")
@@ -155,7 +155,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          #if event_count>100000: break
          if event_count%10000==1:
            print("event",event_count)
-         if not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
+         if not usePepper and not "NANOAOD" in f and len(event.HLT_isFired)!=trigger_indices_len:
            trigger_indices={}
            trigger_indices_len=len(event.HLT_isFired)
            print("read trigger names", event_count)
@@ -166,11 +166,14 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                for trig in triggers[t]:
                  if a.startswith(trig):
                    trigger_indices[t]+=[a]
-         if "NANOAOD" in f or StandAloneROOT:
+         if "NANOAOD" in f or StandAloneROOT or usePepper:
            trigger_indices=triggers
          jet1=TLorentzVector()
          jet2=TLorentzVector()
-         if "NANOAOD" in f:
+         if usePepper:
+           jet1.SetPtEtaPhiM(event.Jet_1_pt,event.Jet_1_eta,event.Jet_1_phi,event.Jet_1_mass)
+           jet2.SetPtEtaPhiM(event.Jet_2_pt,event.Jet_2_eta,event.Jet_2_phi,event.Jet_2_mass)
+         elif "NANOAOD" in f:
            jet1.SetPtEtaPhiM(event.jetAK4_pt1_nom,event.jetAK4_eta1,event.jetAK4_phi1,event.jetAK4_mass1*event.jetAK4_pt1_nom/event.jetAK4_pt1)
            jet2.SetPtEtaPhiM(event.jetAK4_pt2_nom,event.jetAK4_eta2,event.jetAK4_phi2,event.jetAK4_mass2*event.jetAK4_pt2_nom/event.jetAK4_pt2)
          else:
@@ -189,7 +192,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          if mjj<massbins[0][0] or chi>16. or yboost>1.11: continue
          weight=1.0
          #print ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)), ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)), jet1.Phi(),jet2.Phi()
-         if vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
+         if not usePepper and vetoHEM and ((not "NANOAOD" in f and event.EVENT_run>=319077) or ("NANOAOD" in f and event.run>=319077)) and ((-1.57<jet1.Phi()) and (jet1.Phi()< -0.87) or (-1.57<jet2.Phi()) and (jet2.Phi()< -0.87)): continue
          if selectChi10 and chi<10: continue
          if selecty2 and yboost>0.61: continue
          if prefiremap:
@@ -197,7 +200,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet1.Eta(),min(499,jet1.Pt())))
             if abs(jet2.Eta())>2:
               weight/=1.-prefiremap.GetBinContent(prefiremap.FindBin(jet2.Eta(),min(499,jet2.Pt())))
-         if "Run2024" in f or "Run2025" in f:
+         if not usePepper and "Run2024" in f or "Run2025" in f:
             if not jetid2024.evaluate(
               event.jetAK4_eta1,
               event.jetAK4_chf1,
@@ -218,9 +221,9 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
               float(event.jetAK4_nConstituents2), # chMultiplicity
               float(event.jetAK4_nConstituents2), # neMultiplicity
               float(event.jetAK4_nConstituents2)): continue
-         elif "NANOAOD" in f and not "RunIII" in f:
+         elif not usePepper and "NANOAOD" in f and not "RunIII" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
-         if "NANOAOD" in f and not "UL" in f: # flags missing in 12Feb2024 UL skims
+         if not usePepper and "NANOAOD" in f and not "UL" in f: # flags missing in 12Feb2024 UL skims
             if not event.Flag_goodVertices or\
                not event.Flag_globalSuperTightHalo2016Filter or\
                not event.Flag_EcalDeadCellTriggerPrimitiveFilter or\
@@ -229,13 +232,13 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                not event.Flag_hfNoisyHitsFilter or\
                not event.Flag_eeBadScFilter or\
                not event.Flag_ecalBadCalibFilter: continue
-         if "Run2024" in f:
+         if not usePepper and "Run2024" in f:
             if jetVetoMap2024.evaluate("jetvetomap",jet1.Eta(),jet1.Phi())!=0 or jetVetoMap2024.evaluate("jetvetomap",jet2.Eta(),jet2.Phi())!=0: continue
-         if "Run2025" in f:
+         if not usePepper and "Run2025" in f:
             if jetVetoMap2025.evaluate("jetvetomap",jet1.Eta(),jet1.Phi())!=0 or jetVetoMap2025.evaluate("jetvetomap",jet2.Eta(),jet2.Phi())!=0: continue
          if "qcdpy" in sample or "qcdhw" in sample: weight*=event.genWeight
          if mjj>6000 and "data" in sample:
-           if "NANOAOD" in f:
+           if usePepper or "NANOAOD" in f:
              print("found",event.event, event.luminosityBlock, event.run, mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
            else:
              print("found",long(event.EVENT_event), int(event.EVENT_lumiBlock), int(event.EVENT_run), mjj,chi,yboost,jet1.Pt(),jet1.Rapidity(),jet1.Phi(),jet2.Pt(),jet2.Rapidity(),jet2.Phi())
@@ -243,9 +246,9 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
          #if "NANOAOD" in f and (event.PuppiMET_pt/event.PuppiMET_sumEt>0.9): continue # workaround if no jet ID
          irec=0
          for massbin in massbins:
-            passedHLT=len(triggers[massbins.index(massbin)])==0
+            passedHLT=usePepper or len(triggers[massbins.index(massbin)])==0
             for i in trigger_indices[massbins.index(massbin)]:
-              if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
+              if usePepper or ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
                  (not "NANOAOD" in f and  event.HLT_isFired.find(i)!=event.HLT_isFired.end() and event.HLT_isFired[i]):
                 passedHLT=True
                 break
@@ -260,17 +263,18 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
                plots[irec+7*len(massbins)].Fill(jet2.Rapidity(),weight)
                plots[irec+8*len(massbins)].Fill(jet1.Phi(),weight)
                plots[irec+9*len(massbins)].Fill(jet2.Phi(),weight)
-               if "NANOAOD" in f:
-                 plots[irec+10*len(massbins)].Fill(event.PuppiMET_pt/event.PuppiMET_sumEt,weight)
-               else:
-                 plots[irec+10*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
+               if not usePepper: #### FIX
+                 if "NANOAOD" in f:
+                   plots[irec+10*len(massbins)].Fill(event.PuppiMET_pt/event.PuppiMET_sumEt,weight)
+                 else:
+                   plots[irec+10*len(massbins)].Fill(event.MET_et/event.MET_sumEt,weight)
                plots[irec+11*len(massbins)].Fill((jet1.Pt()-jet2.Pt())/(jet1.Pt()+jet2.Pt()),weight)
                plots[irec+12*len(massbins)].Fill(deltaPhi(jet1.Phi(),jet2.Phi()),weight)
             irec+=1
          irec=13*len(massbins)
          plots[irec].Fill(mjj,weight)
          irec+=1
-         if StandAloneROOT or ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
+         if usePepper or StandAloneROOT or ("NANOAOD" in f and len(trigger_indices[-1])==0) or \
             (not "NANOAOD" in f and not len(massbins) in trigger_indices): continue # for MC
          for i in trigger_indices[len(massbins)]:
           if ("NANOAOD" in f and hasattr(event,i) and getattr(event,i)) or \
@@ -312,6 +316,7 @@ if __name__ == '__main__':
     genLevel=False
     selectChi10=False
     selecty2=False
+    usePepper=True
  
     chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
               (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -390,6 +395,10 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2025-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_21Dec2025"),
             ("datacard_shapelimit13TeV_run2_2024_QCDmadgraph-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_21Dec2025"),
             ("datacard_shapelimit13TeV_run2_2024-21Dec2025","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_21Dec2025"),
+            ("datacard_shapelimit13TeV_run2_2024_QCDmadgraph-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_2024-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_2025-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_2026-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2026_2026Sep10"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -1138,7 +1147,8 @@ if __name__ == '__main__':
     if len(sys.argv)>1:
       samplenum=int(sys.argv[1])
       samples=[samples[samplenum]]
-      triggers=[triggers[samplenum]]
+      if not usePepper:
+        triggers=[triggers[samplenum]]
 
     if "QBH" in samples[0][0]:
      qbhlist=[]

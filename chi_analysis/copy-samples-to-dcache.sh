@@ -1,3 +1,17 @@
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2026_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2026_2026Sep10/
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2025_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_2026Sep10/
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_2026Sep10/
+
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT200to400.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT400to600.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT600to800.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT800to1000.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT1000to1200.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT1200to1500.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT1500to2000.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_QCD_madgraph_pythia8_HT2000toInf.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/qcd2024_2026Sep10
+
+
 gfal-copy /data/dust/user/hinzmann/run2023/JetMET0_Run2024C-2024CDEReprocessing-v1_NANOAOD-21Dec2025.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_21Dec2025/
 gfal-copy /data/dust/user/hinzmann/run2023/JetMET0_Run2024D-2024CDEReprocessing-v1_NANOAOD-21Dec2025.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_21Dec2025/
 gfal-copy /data/dust/user/hinzmann/run2023/JetMET0_Run2024E-2024CDEReprocessing-v1_NANOAOD-21Dec2025.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_21Dec2025/

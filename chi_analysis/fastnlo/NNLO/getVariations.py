@@ -3,15 +3,15 @@ from array import *
 import subprocess,os
 
 order="NNLO"
-newci=True
+newci=False
 fullColor=False
-com=13600 #None for Run2 NNLO, 13600 for Run3
+com=13000 #13600 #None for Run2 NNLO, 13600 for Run3 or FullColor
 
 if order=="NNLO":
   #PDF="ct14nnlo"
   PDF="nn31nnlo"
-  mscale="m2"
-  #mscale="pt12"
+  #mscale="m2"
+  mscale="pt12"
 else:
   PDF="ct14nlo"
   mscale="pt12"
@@ -284,7 +284,9 @@ class getVariations:  # This class helps extract xsecs from NLOJET++ and CIJET++
             print(list)
             
     def listFill(self,mylist,uncerttype):
-        myfile=TFile(self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj_chi_norm_"+self.version[1]+"_"+PDF+"_cppread_"+uncerttype+"_"+mscale+("_"+str(com) if com!=None else "")+".root","RECREATE")
+        fname=self.BaseDir+"/2jet"+("fc" if fullColor else "")+".NNLO.fnl5662"+self.version[0]+"_mjj_chi_norm_"+self.version[1]+"_"+PDF+"_cppread_"+uncerttype+"_"+mscale+("_"+str(com) if com!=None else "")+".root"
+        print(fname)
+        myfile=TFile(fname,"RECREATE")
         for list in mylist:
             if uncerttype=="mu" or uncerttype=="mu6" or uncerttype=="mu30":
                 mur=str(list[0][0])

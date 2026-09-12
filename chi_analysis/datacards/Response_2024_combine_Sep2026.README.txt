@@ -1,0 +1,48 @@
+Response_2024_combine_Sep2026.root
+==================================
+2024 dijet chi response matrix as Combine templates.
+Generated 2026-09-11 from qcd2024_21Dec2025 (QCD-4Jets MadGraphMLM+Pythia8,
+RunIII2024Summer24 NanoAOD 140X, AK4 PUPPI), HT bins 800to1000 and above.
+1.14e9 matched jets.  Weights xsec/genEventCount, so histograms are in pb.
+
+NAMING  (matches Response_pythia8_Pt_170toInf_CB2_AK4SF_March24.root)
+  QCD_ALT#chi<mlo>_<mhi>_rebin1_bin_<genMass>_<genChi>   gen -> SMEARED
+  QCD#chi<mlo>_<mhi>_rebin1_bin_<genMass>_<genChi>       gen -> RECO
+  QCD_RECOSPEC#chi<mlo>_<mhi>_rebin1                     measured reco spectrum
+  mig_SMR / mig_RECO   132x132 migration matrices (x=reco, y=gen, fine grid)
+  gen_fine / reco_fine 132-bin gen and reco spectra (for Miss / normalisation)
+
+Each template is the reco chi distribution in one reco mass channel arising
+from one gen (mass, chi) bin -- one column of the response matrix, sliced by
+reco mass.  1221 templates per prefix.
+
+BINNING  (NEW -- please check this first)
+  11 mass channels: 1900-2400, 2400-3000, 3000-3600, 3600-4200, 4200-4800,
+                    4800-5400, 5400-6000, 6000-7000,
+                    7000-7700, 7700-8500, 8500-13000
+  chi: [1,2,3,4,5,6,7,8,9,10,12,14,16]  (12 bins) below 7 TeV
+       [1,3,6,9,12,16]                  (5 bins)  at and above 7 TeV
+  Gen and reco share the channel's chi binning, as in the reference file
+  (a coarse channel uses j=0..4 for EVERY gen mass bin, including low ones).
+
+  Changed vs the Run 2 file: floor is 1900 (was 1200), and the single
+  7000-13000 channel is split three ways.  The three new top channels are
+  statistics-limited -- weighted yields ~1.5e-3, 4.4e-4, 1.3e-4 pb -- and in the
+  closure the 8500+ bin is where smeared/reco degrades most.  Whether they are
+  usable in a fit is the main open question.
+
+KNOWN CAVEATS
+  - No jet ID applied to RECO: the 2024 ntuples have no IDTight branch, only the
+    raw inputs (nhf, chf, nemf, cemf, muf, nConstituents).  Run 3 tight ID must
+    be applied by hand before this is production-ready.
+  - Fakes are excluded by construction: templates require a matched gen bin, so
+    reco dijets with no gen counterpart are absent.  Not yet measured.
+  - A ~1% tilt remains between smeared and reco across chi (smeared high at low
+    chi, low at high chi).  Cause not identified; excluded so far are the DSCB
+    functional form, rapidity binning, rapidity smearing, and the two-jet
+    response correlation (rho ~ 0.004).
+  - Source files are skimmed on reco jetAK4_pt1 > 200, so they cannot measure
+    efficiency near threshold.
+
+Code: /afs/cern.ch/work/z/zhangj/private/jetUnfold/MyChi/ChiAnalysis/python/response2024/
+Plots: https://zhangj.web.cern.ch/dijet_response_2024/

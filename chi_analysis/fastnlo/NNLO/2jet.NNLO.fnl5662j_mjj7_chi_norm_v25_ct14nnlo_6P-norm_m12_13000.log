@@ -1,0 +1,40 @@
+ ##################################################################################
+ # [fnlo-tk-yodaout] Evaluating table: ./2jet.NNLO.fnl5662j_mjj7_chi_norm_v25.tab.gz
+ # [fnlo-tk-yodaout] Using PDF set   : CT14nnlo
+ # [fnlo-tk-yodaout] Showing uncertainty from asymmetric 6-point scale factor variation.
+ # [fnlo-tk-yodaout] Deriving NNLO cross sections for comparison.
+ # [fnlo-tk-yodaout] Normalizing cross sections. 
+ # [fnlo-tk-yodaout] Using scale definition kScale2.
+ # [fnlo-tk-yodaout] No request given for central scale factor, using unmodified central scale.
+ # [fnlo-tk-yodaout] Do not apply nonperturbative corrections.
+ # [fnlo-tk-yodaout] No request given for x-axis rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] No request given for uncertainty rescale factor, using default value of unity.
+ # [fnlo-tk-yodaout] Using newEcms = 13000
+ # [fnlo-tk-yodaout] Using verbosity level: WARNING
+ ##################################################################################
+
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+LHAPDF 6.5.5 loading /home/rabbertz/local/share/LHAPDF/CT14nnlo/CT14nnlo_0000.dat
+CT14nnlo PDF set, member #0, version 1; LHAPDF ID = 13000
+ ##################################################################################
+ # fastNLOReader: Evaluating uncertainties
+ ##################################################################################
+ #=================================================================================
+ # Relative scale uncertainties (6P CT14nnlo NNLO)
+ #---------------------------------------------------------------------------------
+ # bin      cross_section           lower_uncertainty       upper_uncertainty
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    1       7.31841335853E-02      -3.54091109746E-03       8.95259308312E-03
+    2       6.20116324606E-02      -3.31148153361E-04       2.04970468934E-03
+    3       6.18095738692E-02      -1.09215101993E-03       3.36696277991E-03
+    4       6.24411082871E-02      -1.09064248643E-03       4.85055400096E-03
+    5       6.37061753634E-02      -1.11302978432E-03       1.35731034738E-03
+    6       6.58378622667E-02      -3.44740812557E-03       6.13373279920E-03
+    7       6.41078679266E-02      -8.54442007706E-03       5.56217512015E-03
+    8       6.59778044415E-02      -1.49777697176E-03       3.20299756363E-03
+    9       6.65346837683E-02      -7.29286472555E-03       3.18720679439E-03
+   10       6.83168098320E-02      -2.07853592314E-03       2.30080909945E-03
+   11       6.94452685081E-02      -1.37708749608E-03       1.45107058860E-03
+   12       6.94325006755E-02      -8.32083776430E-03       2.69748209972E-03
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

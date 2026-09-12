@@ -41,14 +41,15 @@ if __name__ == '__main__':
     modelComparison=False # NNLO vs Pythia vs Madgraph and generator level
     onlyMC=False # before/after smearing
     onlyData=False # before/after unfolding
-    withUncertainties=False
+    withUncertainties=True
     compareNoUncertainty=False
-    normalize=False
+    normalize=True
     run="2"
     postfix=""
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2"+postfix+"/datacard_shapelimit13TeV"
     if not normalize:
       postfix="_nonorm"
-    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3"+postfix+"/datacard_shapelimit13TeV"
+      prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3"+postfix+"/datacard_shapelimit13TeV"
 
     name="unfold"
     if withUncertainties: name+="_withUncertainties"
@@ -227,6 +228,19 @@ if __name__ == '__main__':
 
       fout.cd()
       h1genpostfit.Write()
+
+      uncertaintynames=["jer","prefire","trigger"]#,"model","JERtail","sim"
+      for mn in massbins:
+        uncertaintynames+=["model"+str(mn[0])]
+        uncertaintynames+=["JERtail"+str(mn[0])]
+        uncertaintynames+=["sim"+str(mn[0])]
+      jesSources=23
+      for n in range(jesSources):
+        uncertaintynames+=["jes"+str(n+1)]
+      for name in uncertaintynames:
+          fitParameter=fittree.floatParsFinal().find(name).getVal()
+          fitConstraint=fittree.floatParsFinal().find(name).getError()
+          print(name,fitParameter,fitConstraint)
 
       #if not normalize:
       #  histname='QCD_ALT#chi'+str(massbins[i]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_nonorm"

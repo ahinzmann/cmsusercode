@@ -5,7 +5,7 @@ import ROOT
 import subprocess
 
 def system_call(command):
-    print command
+    print(command)
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     return p.stdout.read()
 
@@ -37,7 +37,7 @@ if trivialClosure: name+="_trivialClosure"
 if crossClosureNNLO: name+="_crossClosureNNLO"
 if crossClosureHerwig: name+="_crossClosureHerwig"
 if crossClosureMadgraph: name+="_crossClosureMadgraph"
-print name
+print(name)
 statUncertainties=[]
 chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
            (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -110,10 +110,10 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
     for i in range(len(massbins)):
        if trivialClosure or crossClosureNNLO or crossClosureHerwig or crossClosureMadgraph:
          hData=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
-         print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
+         print("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral())
        else:
          hData=f.Get("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1")
-         print "data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral()
+         print("data_obs#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1",hData.Integral())
        text+=str(hData.Integral())+" "
     cfg.writelines(text+"""
 -----------
@@ -130,16 +130,16 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
        for chibin in range(len(chi_bins[j])-1):
         if trivialClosure:
           hQCD=f.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
-          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+          print("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral())
         elif crossClosureHerwig:
           hQCD=fh.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
-          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+          print("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral())
         elif crossClosureMadgraph:
           hQCD=fm.Get("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
-          print "QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+          print("QCD#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral())
         else:
           hQCD=f.Get("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_")
-          print "QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral()
+          print("QCD_ALT#chi"+str(massbins[i][0])+"_"+str(massbins[i][1])+"_rebin1"+"_bin_"+str(j)+"_"+str(chibin)+"_",hQCD.Integral())
         if hQCD.Integral()>0:
           ones+="1 "
         else:
@@ -156,7 +156,7 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
     text=""
 
     if withUncertainties:
-      print "adding uncertainties"
+      print("adding uncertainties")
       if uncorrelatedSimUncertainties:
        for mn in massbins:
         text+="\nmodel"+str(mn[0])+" shape "+ones
@@ -201,7 +201,7 @@ kmax """+str(withUncertainties*(2+3*correlatedSimUncertainties+3*len(massbins)*u
           text+="\nscaleAlt shape "+ones
         if scaleUncertainties:
           text+="\nscale shape "+ones
-      print "adding stat uncertainties"
+      print("adding stat uncertainties")
       for su in statUncertainties:
         text+="\n"+su+" shape "+ones
       cfg.writelines(text+"""
@@ -217,12 +217,12 @@ if True:
     for j in range(len(massbins)):
       for chibin in range(len(chi_bins[j])-1):
         pois_map+=" --PO map='.*"+"bin_"+str(j)+"_"+str(chibin)+".*:r_Bin_"+str(j)+"_"+(str(chibin) if chibin>9 else "0"+str(chibin))+"[1,0,3]'"
-    print "running combine"
+    print("running combine")
     out=system_call("text2workspace.py -m 125 chi_datacard13TeV"+name+"_run"+runs+".txt --X-allow-no-background -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "+pois_map+" -o "+name+"_run"+runs+".root")
-    print out
+    print(out)
     out=system_call("mkdir "+name+"_run"+runs)
-    print out
+    print(out)
     out=system_call("cd "+name+"_run"+runs+";combine -m 125 -M MultiDimFit ../"+name+"_run"+runs+".root --saveFitResult")
-    print out
+    print(out)
     out=system_call("mv "+name+"_run"+runs+"/multidimfit.root multidimfit_"+name+"_run"+runs+".root")
-    print out
+    print(out)
