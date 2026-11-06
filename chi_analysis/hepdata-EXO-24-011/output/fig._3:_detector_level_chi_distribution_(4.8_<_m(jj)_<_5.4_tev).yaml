@@ -1,0 +1,273 @@
+dependent_variables:
+- header:
+    name: Measured detector level
+  qualifiers:
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 138.0
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.00401
+        plus: 0.00421
+      label: total
+    value: 0.08114
+  - errors:
+    - asymerror:
+        minus: -0.00355
+        plus: 0.00376
+      label: total
+    value: 0.06368
+  - errors:
+    - asymerror:
+        minus: -0.00353
+        plus: 0.00373
+      label: total
+    value: 0.06289
+  - errors:
+    - asymerror:
+        minus: -0.00363
+        plus: 0.00383
+      label: total
+    value: 0.06646
+  - errors:
+    - asymerror:
+        minus: -0.00372
+        plus: 0.00392
+      label: total
+    value: 0.06983
+  - errors:
+    - asymerror:
+        minus: -0.00367
+        plus: 0.00387
+      label: total
+    value: 0.06785
+  - errors:
+    - asymerror:
+        minus: -0.00355
+        plus: 0.00376
+      label: total
+    value: 0.06368
+  - errors:
+    - asymerror:
+        minus: -0.00357
+        plus: 0.00378
+      label: total
+    value: 0.06448
+  - errors:
+    - asymerror:
+        minus: -0.0036
+        plus: 0.0038
+      label: total
+    value: 0.06527
+  - errors:
+    - asymerror:
+        minus: -0.00258
+        plus: 0.00268
+      label: total
+    value: 0.06696
+  - errors:
+    - asymerror:
+        minus: -0.00253
+        plus: 0.00263
+      label: total
+    value: 0.06439
+  - errors:
+    - asymerror:
+        minus: -0.00256
+        plus: 0.00266
+      label: total
+    value: 0.066
+- header:
+    name: QCD NNLO + EW NLO
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0022
+        plus: 0.0039
+      label: theory
+    value: 0.07686
+  - errors:
+    - asymerror:
+        minus: -0.0017
+        plus: 0.0029
+      label: theory
+    value: 0.06275
+  - errors:
+    - asymerror:
+        minus: -0.0015
+        plus: 0.0023
+      label: theory
+    value: 0.06161
+  - errors:
+    - asymerror:
+        minus: -0.0012
+        plus: 0.0018
+      label: theory
+    value: 0.06171
+  - errors:
+    - asymerror:
+        minus: -0.001
+        plus: 0.0014
+      label: theory
+    value: 0.06306
+  - errors:
+    - asymerror:
+        minus: -0.0006
+        plus: 0.001
+      label: theory
+    value: 0.06365
+  - errors:
+    - asymerror:
+        minus: -0.0003
+        plus: 0.0006
+      label: theory
+    value: 0.06478
+  - errors:
+    - asymerror:
+        minus: -0.0
+        plus: 0.0001
+      label: theory
+    value: 0.06533
+  - errors:
+    - asymerror:
+        minus: -0.0003
+        plus: 0.0004
+      label: theory
+    value: 0.06644
+  - errors:
+    - asymerror:
+        minus: -0.0011
+        plus: 0.0009
+      label: theory
+    value: 0.06728
+  - errors:
+    - asymerror:
+        minus: -0.0023
+        plus: 0.0015
+      label: theory
+    value: 0.06945
+  - errors:
+    - asymerror:
+        minus: -0.0038
+        plus: 0.0017
+      label: theory
+    value: 0.07018
+- header:
+    name: $\Lambda^{-}_{LL}$ (CI) = 30 TeV
+  values:
+  - value: 0.08231
+  - value: 0.0652
+  - value: 0.06274
+  - value: 0.06213
+  - value: 0.06302
+  - value: 0.06328
+  - value: 0.06424
+  - value: 0.06459
+  - value: 0.06558
+  - value: 0.06626
+  - value: 0.06828
+  - value: 0.06891
+- header:
+    name: $\Lambda^{+}_{VV}$ (CI) = 30 TeV
+  values:
+  - value: 0.07181
+  - value: 0.06031
+  - value: 0.06037
+  - value: 0.06114
+  - value: 0.06297
+  - value: 0.0639
+  - value: 0.06523
+  - value: 0.06601
+  - value: 0.06726
+  - value: 0.0683
+  - value: 0.07067
+  - value: 0.07153
+- header:
+    name: $\Lambda_{T}$ (GRW) = 13 TeV
+  values:
+  - value: 0.08223
+  - value: 0.06502
+  - value: 0.06363
+  - value: 0.06276
+  - value: 0.06294
+  - value: 0.06418
+  - value: 0.06393
+  - value: 0.06403
+  - value: 0.06688
+  - value: 0.06593
+  - value: 0.06809
+  - value: 0.06818
+- header:
+    name: $M_{QBH}$ ($n_{ED}$ = 6 ADD) = 9 TeV
+  values:
+  - value: 0.07685
+  - value: 0.06275
+  - value: 0.06161
+  - value: 0.06171
+  - value: 0.06306
+  - value: 0.06364
+  - value: 0.06478
+  - value: 0.06533
+  - value: 0.06644
+  - value: 0.06728
+  - value: 0.06946
+  - value: 0.07018
+- header:
+    name: $f_a/c_g$ (ALP) = 2.5 TeV
+  values:
+  - value: 0.07907
+  - value: 0.06369
+  - value: 0.06201
+  - value: 0.06175
+  - value: 0.06305
+  - value: 0.06349
+  - value: 0.06451
+  - value: 0.06497
+  - value: 0.06601
+  - value: 0.06681
+  - value: 0.06902
+  - value: 0.06989
+- header:
+    name: $\Lambda/\sqrt{C_G}$ (SMEFT) = 10 TeV
+  values:
+  - value: 0.08422
+  - value: 0.06576
+  - value: 0.06273
+  - value: 0.06188
+  - value: 0.06304
+  - value: 0.06327
+  - value: 0.06409
+  - value: 0.06438
+  - value: 0.06528
+  - value: 0.06591
+  - value: 0.06797
+  - value: 0.06881
+independent_variables:
+- header:
+    name: CHI = exp(|Y1-Y2|)
+  values:
+  - high: 2
+    low: 1
+  - high: 3
+    low: 2
+  - high: 4
+    low: 3
+  - high: 5
+    low: 4
+  - high: 6
+    low: 5
+  - high: 7
+    low: 6
+  - high: 8
+    low: 7
+  - high: 9
+    low: 8
+  - high: 10
+    low: 9
+  - high: 12
+    low: 10
+  - high: 14
+    low: 12
+  - high: 16
+    low: 14

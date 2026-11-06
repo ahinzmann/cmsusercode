@@ -1,0 +1,269 @@
+dependent_variables:
+- header:
+    name: Measured
+  qualifiers:
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 138.0
+  values:
+  - errors:
+    - label: sys
+      symerror: 0.00404
+    - label: total
+      symerror: 0.01161
+    value: 0.07642
+  - errors:
+    - label: sys
+      symerror: 0.00296
+    - label: total
+      symerror: 0.01052
+    value: 0.07107
+  - errors:
+    - label: sys
+      symerror: 0.00242
+    - label: total
+      symerror: 0.01075
+    value: 0.07633
+  - errors:
+    - label: sys
+      symerror: 0.00171
+    - label: total
+      symerror: 0.01041
+    value: 0.06618
+  - errors:
+    - label: sys
+      symerror: 0.0013
+    - label: total
+      symerror: 0.0104
+    value: 0.05746
+  - errors:
+    - label: sys
+      symerror: 0.00104
+    - label: total
+      symerror: 0.01073
+    value: 0.06603
+  - errors:
+    - label: sys
+      symerror: 0.00075
+    - label: total
+      symerror: 0.01062
+    value: 0.06049
+  - errors:
+    - label: sys
+      symerror: 0.00072
+    - label: total
+      symerror: 0.01112
+    value: 0.06745
+  - errors:
+    - label: sys
+      symerror: 0.00064
+    - label: total
+      symerror: 0.01034
+    value: 0.0498
+  - errors:
+    - label: sys
+      symerror: 0.00133
+    - label: total
+      symerror: 0.00816
+    value: 0.06565
+  - errors:
+    - label: sys
+      symerror: 0.00208
+    - label: total
+      symerror: 0.00849
+    value: 0.06917
+  - errors:
+    - label: sys
+      symerror: 0.00343
+    - label: total
+      symerror: 0.00905
+    value: 0.06957
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, full color)
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.00113
+        plus: 0.00131
+      label: theory
+    value: 0.08124
+  - errors:
+    - asymerror:
+        minus: -0.00071
+        plus: 0.00084
+      label: theory
+    value: 0.06595
+  - errors:
+    - asymerror:
+        minus: -0.00046
+        plus: 0.00055
+      label: theory
+    value: 0.06301
+  - errors:
+    - asymerror:
+        minus: -0.00039
+        plus: 0.00042
+      label: theory
+    value: 0.06333
+  - errors:
+    - asymerror:
+        minus: -0.00032
+        plus: 0.00033
+      label: theory
+    value: 0.06297
+  - errors:
+    - asymerror:
+        minus: -0.00043
+        plus: 0.00045
+      label: theory
+    value: 0.06389
+  - errors:
+    - label: theory
+      symerror: 0.00038
+    value: 0.0643
+  - errors:
+    - label: theory
+      symerror: 0.00061
+    value: 0.06553
+  - errors:
+    - asymerror:
+        minus: -0.00098
+        plus: 0.00097
+      label: theory
+    value: 0.06433
+  - errors:
+    - asymerror:
+        minus: -0.00059
+        plus: 0.00052
+      label: theory
+    value: 0.06682
+  - errors:
+    - asymerror:
+        minus: -0.00096
+        plus: 0.00088
+      label: theory
+    value: 0.06823
+  - errors:
+    - asymerror:
+        minus: -0.00182
+        plus: 0.00177
+      label: theory
+    value: 0.06768
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color)
+  values:
+  - value: 0.08118
+  - value: 0.06547
+  - value: 0.06343
+  - value: 0.06166
+  - value: 0.06257
+  - value: 0.06297
+  - value: 0.06352
+  - value: 0.06422
+  - value: 0.065
+  - value: 0.06631
+  - value: 0.06825
+  - value: 0.07044
+- header:
+    name: QCD NNLO + EW NLO ($\mu=<p_{T}>$, lead. color)
+  values:
+  - value: 0.08444
+  - value: 0.06771
+  - value: 0.06555
+  - value: 0.06211
+  - value: 0.0629
+  - value: 0.0627
+  - value: 0.06278
+  - value: 0.06314
+  - value: 0.06372
+  - value: 0.06494
+  - value: 0.06724
+  - value: 0.07029
+- header:
+    name: QCD NLO + EW NLO ($\mu=<p_{T}>$)
+  values:
+  - value: 0.08115
+  - value: 0.06541
+  - value: 0.06332
+  - value: 0.06337
+  - value: 0.06357
+  - value: 0.06404
+  - value: 0.06455
+  - value: 0.06512
+  - value: 0.06568
+  - value: 0.06645
+  - value: 0.06735
+  - value: 0.06809
+- header:
+    name: QCD NNLO ($\mu=m_{jj}$, lead. color)
+  values:
+  - value: 0.072952
+  - value: 0.062263
+  - value: 0.062271
+  - value: 0.061547
+  - value: 0.063044
+  - value: 0.063775
+  - value: 0.064551
+  - value: 0.065371
+  - value: 0.066235
+  - value: 0.067613
+  - value: 0.069606
+  - value: 0.071776
+- header:
+    name: QCD NNLO ($\mu=m_{jj}$, lead. color, fb)
+  values:
+  - value: 0.7731
+  - value: 0.65982
+  - value: 0.65991
+  - value: 0.65223
+  - value: 0.6681
+  - value: 0.67585
+  - value: 0.68407
+  - value: 0.69276
+  - value: 0.70191
+  - value: 0.71652
+  - value: 0.73765
+  - value: 0.76064
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color, fb)
+  values:
+  - value: 0.83946
+  - value: 0.67701
+  - value: 0.65587
+  - value: 0.63759
+  - value: 0.64698
+  - value: 0.65114
+  - value: 0.65679
+  - value: 0.66405
+  - value: 0.67218
+  - value: 0.68564
+  - value: 0.7058
+  - value: 0.72835
+independent_variables:
+- header:
+    name: CHI = exp(|Y1-Y2|)
+  values:
+  - high: 2
+    low: 1
+  - high: 3
+    low: 2
+  - high: 4
+    low: 3
+  - high: 5
+    low: 4
+  - high: 6
+    low: 5
+  - high: 7
+    low: 6
+  - high: 8
+    low: 7
+  - high: 9
+    low: 8
+  - high: 10
+    low: 9
+  - high: 12
+    low: 10
+  - high: 14
+    low: 12
+  - high: 16
+    low: 14

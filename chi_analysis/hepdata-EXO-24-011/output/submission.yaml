@@ -1,0 +1,784 @@
+---
+additional_resources:
+- description: Created with hepdata_lib 0.16.0
+  location: https://doi.org/10.5281/zenodo.1217998
+- description: Webpage with all figures and tables
+  location: https://cms-results.web.cern.ch/cms-results/public-results/publications/EXO-24-011/
+comment: A measurement is presented of dijet angular distributions in proton-proton
+  collisions at $\sqrt{s} = 13$ TeV, using data collected with the CMS detector at
+  the CERN LHC and corresponding to an integrated luminosity of 138 $\rm fb^{-1}$.
+  The data are compared with predictions from perturbative quantum chromodynamics
+  at next-to-next-to-leading order, including electroweak corrections.The distributions
+  are used to search for proposed signatures of quark compositeness, extra spatial
+  dimensions, quantum black holes, axion-like particles, and anomalous gluon couplings.
+data_license:
+  description: CC0 enables reusers to distribute, remix, adapt, and build upon the
+    material in any medium or format, with no conditions.
+  name: CC0
+  url: https://creativecommons.org/publicdomain/zero/1.0/
+record_ids:
+- id: 0
+  type: inspire
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory3_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory3_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory3_detector_run2.png
+data_file: fig._2:_detector_level_chi_distribution_(2.4_<_m(jj)_<_3.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 2.4 <
+  M(JJ) < 3.0 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 2 upper left
+name: 'Fig. 2: Detector level CHI distribution (2.4 < M(JJ) < 3.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory4_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory4_detector_run2.png
+data_file: fig._2:_detector_level_chi_distribution_(3.0_<_m(jj)_<_3.6_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 3.0 <
+  M(JJ) < 3.6 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 2 upper right
+name: 'Fig. 2: Detector level CHI distribution (3.0 < M(JJ) < 3.6 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory5_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory5_detector_run2.png
+data_file: fig._2:_detector_level_chi_distribution_(3.6_<_m(jj)_<_4.2_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 3.6 <
+  M(JJ) < 4.2 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 2 lower left
+name: 'Fig. 2: Detector level CHI distribution (3.6 < M(JJ) < 4.2 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory6_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory6_detector_run2.png
+data_file: fig._2:_detector_level_chi_distribution_(4.2_<_m(jj)_<_4.8_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 4.2 <
+  M(JJ) < 4.8 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 2 lower right
+name: 'Fig. 2: Detector level CHI distribution (4.2 < M(JJ) < 4.8 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory7_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory7_detector_run2.png
+data_file: fig._3:_detector_level_chi_distribution_(4.8_<_m(jj)_<_5.4_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 4.8 <
+  M(JJ) < 5.4 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 3 upper left
+name: 'Fig. 3: Detector level CHI distribution (4.8 < M(JJ) < 5.4 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory8_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory8_detector_run2.png
+data_file: fig._3:_detector_level_chi_distribution_(5.4_<_m(jj)_<_6.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 5.4 <
+  M(JJ) < 6.0 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 3 upper right
+name: 'Fig. 3: Detector level CHI distribution (5.4 < M(JJ) < 6.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory9_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory9_detector_run2.png
+data_file: fig._3:_detector_level_chi_distribution_(6.0_<_m(jj)_<_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in 6.0 <
+  M(JJ) < 7.0 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are
+  compared to NNLO QCD + NLO EW predictions, corrected for the detector response.
+  The horizontal bars represent statistical and experimental systematic uncertainties
+  combined in quadrature. Theoretical uncertainties are provided as well. Also given
+  are the predictions for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 3 lower left
+name: 'Fig. 3: Detector level CHI distribution (6.0 < M(JJ) < 7.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_detector_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory10_detector_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory10_detector_run2.png
+data_file: fig._3:_detector_level_chi_distribution_(m(jj)_>_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/N)*D(N)/DCHI in M(JJ)
+  > 7.0 TeV with |Y1+Y2|/2< 1.1. The data distributions at detector-level are compared
+  to NNLO QCD + NLO EW predictions, corrected for the detector response. The horizontal
+  bars represent statistical and experimental systematic uncertainties combined in
+  quadrature. Theoretical uncertainties are provided as well. Also given are the predictions
+  for various BSM scenarios.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DN/DCHI
+location: Data from Figure 3 lower right
+name: 'Fig. 3: Detector level CHI distribution (M(JJ) > 7.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: limitsDetLHCa_DMAxial_mdm1_v6b_run2.root
+- description: Image file
+  location: limitsDetLHCa_DMAxial_mdm1_v6b_run2.png
+- description: Thumbnail image file
+  location: thumb_limitsDetLHCa_DMAxial_mdm1_v6b_run2.png
+data_file: fig._4:_exclusion_limit_(dm_mediator).yaml
+description: The 95% CL upper limits on the universal quark coupling $g_{q}$ as a
+  function of a vector or axial-vector mediator mass, with $g_{DM}=1.0$ and $m_{DM}=1$
+  GeV. The observed and expected limits and their 68% and 95% confidence intervals
+  are given.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+location: Data from Figure 4
+name: 'Fig. 4: Exclusion limit (DM mediator)'
+---
+additional_resources:
+- description: ROOT file
+  location: limitsLHCaalp_coupling_run2.root
+- description: Image file
+  location: limitsLHCaalp_coupling_run2.png
+- description: Thumbnail image file
+  location: thumb_limitsLHCaalp_coupling_run2.png
+data_file: fig._5_left:_exclusion_limit_(alp_liniar_eft).yaml
+description: The 95% CL upper limits on the ALP gluon coupling, $c_{g}$, as a function
+  of the characteristic energy scale, $f_{a}$, assuming $m_{a}=1$ MeV. Only dijet
+  angular distributions with $m_{jj}<f_{a}$ are used to obtain the limits on $c_{g}$.
+  The observed limits, expected limits and their 68% and 95% confidence intervals
+  are given.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+location: Data from Figure 5 left
+name: 'Fig. 5 left: Exclusion limit (ALP liniar EFT)'
+---
+additional_resources:
+- description: ROOT file
+  location: limitsLHCatripleG_coupling_run2.root
+- description: Image file
+  location: limitsLHCatripleG_coupling_run2.png
+- description: Thumbnail image file
+  location: thumb_limitsLHCatripleG_coupling_run2.png
+data_file: fig._5_right:_exclusion_limit_(smeft).yaml
+description: The 95% CL upper limits on the anomalous triple gluon coupling, $C_{G}$,
+  in SMEFT as a function of the BSM physics energy scale, $\Lambda$. Only dijet angular
+  distributions with $m_{jj}<\Lambda$ are used to obtain the limits on $C_{G}$. The
+  observed limits, expected limits and their 68% and 95% confidence intervals are
+  given.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+location: Data from Figure 5 right
+name: 'Fig. 5 right: Exclusion limit (SMEFT)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory4_scales_pdfs_run2.png
+data_file: fig._6:_particle_level_chi_distribution_(3.0_<_m(jj)_<_3.6_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 3.0
+  < M(JJ) < 3.6 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 6 upper left
+name: 'Fig. 6: Particle level CHI distribution (3.0 < M(JJ) < 3.6 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory5_scales_pdfs_run2.png
+data_file: fig._6:_particle_level_chi_distribution_(3.6_<_m(jj)_<_4.2_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 3.6
+  < M(JJ) < 4.2 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 6 upper right
+name: 'Fig. 6: Particle level CHI distribution (3.6 < M(JJ) < 4.2 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory6_scales_pdfs_run2.png
+data_file: fig._6:_particle_level_chi_distribution_(4.2_<_m(jj)_<_4.8_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 4.2
+  < M(JJ) < 4.8 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 6 lower left
+name: 'Fig. 6: Particle level CHI distribution (4.2 < M(JJ) < 4.8 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory7_scales_pdfs_run2.png
+data_file: fig._6:_particle_level_chi_distribution_(4.8_<_m(jj)_<_5.4_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 4.8
+  < M(JJ) < 5.4 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 6 lower right
+name: 'Fig. 6: Particle level CHI distribution (4.8 < M(JJ) < 5.4 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory8_scales_pdfs_run2.png
+data_file: fig._7:_particle_level_chi_distribution_(5.4_<_m(jj)_<_6.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 5.4
+  < M(JJ) < 6.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 7 upper left
+name: 'Fig. 7: Particle level CHI distribution (5.4 < M(JJ) < 6.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory9_scales_pdfs_run2.png
+data_file: fig._7:_particle_level_chi_distribution_(6.0_<_m(jj)_<_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 6.0
+  < M(JJ) < 7.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative
+  CT14 PDF set, and a comparison with the NLO prediction used in the previous publication
+  are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$
+  = $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 7 upper right
+name: 'Fig. 7: Particle level CHI distribution (6.0 < M(JJ) < 7.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_pdfs_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_pdfs_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory10_scales_pdfs_run2.png
+data_file: fig._7:_particle_level_chi_distribution_(m(jj)_>_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in M(JJ)
+  > 7.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s}
+  = 13$ TeV. The data distributions corrected for detector effects are compared to
+  NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and
+  $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set,
+  and a comparison with the NLO prediction used in the previous publication are also
+  given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ =
+  $m_{jj}$ and using NNPDF3.1 are provided.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Figure 7 lower
+name: 'Fig. 7: Particle level CHI distribution (M(JJ) > 7.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_unfold_withUncertainties_correlationMatrix_run2.root
+data_file: fig._8:_correlation_matrix.yaml
+description: Correlation matrix of the maximum likelihood estimators of the signal
+  strength modifiers. The matrix is obtained after the fit to the data. The bin numbers
+  correspond to 11 times the index (starting at 0) of the $m_{jj}$ bin (3.0,3.6,4.2,4.8,5.4,6.0,7.0)
+  GeV plus the index (starting at 0) of the CHI bin (1,2,3,4,5,6,7,8,9,10,12,14).
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+location: ''
+name: 'Fig. 8: Correlation matrix'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory4_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory4_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._1:_particle_level_chi_(3.0_<_m(jj)_<_3.6_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 3.0
+  < M(JJ) < 3.6 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 1 upper left
+name: 'Add. Fig. 1: Particle level CHI (3.0 < M(JJ) < 3.6 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory5_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory5_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._1:_particle_level_chi_(3.6_<_m(jj)_<_4.2_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 3.6
+  < M(JJ) < 4.2 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 1 upper right
+name: 'Add. Fig. 1: Particle level CHI (3.6 < M(JJ) < 4.2 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory6_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory6_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._1:_particle_level_chi_(4.2_<_m(jj)_<_4.8_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 4.2
+  < M(JJ) < 4.8 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 1 lower left
+name: 'Add. Fig. 1: Particle level CHI (4.2 < M(JJ) < 4.8 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory7_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory7_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._1:_particle_level_chi_(4.8_<_m(jj)_<_5.4_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 4.8
+  < M(JJ) < 5.4 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 1 lower right
+name: 'Add. Fig. 1: Particle level CHI (4.8 < M(JJ) < 5.4 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory8_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory8_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._2:_particle_level_chi_(5.4_<_m(jj)_<_6.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 5.4
+  < M(JJ) < 6.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 2 upper left
+name: 'Add. Fig. 2: Particle level CHI (5.4 < M(JJ) < 6.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory9_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory9_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._2:_particle_level_chi_(6.0_<_m(jj)_<_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in 6.0
+  < M(JJ) < 7.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity
+  at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are
+  compared to NNLO predictions with full color treatment and leading color treatment
+  with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$
+  = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication
+  is also given. Theoretical uncertainties with full color treatment and the central
+  scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also
+  provide prediction without EW corrections applied and un-normalized in units of
+  fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 2 upper right
+name: 'Add. Fig. 2: Particle level CHI (6.0 < M(JJ) < 7.0 TeV)'
+---
+additional_resources:
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_fullcolor_fc_supplementary_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_pdfs_noewk_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_pdfs_noewk_nonorm_run2.root
+- description: ROOT file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_pdfs_nonorm_run2.root
+- description: Image file
+  location: datacard_shapelimit13TeV_combined_theory10_scales_fullcolor_fc_supplementary_run2.png
+- description: Thumbnail image file
+  location: thumb_datacard_shapelimit13TeV_combined_theory10_scales_fullcolor_fc_supplementary_run2.png
+data_file: add._fig._2:_particle_level_chi_(m(jj)_>_7.0_tev).yaml
+description: Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in M(JJ)
+  > 7.0 TeV with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s}
+  = 13$ TeV. The data distributions corrected for detector effects are compared to
+  NNLO predictions with full color treatment and leading color treatment with central
+  scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$.
+  A comparison with the NLO prediction used in the previous publication is also given.
+  Theoretical uncertainties with full color treatment and the central scale $\mu_{F}$
+  = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction
+  without EW corrections applied and un-normalized in units of fb.
+keywords:
+- name: reactions
+  values:
+  - P P --> JET JET X
+- name: cmenergies
+  values:
+  - 13000
+- name: observables
+  values:
+  - DSIG/DCHI
+location: Data from Add. Fig. 2 lower
+name: 'Add. Fig. 2: Particle level CHI (M(JJ) > 7.0 TeV)'

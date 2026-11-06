@@ -30,6 +30,15 @@ submission.add_record_id(0, "inspire")
 
 input_dir="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/"
 input_dir2="versions/run2ULNNLO_m2_NNPDF3/"
+input_dir3="versions/run2ULNNLOfc_m2_NNPDF3/"
+image_type="pdf"
+outdir = "output"
+
+input_dir="output/"
+input_dir2=""
+input_dir3=""
+image_type="png"
+outdir = "output2"
 
 paper_plots=[]
 paper_plots+=[("2.4 < M(JJ) < 3.0 TeV","Figure 2 upper left","datacard_shapelimit13TeV_combined_theory3_detector_run2")]
@@ -66,7 +75,7 @@ for massbin,figure,filename in paper_plots:
   table.keywords["cmenergies"] = [13000]
   table.keywords["observables"] = ["DN/DCHI"]
   print(input_dir+input_dir2+filename)
-  table.add_image(input_dir+input_dir2+filename+".pdf")
+  table.add_image(input_dir+input_dir2+filename+"."+image_type)
 
   reader = RootFileReader(input_dir+input_dir2+filename+".root")
   canvas = reader.retrieve_object("combined/main")
@@ -127,7 +136,7 @@ for massbin,figure,filename in paper_plots:
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
   print(input_dir+filename)
-  table.add_image(input_dir+filename+".pdf")
+  table.add_image(input_dir+filename+"."+image_type)
 
   reader = RootFileReader(input_dir+filename+".root")
   #canvas = reader.retrieve_object("main")
@@ -180,7 +189,7 @@ for massbin,figure,filename in paper_plots:
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
   print(input_dir+filename)
-  table.add_image(input_dir+filename+".pdf")
+  table.add_image(input_dir+filename+"."+image_type)
 
   reader = RootFileReader(input_dir+filename+".root")
   #canvas = reader.retrieve_object("main")
@@ -226,13 +235,13 @@ for massbin,figure,filename in paper_plots:
  if "Figure 6" in figure or "Figure 7" in figure:
   table = Table("Fig. "+("6" if "Figure 6" in figure else "7")+": Particle level CHI distribution ("+massbin+")")
   print(figure)
-  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set, and a comparison with the NLO prediction used in the previous publication are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction without EW corrections applied."
+  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. Prediction with the alternative CT14 PDF set, and a comparison with the NLO prediction used in the previous publication are also given. Theoretical uncertainties with the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided."
   table.location = "Data from "+figure
   table.keywords["reactions"] = ["P P --> JET JET X"]
   table.keywords["cmenergies"] = [13000]
   table.keywords["observables"] = ["DSIG/DCHI"]
   print(input_dir+input_dir2+filename)
-  table.add_image(input_dir+input_dir2+filename+".pdf")
+  table.add_image(input_dir+input_dir2+filename+"."+image_type)
 
   reader = RootFileReader(input_dir+input_dir2+filename+".root")
   #canvas = reader.retrieve_object("combined/main")
@@ -244,11 +253,8 @@ for massbin,figure,filename in paper_plots:
   nnlomaindown = reader.read_hist_1d("combined/main/TheoryDown")
   nnloalt = reader.read_hist_1d("combined/main/AltScale")
   nloold = reader.read_hist_1d("combined/main/OldNLO")
-
-  reader = RootFileReader(input_dir+input_dir2+filename.replace("pdfs","pdfs_noewk")+".root")
-  noewk = reader.read_hist_1d("combined/main/NoEWK")
-  print(data)
-  print(nnlomain)
+  #print(data)
+  #print(nnlomain)
   #print(nnlomainup)
 
   chi = Variable("CHI = exp(|Y1-Y2|)", is_independent=True, is_binned=True, units="")
@@ -273,15 +279,12 @@ for massbin,figure,filename in paper_plots:
   thnnloalt.values = round_value_to_decimals(nnloalt['y'],5)
   thnloold = Variable("QCD NLO + EW NLO ($\mu=<p_{T}>$)", is_independent=False, is_binned=False, units="")
   thnloold.values = round_value_to_decimals(nloold['y'],5)
-  thnoewk = Variable("QCD NNLO ($\mu=m_{jj}$)", is_independent=False, is_binned=False, units="")
-  thnoewk.values = noewk['y']
   
   table.add_variable(chi)
   table.add_variable(obs)
   table.add_variable(thnnlomain)
   table.add_variable(thnnloalt)
   table.add_variable(thnloold)
-  table.add_variable(thnoewk)
   table.add_additional_resource("ROOT file", input_dir+input_dir2+filename+".root", copy_file=True)  # optional
   submission.add_table(table)
 
@@ -307,7 +310,97 @@ if True:
    table.add_variable(x)
    table.add_variable(x2)
    table.add_variable(y)
+   table.add_additional_resource("ROOT file", corr_file, copy_file=True)  # optional
    submission.add_table(table)
 
-outdir = "output"
+paper_plots=[]
+paper_plots+=[("3.0 < M(JJ) < 3.6 TeV","Add. Fig. 1 upper left","datacard_shapelimit13TeV_combined_theory4_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("3.6 < M(JJ) < 4.2 TeV","Add. Fig. 1 upper right","datacard_shapelimit13TeV_combined_theory5_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("4.2 < M(JJ) < 4.8 TeV","Add. Fig. 1 lower left","datacard_shapelimit13TeV_combined_theory6_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("4.8 < M(JJ) < 5.4 TeV","Add. Fig. 1 lower right","datacard_shapelimit13TeV_combined_theory7_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("5.4 < M(JJ) < 6.0 TeV","Add. Fig. 2 upper left","datacard_shapelimit13TeV_combined_theory8_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("6.0 < M(JJ) < 7.0 TeV","Add. Fig. 2 upper right","datacard_shapelimit13TeV_combined_theory9_scales_fullcolor_fc_supplementary_run2")]
+paper_plots+=[("M(JJ) > 7.0 TeV","Add. Fig. 2 lower","datacard_shapelimit13TeV_combined_theory10_scales_fullcolor_fc_supplementary_run2")]
+
+for massbin,figure,filename in paper_plots:
+
+ if "Add. Fig. 1" in figure or "Add. Fig. 2" in figure:
+  table = Table("Add. Fig. "+("1" if "Add. Fig. 1" in figure else "2")+": Particle level CHI ("+massbin+")")
+  print(figure)
+  table.description = "Normalized CHI = exp(|Y1-Y2|) distributions (1/SIG)*D(SIG)/DCHI in "+massbin+" with |Y1+Y2|/2< 1.1 for 138 fb$^{-1}$ of integrated luminosity at $\sqrt{s} = 13$ TeV. The data distributions corrected for detector effects are compared to NNLO predictions with full color treatment and leading color treatment with central scale choices $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and $\mu_{F}$ = $\mu_{R}$ = $<p_{T}>$. A comparison with the NLO prediction used in the previous publication is also given. Theoretical uncertainties with full color treatment and the central scale $\mu_{F}$ = $\mu_{R}$ = $m_{jj}$ and using NNPDF3.1 are provided. We also provide prediction without EW corrections applied and un-normalized in units of fb."
+  table.location = "Data from "+figure
+  table.keywords["reactions"] = ["P P --> JET JET X"]
+  table.keywords["cmenergies"] = [13000]
+  table.keywords["observables"] = ["DSIG/DCHI"]
+  print(input_dir+input_dir3+filename)
+  table.add_image(input_dir+input_dir3+filename+"."+image_type)
+
+  reader = RootFileReader(input_dir+input_dir3+filename+".root")
+  #canvas = reader.retrieve_object("combined/main")
+  #print([p.GetName() for p in canvas.GetListOfPrimitives()])
+  data = reader.read_graph("combined/main/DataSysStat")
+  datasys = reader.read_graph("combined/main/DataSys")
+  nnlomain = reader.read_hist_1d("combined/main/MainScale")
+  nnlomainup = reader.read_hist_1d("combined/main/TheoryUp")
+  nnlomaindown = reader.read_hist_1d("combined/main/TheoryDown")
+  nnloalt = reader.read_hist_1d("combined/main/AltScale")
+  nnlocolor = reader.read_hist_1d("combined/main/FullColor")
+  nloold = reader.read_hist_1d("combined/main/OldNLO")
+
+  reader = RootFileReader(input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_noewk")+".root")
+  noewk = reader.read_hist_1d("combined/main/NoEWK")
+  reader = RootFileReader(input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_noewk_nonorm")+".root")
+  noewknonorm = reader.read_hist_1d("combined/main/NoEWK")
+  reader = RootFileReader(input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_nonorm")+".root")
+  nonorm = reader.read_hist_1d("combined/main/MainScale")
+  print(data)
+  print(nnlomain)
+  #print(nnlomainup)
+
+  chi = Variable("CHI = exp(|Y1-Y2|)", is_independent=True, is_binned=True, units="")
+  chi.values = [(round((([0.5]+data['x'])[i]+data['x'][i])/2.),round((data['x'][i]+(data['x']+[17])[i+1])/2.)) for i in range(len(data['x']))]
+
+  obs = Variable("Measured", is_independent=False, is_binned=False, units="")
+  obs.values = round_value_to_decimals(data['y'],5)
+  obs.add_qualifier("LUMINOSITY", 138.0, "fb$^{-1}$")
+  total = Uncertainty("total", is_symmetric=False)
+  total.values = round_value_to_decimals(data['dy'],5)
+  sys = Uncertainty("sys", is_symmetric=False)
+  sys.values = round_value_to_decimals(datasys['dy'],5)
+  obs.add_uncertainty(sys)
+  obs.add_uncertainty(total)
+  
+  thnnlomain = Variable("QCD NNLO + EW NLO ($\mu=m_{jj}$, full color)", is_independent=False, is_binned=False, units="")
+  thnnlomain.values = round_value_to_decimals(nnlomain['y'],5)
+  theory = Uncertainty("theory", is_symmetric=False)
+  theory.values = round_value_to_decimals([(nnlomaindown['y'][i]-nnlomain['y'][i],nnlomainup['y'][i]-nnlomain['y'][i]) for i in range(len(nnlomain['y']))],5)
+  thnnlomain.add_uncertainty(theory)
+  thnnlocolor = Variable("QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color)", is_independent=False, is_binned=False, units="")
+  thnnlocolor.values = round_value_to_decimals(nnlocolor['y'],5)
+  thnnloalt = Variable("QCD NNLO + EW NLO ($\mu=<p_{T}>$, lead. color)", is_independent=False, is_binned=False, units="")
+  thnnloalt.values = round_value_to_decimals(nnloalt['y'],5)
+  thnloold = Variable("QCD NLO + EW NLO ($\mu=<p_{T}>$)", is_independent=False, is_binned=False, units="")
+  thnloold.values = round_value_to_decimals(nloold['y'],5)
+  thnoewk = Variable("QCD NNLO ($\mu=m_{jj}$, lead. color)", is_independent=False, is_binned=False, units="")
+  thnoewk.values = noewk['y']
+  thnoewknonorm = Variable("QCD NNLO ($\mu=m_{jj}$, lead. color, fb)", is_independent=False, is_binned=False, units="")
+  thnoewknonorm.values = noewknonorm['y']
+  thnonorm = Variable("QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color, fb)", is_independent=False, is_binned=False, units="")
+  thnonorm.values = nonorm['y']
+  
+  table.add_variable(chi)
+  table.add_variable(obs)
+  table.add_variable(thnnlomain)
+  table.add_variable(thnnlocolor)
+  table.add_variable(thnnloalt)
+  table.add_variable(thnloold)
+  table.add_variable(thnoewk)
+  table.add_variable(thnoewknonorm)
+  table.add_variable(thnonorm)
+  table.add_additional_resource("ROOT file", input_dir+input_dir3+filename+".root", copy_file=True)  # optional
+  table.add_additional_resource("ROOT file", input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_noewk")+".root", copy_file=True)  # optional
+  table.add_additional_resource("ROOT file", input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_noewk_nonorm")+".root", copy_file=True)  # optional
+  table.add_additional_resource("ROOT file", input_dir+input_dir2+filename.replace("fullcolor_fc_supplementary","pdfs_nonorm")+".root", copy_file=True)  # optional
+  submission.add_table(table)
+
 submission.create_files(outdir, remove_old=True)

@@ -189,9 +189,9 @@ if __name__=="__main__":
   useNNLO=True # choice for QCD
   useM2=True # choice of mu-scale for QCD
   use_NNPDF3=True
-  useFullColor=True
+  useFullColor=False
   normalize=True
-  run="2"
+  run="3"
   
   if use_NNPDF3:
     pdfset="nn31nnlo"
@@ -206,15 +206,15 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=True
+  unfoldedData=False
   oldMeasurements=False
   compareRun3=False
-  oldTheory=True
+  oldTheory=False
   signalsBSM=False
   signalsDM=False
   signalsBragg=False
-  compareScales=True
-  compareFullColor=True
+  compareScales=False
+  compareFullColor=False
   compareNosmooth=False
   comparePDFs=False
   compareMu30=False
@@ -222,7 +222,7 @@ if __name__=="__main__":
   compareNoEWK=False
   comparePostfit=False
   preliminary=False
-  supplementary=True
+  supplementary=False
   
   if run=="3":
     lumi=109950+110630+28060 # Run3
@@ -231,7 +231,10 @@ if __name__=="__main__":
     lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
     com="13000"
 
-  massbins=[(1200,1500),
+  lumi=1000 # to obtain cross sections without normalizing
+
+  if not useFullColor and not run=="3":
+    massbins=[(1200,1500),
         (1500,1900),
         (1900,2400),
         (2400,3000),
@@ -242,7 +245,20 @@ if __name__=="__main__":
         (5400,6000),
         (6000,7000),
         (7000,13000),
-  ]
+    ]
+  else:
+    massbins=[(1200,1500),
+        (1500,1900),
+        (1900,2400),
+        (2400,3000),
+        (3000,3600),
+        (3600,4200),
+        (4200,4800),
+        (4800,5400),
+        (5400,6000),
+        (6000,7000),
+        (7000,13600),
+    ]
 
   mass_bins_nlo3={}
   mass_bins_nlo3[0]=1200
@@ -996,6 +1012,8 @@ if __name__=="__main__":
             exp_sumup=0
             theory_sumdown=0
             theory_sumup=0
+            theoryalt_sumdown=0
+            theoryalt_sumup=0
             for up,down,central in uncertainties:
                 if b==0:# or b==h14G.GetXaxis().GetNbins()-1:
                     print(massbins[massbin],b,uncertaintynames[uncertainties.index([up,down,central])],abs(up.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1),abs(down.GetBinContent(b+1)-central.GetBinContent(b+1))/central.GetBinContent(b+1))
@@ -1004,13 +1022,18 @@ if __name__=="__main__":
                 if uncertaintynames[uncertainties.index([up,down,central])] in ["jes","jer","JERtail","prefire","model","sim"]:
                     exp_sumup+=addup
                     exp_sumdown+=adddown
-                else:
+                elif uncertaintynames[uncertainties.index([up,down,central])] in ["stat","scale","pdf"]:
                     theory_sumup+=addup
                     theory_sumdown+=adddown
+                else:
+                    theoryalt_sumup+=addup
+                    theoryalt_sumdown+=adddown
             exp_sumdown=sqrt(exp_sumdown)
             exp_sumup=sqrt(exp_sumup)
             theory_sumdown=sqrt(theory_sumdown)
             theory_sumup=sqrt(theory_sumup)
+            theoryalt_sumdown=sqrt(theoryalt_sumdown)
+            theoryalt_sumup=sqrt(theoryalt_sumup)
 
             if h14G.GetY()[b]>0:
               chi2+=pow(hNloQcdbackup.GetBinContent(b+1)-h14G.GetY()[b],2) / \
@@ -1043,8 +1066,8 @@ if __name__=="__main__":
               h14Gsys.SetPointEYhigh(b,0)
               h14Gsysstat.SetPointEYlow(b,h14G.GetErrorYlow(b))
               h14Gsysstat.SetPointEYhigh(b,h14G.GetErrorYhigh(b))
-              h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-sqrt(pow(exp_sumdown,2)+pow(theory_sumdown,2))*hNloQcdbackup.GetBinContent(b+1))
-              h3new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)+sqrt(pow(exp_sumup,2)+pow(theory_sumup,2))*hNloQcdbackup.GetBinContent(b+1))
+              h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-sqrt(pow(exp_sumdown,2)+pow(theoryalt_sumdown,2))*hNloQcdbackup.GetBinContent(b+1))
+              h3new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)+sqrt(pow(exp_sumup,2)+pow(theoryalt_sumup,2))*hNloQcdbackup.GetBinContent(b+1))
               stat_up=h14G.GetErrorYhigh(b)
               stat_down=h14G.GetErrorYlow(b)
             h14G.SetPointEYlow(b,0)

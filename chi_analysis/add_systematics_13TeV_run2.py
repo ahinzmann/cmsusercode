@@ -75,10 +75,10 @@ if __name__ == '__main__':
     only6000=False # mass binning
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
-    useFullColor=True
+    useFullColor=False
     use_UL=True
     responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="2" # "2" for Run2 or "3" for 13.6 TeV
+    run="3" # "2" for Run2 or "3" for 13.6 TeV
     use_NNPDF3=True
     use_CP2=True # for ADD
     normalize=True
@@ -150,6 +150,8 @@ if __name__ == '__main__':
                 ] #["JER1"+y for y in years]+["JER2"+y for y in years]+
 
     if run=="2":
+      #if use_UL:
+      #  years=["UL16preVFP-2026Sep10","UL16postVFP-2026Sep10","UL17-2026Sep10","UL18-2026Sep10"]
       lumi=138000*(1.-59.83/137.6*(1.57-0.87)/(2.*pi)) # SCALE CROSS SECTION TO ACCOUNT FOR HEM VETO
     if run=="3":
       years=["2024-2026Sep10","2025-2026Sep10","2026-2026Sep10"]
@@ -238,8 +240,9 @@ if __name__ == '__main__':
               (8,),
               (9,10,)
                  ]
-    if run=="3":
+    if run=="3" or responsePostfix=="Run3Response":
       chi_bins=[(1,2,3,4,5,6,7,8,9,10,12,14,16),
+               (1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
@@ -249,7 +252,8 @@ if __name__ == '__main__':
                (1,2,3,4,5,6,7,8,9,10,12,14,16),
                (1,3,6,9,12,16),
               ]
-      mass_bins_nlo_list=[(2,),
+      mass_bins_nlo_list=[(1,),
+                  (2,),
                   (3,),
                   (4,),
                   (5,),
@@ -259,7 +263,8 @@ if __name__ == '__main__':
               (9,),
               (10,)
                  ]
-      massbins=[(1900,2400),
+      massbins=[(1500,1900),
+              (1900,2400),
               (2400,3000),
               (3000,3600),
               (3600,4200),
@@ -276,7 +281,7 @@ if __name__ == '__main__':
     mass_binning=array.array('d')
     for mass_bin in massbins:
         mass_binning.append(mass_bin[0])
-    mass_binning.append(13000)
+    mass_binning.append(13600)
     chi_binnings=[]
     for mass_bin in chi_bins:
         chi_binnings+=[array.array('d')]
@@ -617,6 +622,7 @@ if __name__ == '__main__':
         insample="data/datacard_shapelimit13TeV_run2_2024-2026Sep10_chi.root"
       elif use_UL:
         insample="datacards/datacard_shapelimit13TeV_run2_UL16preVFP_L1prefire_chi.root" # ultra legacy reco
+        #insample="data/datacard_shapelimit13TeV_run2_UL16preVFP-L1prefire-2026Sep10_chi.root" # ultra legacy reco
       else:
         insample="datacards/datacard_shapelimit13TeV_run2_2016_L1prefire_chi.root" # Aug rereco
       print(insample)
@@ -628,11 +634,13 @@ if __name__ == '__main__':
       print(insample2026)
       infile2026=TFile(insample2026,'READ')
       insample16postVFP="datacards/datacard_shapelimit13TeV_run2_UL16postVFP_L1prefire_chi.root"
+      #insample16postVFP="data/datacard_shapelimit13TeV_run2_UL16postVFP-L1prefire-2026Sep10_chi.root"
       print(insample16postVFP)
       infile16postVFP=TFile(insample16postVFP,'READ')
       #insample17='datacards/uhh2.AnalysisModuleRunner.DATA.Run2017_RunBCDEF_17Nov2017-v1.root' #2017
       if use_UL:
         insample17="datacards/datacard_shapelimit13TeV_run2_UL17_L1prefire_chi.root"
+        #insample17="data/datacard_shapelimit13TeV_run2_UL17-L1prefire-2026Sep10_chi.root"
       else:
         insample17="datacards/datacard_shapelimit13TeV_run2_2017_L1prefire_chi.root"
       print(insample17)
@@ -640,6 +648,7 @@ if __name__ == '__main__':
       #insample18='datacards/uhh2.AnalysisModuleRunner.DATA.Run2018_RunABCD_RunII_102X_v1.root' #2018
       if use_UL:
         insample18="datacards/datacard_shapelimit13TeV_run2_UL18_HEM_chi.root"
+        #insample18="data/datacard_shapelimit13TeV_run2_UL18-HEM-2026Sep10_chi.root"
       else:
         insample18="datacards/datacard_shapelimit13TeV_run2_2018_HEM_chi.root"
       print(insample18)
@@ -937,8 +946,6 @@ if __name__ == '__main__':
         else:
           #histname2="dijet_"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"").replace("1200_1500","1900_2400").replace("1500_1900","1900_2400").replace("6000_7000","6000_13000").replace("7000_13000","6000_13000")+"_chi"
           histname2="datacard_shapelimit13TeV_run2_"+years[0]+"#chi"+str(massbins[j]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1"
-          if run=="3":
-            histname2=histname2
           print(histname2)
           data = TH1F(infile.Get(histname2))
           data.SetName(histname)
@@ -2178,8 +2185,9 @@ if __name__ == '__main__':
         #matrix1.Print()
         #print (len(matrixMassBins)-1)*(len(chi_bins[-1])-1)
         #matrix2.Print()
-        if run=="3":
-          responses=TFile("datacards/Response_2024_combine_runII_Sep2026.root",'READ')
+        if run=="3" or responsePostfix=="Run3Response":
+          responses=TFile("datacards/Response_2024_newJEC_recoSF_runII_genFrom1000_Nov2026.root",'READ')
+          #responses=TFile("datacards/Response_2024_combine_runII_Sep2026.root",'READ')
         else:
           if "herwigp" in responsePostfix:
             responses=TFile("datacards/Response_"+responsePostfix+"_Pt_170toInf_CB2_AK4SF_March24.root",'READ')
@@ -2214,15 +2222,15 @@ if __name__ == '__main__':
 
           # integral response matrix files from Jingyu
           response_integrals={}
-          for j1 in range(len(massbins)):
+          for j1 in range(len(massbins)): # reco bins
             for b1 in range(althists[j1].GetNbinsX()):
               response_integrals[str(j1)+"_"+str(b1)]=0
-              for j2 in range(len(massbins)):
+              for j2 in range(len(massbins)): # gen bins
                 for b2 in range(althists[j2].GetNbinsX()):
                   response=0
-                  response_name=("QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_")
+                  response_name=("QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_").replace("7000_13600","7000_13000")
                   if run=="3":
-                    response_name=response_name.replace("7000_13600","7000_13000")
+                    response_name=response_name.replace("_ALT","")
                   if j2==(len(massbins)-1):
                     # highest reco mass has coarse gen-chi-binning in Jingyu's files
                     bin1=althists[j2].GetXaxis().FindBin(althists[j1].GetBinCenter(b1+1))-1
@@ -2235,7 +2243,8 @@ if __name__ == '__main__':
                         response+=responses.Get(response_name+str(bin1)).GetBinContent(b2+1)
                   else:
                     response=responses.Get(response_name+str(b1)).GetBinContent(b2+1)
-                  if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
+                  if not run=="3":
+                    if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
                   response_integrals[str(j1)+"_"+str(b1)]+=response
 
           if samples[i][0]=="QCD": # for unfolding
@@ -2246,9 +2255,9 @@ if __name__ == '__main__':
                   histsunfold[str(j)+unfoldbin]=althists[j].Clone(althists[j].GetName()+unfoldbin)
           
           countgen=0
-          for j1 in range(len(massbins)):
+          for j1 in range(len(massbins)): # gen bins
             for b1 in range(althists[j1].GetNbinsX()):
-              for j2 in range(len(massbins)):
+              for j2 in range(len(massbins)): # reco bins
                 for b2 in range(althists[j2].GetNbinsX()):
                   # map massbins on matrixMassBins
                   #j1m=j1+1
@@ -2275,9 +2284,9 @@ if __name__ == '__main__':
                   #       althists[0].GetXaxis().GetBinLowEdge(bin2+1)<althists[j2].GetXaxis().GetBinUpEdge(b2+1):
                   #      response+=matrix1[j2m+bin2*(len(matrixMassBins)-1)][j1m+b1*(len(matrixMassBins)-1)]
                   response=0
-                  response_name="QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_"
+                  response_name=("QCD_ALT#chi"+str(massbins[j2]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_bin_"+str(j1)+"_").replace("7000_13600","7000_13000")
                   if run=="3":
-                    response_name=response_name.replace("7000_13600","7000_13000")
+                    response_name=response_name.replace("_ALT","")
                   if j2==(len(massbins)-1):
                     # highest reco mass has coarse gen-chi-binning in Jingyu's files
                     bin1=althists[j2].GetXaxis().FindBin(althists[j1].GetBinCenter(b1+1))-1
@@ -2290,7 +2299,8 @@ if __name__ == '__main__':
                         response+=responses.Get(response_name+str(bin1)).GetBinContent(b2+1)
                   else:
                     response=responses.Get(response_name+str(b1)).GetBinContent(b2+1)
-                  if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
+                  if not run=="3":
+                    if abs(j1-j2)>4: response=0 # REMOVE FAR OFF-DIAGONAL
                   response/=response_integrals[str(j1)+"_"+str(b1)]
                   #print "gen",j1,b1,"reco",j2,b2,"old-response",response,"new-response",response_name,response
                   althists[j2].Fill(althists[j2].GetBinCenter(b2+1),althistsclones[j1].GetBinContent(b1+1)*response)

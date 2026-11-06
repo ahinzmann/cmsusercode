@@ -223,7 +223,7 @@ def createPlots(sample,prefix,postfix,triggers,massbins,chi_bins):
               float(event.jetAK4_nConstituents2)): continue
          elif not usePepper and "NANOAOD" in f and not "RunIII" in f:
             if not event.jetAK4_TightID1 or not event.jetAK4_TightID2: continue
-         if not usePepper and "NANOAOD" in f and not "UL" in f: # flags missing in 12Feb2024 UL skims
+         if not usePepper and "NANOAOD" in f and not "12Feb2024" in f and not "28May2024" in f: # flags missing in 12Feb2024 UL skims
             if not event.Flag_goodVertices or\
                not event.Flag_globalSuperTightHalo2016Filter or\
                not event.Flag_EcalDeadCellTriggerPrimitiveFilter or\
@@ -399,6 +399,10 @@ if __name__ == '__main__':
             ("datacard_shapelimit13TeV_run2_2024-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_2026Sep10"),
             ("datacard_shapelimit13TeV_run2_2025-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_2026Sep10"),
             ("datacard_shapelimit13TeV_run2_2026-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2026_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_UL16preVFP-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016APV_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_UL16postVFP-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_UL17-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017_2026Sep10"),
+            ("datacard_shapelimit13TeV_run2_UL18-2026Sep10","","/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018_2026Sep10"),
             ]
 
     triggers=[[["HLT_PFHT475","HLT_PFJet260"], #2016
@@ -1172,7 +1176,7 @@ if __name__ == '__main__':
       print(len(folders))
       name=sys.argv[2]
       for s in folders[int(sys.argv[2])].split("_"):
-        if "HT" in s: name=s.replace("-","")+"_"+name; break
+        if "HT" in s and not "JetHT" in s: name=s.replace("-","")+"_"+name; break
       samples=[(samples[0][0],"-"+name,samples[0][2].replace("/pnfs/","dcap://dcache-cms-dcap.desy.de//pnfs/")+"/"+folders[int(sys.argv[2])])]
 
     if len(sys.argv)>3:
@@ -1184,7 +1188,7 @@ if __name__ == '__main__':
         genLevel=True
       if "Chi10" in sys.argv[3]:
         selectChi10=True
-      if "y2" in sys.argv[3]:
+      if "-y2" in sys.argv[3]:
         selecty2=True
 
     chi_binnings=[]

@@ -1,3 +1,8 @@
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2016APV_JetHT.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016APV_2026Sep10/
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2016_JetHT.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2016_2026Sep10/
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2017_JetHT.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2017_2026Sep10/
+gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2018_JetHT.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2018_2026Sep10/
+
 gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2026_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2026_2026Sep10/
 gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2025_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2025_2026Sep10/
 gfal-copy /data/dust/user/hinzmann/diboson/run3/pepper/dijet-pepper/dijet_2026Sep10_2024_JetMET.root davs://dcache-cms-webdav.desy.de:2880/pnfs/desy.de/cms/tier2/store/user/hinzmann/dijetangular/data2024_2026Sep10/

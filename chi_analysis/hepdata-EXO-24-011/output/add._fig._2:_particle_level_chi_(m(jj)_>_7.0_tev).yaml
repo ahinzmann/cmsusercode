@@ -1,0 +1,133 @@
+dependent_variables:
+- header:
+    name: Measured
+  qualifiers:
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 138.0
+  values:
+  - errors:
+    - label: sys
+      symerror: 0.01661
+    - label: total
+      symerror: 0.05048
+    value: 0.16948
+  - errors:
+    - label: sys
+      symerror: 0.00325
+    - label: total
+      symerror: 0.03014
+    value: 0.07846
+  - errors:
+    - label: sys
+      symerror: 0.0
+    - label: total
+      symerror: 0.02091
+    value: 0.02276
+  - errors:
+    - label: sys
+      symerror: 0.0
+    - label: total
+      symerror: 0.03031
+    value: 0.06688
+  - errors:
+    - label: sys
+      symerror: 0.00174
+    - label: total
+      symerror: 0.02384
+    value: 0.03918
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, full color)
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.00457
+        plus: 0.00323
+      label: theory
+    value: 0.07428
+  - errors:
+    - asymerror:
+        minus: -0.00097
+        plus: 0.0007
+      label: theory
+    value: 0.06367
+  - errors:
+    - asymerror:
+        minus: -0.00047
+        plus: 0.00072
+      label: theory
+    value: 0.06438
+  - errors:
+    - asymerror:
+        minus: -0.00788
+        plus: 0.00793
+      label: theory
+    value: 0.0663
+  - errors:
+    - asymerror:
+        minus: -0.003
+        plus: 0.00315
+      label: theory
+    value: 0.0671
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color)
+  values:
+  - value: 0.07482
+  - value: 0.06372
+  - value: 0.06506
+  - value: 0.06635
+  - value: 0.06623
+- header:
+    name: QCD NNLO + EW NLO ($\mu=<p_{T}>$, lead. color)
+  values:
+  - value: 0.08145
+  - value: 0.0671
+  - value: 0.06551
+  - value: 0.06426
+  - value: 0.06162
+- header:
+    name: QCD NLO + EW NLO ($\mu=<p_{T}>$)
+  values:
+  - value: 0.07587
+  - value: 0.06476
+  - value: 0.06483
+  - value: 0.06547
+  - value: 0.06576
+- header:
+    name: QCD NNLO ($\mu=m_{jj}$, lead. color)
+  values:
+  - value: 0.06723
+  - value: 0.063286
+  - value: 0.066406
+  - value: 0.068094
+  - value: 0.068045
+- header:
+    name: QCD NNLO ($\mu=m_{jj}$, lead. color, fb)
+  values:
+  - value: 0.027469
+  - value: 0.025857
+  - value: 0.027132
+  - value: 0.027822
+  - value: 0.027802
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$, lead. color, fb)
+  values:
+  - value: 0.029688
+  - value: 0.025283
+  - value: 0.025815
+  - value: 0.026327
+  - value: 0.026279
+independent_variables:
+- header:
+    name: CHI = exp(|Y1-Y2|)
+  values:
+  - high: 3
+    low: 1
+  - high: 6
+    low: 3
+  - high: 9
+    low: 6
+  - high: 12
+    low: 9
+  - high: 16
+    low: 12

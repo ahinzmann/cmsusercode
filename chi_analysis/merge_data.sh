@@ -96,8 +96,8 @@ hadd -f datacard_shapelimit13TeV_run2_UL18_QCDmadgraph-HT2000toInf-GEN_chi.root 
 
 
 
-hadd -f datacard_shapelimit13TeV_run2_2022_chi.root datacard_shapelimit13TeV_run2_2022-*_chi.root
-hadd -f datacard_shapelimit13TeV_run2_2023_chi.root datacard_shapelimit13TeV_run2_2023-*_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2022_chi.root datacard_shapelimit13TeV_run2_2022-?_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2023_chi.root datacard_shapelimit13TeV_run2_2023-{?,??}_chi.root
 
 hadd -f datacard_shapelimit13TeV_run2_2022_QCDmadgraph-HT200to400_chi.root datacard_shapelimit13TeV_run2_2022_QCDmadgraph-HT200to400_*_chi.root
 hadd -f datacard_shapelimit13TeV_run2_2022_QCDmadgraph-HT400to600_chi.root datacard_shapelimit13TeV_run2_2022_QCDmadgraph-HT400to600_*_chi.root
@@ -138,7 +138,7 @@ hadd -f datacard_shapelimit13TeV_run2_NUL16postVFP_L1prefire_chi.root datacard_s
 hadd -f datacard_shapelimit13TeV_run2_NUL17_L1prefire_chi.root datacard_shapelimit13TeV_run2_NUL17-JetHT_*-L1prefire_chi.root
 hadd -f datacard_shapelimit13TeV_run2_NUL18_HEM_chi.root datacard_shapelimit13TeV_run2_NUL18-JetHT_*-HEM_chi.root
 
-hadd -f datacard_shapelimit13TeV_run2_2023-28May2024_chi.root datacard_shapelimit13TeV_run2_2023-28May2024-*_chi.root
+hadd -f datacard_shapelimit13TeV_run2_2023-28May2024_chi.root datacard_shapelimit13TeV_run2_2023-28May2024-{?,??}_chi.root
 
 hadd -f datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024-HT200to400_chi.root datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024-HT200to400_*_chi.root
 hadd -f datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024-HT400to600_chi.root datacard_shapelimit13TeV_run2_2023_QCDmadgraph-28May2024-HT400to600_*_chi.root
@@ -267,6 +267,11 @@ hadd -f data/datacard_shapelimit13TeV_run2_2024_QCDmadgraph-21Dec2025-HT2000-y2_
 mv data/datacard_shapelimit13TeV_run2_2026-2026Sep10-0_chi.root data/datacard_shapelimit13TeV_run2_2026-2026Sep10_chi.root
 mv data/datacard_shapelimit13TeV_run2_2025-2026Sep10-0_chi.root data/datacard_shapelimit13TeV_run2_2025-2026Sep10_chi.root
 mv data/datacard_shapelimit13TeV_run2_2024-2026Sep10-0_chi.root data/datacard_shapelimit13TeV_run2_2024-2026Sep10_chi.root
+
+mv data/datacard_shapelimit13TeV_run2_UL16preVFP-2026Sep10-0-L1prefire_chi.root data/datacard_shapelimit13TeV_run2_UL16preVFP-L1prefire-2026Sep10_chi.root
+mv data/datacard_shapelimit13TeV_run2_UL16postVFP-2026Sep10-0-L1prefire_chi.root data/datacard_shapelimit13TeV_run2_UL16postVFP-L1prefire-2026Sep10_chi.root
+mv data/datacard_shapelimit13TeV_run2_UL17-2026Sep10-0-L1prefire_chi.root data/datacard_shapelimit13TeV_run2_UL17-L1prefire-2026Sep10_chi.root
+mv data/datacard_shapelimit13TeV_run2_UL18-2026Sep10-0-HEM_chi.root data/datacard_shapelimit13TeV_run2_UL18-HEM-2026Sep10_chi.root
 
 mv data/datacard_shapelimit13TeV_run2_2024_QCDmadgraph-2026Sep10-HT200to400.root_0_chi.root data/datacard_shapelimit13TeV_run2_2024_QCDmadgraph-2026Sep10-HT200to400_chi.root
 mv data/datacard_shapelimit13TeV_run2_2024_QCDmadgraph-2026Sep10-HT400to600.root_1_chi.root data/datacard_shapelimit13TeV_run2_2024_QCDmadgraph-2026Sep10-HT400to600_chi.root

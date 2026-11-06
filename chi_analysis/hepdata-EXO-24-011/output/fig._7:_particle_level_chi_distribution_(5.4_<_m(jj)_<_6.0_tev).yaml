@@ -1,0 +1,213 @@
+dependent_variables:
+- header:
+    name: Measured
+  qualifiers:
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 138.0
+  values:
+  - errors:
+    - label: sys
+      symerror: 0.00404
+    - label: total
+      symerror: 0.01161
+    value: 0.07642
+  - errors:
+    - label: sys
+      symerror: 0.00296
+    - label: total
+      symerror: 0.01052
+    value: 0.07107
+  - errors:
+    - label: sys
+      symerror: 0.00242
+    - label: total
+      symerror: 0.01075
+    value: 0.07633
+  - errors:
+    - label: sys
+      symerror: 0.00171
+    - label: total
+      symerror: 0.01041
+    value: 0.06618
+  - errors:
+    - label: sys
+      symerror: 0.0013
+    - label: total
+      symerror: 0.0104
+    value: 0.05746
+  - errors:
+    - label: sys
+      symerror: 0.00104
+    - label: total
+      symerror: 0.01073
+    value: 0.06603
+  - errors:
+    - label: sys
+      symerror: 0.00075
+    - label: total
+      symerror: 0.01062
+    value: 0.06049
+  - errors:
+    - label: sys
+      symerror: 0.00072
+    - label: total
+      symerror: 0.01112
+    value: 0.06745
+  - errors:
+    - label: sys
+      symerror: 0.00064
+    - label: total
+      symerror: 0.01034
+    value: 0.0498
+  - errors:
+    - label: sys
+      symerror: 0.00133
+    - label: total
+      symerror: 0.00816
+    value: 0.06565
+  - errors:
+    - label: sys
+      symerror: 0.00208
+    - label: total
+      symerror: 0.00849
+    value: 0.06917
+  - errors:
+    - label: sys
+      symerror: 0.00343
+    - label: total
+      symerror: 0.00905
+    value: 0.06957
+- header:
+    name: QCD NNLO + EW NLO ($\mu=m_{jj}$)
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.00121
+        plus: 0.00119
+      label: theory
+    value: 0.08118
+  - errors:
+    - asymerror:
+        minus: -0.00069
+        plus: 0.00073
+      label: theory
+    value: 0.06547
+  - errors:
+    - asymerror:
+        minus: -0.00059
+        plus: 0.00065
+      label: theory
+    value: 0.06343
+  - errors:
+    - asymerror:
+        minus: -0.00038
+        plus: 0.00045
+      label: theory
+    value: 0.06166
+  - errors:
+    - asymerror:
+        minus: -0.00039
+        plus: 0.0004
+      label: theory
+    value: 0.06257
+  - errors:
+    - asymerror:
+        minus: -0.00042
+        plus: 0.00039
+      label: theory
+    value: 0.06297
+  - errors:
+    - asymerror:
+        minus: -0.00049
+        plus: 0.00042
+      label: theory
+    value: 0.06352
+  - errors:
+    - asymerror:
+        minus: -0.00051
+        plus: 0.0005
+      label: theory
+    value: 0.06422
+  - errors:
+    - asymerror:
+        minus: -0.00068
+        plus: 0.00061
+      label: theory
+    value: 0.065
+  - errors:
+    - asymerror:
+        minus: -0.00067
+        plus: 0.00057
+      label: theory
+    value: 0.06631
+  - errors:
+    - asymerror:
+        minus: -0.00088
+        plus: 0.00085
+      label: theory
+    value: 0.06825
+  - errors:
+    - asymerror:
+        minus: -0.00155
+        plus: 0.00168
+      label: theory
+    value: 0.07044
+- header:
+    name: QCD NNLO + EW NLO ($\mu=<p_{T}>$)
+  values:
+  - value: 0.08444
+  - value: 0.06771
+  - value: 0.06555
+  - value: 0.06211
+  - value: 0.0629
+  - value: 0.0627
+  - value: 0.06278
+  - value: 0.06314
+  - value: 0.06372
+  - value: 0.06494
+  - value: 0.06724
+  - value: 0.07029
+- header:
+    name: QCD NLO + EW NLO ($\mu=<p_{T}>$)
+  values:
+  - value: 0.08115
+  - value: 0.06541
+  - value: 0.06332
+  - value: 0.06337
+  - value: 0.06357
+  - value: 0.06404
+  - value: 0.06455
+  - value: 0.06512
+  - value: 0.06568
+  - value: 0.06645
+  - value: 0.06735
+  - value: 0.06809
+independent_variables:
+- header:
+    name: CHI = exp(|Y1-Y2|)
+  values:
+  - high: 2
+    low: 1
+  - high: 3
+    low: 2
+  - high: 4
+    low: 3
+  - high: 5
+    low: 4
+  - high: 6
+    low: 5
+  - high: 7
+    low: 6
+  - high: 8
+    low: 7
+  - high: 9
+    low: 8
+  - high: 10
+    low: 9
+  - high: 12
+    low: 10
+  - high: 14
+    low: 12
+  - high: 16
+    low: 14

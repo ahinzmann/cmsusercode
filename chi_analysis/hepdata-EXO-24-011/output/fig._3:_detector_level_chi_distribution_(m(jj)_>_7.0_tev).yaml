@@ -1,0 +1,133 @@
+dependent_variables:
+- header:
+    name: Measured detector level
+  qualifiers:
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 138.0
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.03697
+        plus: 0.0483
+      label: total
+    value: 0.14
+  - errors:
+    - asymerror:
+        minus: -0.02177
+        plus: 0.02944
+      label: total
+    value: 0.07333
+  - errors:
+    - asymerror:
+        minus: -0.0144
+        plus: 0.02255
+      label: total
+    value: 0.03333
+  - errors:
+    - asymerror:
+        minus: -0.02072
+        plus: 0.02845
+      label: total
+    value: 0.06667
+  - errors:
+    - asymerror:
+        minus: -0.01554
+        plus: 0.02134
+      label: total
+    value: 0.05
+- header:
+    name: QCD NNLO + EW NLO
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0059
+        plus: 0.0092
+      label: theory
+    value: 0.06848
+  - errors:
+    - asymerror:
+        minus: -0.0033
+        plus: 0.005
+      label: theory
+    value: 0.06255
+  - errors:
+    - asymerror:
+        minus: -0.0009
+        plus: 0.0011
+      label: theory
+    value: 0.06322
+  - errors:
+    - asymerror:
+        minus: -0.0032
+        plus: 0.0018
+      label: theory
+    value: 0.06895
+  - errors:
+    - asymerror:
+        minus: -0.0078
+        plus: 0.0049
+      label: theory
+    value: 0.06972
+- header:
+    name: $\Lambda^{-}_{LL}$ (CI) = 30 TeV
+  values:
+  - value: 0.08348
+  - value: 0.06439
+  - value: 0.0611
+  - value: 0.06517
+  - value: 0.06526
+- header:
+    name: $\Lambda^{+}_{VV}$ (CI) = 30 TeV
+  values:
+  - value: 0.0592
+  - value: 0.06062
+  - value: 0.06427
+  - value: 0.07155
+  - value: 0.07307
+- header:
+    name: $\Lambda_{T}$ (GRW) = 13 TeV
+  values:
+  - value: 0.10592
+  - value: 0.06684
+  - value: 0.05843
+  - value: 0.06043
+  - value: 0.05776
+- header:
+    name: $M_{QBH}$ ($n_{ED}$ = 6 ADD) = 9 TeV
+  values:
+  - value: 0.13304
+  - value: 0.06735
+  - value: 0.05287
+  - value: 0.05395
+  - value: 0.05285
+- header:
+    name: $f_a/c_g$ (ALP) = 2.5 TeV
+  values:
+  - value: 0.06914
+  - value: 0.06258
+  - value: 0.06305
+  - value: 0.06873
+  - value: 0.06966
+- header:
+    name: $\Lambda/\sqrt{C_G}$ (SMEFT) = 10 TeV
+  values:
+  - value: 0.08168
+  - value: 0.06347
+  - value: 0.06101
+  - value: 0.06539
+  - value: 0.06676
+independent_variables:
+- header:
+    name: CHI = exp(|Y1-Y2|)
+  values:
+  - high: 3
+    low: 1
+  - high: 6
+    low: 3
+  - high: 9
+    low: 6
+  - high: 12
+    low: 9
+  - high: 16
+    low: 12
