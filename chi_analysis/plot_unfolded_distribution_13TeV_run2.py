@@ -46,7 +46,7 @@ if __name__ == '__main__':
     normalize=True
     run="2"
     postfix=""
-    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2"+postfix+"/datacard_shapelimit13TeV"
+    prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3"+postfix+"/datacard_shapelimit13TeV"
     if not normalize:
       postfix="_nonorm"
       prefix="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run"+run+"ULNNLO_m2_NNPDF3"+postfix+"/datacard_shapelimit13TeV"

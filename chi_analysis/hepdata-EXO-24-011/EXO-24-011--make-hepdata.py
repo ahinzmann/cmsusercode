@@ -1,3 +1,6 @@
+not up-to-date. latest version is in https://gitlab.cern.ch/cms-exo-hepdata/exo-24-011
+#######
+
 import hepdata_lib
 from hepdata_lib import Submission
 from hepdata_lib.helpers import *
@@ -296,7 +299,7 @@ if True:
    table.keywords["reactions"] = ["P P --> JET JET X"]
    table.keywords["cmenergies"] = [13000]
 
-   corr_file="/data/dust/user/hinzmann/dijetangular/CMSSW_8_1_0/src/cmsusercode/chi_analysis/versions/run2ULNNLO_m2_NNPDF3/datacard_shapelimit13TeV_unfold_withUncertainties_correlationMatrix_run2.root"
+   corr_file=input_dir+"datacard_shapelimit13TeV_unfold_withUncertainties_correlationMatrix_run2.root"
    reader = RootFileReader(corr_file)
    data = reader.read_hist_2d("corr/correlation")
    from hepdata_lib import Variable

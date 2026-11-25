@@ -191,7 +191,7 @@ if __name__=="__main__":
   use_NNPDF3=True
   useFullColor=False
   normalize=True
-  run="3"
+  run="2"
   
   if use_NNPDF3:
     pdfset="nn31nnlo"
@@ -206,17 +206,17 @@ if __name__=="__main__":
     muScale="pt12"
     muAltScale="m2"
 
-  unfoldedData=False
+  unfoldedData=True
   oldMeasurements=False
   compareRun3=False
-  oldTheory=False
+  oldTheory=True
   signalsBSM=False
   signalsDM=False
   signalsBragg=False
-  compareScales=False
+  compareScales=True
   compareFullColor=False
   compareNosmooth=False
-  comparePDFs=False
+  comparePDFs=True
   compareMu30=False
   compareMadgraph=False
   compareNoEWK=False
@@ -233,7 +233,7 @@ if __name__=="__main__":
 
   lumi=1000 # to obtain cross sections without normalizing
 
-  if not useFullColor and not run=="3":
+  if not run=="3":
     massbins=[(1200,1500),
         (1500,1900),
         (1900,2400),
@@ -330,7 +330,6 @@ if __name__=="__main__":
         (1,2,3,4,5,6,7,8,9,10,12,14,16),
         (1,3,6,9,12,16),
     ]
-
 
   chi_binnings=[]
   for mass_bin in chi_bins:
@@ -989,7 +988,8 @@ if __name__=="__main__":
         fsys = TFile.Open(filename)
         new_hists+=[fsys]
         uncertaintynames=["jes","jer","JERtail","prefire","model","sim","scale","pdf"]
-        if useNNLO and not compareMu30: uncertaintynames+=["stat","scaleAlt"]
+        if useNNLO and not compareMu30: uncertaintynames+=["stat"]
+        if useNNLO and not compareMu30: uncertaintynames+=["scaleAlt"]
         uncertainties=[]
         for u in uncertaintynames:
             histname1='QCD_ALT#chi'+str(massbins[massbin]).strip("()").replace(',',"_").replace(' ',"")+"_rebin1_"+u+"Up"
@@ -1022,7 +1022,10 @@ if __name__=="__main__":
                 if uncertaintynames[uncertainties.index([up,down,central])] in ["jes","jer","JERtail","prefire","model","sim"]:
                     exp_sumup+=addup
                     exp_sumdown+=adddown
-                elif uncertaintynames[uncertainties.index([up,down,central])] in ["stat","scale","pdf"]:
+                elif uncertaintynames[uncertainties.index([up,down,central])] in ["stat"] and unfoldedData and run=="2" and not useFullColor:
+                    # "stat" is removed in EXO-24-011 paper unfolded curve where the theory curve is smoothed
+                    pass
+                elif uncertaintynames[uncertainties.index([up,down,central])] in ["scale","pdf","stat"]:
                     theory_sumup+=addup
                     theory_sumdown+=adddown
                 else:
@@ -1066,8 +1069,8 @@ if __name__=="__main__":
               h14Gsys.SetPointEYhigh(b,0)
               h14Gsysstat.SetPointEYlow(b,h14G.GetErrorYlow(b))
               h14Gsysstat.SetPointEYhigh(b,h14G.GetErrorYhigh(b))
-              h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-sqrt(pow(exp_sumdown,2)+pow(theoryalt_sumdown,2))*hNloQcdbackup.GetBinContent(b+1))
-              h3new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)+sqrt(pow(exp_sumup,2)+pow(theoryalt_sumup,2))*hNloQcdbackup.GetBinContent(b+1))
+              h2new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)-sqrt(pow(exp_sumdown,2)+pow(theory_sumdown,2)+pow(theoryalt_sumdown,2))*hNloQcdbackup.GetBinContent(b+1))
+              h3new.SetBinContent(b+1,hNloQcdbackup.GetBinContent(b+1)+sqrt(pow(exp_sumup,2)+pow(theory_sumup,2)+pow(theoryalt_sumup,2))*hNloQcdbackup.GetBinContent(b+1))
               stat_up=h14G.GetErrorYhigh(b)
               stat_down=h14G.GetErrorYlow(b)
             h14G.SetPointEYlow(b,0)

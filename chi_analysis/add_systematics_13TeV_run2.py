@@ -75,10 +75,10 @@ if __name__ == '__main__':
     only6000=False # mass binning
     useNNLO=True # choice for QCD
     useM2=True # choice of mu-scale for QCD
-    useFullColor=False
+    useFullColor=True
     use_UL=True
     responsePostfix="" # "", "herwigpp", "madgraphMLM", "Test", "Train", "GS", "SysUp", "SysDown", "RECO"
-    run="3" # "2" for Run2 or "3" for 13.6 TeV
+    run="2" # "2" for Run2 or "3" for 13.6 TeV
     use_NNPDF3=True
     use_CP2=True # for ADD
     normalize=True
